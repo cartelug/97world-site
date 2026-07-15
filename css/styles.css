@@ -18,9 +18,14 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+  background:
+    radial-gradient(120% 130% at 50% -10%,#0d0d16 0%,#070709 55%,#040405 100%);
+  background-attachment:fixed;
+}
 body{
-  background:var(--bg);color:var(--ink);
+  background:transparent;color:var(--ink);
   font-family:var(--font);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;line-height:1.55;letter-spacing:-.005em;
@@ -315,7 +320,181 @@ footer{border-top:1px solid var(--line);padding:52px 0 40px;margin-top:30px}
 .float-wa svg{width:30px;height:30px}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
 
+/* ============================================================
+   ✦ FX LAYER — animated background, cursor, glass, motion
+   ============================================================ */
+
+/* ---- flowing gradient background (canvas) ---- */
+#fxCanvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  z-index:-2;pointer-events:none;
+  filter:blur(46px) saturate(1.35);
+  opacity:.92;
+  transform:translateZ(0);
+  will-change:transform;
+}
+/* soft dark veil to keep text crisp over the aurora */
+.fx-veil{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(90% 60% at 50% 8%,transparent 0%,rgba(4,4,6,.35) 70%,rgba(4,4,6,.7) 100%),
+    linear-gradient(180deg,rgba(4,4,6,.25),transparent 22%,transparent 78%,rgba(4,4,6,.55));
+}
+/* film grain */
+.grain{
+  position:fixed;inset:-200%;z-index:9997;pointer-events:none;
+  opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 7s steps(6) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}10%{transform:translate(-4%,-4%)}
+  30%{transform:translate(3%,-2%)}50%{transform:translate(-2%,3%)}
+  70%{transform:translate(4%,2%)}90%{transform:translate(-3%,4%)}100%{transform:translate(0,0)}
+}
+
+/* ---- spotlight cursor ---- */
+.cursor-glow{
+  position:fixed;top:0;left:0;width:520px;height:520px;z-index:9996;
+  border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,206,0,.09),rgba(15,71,175,.06) 40%,transparent 70%);
+  mix-blend-mode:screen;opacity:0;transition:opacity .5s ease;
+  will-change:transform;
+}
+.cursor-dot{
+  position:fixed;top:0;left:0;width:8px;height:8px;z-index:9998;
+  border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);
+  background:#fff;mix-blend-mode:difference;opacity:0;transition:opacity .3s,width .18s,height .18s;
+  will-change:transform;
+}
+.cursor-dot.hot{width:44px;height:44px;background:var(--ug-y)}
+@media(hover:none),(pointer:coarse){.cursor-glow,.cursor-dot{display:none}}
+
+/* ---- scroll progress ---- */
+.scroll-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:9995;pointer-events:none}
+.scroll-progress i{
+  display:block;height:100%;width:0%;
+  background:linear-gradient(90deg,var(--ug-y),var(--ug-r) 35%,var(--ss-b) 70%,var(--ss-g));
+  box-shadow:0 0 14px rgba(255,206,0,.5);
+  transition:width .08s linear;
+}
+
+/* ---- flowing gradient text ---- */
+h1.hero-title em{
+  background:linear-gradient(92deg,var(--ug-y),#fff 30%,var(--ss-b) 60%,var(--ss-g) 80%,var(--ug-y));
+  background-size:280% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:flowText 9s ease-in-out infinite;
+}
+.proof h3 .y{
+  background:linear-gradient(92deg,var(--ug-y),var(--ug-r),var(--ug-y));
+  background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:flowText 7s ease-in-out infinite;
+}
+@keyframes flowText{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+/* ---- animated brand chip in nav ---- */
+.brand .mono{position:relative;overflow:hidden}
+.brand .mono::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.9) 50%,transparent 70%);
+  transform:translateX(-120%);
+}
+.brand:hover .mono::after{animation:shine 1s ease}
+@keyframes shine{to{transform:translateX(120%)}}
+
+/* ---- glass upgrades (translucent surfaces only) ---- */
+.price-shell,.eyebrow,.summary{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+/* ---- CTA sheen + glow ---- */
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);
+  transform:translateX(-130%);transition:transform .6s ease;
+}
+.btn:hover::before{transform:translateX(130%)}
+.btn.primary{
+  background:linear-gradient(120deg,#fff,#ececff);
+  box-shadow:0 6px 22px rgba(0,0,0,.35);
+}
+.btn.primary:hover{box-shadow:0 18px 44px rgba(255,255,255,.22),0 0 0 1px rgba(255,255,255,.4)}
+
+/* animated gradient ring around the primary hero CTA */
+.cta-row .btn.primary{position:relative}
+.cta-row .btn.primary::after{
+  content:"";position:absolute;inset:-2px;z-index:-2;border-radius:inherit;
+  background:conic-gradient(from 0deg,var(--ug-y),var(--ug-r),var(--ss-b),var(--ss-g),var(--ug-y));
+  filter:blur(9px);opacity:0;transition:opacity .35s;animation:spin 6s linear infinite;
+}
+.cta-row .btn.primary:hover::after{opacity:.85}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- 3D tilt cards ---- */
+.grid2{perspective:1400px}
+.work{transform-style:preserve-3d;will-change:transform;transition:transform .2s ease,border-color .4s ease,box-shadow .4s ease}
+.work::after{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.10),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.work:hover{box-shadow:0 30px 70px rgba(0,0,0,.55)}
+.work:hover::after{opacity:1}
+
+/* tilt for the proof + pricing shells */
+.proof,.price-shell{will-change:transform}
+
+/* ---- experience line flair ---- */
+.exp-line{position:relative}
+.exp-line::before{
+  content:"";position:absolute;left:0;bottom:-1px;height:1px;width:0;
+  background:linear-gradient(90deg,var(--ug-y),transparent);transition:width .5s ease;
+}
+.exp-line:hover::before{width:100%}
+.exp-line .idx{transition:color .35s}
+.exp-line:hover .idx{color:var(--ug-y)}
+
+/* ---- service rows highlight ---- */
+.svc{position:relative;border-radius:10px}
+.svc::before{
+  content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,206,0,.08),transparent 60%);
+  opacity:0;transition:opacity .25s;
+}
+.svc:hover::before{opacity:1}
+.svc.sel .check{box-shadow:0 0 0 4px rgba(255,206,0,.18)}
+
+/* ---- marquee band ---- */
+.marquee{
+  position:relative;overflow:hidden;padding:22px 0;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+.marquee-track{display:inline-flex;white-space:nowrap;will-change:transform;animation:marquee 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{
+  font-size:clamp(22px,4vw,40px);font-weight:900;letter-spacing:-.02em;
+  text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.3);
+  padding:0 26px;display:inline-flex;align-items:center;gap:26px;
+}
+.marquee-track span::after{content:"✦";-webkit-text-stroke:0;color:var(--ug-y);font-size:.5em}
+.marquee-track .fill{color:#fff;-webkit-text-stroke:0}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---- reveal: add blur + stagger ---- */
+.reveal{filter:blur(4px)}
+.reveal.in{filter:blur(0);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1),filter .8s ease}
+
+/* ---- float-wa gradient pulse ---- */
+.float-wa{background:linear-gradient(145deg,#25D366,#128C4B)}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.001ms !important;animation-iteration-count:1 !important}
-  .reveal{opacity:1;transform:none}
+  .reveal{opacity:1;transform:none;filter:none}
+  #fxCanvas{filter:blur(46px) saturate(1.2)}
+  .grain,.cursor-glow,.cursor-dot{display:none}
+  .marquee-track{animation:none}
 }

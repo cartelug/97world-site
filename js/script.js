@@ -39,7 +39,17 @@
       if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
     });
   }, { threshold: 0.12 });
-  function kickReveals() { document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); }); }
+  function kickReveals() {
+    var groups = {};
+    document.querySelectorAll(".reveal").forEach(function (el) {
+      // stagger siblings within the same parent for a cascading entrance
+      var key = el.parentNode ? (el.parentNode.id || el.parentNode.className || "root") : "root";
+      groups[key] = (groups[key] || 0);
+      var i = groups[key]++;
+      if (!el.style.transitionDelay) el.style.transitionDelay = Math.min(i * 70, 420) + "ms";
+      io.observe(el);
+    });
+  }
 
   /* ---------- RENDER: experience ---------- */
   function renderExperience() {

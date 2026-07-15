@@ -11,6 +11,14 @@
 </head>
 <body>
 
+<!-- ===================== FX LAYER ===================== -->
+<canvas id="fxCanvas" aria-hidden="true"></canvas>
+<div class="fx-veil" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-progress" aria-hidden="true"><i></i></div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
 <!-- ===================== INTRO ANIMATION ===================== -->
 <div id="intro" aria-hidden="true">
   <div class="intro-grid"></div>
@@ -70,6 +78,14 @@
   </div>
   <a href="#exp" class="scroll-hint" aria-label="Scroll down">↓</a>
 </section>
+
+<!-- ===================== MARQUEE ===================== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Websites</span><span class="fill">Branding</span><span>Campaign Fliers</span><span class="fill">Logo Design</span><span>Social Kits</span><span class="fill">Landing Pages</span><span>Business Cards</span>
+    <span>Websites</span><span class="fill">Branding</span><span>Campaign Fliers</span><span class="fill">Logo Design</span><span>Social Kits</span><span class="fill">Landing Pages</span><span>Business Cards</span>
+  </div>
+</div>
 
 <!-- ===================== EXPERIENCE ===================== -->
 <section class="blk" id="exp">
@@ -221,5 +237,6 @@
 <!-- data mirrors the 97 World Notion hub (Services & Portfolio) -->
 <script src="js/data.js"></script>
 <script src="js/script.js"></script>
+<script src="js/fx.js"></script>
 </body>
 </html>
