@@ -114,7 +114,58 @@
     document.getElementById("sumTotal").textContent = count ? money(totUsd) : "—";
     document.getElementById("dep1").textContent = count ? money(totUsd / 2) : "—";
     document.getElementById("dep2").textContent = count ? money(totUsd / 2) : "—";
+    updateQbar(count, totUsd);
   }
+
+  /* ---------- MOBILE: sticky quote bar ---------- */
+  // Slides up once something is selected; hides while the order form is on
+  // screen so it never covers the real send button.
+  var orderInView = false;
+  function updateQbar(count, totUsd) {
+    var bar = document.getElementById("qbar");
+    if (!bar) return;
+    document.getElementById("qbarCount").textContent = count;
+    document.getElementById("qbarTotal").textContent = count ? money(totUsd) : "—";
+    var on = count > 0 && !orderInView;
+    bar.classList.toggle("on", on);
+    bar.setAttribute("aria-hidden", String(!on));
+    document.body.classList.toggle("qbar-on", on);
+  }
+  function currentQuote() {
+    var totUsd = 0, count = 0;
+    D.services.forEach(function (s) { if (selected[s.id]) { totUsd += s.usd; count++; } });
+    return { count: count, totUsd: totUsd };
+  }
+  if ("IntersectionObserver" in window) {
+    var orderEl = document.getElementById("order");
+    if (orderEl) {
+      new IntersectionObserver(function (es) {
+        orderInView = es[0].isIntersecting;
+        var q = currentQuote();
+        updateQbar(q.count, q.totUsd);
+      }, { threshold: 0.12 }).observe(orderEl);
+    }
+  }
+
+  /* ---------- MOBILE: menu ---------- */
+  window.toggleMenu = function () {
+    var m = document.getElementById("mmenu");
+    var b = document.getElementById("burger");
+    if (!m || !b) return;
+    var open = !m.classList.contains("open");
+    m.classList.toggle("open", open);
+    m.setAttribute("aria-hidden", String(!open));
+    b.classList.toggle("x", open);
+    b.setAttribute("aria-expanded", String(open));
+    b.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.classList.toggle("menu-open", open);
+  };
+  document.querySelectorAll("#mmenu a").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var m = document.getElementById("mmenu");
+      if (m && m.classList.contains("open")) window.toggleMenu();
+    });
+  });
 
   /* ---------- COUNTRY ---------- */
   window.setCountry = function (c) {
