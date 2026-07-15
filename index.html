@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="97 World — the digital design sector. Websites, campaign fliers, branding and more across Uganda & South Sudan. Proof isn't fabricated. It's built.">
 <meta name="theme-color" content="#050506">
-<title>97 World — Design Sector</title>
+<title>97 World — Design Sector · Uganda & South Sudan</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/home.css">
+<script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
 </head>
-<body>
+<body data-page="home">
 
 <!-- ===================== FX LAYER ===================== -->
 <canvas id="fxCanvas" aria-hidden="true"></canvas>
@@ -20,7 +22,7 @@
 <div class="cursor-glow" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
 
-<!-- ===================== INTRO ANIMATION ===================== -->
+<!-- ===================== INTRO (once per session) ===================== -->
 <div id="intro" aria-hidden="true">
   <div class="intro-grid"></div>
   <div class="intro-glow"></div>
@@ -38,17 +40,17 @@
 
 <!-- ===================== NAV ===================== -->
 <header class="nav" id="nav">
-  <a href="#top" class="brand" aria-label="97 World home">
+  <a href="index.html" class="brand" aria-label="97 World home">
     <span class="mono"><img src="assets/mark.png" alt="97 Design" width="34" height="34"></span>
     <span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span>
   </a>
   <nav class="links">
-    <a href="#exp">Services</a>
-    <a href="#work">Work</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#order">Order</a>
+    <a href="services.html">Services</a>
+    <a href="work.html">Work</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
   </nav>
-  <a href="#order" class="nav-cta">Start a project</a>
+  <a href="start.html" class="nav-cta">Start a project</a>
   <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
@@ -57,14 +59,15 @@
 <!-- ===================== MOBILE MENU ===================== -->
 <div class="mmenu" id="mmenu" aria-hidden="true">
   <nav class="mmenu-links">
-    <a href="#exp" style="--i:0"><small>01</small> Services</a>
-    <a href="#work" style="--i:1"><small>02</small> Work</a>
-    <a href="#pricing" style="--i:2"><small>03</small> Pricing</a>
-    <a href="#order" style="--i:3"><small>04</small> Order</a>
+    <a href="index.html" class="on" style="--i:0"><small>01</small> Home</a>
+    <a href="services.html" style="--i:1"><small>02</small> Services</a>
+    <a href="work.html" style="--i:2"><small>03</small> Work</a>
+    <a href="pricing.html" style="--i:3"><small>04</small> Pricing</a>
+    <a href="about.html" style="--i:4"><small>05</small> About</a>
   </nav>
   <div class="mmenu-foot">
     <a class="btn wa full" href="https://wa.me/256708735878" target="_blank" rel="noopener">Chat on WhatsApp</a>
-    <a class="btn ghost full" href="#order">Start a project →</a>
+    <a class="btn ghost full" href="start.html">Start a project →</a>
     <div class="mmenu-nations">
       <div class="flagline">
         <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
@@ -75,36 +78,38 @@
   </div>
 </div>
 
+<main data-page="home">
+
 <!-- ===================== HERO ===================== -->
-<section class="hero" id="top">
-  <div class="hero-grid"></div>
-  <div class="glow a"></div><div class="glow b"></div>
-  <div class="wrap hero-inner">
-    <div class="eyebrow reveal"><span class="dot"></span> The Digital Design Sector of 97 World</div>
-    <h1 class="hero-title reveal">
-      WE BUILD<br>
-      THE <em>PROOF</em>,<br>
-      <span class="stroke">NOT THE HYPE.</span>
+<section class="hero2" id="top">
+  <div class="hero2-grid"></div>
+  <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true" data-plx="0.1">
+  <div class="wrap hero2-inner">
+    <div class="eyebrow reveal"><span class="dot"></span> The Digital Design Sector — Kampala · Juba</div>
+    <h1 class="mega reveal">
+      <span class="row">WE BUILD</span>
+      <span class="row rotwrap"><span id="rotWord">PROOF.</span></span>
+      <span class="row thin">NOT THE HYPE.</span>
     </h1>
-    <p class="lead reveal">From <b>websites</b> to <b>campaign fliers</b> to <b>everything in between</b> — 97 World is the design sector built for brands that want work that speaks. <b>Proof isn't fabricated. It's built.</b></p>
-    <div class="cta-row reveal">
-      <a href="#pricing" class="btn primary">Build your quote →</a>
-      <a href="#work" class="btn ghost">See our work</a>
-    </div>
-    <div class="hero-meta reveal">
-      <div class="m"><b>97</b><span>The Sector</span></div>
-      <div class="m"><b>2</b><span>Nations Served</span></div>
-      <div class="m"><b>∞</b><span>Ideas Built</span></div>
-      <div class="m">
-        <div class="flagline">
-          <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
-          <i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i>
-        </div>
-        <span class="flag-cap">Uganda · South Sudan</span>
+    <div class="tail reveal">
+      <p class="lead">From <b>websites</b> to <b>campaign fliers</b> to <b>full brand identities</b> — one sector for everything your idea needs to look serious and sell.</p>
+      <div class="chips">
+        <span class="chip"><i class="fdot ug"></i> Kampala <b class="clock" data-tz="Africa/Kampala"></b></span>
+        <span class="chip"><i class="fdot ss"></i> Juba <b class="clock" data-tz="Africa/Juba"></b></span>
       </div>
     </div>
+    <div class="cta-row reveal">
+      <a href="start.html" class="btn primary">Start a project →</a>
+      <a href="pricing.html" class="btn ghost">Build your quote</a>
+    </div>
+    <div class="hero2-stats reveal">
+      <div class="st"><b data-count="2">2</b><span>Nations served</span></div>
+      <div class="st"><b data-count="7">7</b><span>Services offered</span></div>
+      <div class="st"><b>50%</b><span>Deposit to start</span></div>
+      <div class="st"><b>∞</b><span>Ideas built</span></div>
+    </div>
   </div>
-  <a href="#exp" class="scroll-hint" aria-label="Scroll down">↓</a>
+  <a href="#glance" class="scroll-hint" aria-label="Scroll down">↓</a>
 </section>
 
 <!-- ===================== MARQUEE ===================== -->
@@ -115,125 +120,204 @@
   </div>
 </div>
 
-<!-- ===================== EXPERIENCE ===================== -->
-<section class="blk" id="exp">
+<!-- ===================== BENTO ===================== -->
+<section class="blk" id="glance">
   <div class="wrap">
-    <div class="kicker reveal">The Experience</div>
-    <h2 class="sec reveal">One sector. <span class="mut">Every design need you have.</span></h2>
-    <p class="sub reveal">The experience starts the moment you need something built. We take it from a first idea to a finished, living thing.</p>
+    <div class="kicker reveal">The sector at a glance</div>
+    <h2 class="sec reveal">Everything you need. <span class="mut">One sector.</span></h2>
 
-    <div class="exp-lines" id="expLines"><!-- injected from data.js --></div>
+    <div class="bento">
+      <a class="bcard tilt b-services reveal" href="services.html">
+        <div class="bk">Services</div>
+        <h3>What we build</h3>
+        <div class="list">
+          <span class="li">Websites <span>from <b data-usd="500"></b></span></span>
+          <span class="li">Fliers &amp; Posters <span>from <b data-usd="40"></b></span></span>
+          <span class="li">Brand &amp; Logos <span>from <b data-usd="150"></b></span></span>
+          <span class="li">Social Kits <span>from <b data-usd="120"></b></span></span>
+        </div>
+        <span class="go">All 7 services →</span>
+      </a>
 
-    <div class="proof reveal">
-      <h3><span class="x">PROOF ISN'T</span> <span class="y">FABRICATED.</span><br>IT'S <span class="y">BUILT.</span></h3>
-      <p>Every result on this page is made — not staged</p>
+      <a class="bcard tilt b-work reveal" href="work.html">
+        <div class="thumb may">
+          <div class="browser">
+            <div class="bbar"><i></i><i></i><i></i></div>
+            <div class="bbody">
+              <span class="badge live">Live</span>
+              <div class="lg" style="background:linear-gradient(92deg,#63d67f,#ffce00);-webkit-background-clip:text;background-clip:text">Mayanyure</div>
+              <div class="cap">Resort</div>
+            </div>
+          </div>
+        </div>
+        <div class="meta2"><b>Latest shipped work</b><span>See the case studies →</span></div>
+      </a>
+
+      <a class="bcard tilt b-pricing reveal" href="pricing.html">
+        <div class="bk">Pricing</div>
+        <div class="big">from <b data-usd="35"></b></div>
+        <div class="note">Instant quote calculator · 50% locks your slot</div>
+        <span class="go">Build your quote →</span>
+      </a>
+
+      <div class="bcard b-nations reveal">
+        <div class="bk">Nations</div>
+        <div class="rows">
+          <div class="n"><div><b>Uganda</b><small>Kampala · UGX</small></div><span class="clock" data-tz="Africa/Kampala"></span></div>
+          <div class="n"><div><b>South Sudan</b><small>Juba · USD</small></div><span class="clock" data-tz="Africa/Juba"></span></div>
+        </div>
+        <span class="go" style="color:var(--dim)">+ international, in USD</span>
+      </div>
+
+      <a class="bcard b-wa reveal" href="https://wa.me/256708735878" target="_blank" rel="noopener">
+        <div class="ic"><svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3z"/></svg></div>
+        <h3>Talk to the sector</h3>
+        <span class="go">WhatsApp us →</span>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ===================== PORTFOLIO ===================== -->
+<!-- ===================== FEATURED WORK ===================== -->
 <section class="blk tight" id="work">
   <div class="wrap">
-    <div class="kicker reveal">Websites We've Built</div>
-    <h2 class="sec reveal">Real work. <span class="mut">Live &amp; loading.</span></h2>
-    <div class="grid2" id="workGrid"><!-- injected from data.js --></div>
-  </div>
-</section>
-
-<!-- ===================== PRICING ===================== -->
-<section class="blk" id="pricing">
-  <div class="wrap">
-    <div class="kicker reveal">Interactive Pricing</div>
-    <h2 class="sec reveal">Build your quote. <span class="mut">Pick what you need.</span></h2>
-    <p class="sub reveal">Tell us where you are and tick what you want built. Your total updates live — and every project starts with a <b>50% deposit</b>, with the balance paid on delivery.</p>
-
-    <div class="price-shell reveal">
-      <div class="price-top">
-        <div class="ctry" id="ctry">
-          <button data-c="UG" class="on" type="button" onclick="setCountry('UG')">
-            <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span> Uganda · UGX
-          </button>
-          <button data-c="SS" type="button" onclick="setCountry('SS')">
-            <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span> South Sudan / Intl · USD
-          </button>
-        </div>
-        <div class="cur-note" id="curNote">Showing prices in Ugandan Shillings (UGX)</div>
+    <div class="sec-head">
+      <div>
+        <div class="kicker reveal">Selected work</div>
+        <h2 class="sec reveal">Real work. <span class="mut">Live &amp; loading.</span></h2>
       </div>
-      <div class="price-body">
-        <div class="svc-list" id="svcList"><!-- injected from data.js --></div>
-        <div class="summary">
-          <h4>Your Quote</h4>
-          <div class="srow"><span class="k">Items selected</span><span class="v" id="sumCount">0</span></div>
-          <div class="srow total"><span class="k">Project total</span><span class="v" id="sumTotal">—</span></div>
-          <div class="dep">
-            <div class="lbl">2-Deposit Plan</div>
-            <div class="drow"><span>1st deposit — to start</span><b id="dep1">—</b></div>
-            <div class="drow"><span>Balance — on delivery</span><b id="dep2">—</b></div>
-            <small>Every project runs on a 50 / 50 plan: pay the first deposit to lock your slot and begin, then the balance when the work is delivered.</small>
+      <a class="more reveal" href="work.html">All case studies →</a>
+    </div>
+    <div class="grid2">
+      <a class="work reveal" href="work.html#watp">
+        <div class="thumb watp">
+          <div class="browser">
+            <div class="bbar"><i></i><i></i><i></i></div>
+            <div class="bbody">
+              <span class="badge soon">Placeholder · Coming Soon</span>
+              <div class="lg" style="background:linear-gradient(92deg,#7aa2ff,#c58bff);-webkit-background-clip:text;background-clip:text">WATP</div>
+              <div class="cap">My Weekly Track</div>
+            </div>
           </div>
-          <a href="#order" class="btn wa full mt" onclick="syncOrder()">Continue to order →</a>
         </div>
-      </div>
+        <div class="meta">
+          <h4>WATP My Weekly Track <span class="badge soon">Coming Soon</span></h4>
+          <p>A personal tracking platform. Preview slot reserved; live build in progress.</p>
+          <div class="tags"><span>Web App</span><span>Tracking</span><span>UI/UX</span></div>
+        </div>
+      </a>
+      <a class="work reveal" href="work.html#mayanyure">
+        <div class="thumb may">
+          <div class="browser">
+            <div class="bbar"><i></i><i></i><i></i></div>
+            <div class="bbody">
+              <span class="badge live">Website</span>
+              <div class="lg" style="background:linear-gradient(92deg,#63d67f,#ffce00);-webkit-background-clip:text;background-clip:text">Mayanyure</div>
+              <div class="cap">Resort</div>
+            </div>
+          </div>
+        </div>
+        <div class="meta">
+          <h4>Mayanyure Resort <span class="badge live">Live</span></h4>
+          <p>A full hospitality website — bookings, gallery and story, built to convert guests.</p>
+          <div class="tags"><span>Website</span><span>Hospitality</span><span>Booking</span></div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ===================== ORDER FORM ===================== -->
-<section class="blk tight" id="order">
+<!-- ===================== SERVICES STRIP ===================== -->
+<section class="blk" id="exp">
   <div class="wrap">
-    <div class="kicker reveal">Place Your Order</div>
-    <h2 class="sec reveal">Send it to us <span class="mut">on WhatsApp.</span></h2>
-    <p class="sub reveal">Fill this in and it turns straight into a ready-to-send WhatsApp message. Hit send and you're talking to 97 World.</p>
+    <div class="sec-head">
+      <div>
+        <div class="kicker reveal">The experience</div>
+        <h2 class="sec reveal">One sector. <span class="mut">Every design need.</span></h2>
+      </div>
+      <a class="more reveal" href="services.html">Explore services →</a>
+    </div>
+    <div class="exp-lines">
+      <a class="exp-line reveal" href="services.html#web">
+        <span class="idx">01</span><span class="name">Websites</span>
+        <span class="desc">Fast, modern, conversion-first sites that work on every screen.</span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="exp-line reveal" href="services.html#flier">
+        <span class="idx">02</span><span class="name">Campaign Fliers</span>
+        <span class="desc">Posters &amp; fliers that stop the scroll and fill the room.</span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="exp-line reveal" href="services.html#logo">
+        <span class="idx">03</span><span class="name">Brand &amp; Logo Design</span>
+        <span class="desc">Identities that hold up from a business card to a billboard.</span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="exp-line reveal" href="services.html#social">
+        <span class="idx">04</span><span class="name">Social Media Kits</span>
+        <span class="desc">Content that keeps your brand loud across every feed.</span>
+        <span class="arrow">→</span>
+      </a>
+      <a class="exp-line reveal" href="services.html">
+        <span class="idx">05</span><span class="name" style="color:var(--dim)">…and more — all your needs</span>
+        <span class="desc">If it can be designed, the 97 sector builds it.</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
 
-    <div class="order reveal">
-      <div class="order-head">
-        <span class="wa-ico" aria-hidden="true">
-          <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
-        </span>
-        <div>
-          <h4>WhatsApp Order Form</h4>
-          <p>Direct to 97 World · +256 708 735 878</p>
-        </div>
-      </div>
-      <div class="order-body">
-        <div class="field">
-          <label for="fName">Your name</label>
-          <input id="fName" type="text" placeholder="e.g. Zah" autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="fCountry">Your country</label>
-          <select id="fCountry" onchange="setCountryFromForm()">
-            <option value="UG">Uganda</option>
-            <option value="SS">South Sudan</option>
-            <option value="OT">Other / International</option>
-          </select>
-        </div>
-        <div class="field full">
-          <label for="fNeeds">What do you need built?</label>
-          <textarea id="fNeeds" placeholder="Selected services from the pricing tool will appear here — or describe it in your own words."></textarea>
-        </div>
-        <div class="field full">
-          <label for="fExtra">Anything else? (timeline, references, budget)</label>
-          <input id="fExtra" type="text" placeholder="Optional — e.g. needed within 2 weeks">
-        </div>
-      </div>
-      <div class="order-foot">
-        <button class="btn wa send-wa" id="sendBtn" type="button" onclick="sendOrder(event)">
-          <svg viewBox="0 0 32 32" width="20" height="20" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3z"/></svg>
-          Send order on WhatsApp
-        </button>
-        <p class="fine">Opens WhatsApp to <b>+256 708 735 878</b> with your order pre-filled. First deposit confirms your slot.</p>
+<!-- ===================== PROCESS ===================== -->
+<section class="blk tight" id="process">
+  <div class="wrap">
+    <div class="kicker reveal">How it works</div>
+    <h2 class="sec reveal">Brief to build <span class="mut">in four steps.</span></h2>
+    <div class="rail">
+      <div class="step reveal"><h3>Brief us</h3><p>Tell us what you need on WhatsApp — goals, references, deadline. We shape it into a clear brief with a fixed quote.</p></div>
+      <div class="step reveal"><h3>Lock your slot</h3><p>A 50% deposit locks your place in the build queue. The timeline starts counting the moment it lands.</p></div>
+      <div class="step reveal"><h3>We build, you react</h3><p>Tight feedback loops on WhatsApp while we design and build — no long silences, no surprises.</p></div>
+      <div class="step reveal"><h3>Delivery day</h3><p>Final files, live site, full handover. The balance clears on delivery — and the proof is yours.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="blk tight" id="manifesto">
+  <div class="wrap">
+    <div class="manifesto reveal">
+      <h3><span class="x">PROOF ISN'T</span> <span class="y">FABRICATED.</span><br>IT'S <span class="y">BUILT.</span></h3>
+      <p>Every result on this page is made — not staged</p>
+      <div class="principles">
+        <div class="p"><b>Proof over hype</b><span>We don't decorate promises. Everything we show is something we actually built.</span></div>
+        <div class="p"><b>Speed with standards</b><span>Days, not months — without shipping anything we wouldn't put our mark on.</span></div>
+        <div class="p"><b>Two nations, one bar</b><span>From Kampala to Juba, the quality bar does not move.</span></div>
+        <div class="p"><b>Built to convert</b><span>Design is judged by what it makes happen — orders, bookings, calls, results.</span></div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ===================== CTA ===================== -->
+<section class="cta-banner">
+  <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true">
+  <div class="wrap">
+    <h2>LET'S BUILD <em>YOURS.</em></h2>
+    <p>Quotes are instant, the deposit locks your slot, and the sector gets to work.</p>
+    <div class="row">
+      <a href="start.html" class="btn primary">Start a project →</a>
+      <a href="pricing.html" class="btn ghost">Build your quote</a>
+    </div>
+  </div>
+</section>
+
+</main>
 
 <!-- ===================== FOOTER ===================== -->
 <footer>
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="#top" class="brand"><span class="mono"><img src="assets/mark.png" alt="97 Design" width="40" height="40"></span><span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span></a>
+        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark.png" alt="97 Design" width="40" height="40"></span><span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span></a>
         <p>The digital design sector of 97 World. Websites, fliers, brands and everything your idea needs — built, not fabricated.</p>
         <div class="flagline mt">
           <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
@@ -242,38 +326,33 @@
       </div>
       <div class="foot-col">
         <h5>Sector</h5>
-        <a href="#exp">Services</a><a href="#work">Our Work</a><a href="#pricing">Pricing</a><a href="#order">Order</a>
+        <a href="index.html">Home</a><a href="services.html">Services</a><a href="work.html">Work</a><a href="pricing.html">Pricing</a><a href="about.html">About</a>
+      </div>
+      <div class="foot-col">
+        <h5>Build</h5>
+        <a href="services.html#web">Websites</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
       </div>
       <div class="foot-col">
         <h5>Talk to us</h5>
         <a href="https://wa.me/256708735878" target="_blank" rel="noopener">WhatsApp</a>
         <a href="tel:+256708735878">+256 708 735 878</a>
-        <a href="#order">Start a project</a>
+        <a href="start.html">Start a project</a>
       </div>
     </div>
     <div class="foot-bottom">
       <span>© <span id="yr"></span> 97 World — Design Sector. Uganda · South Sudan.</span>
       <span>Proof isn't fabricated. It's built.</span>
     </div>
+    <span class="foot-wm">97 WORLD</span>
   </div>
 </footer>
-
-<!-- sticky mobile quote bar -->
-<div class="qbar" id="qbar" aria-hidden="true">
-  <div class="qinfo">
-    <small>Your quote · <span id="qbarCount">0</span> selected</small>
-    <b id="qbarTotal">—</b>
-  </div>
-  <a href="#order" class="btn wa" onclick="syncOrder()">Order →</a>
-</div>
 
 <a class="float-wa" href="https://wa.me/256708735878" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
-<!-- data mirrors the 97 World Notion hub (Services & Portfolio) -->
 <script src="js/data.js"></script>
-<script src="js/script.js"></script>
-<script src="js/fx.js"></script>
+<script src="js/site.js"></script>
+<script src="js/home.js"></script>
 </body>
 </html>

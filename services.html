@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Websites, landing pages, logos, brand kits, fliers, business cards and social packs — every service of the 97 World design sector, with prices and turnarounds.">
+<meta name="theme-color" content="#050506">
+<title>Services — 97 World Design Sector</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="services">
+
+<!-- ===================== FX LAYER ===================== -->
+<canvas id="fxCanvas" aria-hidden="true"></canvas>
+<div class="fx-veil" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="scroll-progress" aria-hidden="true"><i></i></div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a href="index.html" class="brand" aria-label="97 World home">
+    <span class="mono"><img src="assets/mark.png" alt="97 Design" width="34" height="34"></span>
+    <span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span>
+  </a>
+  <nav class="links">
+    <a href="services.html" class="on">Services</a>
+    <a href="work.html">Work</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="about.html">About</a>
+  </nav>
+  <a href="start.html" class="nav-cta">Start a project</a>
+  <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="mmenu" id="mmenu" aria-hidden="true">
+  <nav class="mmenu-links">
+    <a href="index.html" style="--i:0"><small>01</small> Home</a>
+    <a href="services.html" class="on" style="--i:1"><small>02</small> Services</a>
+    <a href="work.html" style="--i:2"><small>03</small> Work</a>
+    <a href="pricing.html" style="--i:3"><small>04</small> Pricing</a>
+    <a href="about.html" style="--i:4"><small>05</small> About</a>
+  </nav>
+  <div class="mmenu-foot">
+    <a class="btn wa full" href="https://wa.me/256708735878" target="_blank" rel="noopener">Chat on WhatsApp</a>
+    <a class="btn ghost full" href="start.html">Start a project →</a>
+    <div class="mmenu-nations">
+      <div class="flagline">
+        <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
+        <i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i>
+      </div>
+      <span class="cap">Uganda · South Sudan</span>
+    </div>
+  </div>
+</div>
+
+<main data-page="services">
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="crumb reveal"><a href="index.html">Home</a><i></i>Services</div>
+    <h1 class="reveal">Everything your brand <em>needs.</em></h1>
+    <p class="sub reveal">Seven services, one quality bar. Prices are starting points shown in your currency — add anything to your quote and the total builds live.</p>
+    <div class="meta-row reveal">
+      <span class="chip">7 services</span>
+      <span class="chip">From&nbsp;<b style="color:#fff" data-usd="35"></b></span>
+      <span class="chip">2–10 day turnarounds</span>
+    </div>
+  </div>
+</section>
+
+<section class="blk tight">
+  <div class="wrap">
+    <div class="catalog" id="svcCatalog"><!-- rendered from js/data.js --></div>
+  </div>
+</section>
+
+<section class="blk" id="process">
+  <div class="wrap">
+    <div class="kicker reveal">How it works</div>
+    <h2 class="sec reveal">Brief to build <span class="mut">in four steps.</span></h2>
+    <div class="rail">
+      <div class="step reveal"><h3>Brief us</h3><p>Tell us what you need on WhatsApp — goals, references, deadline. We shape it into a clear brief with a fixed quote.</p></div>
+      <div class="step reveal"><h3>Lock your slot</h3><p>A 50% deposit locks your place in the build queue. The timeline starts counting the moment it lands.</p></div>
+      <div class="step reveal"><h3>We build, you react</h3><p>Tight feedback loops on WhatsApp while we design and build — no long silences, no surprises.</p></div>
+      <div class="step reveal"><h3>Delivery day</h3><p>Final files, live site, full handover. The balance clears on delivery — and the proof is yours.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="blk tight" id="faq">
+  <div class="wrap">
+    <div class="kicker reveal">Questions</div>
+    <h2 class="sec reveal">Answers, <span class="mut">upfront.</span></h2>
+    <div class="faq reveal" data-faq><!-- rendered from js/data.js --></div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true">
+  <div class="wrap">
+    <h2>LET'S BUILD <em>YOURS.</em></h2>
+    <p>Quotes are instant, the deposit locks your slot, and the sector gets to work.</p>
+    <div class="row">
+      <a href="start.html" class="btn primary">Start a project →</a>
+      <a href="pricing.html" class="btn ghost">Build your quote</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark.png" alt="97 Design" width="40" height="40"></span><span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span></a>
+        <p>The digital design sector of 97 World. Websites, fliers, brands and everything your idea needs — built, not fabricated.</p>
+        <div class="flagline mt">
+          <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
+          <i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h5>Sector</h5>
+        <a href="index.html">Home</a><a href="services.html">Services</a><a href="work.html">Work</a><a href="pricing.html">Pricing</a><a href="about.html">About</a>
+      </div>
+      <div class="foot-col">
+        <h5>Build</h5>
+        <a href="services.html#web">Websites</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
+      </div>
+      <div class="foot-col">
+        <h5>Talk to us</h5>
+        <a href="https://wa.me/256708735878" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="tel:+256708735878">+256 708 735 878</a>
+        <a href="start.html">Start a project</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="yr"></span> 97 World — Design Sector. Uganda · South Sudan.</span>
+      <span>Proof isn't fabricated. It's built.</span>
+    </div>
+    <span class="foot-wm">97 WORLD</span>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/256708735878" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
+</a>
+
+<script src="js/data.js"></script>
+<script src="js/site.js"></script>
+
+</body>
+</html>
