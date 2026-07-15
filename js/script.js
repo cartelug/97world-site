@@ -26,7 +26,7 @@
     kickReveals();
   }
   window.endIntro = endIntro;
-  var introTimer = setTimeout(endIntro, 6200);
+  var introTimer = setTimeout(endIntro, 4600);
 
   /* ---------- NAV scroll shadow ---------- */
   window.addEventListener("scroll", function () {
