@@ -47,9 +47,10 @@
 }
 .hero2-inner{position:relative;z-index:2;width:100%}
 
-h1.mega{font-size:clamp(52px,10.5vw,132px);line-height:.92;font-weight:900;letter-spacing:-.035em}
+/* height-capped so all three rows + lead + the proof CTAs share the first viewport */
+h1.mega{font-size:clamp(58px,min(12.5vw,13.5vh),150px);line-height:.88;font-weight:900;letter-spacing:.01em}
 h1.mega .row{display:block}
-h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
+h1.mega .thin{color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.5)}
 .rotwrap{display:block;min-height:1em}
 #rotWord{
   display:inline-block;
@@ -63,12 +64,12 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   100%{opacity:1;transform:none;filter:blur(0)}
 }
 .hero2 .tail{
-  margin-top:30px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;
+  margin-top:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;
 }
 .hero2 .lead{max-width:520px;color:#c7c7cd;font-size:clamp(16px,2.2vw,18.5px)}
 .hero2 .lead b{color:#fff}
 .hero2 .chips{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-.hero2 .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px;align-items:center}
+.hero2 .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;align-items:center}
 /* quiet third path under the two proof buttons */
 .cta-mini{
   font-family:var(--font-mono);font-size:12.5px;color:var(--mut);
@@ -104,7 +105,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 .exp-line:hover{padding-left:14px}
 .exp-line .idx{font-size:13px;color:var(--mut);width:34px;font-weight:700;letter-spacing:.1em;transition:color .35s}
 .exp-line:hover .idx{color:var(--ug-y)}
-.exp-line .name{font-size:clamp(24px,4.6vw,42px);font-weight:800;letter-spacing:-.02em;flex:1;transition:.35s}
+.exp-line .name{font-size:clamp(24px,4.6vw,44px);font-weight:800;letter-spacing:.01em;flex:1;transition:.35s}
 .exp-line:hover .name{transform:translateX(4px)}
 .exp-line .desc{color:var(--mut);font-size:14.5px;max-width:240px;text-align:right}
 .exp-line .arrow{color:var(--ug-y);font-size:22px;opacity:0;transform:translateX(-8px);transition:.35s}
@@ -127,8 +128,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 }
 .manifesto::before{content:"";position:absolute;inset:0;
   background:radial-gradient(60% 120% at 50% 0%,rgba(255,206,0,.10),transparent 70%)}
-.manifesto h3{position:relative;font-size:clamp(28px,6vw,58px);font-weight:900;letter-spacing:-.02em;line-height:1.05}
-.manifesto h3 .x{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
+.manifesto h3{position:relative;font-size:clamp(30px,6.5vw,66px);font-weight:900;letter-spacing:.005em;line-height:.98}
+.manifesto h3 .x{color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.5)}
 .manifesto h3 .y{
   background:linear-gradient(92deg,var(--ug-y),var(--ug-r),var(--ug-y));background-size:220% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;

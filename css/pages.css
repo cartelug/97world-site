@@ -14,7 +14,7 @@
 .page-hero .crumb a:hover{color:#fff}
 .page-hero .crumb i{width:16px;height:1px;background:var(--line2)}
 .page-hero h1{
-  font-size:clamp(42px,8vw,96px);font-weight:900;letter-spacing:-.03em;line-height:.96;text-wrap:balance;
+  font-size:clamp(46px,9.5vw,110px);font-weight:900;letter-spacing:0;line-height:.92;text-wrap:balance;
 }
 .page-hero h1 em{
   font-style:normal;
@@ -40,7 +40,7 @@
   font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:800;
   color:var(--ug-y);border:1px solid rgba(255,206,0,.35);padding:4px 10px;border-radius:30px;
 }
-.cat-head h3{font-size:clamp(22px,3.4vw,30px);font-weight:900;letter-spacing:-.02em}
+.cat-head h3{font-size:clamp(22px,3.4vw,32px);font-weight:900;letter-spacing:.04em}
 .pop{
   font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#000;
   background:var(--ug-y);padding:3px 8px;border-radius:20px;font-weight:800;
@@ -73,7 +73,7 @@
 .case .shot .browser{inset:26px 26px auto 26px;height:calc(100% - 52px)}
 .case .body{padding:34px 32px;display:flex;flex-direction:column;gap:14px;border-left:1px solid var(--line)}
 .case .type{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ug-y);font-weight:700}
-.case h3{font-size:clamp(24px,3.6vw,34px);font-weight:900;letter-spacing:-.02em;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.case h3{font-size:clamp(24px,3.6vw,36px);font-weight:900;letter-spacing:.04em;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .case p{color:#b9b9c0;font-size:15px}
 .case .focus{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:4px}
 .case .focus li{position:relative;padding-left:22px;font-size:14px;color:var(--mut)}
@@ -199,8 +199,8 @@
 .lost{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;padding:100px 20px}
 .lost .inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px}
 .lost img{width:min(180px,40vw);opacity:.9}
-.lost h1{font-size:clamp(40px,8vw,84px);font-weight:900;letter-spacing:-.03em}
-.lost h1 em{font-style:normal;color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
+.lost h1{font-size:clamp(44px,9vw,96px);font-weight:900;letter-spacing:.01em}
+.lost h1 em{font-style:normal;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.5)}
 .lost p{color:var(--mut);max-width:380px}
 
 /* ============ RESPONSIVE ============ */

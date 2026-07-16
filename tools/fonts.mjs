@@ -1,58 +1,62 @@
 /* ============================================================
    97 DESIGN — display font pipeline (dev-only, run locally)
-   Converts the licensed Knockout Cruiserweight file (any of
-   OTF/TTF/WOFF/WOFF2) into the committed web subset and prints
-   the metrics needed for the zero-CLS fallback overrides.
+   Subsets the licensed Knockout web fonts to the site's charset
+   and prints the metrics used by the zero-CLS fallback overrides
+   in css/fonts.css.
 
-   Usage: npm run fonts -- --src <path-to-font-file>
+   Usage: npm run fonts -- --dir <folder-with-knockout-woff2s>
+   (matches files by name: *Cruiserweight*, *JuniorMiddleweight*,
+    *UltimateSumo*)
 
-   Output: assets/fonts/knockout-cruiserweight.woff2
-   Only the subset ships — the desktop original is never
-   committed (licensing: the owner's H&Co web license covers
-   self-hosted serving of the web subset).
+   Only subsets are committed — desktop originals never are
+   (licensing: the owner's H&Co web license covers self-hosted
+   serving of the web subsets).
    ============================================================ */
 import subsetFont from 'subset-font';
 import * as fontkit from 'fontkit';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const srcArg = process.argv.indexOf('--src');
-const SRC = srcArg > -1 ? process.argv[srcArg + 1] : null;
-if (!SRC) {
-  console.error('usage: npm run fonts -- --src <path-to-knockout-file>');
+const dirArg = process.argv.indexOf('--dir');
+const DIR = dirArg > -1 ? process.argv[dirArg + 1] : null;
+if (!DIR) {
+  console.error('usage: npm run fonts -- --dir <folder-with-knockout-woff2 files>');
   process.exit(1);
 }
 
-// every character the site's display surfaces can render, plus the
-// symbols used in headings/CTAs — anything outside this falls back
+/* the three faces the site uses (Knockout numbering):
+   52 Cruiserweight — core display · 31 Junior Middlewt — mid headings
+   94 Ultmt Sumo — brand stamps (footer watermark, intro DESIGN) */
+const FACES = [
+  { match: /cruiserweight/i, out: 'knockout-cruiserweight.woff2' },
+  { match: /juniormiddleweight|junior.?middlewt/i, out: 'knockout-jr-middleweight.woff2' },
+  { match: /ultimatesumo|ultmt.?sumo/i, out: 'knockout-ultimate-sumo.woff2' },
+];
+
+// every character display surfaces can render; symbols outside this
+// intentionally fall back (Knockout carries no arrows/checks)
 const ASCII = Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join('');
-const EXTRAS = '’‘“”–—·•→↓↗↺°✓✕✦×⇄%';
-const TEXT = ASCII + EXTRAS;
+const TEXT = ASCII + '’‘“”–—·•°×%';
 
-const src = readFileSync(SRC);
-const woff2 = await subsetFont(src, TEXT, { targetFormat: 'woff2' });
-const out = join(ROOT, 'assets', 'fonts', 'knockout-cruiserweight.woff2');
-writeFileSync(out, woff2);
-console.log('subset'.padEnd(14), (src.length / 1024).toFixed(0) + 'KB →', (woff2.length / 1024).toFixed(0) + 'KB woff2');
+const files = readdirSync(DIR);
+for (const face of FACES) {
+  const name = files.find((f) => face.match.test(f) && /\.(woff2?|otf|ttf)$/i.test(f));
+  if (!name) { console.error('MISSING source for', face.out); process.exit(1); }
+  const src = readFileSync(join(DIR, name));
+  const woff2 = await subsetFont(src, TEXT, { targetFormat: 'woff2' });
+  const smaller = woff2.length < src.length ? woff2 : src; // never ship a bigger file
+  writeFileSync(join(ROOT, 'assets', 'fonts', face.out), smaller);
 
-// metrics report → size-adjust / ascent-override / descent-override for
-// the Arial Narrow fallback face in css/fonts.css (CLS-free swap)
-const font = fontkit.create(src);
-const upm = font.unitsPerEm;
-const pct = (v) => ((v / upm) * 100).toFixed(2) + '%';
-console.log('family'.padEnd(14), font.familyName, '·', font.subfamilyName);
-console.log('unitsPerEm'.padEnd(14), upm);
-console.log('ascent'.padEnd(14), font.ascent, '→ ascent-override:', pct(font.ascent));
-console.log('descent'.padEnd(14), font.descent, '→ descent-override:', pct(Math.abs(font.descent)));
-console.log('lineGap'.padEnd(14), font.lineGap, '→ line-gap-override:', pct(font.lineGap));
-console.log('capHeight'.padEnd(14), font.capHeight, '(' + pct(font.capHeight) + ')');
-if (font.capHeight / upm < 0.62)
-  console.log('note: low cap-height — check kinetic clip wrappers for cropping');
-// avg advance of the caps — rough size-adjust hint vs Arial Narrow (~0.44em avg)
-const caps = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const run = font.layout(caps);
-const avg = run.positions.reduce((a, p) => a + p.xAdvance, 0) / caps.length / upm;
-console.log('avg cap adv'.padEnd(14), avg.toFixed(3) + 'em — size-adjust hint vs Arial Narrow: ~' + ((avg / 0.52) * 100).toFixed(0) + '%');
-console.log('\nnext: css/fonts.css @font-face swap → remove font-stretch → npm run build (see plan PART A)');
+  const font = fontkit.create(src);
+  const upm = font.unitsPerEm;
+  const pct = (v) => ((v / upm) * 100).toFixed(1) + '%';
+  const caps = 'HAMBURGEFONTSIV';
+  const avg = font.layout(caps).positions.reduce((a, p) => a + p.xAdvance, 0) / caps.length / upm;
+  console.log(face.out.padEnd(34), (src.length / 1024).toFixed(0) + 'KB →', (smaller.length / 1024).toFixed(0) + 'KB',
+    '| ' + font.familyName, '| asc', pct(font.ascent), 'desc', pct(Math.abs(font.descent)),
+    'cap', pct(font.capHeight), '| avgCapAdv', avg.toFixed(3) + 'em');
+}
+console.log('\nfallback overrides for css/fonts.css: ascent-override:80%;descent-override:20%;line-gap-override:0%');
+console.log('next: npm run build (heads re-inline the token swap), bump sw.js VERSION');

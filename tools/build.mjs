@@ -152,9 +152,10 @@ ${p.headExtra ? p.headExtra + '\n' : ''}<link rel="icon" type="image/svg+xml" hr
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/knockout-cruiserweight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-${p.home ? `<link rel="preload" as="image" href="assets/bg/bg1-desktop.avif" media="(min-width:821px)" fetchpriority="high">
+${p.home ? `<link rel="preload" href="assets/fonts/knockout-ultimate-sumo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="assets/bg/bg1-desktop.avif" media="(min-width:821px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/bg/bg1-mobile.avif" media="(max-width:820px)" fetchpriority="high">
 ` : ''}<style>
 ${criticalCss}</style>

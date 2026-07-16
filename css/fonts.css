@@ -1,16 +1,48 @@
 /* ============================================================
-   97 WORLD — SELF-HOSTED VARIABLE FONTS
-   Archivo (display, wght+wdth axes) · Inter (body/UI, wght)
-   JetBrains Mono (technical labels, wght)
+   97 WORLD — SELF-HOSTED FONTS
+   Knockout (H&Co, owner-licensed) display trio:
+     52 Cruiserweight — core display (heads, heroes)
+     31 Junior Middlewt — mid-level headings, menu
+     94 Ultmt Sumo — brand stamps (watermark, marquee, intro)
+   plus Inter (body/UI) and JetBrains Mono (technical labels).
+
+   The Knockout faces are single masters declared as weight
+   100–900 so every authored weight maps to the master with no
+   synthetic bolding (font-synthesis is also disabled globally).
+   Only the ~10KB web subsets ship — never desktop originals.
    ============================================================ */
 
 @font-face{
-  font-family:"Archivo Var";
-  src:url("../assets/fonts/archivo-var.woff2") format("woff2-variations");
+  font-family:"Knockout Cruiser";
+  src:url("../assets/fonts/knockout-cruiserweight.woff2") format("woff2");
   font-weight:100 900;
-  font-stretch:62.5% 125%;
   font-style:normal;
   font-display:swap;
+}
+@font-face{
+  font-family:"Knockout Jr";
+  src:url("../assets/fonts/knockout-jr-middleweight.woff2") format("woff2");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Knockout Sumo";
+  src:url("../assets/fonts/knockout-ultimate-sumo.woff2") format("woff2");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+/* metrics-matched fallback: while Knockout is (briefly) loading,
+   display text occupies near-identical boxes — CLS-free swap.
+   Knockout metrics: ascent 80% · descent 20% · no line gap. */
+@font-face{
+  font-family:"Knockout Fallback";
+  src:local("Arial Narrow"),local("Liberation Sans Narrow"),local("Helvetica Neue");
+  size-adjust:112%;
+  ascent-override:80%;
+  descent-override:20%;
+  line-gap-override:0%;
 }
 @font-face{
   font-family:"Inter Var";
