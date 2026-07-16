@@ -3,11 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="97 World — the digital design sector. Websites, campaign fliers, branding and more across Uganda & South Sudan. Proof isn't fabricated. It's built.">
+<meta name="description" content="97 World — the digital design sector. Websites, campaign fliers, branding and more across Uganda & South Sudan. Build your quote in 30 seconds. Proof isn't fabricated. It's built.">
 <meta name="theme-color" content="#050506">
 <title>97 World — Design Sector · Uganda & South Sudan</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/home.css">
 <script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
@@ -26,14 +29,16 @@
 <div id="intro" aria-hidden="true">
   <div class="intro-grid"></div>
   <div class="intro-glow"></div>
+  <canvas id="introCanvas" aria-hidden="true"></canvas>
   <div class="intro-logo">
-    <img class="intro-mark" src="assets/mark-white.png" alt="97 Design" width="300" height="300">
+    <span class="mark-wrap"><img class="intro-mark" src="assets/mark-white.png" alt="97 Design" width="300" height="300"></span>
     <div class="intro-word">DESIGN</div>
     <div class="intro-nations">
       <span class="fdot ug"></span> UGANDA <span class="mid">•</span> SOUTH SUDAN <span class="fdot ss"></span>
     </div>
     <div class="intro-tag">DIGITAL DESIGN SECTOR</div>
   </div>
+  <div class="intro-count"><span>Loading sector</span><b>00%</b></div>
   <div class="intro-bar"><i></i></div>
   <button class="skip" onclick="endIntro()">Skip ›</button>
 </div>
@@ -92,15 +97,15 @@
       <span class="row thin">NOT THE HYPE.</span>
     </h1>
     <div class="tail reveal">
-      <p class="lead">From <b>websites</b> to <b>campaign fliers</b> to <b>full brand identities</b> — one sector for everything your idea needs to look serious and sell.</p>
+      <p class="lead">Websites, fliers, brands — priced upfront, ordered on WhatsApp, delivered in days. <b>Get a real price in 30 seconds below.</b></p>
       <div class="chips">
         <span class="chip"><i class="fdot ug"></i> Kampala <b class="clock" data-tz="Africa/Kampala"></b></span>
         <span class="chip"><i class="fdot ss"></i> Juba <b class="clock" data-tz="Africa/Juba"></b></span>
       </div>
     </div>
     <div class="cta-row reveal">
-      <a href="start.html" class="btn primary">Start a project →</a>
-      <a href="pricing.html" class="btn ghost">Build your quote</a>
+      <a href="#quote" class="btn primary">Build your quote ↓</a>
+      <a href="https://wa.me/256708735878" class="btn ghost" target="_blank" rel="noopener">WhatsApp us</a>
     </div>
     <div class="hero2-stats reveal">
       <div class="st"><b data-count="2">2</b><span>Nations served</span></div>
@@ -109,7 +114,55 @@
       <div class="st"><b>∞</b><span>Ideas built</span></div>
     </div>
   </div>
-  <a href="#glance" class="scroll-hint" aria-label="Scroll down">↓</a>
+  <a href="#quote" class="scroll-hint" aria-label="Scroll to quote builder">↓</a>
+</section>
+
+<!-- ===================== TRUST STRIP ===================== -->
+<div class="trust-strip reveal" id="trust">
+  <div class="row">
+    <span class="t"><i class="ic" style="background:var(--ug-y);box-shadow:0 0 10px var(--ug-y)"></i><span>Instant quote — <b>right below</b></span></span>
+    <a class="t" href="work.html#mayanyure"><i class="ic" style="background:var(--wa);box-shadow:0 0 10px var(--wa)"></i><span><b>Mayanyure Resort</b> — live now</span></a>
+    <span class="t"><i class="ic" style="background:var(--ss-b);box-shadow:0 0 10px var(--ss-b)"></i><span><b>50 / 50</b> deposits — no surprises</span></span>
+    <span class="t"><i class="ic" style="background:var(--ug-r);box-shadow:0 0 10px var(--ug-r)"></i><span>Kampala · Juba · <b>Worldwide</b></span></span>
+  </div>
+</div>
+
+<!-- ===================== QUOTE CALCULATOR ===================== -->
+<section class="blk" id="quote">
+  <div class="wrap">
+    <div class="kicker reveal">Instant pricing</div>
+    <h2 class="sec reveal">Build your quote. <span class="mut">Right here.</span></h2>
+    <p class="sub reveal">Tick what you need — your total updates live in <b>UGX or USD</b>, with the <b>50% deposit</b> that locks your slot. Your quote follows you to checkout.</p>
+
+    <div class="price-shell reveal">
+      <div class="price-top">
+        <div class="ctry">
+          <button data-c="UG" type="button" onclick="setCountry('UG')">
+            <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span> Uganda · UGX
+          </button>
+          <button data-c="SS" type="button" onclick="setCountry('SS')">
+            <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span> South Sudan / Intl · USD
+          </button>
+        </div>
+        <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
+      </div>
+      <div class="price-body">
+        <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
+        <div class="summary">
+          <h4>Your Quote</h4>
+          <div class="srow"><span class="k">Items selected</span><span class="v js-sum-count">0</span></div>
+          <div class="srow total"><span class="k">Project total</span><span class="v js-sum-total">—</span></div>
+          <div class="dep">
+            <div class="lbl">2-Deposit Plan</div>
+            <div class="drow"><span>1st deposit — to start</span><b class="js-dep">—</b></div>
+            <div class="drow"><span>Balance — on delivery</span><b class="js-dep">—</b></div>
+            <small>Every project runs on a 50 / 50 plan: pay the first deposit to lock your slot and begin, then the balance when the work is delivered.</small>
+          </div>
+          <a href="start.html" class="btn wa full mt">Continue to start →</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ===================== MARQUEE ===================== -->
@@ -120,66 +173,8 @@
   </div>
 </div>
 
-<!-- ===================== BENTO ===================== -->
-<section class="blk" id="glance">
-  <div class="wrap">
-    <div class="kicker reveal">The sector at a glance</div>
-    <h2 class="sec reveal">Everything you need. <span class="mut">One sector.</span></h2>
-
-    <div class="bento">
-      <a class="bcard tilt b-services reveal" href="services.html">
-        <div class="bk">Services</div>
-        <h3>What we build</h3>
-        <div class="list">
-          <span class="li">Websites <span>from <b data-usd="500"></b></span></span>
-          <span class="li">Fliers &amp; Posters <span>from <b data-usd="40"></b></span></span>
-          <span class="li">Brand &amp; Logos <span>from <b data-usd="150"></b></span></span>
-          <span class="li">Social Kits <span>from <b data-usd="120"></b></span></span>
-        </div>
-        <span class="go">All 7 services →</span>
-      </a>
-
-      <a class="bcard tilt b-work reveal" href="work.html">
-        <div class="thumb may">
-          <div class="browser">
-            <div class="bbar"><i></i><i></i><i></i></div>
-            <div class="bbody">
-              <span class="badge live">Live</span>
-              <div class="lg" style="background:linear-gradient(92deg,#63d67f,#ffce00);-webkit-background-clip:text;background-clip:text">Mayanyure</div>
-              <div class="cap">Resort</div>
-            </div>
-          </div>
-        </div>
-        <div class="meta2"><b>Latest shipped work</b><span>See the case studies →</span></div>
-      </a>
-
-      <a class="bcard tilt b-pricing reveal" href="pricing.html">
-        <div class="bk">Pricing</div>
-        <div class="big">from <b data-usd="35"></b></div>
-        <div class="note">Instant quote calculator · 50% locks your slot</div>
-        <span class="go">Build your quote →</span>
-      </a>
-
-      <div class="bcard b-nations reveal">
-        <div class="bk">Nations</div>
-        <div class="rows">
-          <div class="n"><div><b>Uganda</b><small>Kampala · UGX</small></div><span class="clock" data-tz="Africa/Kampala"></span></div>
-          <div class="n"><div><b>South Sudan</b><small>Juba · USD</small></div><span class="clock" data-tz="Africa/Juba"></span></div>
-        </div>
-        <span class="go" style="color:var(--dim)">+ international, in USD</span>
-      </div>
-
-      <a class="bcard b-wa reveal" href="https://wa.me/256708735878" target="_blank" rel="noopener">
-        <div class="ic"><svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3z"/></svg></div>
-        <h3>Talk to the sector</h3>
-        <span class="go">WhatsApp us →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <!-- ===================== FEATURED WORK ===================== -->
-<section class="blk tight" id="work">
+<section class="blk" id="work">
   <div class="wrap">
     <div class="sec-head">
       <div>
@@ -305,10 +300,19 @@
     <p>Quotes are instant, the deposit locks your slot, and the sector gets to work.</p>
     <div class="row">
       <a href="start.html" class="btn primary">Start a project →</a>
-      <a href="pricing.html" class="btn ghost">Build your quote</a>
+      <a href="#quote" class="btn ghost">Build your quote</a>
     </div>
   </div>
 </section>
+
+<!-- sticky mobile quote bar -->
+<div class="qbar" aria-hidden="true">
+  <div class="qinfo">
+    <small>Your quote · <span class="js-qbar-count">0</span> selected</small>
+    <b class="js-qbar-total">—</b>
+  </div>
+  <a href="start.html" class="btn wa">Start →</a>
+</div>
 
 </main>
 
@@ -354,5 +358,7 @@
 <script src="js/data.js"></script>
 <script src="js/site.js"></script>
 <script src="js/home.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/intro.js"></script>
 </body>
 </html>

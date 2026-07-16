@@ -8,6 +8,9 @@
 <title>Pricing — 97 World Design Sector</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/pages.css">
 </head>
@@ -73,7 +76,7 @@
   <div class="wrap">
     <div class="price-shell reveal">
       <div class="price-top">
-        <div class="ctry" id="ctry">
+        <div class="ctry">
           <button data-c="UG" type="button" onclick="setCountry('UG')">
             <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span> Uganda · UGX
           </button>
@@ -81,18 +84,18 @@
             <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span> South Sudan / Intl · USD
           </button>
         </div>
-        <div class="cur-note" id="curNote">Showing prices in Ugandan Shillings (UGX)</div>
+        <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
       </div>
       <div class="price-body">
-        <div class="svc-list" id="svcList"><!-- rendered from js/data.js --></div>
+        <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
         <div class="summary">
           <h4>Your Quote</h4>
-          <div class="srow"><span class="k">Items selected</span><span class="v" id="sumCount">0</span></div>
-          <div class="srow total"><span class="k">Project total</span><span class="v" id="sumTotal">—</span></div>
+          <div class="srow"><span class="k">Items selected</span><span class="v js-sum-count">0</span></div>
+          <div class="srow total"><span class="k">Project total</span><span class="v js-sum-total">—</span></div>
           <div class="dep">
             <div class="lbl">2-Deposit Plan</div>
-            <div class="drow"><span>1st deposit — to start</span><b id="dep1">—</b></div>
-            <div class="drow"><span>Balance — on delivery</span><b id="dep2">—</b></div>
+            <div class="drow"><span>1st deposit — to start</span><b class="js-dep">—</b></div>
+            <div class="drow"><span>Balance — on delivery</span><b class="js-dep">—</b></div>
             <small>Every project runs on a 50 / 50 plan: pay the first deposit to lock your slot and begin, then the balance when the work is delivered.</small>
           </div>
           <a href="start.html" class="btn wa full mt">Continue to start →</a>
@@ -111,10 +114,10 @@
 </section>
 
 <!-- sticky mobile quote bar -->
-<div class="qbar" id="qbar" aria-hidden="true">
+<div class="qbar" aria-hidden="true">
   <div class="qinfo">
-    <small>Your quote · <span id="qbarCount">0</span> selected</small>
-    <b id="qbarTotal">—</b>
+    <small>Your quote · <span class="js-qbar-count">0</span> selected</small>
+    <b class="js-qbar-total">—</b>
   </div>
   <a href="start.html" class="btn wa">Start →</a>
 </div>

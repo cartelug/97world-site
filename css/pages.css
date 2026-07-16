@@ -91,58 +91,6 @@
 .case.slot p{margin:10px auto 24px;max-width:420px}
 .case.slot .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 
-/* ============ PRICING PAGE ============ */
-.price-shell{
-  margin-top:30px;border:1px solid var(--line);border-radius:26px;overflow:hidden;
-  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-}
-.price-top{
-  padding:26px 26px 20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;
-  justify-content:space-between;border-bottom:1px solid var(--line);
-}
-.ctry{display:flex;gap:8px;flex-wrap:wrap}
-.ctry button{
-  display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 16px;
-  border-radius:40px;cursor:pointer;transition:.25s;background:rgba(255,255,255,.04);
-  color:#cfcfd5;border:1px solid var(--line);
-}
-.ctry button.on{background:#fff;color:#000;border-color:#fff}
-.ctry .fg{display:inline-flex;gap:2px}
-.ctry .fg i{width:6px;height:12px;border-radius:2px;display:block}
-.cur-note{font-size:12.5px;color:var(--mut)}
-.price-body{display:grid;grid-template-columns:1.5fr 1fr}
-.svc-list{padding:8px 26px}
-.svc{display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:.2s;position:relative;border-radius:10px}
-.svc::before{
-  content:"";position:absolute;inset:0;border-radius:10px;pointer-events:none;
-  background:linear-gradient(90deg,rgba(255,206,0,.08),transparent 60%);opacity:0;transition:opacity .25s;
-}
-.svc:hover::before{opacity:1}
-.svc:hover{transform:translateX(3px)}
-.svc:last-child{border-bottom:none}
-.check{
-  width:24px;height:24px;border-radius:7px;border:1.5px solid #3a3a42;flex:none;
-  display:grid;place-items:center;transition:.2s;color:transparent;font-size:14px;font-weight:900;
-}
-.svc.sel .check{background:var(--ug-y);border-color:var(--ug-y);color:#000;box-shadow:0 0 0 4px rgba(255,206,0,.18)}
-.svc .info{flex:1}
-.svc .info b{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.svc .info span{font-size:13px;color:var(--mut)}
-.svc .amt{font-weight:800;font-size:15px;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}
-.svc .amt small{display:block;font-size:11px;color:var(--mut);font-weight:600}
-.summary{padding:24px 26px;background:rgba(255,255,255,.02);border-left:1px solid var(--line)}
-.summary h4{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);margin-bottom:18px}
-.srow{display:flex;justify-content:space-between;align-items:baseline;margin:12px 0;font-size:14.5px}
-.srow .k{color:var(--mut)}
-.srow.total{border-top:1px solid var(--line);padding-top:16px;margin-top:18px;font-size:16px}
-.srow.total .v{font-size:28px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.dep{background:rgba(255,206,0,.08);border:1px solid rgba(255,206,0,.25);border-radius:14px;padding:14px 16px;margin-top:16px}
-.dep .drow{display:flex;justify-content:space-between;font-size:14px;margin:5px 0}
-.dep .drow b{font-weight:800;font-variant-numeric:tabular-nums}
-.dep .lbl{color:var(--ug-y);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;margin-bottom:8px}
-.dep small{display:block;color:var(--mut);font-size:11.5px;margin-top:8px;line-height:1.5}
-
 /* ============ START PAGE ============ */
 .start-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;margin-top:30px;align-items:start}
 .order{
@@ -232,14 +180,6 @@
 }
 @media(max-width:820px){
   .page-hero{padding:140px 0 54px}
-  .price-body{grid-template-columns:1fr}
-  .summary{border-left:none;border-top:1px solid var(--line)}
-  .price-top{flex-direction:column;align-items:stretch;gap:12px;padding:18px 18px 16px}
-  .ctry{width:100%}
-  .ctry button{flex:1;justify-content:center}
-  .cur-note{text-align:center}
-  .svc-list{padding:6px 18px}
-  .summary{padding:20px 18px}
   .order-body{padding:20px 18px;grid-template-columns:1fr}
   .order-head{padding:20px 18px}
   .order-foot{padding:0 18px 22px}

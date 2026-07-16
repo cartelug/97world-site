@@ -1,0 +1,28 @@
+/* ============================================================
+   97 WORLD — SELF-HOSTED VARIABLE FONTS
+   Archivo (display, wght+wdth axes) · Inter (body/UI, wght)
+   JetBrains Mono (technical labels, wght)
+   ============================================================ */
+
+@font-face{
+  font-family:"Archivo Var";
+  src:url("../assets/fonts/archivo-var.woff2") format("woff2-variations");
+  font-weight:100 900;
+  font-stretch:62.5% 125%;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Inter Var";
+  src:url("../assets/fonts/inter-var.woff2") format("woff2-variations");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"JetBrains Mono Var";
+  src:url("../assets/fonts/jbmono-var.woff2") format("woff2-variations");
+  font-weight:100 800;
+  font-style:normal;
+  font-display:swap;
+}
