@@ -37,6 +37,31 @@
   }
   window.S97.paintPrices = paintPrices;
 
+  /* ---------- site-wide country / currency control ----------
+     Header pill, mobile-menu selector and the calculator's own toggle all
+     call window.setCountry — one source of truth, kept in sync everywhere. */
+  function paintCountryUI(c) {
+    document.querySelectorAll("[data-ctry]").forEach(function (b) {
+      var on = b.getAttribute("data-ctry") === c;
+      b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on));
+    });
+    document.querySelectorAll(".ctry button").forEach(function (b) {
+      b.classList.toggle("on", b.getAttribute("data-c") === c);
+    });
+    document.querySelectorAll(".js-cur-note").forEach(function (n) {
+      n.textContent = "Showing prices in " + curName(c);
+    });
+  }
+  function applyCountry(c) {
+    c = (c === "SS") ? "SS" : "UG";
+    setCountry(c);
+    paintCountryUI(c);
+    paintPrices();
+    try { window.dispatchEvent(new CustomEvent("q97country", { detail: c })); } catch (e) {}
+  }
+  window.S97.applyCountry = applyCountry;
+  window.setCountry = applyCountry;
+
   /* ---------- aurora background ---------- */
   (function aurora() {
     var canvas = document.getElementById("fxCanvas");
@@ -177,6 +202,27 @@
     }, { passive: true });
   })();
 
+  /* ---------- hero scroll-scrub: content rises + fades as you leave ---------- */
+  if (!reduce) (function () {
+    var inner = document.querySelector(".hero2-inner");
+    var hero = document.querySelector(".hero2");
+    if (!inner || !hero) return;
+    inner.style.willChange = "transform,opacity";
+    var tick = false;
+    function upd() {
+      var y = window.pageYOffset, h = hero.offsetHeight || window.innerHeight;
+      if (y < h) {
+        var p = y / h;
+        inner.style.transform = "translateY(" + (y * 0.32) + "px)";
+        inner.style.opacity = Math.max(0, 1 - p * 1.3).toFixed(3);
+      }
+      tick = false;
+    }
+    window.addEventListener("scroll", function () {
+      if (window.pageYOffset < (hero.offsetHeight || window.innerHeight) && !tick) { tick = true; raf(upd); }
+    }, { passive: true });
+  })();
+
   /* ---------- count-up for [data-count] ---------- */
   (function () {
     var nums = document.querySelectorAll("[data-count]");
@@ -299,5 +345,6 @@
   var yr = document.getElementById("yr");
   if (yr) yr.textContent = new Date().getFullYear();
   paintPrices();
+  paintCountryUI(getCountry());
   kickReveals();
 })();

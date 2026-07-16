@@ -81,20 +81,10 @@
     document.body.classList.toggle("qbar-on", on);
   }
 
-  /* ---------- country (all toggles) ---------- */
-  function paintCountry(c) {
-    document.querySelectorAll(".ctry button").forEach(function (b) {
-      b.classList.toggle("on", b.getAttribute("data-c") === c);
-    });
-    put("js-cur-note", "Showing prices in " + S.curName(c));
-  }
-  window.setCountry = function (c) {
-    S.setCountry(c);
-    paintCountry(c);
-    S.paintPrices();
-    render(); calc();
-  };
-  paintCountry(S.getCountry());
+  /* ---------- country: the header pill, mobile-menu selector and this
+     calculator's own toggle are all wired site-wide by js/site.js
+     (window.setCountry / paintCountryUI). We just re-render rows on change. */
+  window.addEventListener("q97country", function () { render(); calc(); });
 
   // back/forward-cache restore: another page may have changed the saved
   // quote while this document was frozen — re-sync instead of overwriting
@@ -102,7 +92,6 @@
     if (!e.persisted) return;
     selected = {};
     S.getSel().forEach(function (id) { selected[id] = true; });
-    paintCountry(S.getCountry());
     S.paintPrices();
     render(); calc();
   });

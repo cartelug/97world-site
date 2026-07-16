@@ -50,9 +50,9 @@
 
 <!-- ===================== NAV ===================== -->
 <header class="nav" id="nav">
-  <a href="index.html" class="brand" aria-label="97 World home">
+  <a href="index.html" class="brand" aria-label="97 Design home">
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="34" height="34"></span>
-    <span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span>
+    <span class="brand-txt">97 DESIGN<small>UG · SS</small></span>
   </a>
   <nav class="links">
     <a href="services.html">Services</a>
@@ -60,6 +60,10 @@
     <a href="pricing.html">Pricing</a>
     <a href="about.html">About</a>
   </nav>
+  <div class="ctry-toggle" role="group" aria-label="Choose country and currency">
+    <button type="button" data-ctry="UG" onclick="setCountry('UG')" aria-pressed="true"><i class="fdot ug"></i>UG</button>
+    <button type="button" data-ctry="SS" onclick="setCountry('SS')" aria-pressed="false"><i class="fdot ss"></i>SS</button>
+  </div>
   <a href="start.html" class="nav-cta">Start a project</a>
   <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -76,6 +80,10 @@
     <a href="about.html" style="--i:4"><small>05</small> About</a>
   </nav>
   <div class="mmenu-foot">
+    <div class="ctry-toggle" role="group" aria-label="Choose country and currency">
+      <button type="button" data-ctry="UG" onclick="setCountry('UG')" aria-pressed="true"><i class="fdot ug"></i>Uganda · UGX</button>
+      <button type="button" data-ctry="SS" onclick="setCountry('SS')" aria-pressed="false"><i class="fdot ss"></i>S. Sudan / Intl · USD</button>
+    </div>
     <a class="btn wa full" href="https://wa.me/256708735878" target="_blank" rel="noopener">Chat on WhatsApp</a>
     <a class="btn ghost full" href="start.html">Start a project →</a>
     <div class="mmenu-nations">
@@ -95,7 +103,6 @@
   <div class="hero2-grid"></div>
   <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true" data-plx="0.1">
   <div class="wrap hero2-inner">
-    <div class="eyebrow reveal"><span class="dot"></span> Design studio — Kampala · Juba</div>
     <h1 class="mega reveal">
       <span class="row">WE BUILD</span>
       <span class="row rotwrap"><span id="rotWord">PROOF.</span></span>
@@ -326,7 +333,7 @@
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span><span class="brand-txt">97 WORLD<small>DESIGN · UG · SS</small></span></a>
+        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span><span class="brand-txt">97 DESIGN<small>UG · SS</small></span></a>
         <p>The design studio of 97 World. Websites, fliers, brands and everything your idea needs — built, not fabricated.</p>
         <div class="flagline mt">
           <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
@@ -349,10 +356,10 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© <span id="yr"></span> 97 World — Design Sector. Uganda · South Sudan.</span>
+      <span>© <span id="yr"></span> 97 Design. Uganda · South Sudan.</span>
       <span>Proof isn't fabricated. It's built.</span>
     </div>
-    <span class="foot-wm">97 WORLD</span>
+    <span class="foot-wm">97 DESIGN</span>
   </div>
 </footer>
 
