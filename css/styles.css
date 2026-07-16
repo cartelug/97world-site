@@ -377,6 +377,8 @@ h2.sec .mut{color:var(--mut)}
 .bbody .cap{color:var(--mut);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
 .watp{background:radial-gradient(120% 120% at 20% 10%,#1b2b5a,transparent 60%),radial-gradient(120% 120% at 90% 90%,#3a1140,transparent 55%),#0a0a0d}
 .may{background:radial-gradient(120% 120% at 15% 15%,#123a1c,transparent 60%),radial-gradient(120% 120% at 90% 85%,#5a4410,transparent 55%),#0a0a0d}
+.brand{background:radial-gradient(120% 120% at 18% 12%,#3a1140,transparent 60%),radial-gradient(120% 120% at 90% 88%,#5a1a4a,transparent 55%),#0a0a0d}
+.campaign{background:radial-gradient(120% 120% at 18% 12%,#5a3410,transparent 60%),radial-gradient(120% 120% at 90% 88%,#5a1414,transparent 55%),#0a0a0d}
 .work .meta{padding:20px 22px;border-top:1px solid var(--line)}
 .work .meta h4{font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px;justify-content:space-between}
 .work .meta p{color:var(--mut);font-size:14px;margin-top:6px}

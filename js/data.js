@@ -88,27 +88,46 @@ window.SITE = {
     { q: "How do I start?", a: "Build your quote on the pricing page, then hit start — it turns into a ready-to-send WhatsApp message straight to the sector." }
   ],
 
-  /* Mirrors Notion → Portfolio */
+  /* Portfolio — mirrors the Notion "Portfolio" database 1:1.
+     Content fields (project/client/description/status/tags/type/year/link/
+     featured) are copied straight from Notion on each sync. `disp` is the
+     visual treatment layered on top (split title, accent, focus bullets);
+     when it's omitted the site auto-derives a look from `type`. To add a
+     project: create the row in Notion, then sync it in here. */
   work: [
     {
-      id: "watp",
-      title: "WATP", sub: "My Weekly Track",
-      status: "soon", statusLabel: "Coming Soon",
-      type: "Web App · Personal Tracking",
-      desc: "My Weekly Track — a personal tracking platform. The preview slot is reserved while the live build is in progress.",
-      focus: ["Product UI & dashboards", "Tracking flows", "Identity & interface system"],
-      tags: ["Web App", "Tracking", "UI/UX"],
-      grad: "watp", accent: "linear-gradient(92deg,#7aa2ff,#c58bff)"
+      project: "WATP — My Weekly Track",
+      client: "WATP",
+      type: "Web App",
+      status: "Coming Soon",          // Live | Coming Soon | In Progress
+      tags: ["Web", "Tracking", "UI/UX"],
+      year: 2026,
+      link: "",
+      featured: true,
+      description: "My Weekly Track — a personal tracking platform. Preview slot reserved on the site; live build in progress.",
+      disp: {
+        id: "watp", title: "WATP", sub: "My Weekly Track",
+        accent: "linear-gradient(92deg,#7aa2ff,#c58bff)", grad: "watp",
+        typeLabel: "Web App · Personal Tracking",
+        focus: ["Product UI & dashboards", "Tracking flows", "Identity & interface system"]
+      }
     },
     {
-      id: "mayanyure",
-      title: "Mayanyure", sub: "Resort",
-      status: "live", statusLabel: "Live",
-      type: "Website · Hospitality",
-      desc: "A full hospitality website — bookings, gallery and story, built to make the resort feel as good online as it does in person.",
-      focus: ["Booking-first structure", "Gallery & storytelling", "Mobile guests covered"],
-      tags: ["Website", "Hospitality", "Booking"],
-      grad: "may", accent: "linear-gradient(92deg,#63d67f,#ffce00)"
+      project: "Mayanyure Resort",
+      client: "Mayanyure Resort",
+      type: "Website",
+      status: "Live",
+      tags: ["Web", "Hospitality", "Booking"],
+      year: 2026,
+      link: "",
+      featured: true,
+      description: "A full hospitality website — bookings, gallery and story, built to make the resort feel as good online as it does in person.",
+      disp: {
+        id: "mayanyure", title: "Mayanyure", sub: "Resort",
+        accent: "linear-gradient(92deg,#63d67f,#ffce00)", grad: "may",
+        typeLabel: "Website · Hospitality",
+        focus: ["Booking-first structure", "Gallery & storytelling", "Mobile guests covered"]
+      }
     }
   ]
 };

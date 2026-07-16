@@ -341,6 +341,83 @@
     });
   })();
 
+  /* ---------- portfolio (home featured grid + work-page cases) ----------
+     Renders 1:1 from D.work (which mirrors the Notion Portfolio DB). Visual
+     treatment comes from each item's `disp`, or is auto-derived from `type`. */
+  (function () {
+    if (!D || !D.work) return;
+    var grid = document.getElementById("workGrid");     // home featured
+    var cases = document.getElementById("workCases");   // work page
+    if (!grid && !cases) return;
+
+    var TREAT = {
+      "Web App":  { accent: "linear-gradient(92deg,#7aa2ff,#c58bff)", grad: "watp" },
+      "Website":  { accent: "linear-gradient(92deg,#63d67f,#ffce00)", grad: "may" },
+      "Branding": { accent: "linear-gradient(92deg,#c58bff,#ff9ecb)", grad: "brand" },
+      "Campaign": { accent: "linear-gradient(92deg,#ffce00,#ff6a3d)", grad: "campaign" }
+    };
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    function slug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+    function view(w) {
+      var d = w.disp || {}, tr = TREAT[w.type] || TREAT.Website, parts = String(w.project || "").split(" — ");
+      var live = w.status === "Live";
+      return {
+        id: d.id || slug(w.project), project: w.project, live: live, status: w.status,
+        title: d.title || parts[0], sub: d.sub || (parts[1] || w.type),
+        accent: d.accent || tr.accent, grad: d.grad || tr.grad,
+        typeLabel: d.typeLabel || (w.type + (w.tags && w.tags[0] ? " · " + w.tags[0] : "")),
+        focus: d.focus || [], tags: w.tags || [], desc: w.description || "",
+        link: w.link || "", type: w.type
+      };
+    }
+    function browser(v, topBadge) {
+      return '<div class="browser"><div class="bbar"><i></i><i></i><i></i></div>' +
+        '<div class="bbody">' + topBadge +
+        '<div class="lg" style="background:' + v.accent + ';-webkit-background-clip:text;background-clip:text">' + esc(v.title) + '</div>' +
+        '<div class="cap">' + esc(v.sub) + '</div></div></div>';
+    }
+    function statusBadge(v) { return '<span class="badge ' + (v.live ? "live" : "soon") + '">' + esc(v.status) + '</span>'; }
+    function topBadge(v) {
+      return v.live ? '<span class="badge live">' + esc(v.type) + '</span>'
+                    : '<span class="badge soon">Placeholder · ' + esc(v.status) + '</span>';
+    }
+
+    if (grid) {
+      var feat = D.work.filter(function (w) { return w.featured; });
+      if (!feat.length) feat = D.work.slice(0, 2);
+      grid.innerHTML = feat.map(function (w) {
+        var v = view(w);
+        return '<a class="work reveal" href="work.html#' + v.id + '">' +
+          '<div class="thumb ' + v.grad + '">' + browser(v, topBadge(v)) + '</div>' +
+          '<div class="meta"><h4>' + esc(v.title) + ' ' + esc(v.sub) + ' ' + statusBadge(v) + '</h4>' +
+          '<p>' + esc(v.desc) + '</p>' +
+          '<div class="tags">' + v.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+          '</div></a>';
+      }).join('');
+    }
+
+    if (cases) {
+      var slot = '<article class="case slot reveal">' +
+        '<h3>This slot is <em>reserved for you.</em></h3>' +
+        '<p>The next case study on this page could be your website, your brand, your campaign. Build the quote — the sector does the rest.</p>' +
+        '<div class="row"><a href="start.html" class="btn primary">Start a project →</a><a href="pricing.html" class="btn ghost">Build your quote</a></div>' +
+        '</article>';
+      cases.innerHTML = D.work.map(function (w) {
+        var v = view(w);
+        return '<article class="case reveal" id="' + v.id + '">' +
+          '<div class="shot ' + v.grad + '">' + browser(v, topBadge(v)) + '</div>' +
+          '<div class="body">' +
+          '<span class="type">' + esc(v.typeLabel) + '</span>' +
+          '<h3>' + esc(v.project) + ' ' + statusBadge(v) + '</h3>' +
+          '<p>' + esc(v.desc) + '</p>' +
+          (v.focus.length ? '<ul class="focus">' + v.focus.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' : '') +
+          (v.link ? '<a class="btn ghost caselink" href="' + esc(v.link) + '" target="_blank" rel="noopener">Visit live site →</a>' : '') +
+          '<div class="tags">' + v.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+          '</div></article>';
+      }).join('') + slot;
+    }
+  })();
+
   /* ---------- init ---------- */
   var yr = document.getElementById("yr");
   if (yr) yr.textContent = new Date().getFullYear();
