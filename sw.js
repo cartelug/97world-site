@@ -6,7 +6,7 @@
    Bump VERSION on every deploy (tools/build.mjs stamps ?v= to
    match).
    ============================================================ */
-const VERSION = "v5";
+const VERSION = "v6";
 const STATIC_CACHE = "97d-static-" + VERSION;
 const PAGE_CACHE = "97d-pages-" + VERSION;
 

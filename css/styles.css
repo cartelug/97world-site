@@ -63,17 +63,16 @@ h3,h4{font-family:var(--font)}
 }
 /* Technical labels: JetBrains Mono — spec-sheet texture */
 .kicker,.chip,.crumb,.cat-tag,.badge,.pop,.tags span,.foot-col h5,
-.intro-tag,.cur-note,.clock,.type,.co,.from,.bk,.intro-count,
+.cur-note,.clock,.type,.co,.from,.bk,
 .hero2-stats .st span,.field label,.summary h4,.panel h4,.dep .lbl,
 .qbar .qinfo small,.mmenu-nations .cap,.flag-cap{font-family:var(--font-mono);font-weight:500}
 /* mono is naturally wide — pull tracking back in */
 .kicker{letter-spacing:.18em}
 .chip{letter-spacing:.1em}
 .crumb{letter-spacing:.14em}
-.intro-tag{letter-spacing:.34em}
 /* numbers that align */
 .clock,.hero2-stats .st b,.svc .amt,.srow .v,.dep .drow b,.qbar .qinfo b,
-.cat-side .price,.qlist li b,.qtot b,.intro-count b{font-variant-numeric:tabular-nums}
+.cat-side .price,.qlist li b,.qtot b{font-variant-numeric:tabular-nums}
 
 /* ============ BACKGROUND FX ============ */
 #fxCanvas{
@@ -164,13 +163,6 @@ h3,h4{font-family:var(--font)}
 @keyframes markSheen{0%{opacity:1;transform:translateX(-60%)}100%{opacity:0;transform:translateX(60%)}}
 #intro.lockup .intro-logo{animation:logoBloom .8s var(--ease)}
 @keyframes logoBloom{0%{transform:scale(1)}35%{transform:scale(1.05)}100%{transform:scale(1)}}
-.intro-count{
-  position:absolute;bottom:calc(13% + 16px);left:50%;transform:translateX(-50%);
-  display:flex;align-items:baseline;gap:14px;color:var(--dim);
-  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
-  opacity:0;animation:introUp .6s ease .4s forwards;
-}
-.intro-count b{font-size:15px;color:#fff;font-weight:700;letter-spacing:.04em;min-width:48px;text-align:right}
 @keyframes markIn{
   0%{opacity:0;filter:blur(18px);transform:scale(1.25) translateY(12px)}
   60%{opacity:1}
@@ -218,7 +210,7 @@ h3,h4{font-family:var(--font)}
 }
 .bcity .lat::before{content:"· "}
 /* ignition at logo-lock (engine emits .locked; the CSS-fallback intro
-   ignites on a timer tuned to markIn/introLoad) */
+   ignites on a timer tuned to the markIn animation) */
 #intro.locked .bdot{transform:scale(1.45);animation:bBreathe 2.4s ease-in-out .35s infinite alternate}
 #intro.locked .bdot.ug{filter:drop-shadow(0 0 5px rgba(255,206,0,.9))}
 #intro.locked .bdot.ss{filter:drop-shadow(0 0 5px rgba(90,150,235,.9))}
@@ -243,22 +235,7 @@ h3,h4{font-family:var(--font)}
   .bpulse{animation:none;visibility:hidden}
   .bdot{opacity:1}
 }
-.intro-tag{
-  margin-top:24px;font-size:10px;color:var(--dim);font-weight:600;
-  opacity:0;transform:translateY(14px);animation:introUp .9s ease 1.85s forwards;
-}
 @keyframes introUp{to{opacity:1;transform:none}}
-.intro-bar{
-  position:absolute;bottom:13%;left:50%;transform:translateX(-50%);
-  width:min(240px,52vw);height:2px;background:rgba(255,255,255,.1);border-radius:2px;
-  overflow:hidden;opacity:0;animation:introUp .6s ease .4s forwards;
-}
-.intro-bar i{
-  display:block;height:100%;width:0;border-radius:2px;
-  background:linear-gradient(90deg,var(--ug-y),var(--ug-r),var(--ss-b),var(--ss-g));
-  box-shadow:0 0 12px rgba(255,206,0,.5);animation:introLoad 2.05s cubic-bezier(.6,0,.2,1) .35s forwards;
-}
-@keyframes introLoad{to{width:100%}}
 .skip{
   position:absolute;bottom:22px;right:22px;font-size:11px;letter-spacing:.2em;
   color:var(--mut);text-transform:uppercase;border:1px solid var(--line);

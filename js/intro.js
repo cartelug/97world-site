@@ -39,7 +39,6 @@
 
   var canvas = document.getElementById("introCanvas");
   var markImg = intro.querySelector(".intro-mark");
-  var pctEl = intro.querySelector(".intro-count b");
   if (!canvas || !canvas.getContext || !markImg) return;
   var ctx = canvas.getContext("2d");
   if (!ctx) return;
@@ -49,7 +48,6 @@
   var T_LOCK = 1400;     // assembled: crisp mark + ring + sheen
   var T_FADE = 500;      // particle fade-out after lock
   var T_BLOOM = 2450;    // final bloom
-  var PCT0 = 250, PCT1 = 2300; // boot counter window
 
   var DPR = Math.min(window.devicePixelRatio || 1, 2);
   var mobile = window.innerWidth < 760;
@@ -166,13 +164,6 @@
 
     if (!bloomDone && t >= T_BLOOM) { bloomDone = true; intro.classList.add("lockup"); }
 
-    // boot counter
-    if (pctEl) {
-      var cp = Math.min(1, Math.max(0, (t - PCT0) / (PCT1 - PCT0)));
-      var n = Math.round(ease(cp) * 100);
-      pctEl.textContent = (n < 10 ? "0" : "") + n + "%";
-    }
-
     // the engine owns the intro deadline (timed from ITS t0, not page eval)
     if (!ended && t >= T_BLOOM + 650) { ended = true; window.endIntro && window.endIntro(); }
 
@@ -180,35 +171,19 @@
     else ctx.clearRect(0, 0, W, H);
   }
 
-  /* ---------- CSS-fallback counter: keep 00% ticking when the engine doesn't run ---------- */
-  function fallbackCounter() {
-    if (!pctEl) return;
-    var s = null;
-    function tick(ts) {
-      if (intro.classList.contains("done")) return;
-      if (s === null) s = ts;
-      var p = Math.min(1, (ts - s) / 2100); // matches the CSS introLoad bar timing
-      var n = Math.round(ease(p) * 100);
-      pctEl.textContent = (n < 10 ? "0" : "") + n + "%";
-      if (p < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
   /* ---------- boot ---------- */
   function start() {
     // If the mark loaded late, the CSS intro is already mid-play and hijacking
-    // it now would blank the visible mark — let CSS finish, just run the counter.
+    // it now would blank the visible mark — let CSS finish (site.js ends it).
     var late = tEval === null || (performance.now() - tEval) > 280;
-    if (late) { fallbackCounter(); return; }
+    if (late) return;
     size();
     // .engine first: it neutralizes the CSS scale/translate on the mark, so the
     // particle targets get measured against the mark's true (locked) geometry
     intro.classList.add("engine");
     parts = build();
-    if (!parts) { // sampling failed → default CSS intro plays untouched
+    if (!parts) { // sampling failed → default CSS intro plays; site.js safety timer ends it
       intro.classList.remove("engine");
-      fallbackCounter();
       return;
     }
     // the engine took over: its own frame() call ends the intro relative to t0
@@ -225,7 +200,8 @@
     // wait one frame so layout (clamp() sizing) is settled
     requestAnimationFrame(start);
   } else {
+    // on load run the engine; on error the CSS intro plays and site.js's
+    // safety timer ends it (__introTimer is never cleared without the engine)
     markImg.addEventListener("load", function () { requestAnimationFrame(start); });
-    markImg.addEventListener("error", function () { fallbackCounter(); });
   }
 })();
