@@ -4,6 +4,36 @@
    featured work, services strip, process rail, manifesto.
    ============================================================ */
 
+/* ============ CINEMATIC SCROLL SCENES ============ */
+.scenes{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;background:#050506}
+.scene{
+  position:absolute;inset:0;background-size:cover;background-position:50% 45%;
+  opacity:0;transition:opacity 1.25s ease;will-change:opacity;transform:scale(1.05);
+}
+.scene.active{opacity:1;animation:kenburns 15s ease-out forwards}
+@keyframes kenburns{from{transform:scale(1.05)}to{transform:scale(1.14)}}
+.scene.s1{background-image:url("../assets/bg/bg1-desktop.jpg")}
+.scene.s2{background-image:url("../assets/bg/bg2-desktop.jpg")}
+.scene.s3{background-image:url("../assets/bg/bg3-desktop.jpg")}
+.scene.s4{background-image:url("../assets/bg/bg4-desktop.jpg")}
+.scene.s5{background-image:url("../assets/bg/bg5-desktop.jpg")}
+.scenes-veil{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(4,4,6,.96) 0%,rgba(4,4,6,.82) 30%,rgba(4,4,6,.52) 60%,rgba(4,4,6,.68) 100%),
+    linear-gradient(180deg,rgba(4,4,6,.5),rgba(4,4,6,.28) 20%,rgba(4,4,6,.4) 80%,rgba(4,4,6,.74));
+}
+@media(max-width:820px){
+  .scene.s1{background-image:url("../assets/bg/bg1-mobile.jpg")}
+  .scene.s2{background-image:url("../assets/bg/bg2-mobile.jpg")}
+  .scene.s5{background-image:url("../assets/bg/bg3-mobile.jpg")}
+  .scenes-veil{background:
+    linear-gradient(180deg,rgba(4,4,6,.92) 0%,rgba(4,4,6,.64) 24%,rgba(4,4,6,.52) 54%,rgba(4,4,6,.86) 100%);}
+}
+@media(prefers-reduced-motion:reduce){
+  .scene,.scene.active{transition:none;animation:none;transform:none}
+}
+
 /* ============ HERO ============ */
 .hero2{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden}
 .hero2-grid{
