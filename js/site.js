@@ -448,6 +448,15 @@
     };
     function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
     function slug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+    /* quote-prefill ids for "Build like this" — explicit disp.svc wins,
+       else derived from type/tags so future Notion rows auto-CTA */
+    function svcFor(w, d) {
+      if (d.svc) return d.svc;
+      var ids = [];
+      if (w.type === "Website" || w.type === "Web App") ids.push("web");
+      if ((w.tags || []).indexOf("Branding") > -1) ids.push("brand");
+      return ids;
+    }
     function view(w) {
       var d = w.disp || {}, tr = TREAT[w.type] || TREAT.Website, parts = String(w.project || "").split(" — ");
       var live = w.status === "Live";
@@ -457,14 +466,18 @@
         accent: d.accent || tr.accent, grad: d.grad || tr.grad,
         typeLabel: d.typeLabel || (w.type + (w.tags && w.tags[0] ? " · " + w.tags[0] : "")),
         focus: d.focus || [], tags: w.tags || [], desc: w.description || "",
-        link: w.link || "", type: w.type
+        link: w.link || "", type: w.type, svc: svcFor(w, d), shot: d.shot || ""
       };
     }
     function browser(v, topBadge) {
+      // real pixels when a capture exists (tools/shots.mjs), gradient title otherwise
+      var body = v.shot
+        ? '<img class="shotimg" src="' + esc(v.shot) + '" alt="' + esc(v.title) + ' — live site" loading="lazy" decoding="async">' + topBadge
+        : topBadge +
+          '<div class="lg" style="background:' + v.accent + ';-webkit-background-clip:text;background-clip:text">' + esc(v.title) + '</div>' +
+          '<div class="cap">' + esc(v.sub) + '</div>';
       return '<div class="browser"><div class="bbar"><i></i><i></i><i></i></div>' +
-        '<div class="bbody">' + topBadge +
-        '<div class="lg" style="background:' + v.accent + ';-webkit-background-clip:text;background-clip:text">' + esc(v.title) + '</div>' +
-        '<div class="cap">' + esc(v.sub) + '</div></div></div>';
+        '<div class="bbody">' + body + '</div></div>';
     }
     function statusBadge(v) { return '<span class="badge ' + (v.live ? "live" : "soon") + '">' + esc(v.status) + '</span>'; }
     function topBadge(v) {
@@ -501,11 +514,84 @@
           '<h3>' + esc(v.project) + ' ' + statusBadge(v) + '</h3>' +
           '<p>' + esc(v.desc) + '</p>' +
           (v.focus.length ? '<ul class="focus">' + v.focus.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' : '') +
-          (v.link ? '<a class="btn ghost caselink" href="' + esc(v.link) + '" target="_blank" rel="noopener">Visit live site →</a>' : '') +
+          (v.svc.length || v.link
+            ? '<div class="row caserow">' +
+              (v.svc.length ? '<a class="btn primary" href="pricing.html?svc=' + v.svc.join(',') + '">Build like this →</a>' : '') +
+              (v.link ? '<a class="btn ghost caselink" href="' + esc(v.link) + '" target="_blank" rel="noopener">Visit live site ↗</a>' : '') +
+              '</div>'
+            : '') +
           '<div class="tags">' + v.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
           '</div></article>';
       }).join('') + slot;
     }
+  })();
+
+  /* ---------- work-first funnel sync (home) ----------
+     The hero's live-proof button + trust-strip count mirror SITE.work,
+     so the static HTML can never drift from the portfolio. */
+  (function () {
+    if (!D || !D.work) return;
+    var live = D.work.filter(function (w) { return w.status === "Live" && w.link; })[0];
+    var btn = document.querySelector("[data-live-proof]");
+    if (btn && live) {
+      btn.href = live.link;
+      var name = (live.disp && live.disp.title) || String(live.project || "").split(" — ")[0];
+      btn.textContent = name.toUpperCase() + " — live ↗";
+    }
+    var count = document.querySelector("[data-work-count]");
+    if (count) count.textContent = D.work.length + " builds";
+  })();
+
+  /* ---------- saved-quote deposit bar on proof pages ----------
+     Pages without the calculator (work.html) still carry the sticky
+     qbar: it shows the SAVED quote's deposit so the money path stays
+     one tap away. pricing.js owns the bar wherever [data-svc-list]
+     exists — this painter stands down there. */
+  (function () {
+    if (document.querySelector("[data-svc-list]")) return;
+    var bars = document.querySelectorAll(".qbar");
+    if (!bars.length || !D) return;
+    function paint() {
+      var sel = getSel(), tot = 0;
+      D.services.forEach(function (s) { if (sel.indexOf(s.id) > -1) tot += s.usd; });
+      var dep = Math.floor(tot / 2), on = sel.length > 0;
+      document.querySelectorAll(".js-qbar-count").forEach(function (el) { el.textContent = sel.length; });
+      document.querySelectorAll(".js-qbar-total").forEach(function (el) { el.textContent = on ? money(dep) : "—"; });
+      bars.forEach(function (bar) {
+        bar.classList.toggle("on", on);
+        bar.setAttribute("aria-hidden", String(!on));
+        try { bar.inert = !on; } catch (e) {}
+      });
+      document.body.classList.toggle("qbar-on", on);
+    }
+    paint();
+    window.addEventListener("q97country", paint);
+    window.addEventListener("pageshow", function (e) { if (e.persisted) paint(); });
+  })();
+
+  /* ---------- work-page sticky conversion pill (desktop) ---------- */
+  (function () {
+    var pill = document.getElementById("workCta");
+    if (!pill) return;
+    var dismissed = false;
+    try { dismissed = sessionStorage.getItem("w97.cta") === "1"; } catch (e) {}
+    var first = document.querySelector(".case");
+    if (dismissed || !first || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        // reveal once the first case has scrolled past the top of the viewport
+        if (!e.isIntersecting && e.boundingClientRect.bottom < 0) {
+          pill.classList.add("on");
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0 });
+    io.observe(first);
+    var x = pill.querySelector(".wc-x");
+    if (x) x.addEventListener("click", function () {
+      pill.classList.remove("on");
+      try { sessionStorage.setItem("w97.cta", "1"); } catch (e) {}
+    });
   })();
 
   /* ---------- hero rotating word (home page) ---------- */

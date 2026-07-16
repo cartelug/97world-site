@@ -74,6 +74,15 @@ nav.links a{padding:8px 13px}
 .no-intro #intro{display:none}
 .intro-logo{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center}
 .intro-mark{width:clamp(150px,26vmin,290px);height:auto;opacity:0}
+/* the Signal Bridge's box is reserved here so the mark's measured
+   position can't shift when the full stylesheet lands (the particle
+   engine samples the mark's rect for its targets) */
+.intro-bridge{width:min(320px,78vw);height:74px;margin-top:16px;opacity:0}
+.intro-bridge svg{display:block;width:100%;height:46px}
+.bcities{display:flex;justify-content:space-between;margin-top:6px}
+.bcity{display:flex;flex-direction:column;gap:3px}
+.bcity b{font-size:11px;letter-spacing:.22em}
+.bcity small{font-size:9.5px}
 /* hero / page-hero skeleton */
 .hero2{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden}
 h1.mega{font-size:clamp(52px,10.5vw,132px);line-height:.92;font-weight:900;letter-spacing:-.035em}

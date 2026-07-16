@@ -19,8 +19,9 @@
 <meta name="twitter:title" content="97 Design — Websites, Brands & Fliers · Uganda & South Sudan">
 <meta name="twitter:description" content="97 Design builds websites, campaign fliers and brands across Uganda & South Sudan. Priced upfront, ordered on WhatsApp, delivered in days. Build your quote in 30 seconds.">
 <meta name="twitter:image" content="https://cartelug.github.io/97world-site/assets/og/og-default.jpg">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -132,6 +133,15 @@ nav.links a{padding:8px 13px}
 .no-intro #intro{display:none}
 .intro-logo{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center}
 .intro-mark{width:clamp(150px,26vmin,290px);height:auto;opacity:0}
+/* the Signal Bridge's box is reserved here so the mark's measured
+   position can't shift when the full stylesheet lands (the particle
+   engine samples the mark's rect for its targets) */
+.intro-bridge{width:min(320px,78vw);height:74px;margin-top:16px;opacity:0}
+.intro-bridge svg{display:block;width:100%;height:46px}
+.bcities{display:flex;justify-content:space-between;margin-top:6px}
+.bcity{display:flex;flex-direction:column;gap:3px}
+.bcity b{font-size:11px;letter-spacing:.22em}
+.bcity small{font-size:9.5px}
 /* hero / page-hero skeleton */
 .hero2{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden}
 h1.mega{font-size:clamp(52px,10.5vw,132px);line-height:.92;font-weight:900;letter-spacing:-.035em}
@@ -153,18 +163,18 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 }
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
 </style>
-<link rel="preload" href="css/styles.css?v=3" as="style">
-<link rel="stylesheet" href="css/styles.css?v=3" media="print" onload="this.media='all';this.onload=null">
-<link rel="preload" href="css/kinetic.css?v=3" as="style">
-<link rel="stylesheet" href="css/kinetic.css?v=3" media="print" onload="this.media='all';this.onload=null">
-<link rel="preload" href="css/home.css?v=3" as="style">
-<link rel="stylesheet" href="css/home.css?v=3" media="print" onload="this.media='all';this.onload=null">
-<noscript><link rel="stylesheet" href="css/styles.css?v=3"><link rel="stylesheet" href="css/kinetic.css?v=3"><link rel="stylesheet" href="css/home.css?v=3"></noscript>
+<link rel="preload" href="css/styles.css?v=4" as="style">
+<link rel="stylesheet" href="css/styles.css?v=4" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/kinetic.css?v=4" as="style">
+<link rel="stylesheet" href="css/kinetic.css?v=4" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/home.css?v=4" as="style">
+<link rel="stylesheet" href="css/home.css?v=4" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="css/styles.css?v=4"><link rel="stylesheet" href="css/kinetic.css?v=4"><link rel="stylesheet" href="css/home.css?v=4"></noscript>
 <script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
 <script type="speculationrules">
 {"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"}]}
 </script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"97 Design","url":"https://cartelug.github.io/97world-site/","image":"https://cartelug.github.io/97world-site/assets/icon-maskable-512.png","telephone":"+256708735878","priceRange":"$35 - $500","slogan":"Proof isn't fabricated. It's built.","areaServed":[{"@type":"Country","name":"Uganda"},{"@type":"Country","name":"South Sudan"}],"address":[{"@type":"PostalAddress","addressLocality":"Kampala","addressCountry":"UG"},{"@type":"PostalAddress","addressLocality":"Juba","addressCountry":"SS"}],"sameAs":["https://wa.me/256708735878"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"97 Design","url":"https://cartelug.github.io/97world-site/","image":"https://cartelug.github.io/97world-site/assets/og/og-default.jpg","telephone":"+256708735878","priceRange":"$35 - $500","slogan":"Proof isn't fabricated. It's built.","areaServed":[{"@type":"Country","name":"Uganda"},{"@type":"Country","name":"South Sudan"}],"address":[{"@type":"PostalAddress","addressLocality":"Kampala","addressCountry":"UG"},{"@type":"PostalAddress","addressLocality":"Juba","addressCountry":"SS"}],"sameAs":["https://wa.me/256708735878"]}</script>
 </head>
 <body data-page="home">
 
@@ -196,8 +206,26 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   <div class="intro-logo">
     <span class="mark-wrap"><img class="intro-mark" src="assets/mark-white.png" alt="97 Design" width="300" height="300"></span>
     <div class="intro-word">DESIGN</div>
-    <div class="intro-nations">
-      <span class="fdot ug"></span> UGANDA <span class="mid">•</span> SOUTH SUDAN <span class="fdot ss"></span>
+    <!-- Signal Bridge: Kampala ⇄ Juba, one live circuit. City text
+         mirrors SITE.nations (intro.js re-syncs it on load). -->
+    <div class="intro-bridge">
+      <svg class="bline" viewBox="0 0 320 46" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="bgrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#ffce00"/><stop offset=".36" stop-color="#d90000"/>
+            <stop offset=".64" stop-color="#0f47af"/><stop offset="1" stop-color="#078930"/>
+          </linearGradient>
+        </defs>
+        <path class="barc" pathLength="1" d="M6 40 Q160 6 314 40"/>
+        <path class="bpulse" pathLength="1" d="M6 40 Q160 6 314 40"/>
+        <path class="bflash" pathLength="1" d="M6 40 Q160 6 314 40"/>
+        <circle class="bdot ug" cx="6" cy="40" r="3"/>
+        <circle class="bdot ss" cx="314" cy="40" r="3"/>
+      </svg>
+      <div class="bcities">
+        <span class="bcity"><b>KAMPALA</b><small><span class="clock" data-tz="Africa/Kampala"></span><span class="lat">0.31°N</span></small></span>
+        <span class="bcity"><b>JUBA</b><small><span class="clock" data-tz="Africa/Juba"></span><span class="lat">4.85°N</span></small></span>
+      </div>
     </div>
   </div>
   <div class="intro-count"><span>Loading sector</span><b>00%</b></div>
@@ -211,8 +239,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
   </a>
   <nav class="links">
-    <a href="services.html">Services</a>
     <a href="work.html">Work</a>
+    <a href="services.html">Services</a>
     <a href="pricing.html">Pricing</a>
     <a href="about.html">About</a>
   </nav>
@@ -226,8 +254,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 <div class="mmenu" id="mmenu" aria-hidden="true">
   <nav class="mmenu-links">
     <a href="index.html" class="on" style="--i:0"><small>01</small> Home</a>
-    <a href="services.html" style="--i:1"><small>02</small> Services</a>
-    <a href="work.html" style="--i:2"><small>03</small> Work</a>
+    <a href="work.html" style="--i:1"><small>02</small> Work</a>
+    <a href="services.html" style="--i:2"><small>03</small> Services</a>
     <a href="pricing.html" style="--i:3"><small>04</small> Pricing</a>
     <a href="about.html" style="--i:4"><small>05</small> About</a>
   </nav>
@@ -257,34 +285,70 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
       <span class="row thin">NOT THE HYPE.</span>
     </h1>
     <div class="tail reveal">
-      <p class="lead">Websites, fliers, brands — priced upfront, ordered on WhatsApp, delivered in days. <b>Get a real price in 30 seconds below.</b></p>
+      <p class="lead">Websites, fliers, brands — priced upfront, ordered on WhatsApp, delivered in days. <b>See what's live below, then price yours in 30 seconds.</b></p>
       <div class="chips">
         <span class="chip"><i class="fdot ug"></i> Kampala <b class="clock" data-tz="Africa/Kampala"></b></span>
         <span class="chip"><i class="fdot ss"></i> Juba <b class="clock" data-tz="Africa/Juba"></b></span>
       </div>
     </div>
     <div class="cta-row reveal">
-      <a href="#quote" class="btn primary">Build your quote ↓</a>
-      <a href="https://wa.me/256708735878" class="btn ghost" target="_blank" rel="noopener">WhatsApp us</a>
+      <a href="#work" class="btn primary">See the work ↓</a>
+      <a href="https://theafrica63.com" class="btn ghost" target="_blank" rel="noopener" data-live-proof>AFRICA63 — live ↗</a>
+      <a class="cta-mini" href="https://wa.me/256708735878" target="_blank" rel="noopener">or WhatsApp us ↗</a>
     </div>
     <span class="cap-line reveal" data-capacity hidden></span>
     <div class="hero2-stats reveal" data-stats></div>
   </div>
-  <a href="#quote" class="scroll-hint" aria-label="Scroll to quote builder">↓</a>
+  <a href="#work" class="scroll-hint" aria-label="Scroll to the work">↓</a>
 </section>
 
 <!-- ===================== TRUST STRIP ===================== -->
 <div class="trust-strip reveal" id="trust">
   <div class="row">
-    <span class="t"><i class="ic" style="background:var(--ug-y);box-shadow:0 0 10px var(--ug-y)"></i><span>Instant quote — <b>right below</b></span></span>
+    <a class="t" href="work.html"><i class="ic" style="background:var(--ug-y);box-shadow:0 0 10px var(--ug-y)"></i><span><b data-work-count>6 builds</b> — see them live →</span></a>
     <a class="t" href="work.html#maya-nature"><i class="ic" style="background:var(--wa);box-shadow:0 0 10px var(--wa)"></i><span><b>Maya Nature Resort</b> — live now</span></a>
+    <a class="t" href="#quote"><i class="ic" style="background:var(--ug-r);box-shadow:0 0 10px var(--ug-r)"></i><span>Instant quote — <b>30 seconds</b></span></a>
     <span class="t"><i class="ic" style="background:var(--ss-b);box-shadow:0 0 10px var(--ss-b)"></i><span><b>50 / 50</b> deposits — no surprises</span></span>
-    <span class="t"><i class="ic" style="background:var(--ug-r);box-shadow:0 0 10px var(--ug-r)"></i><span>Kampala · Juba · <b>Worldwide</b></span></span>
   </div>
 </div>
 
+<!-- ===================== FEATURED WORK ===================== -->
+<section class="blk" id="work" data-scene="2">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="kicker reveal">Selected work</div>
+        <h2 class="sec reveal" data-split="words">Real work. <span class="mut">Live &amp; loading.</span></h2>
+      </div>
+      <a class="more reveal" href="work.html">All case studies →</a>
+    </div>
+    <div class="grid2" id="workGrid"><!-- rendered from js/data.js (Notion Portfolio) --></div>
+    <div class="work-bridge reveal">
+      <span>Seen enough?</span>
+      <a href="#quote" class="btn primary">Build your quote →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MARQUEE ===================== -->
+<div class="marquee" aria-hidden="true" data-marquee></div>
+
+<!-- ===================== SERVICES STRIP ===================== -->
+<section class="blk" id="exp" data-scene="3">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="kicker reveal">The experience</div>
+        <h2 class="sec reveal" data-split="words">One studio. <span class="mut">Every design need.</span></h2>
+      </div>
+      <a class="more reveal" href="services.html">Explore services →</a>
+    </div>
+    <div class="exp-lines" data-exp></div>
+  </div>
+</section>
+
 <!-- ===================== QUOTE CALCULATOR ===================== -->
-<section class="blk" id="quote" data-scene="2">
+<section class="blk" id="quote" data-scene="4">
   <div class="wrap">
     <div class="kicker reveal">Instant pricing</div>
     <h2 class="sec reveal" data-split="words">Build your quote. <span class="mut">Right here.</span></h2>
@@ -333,37 +397,6 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ===================== MARQUEE ===================== -->
-<div class="marquee" aria-hidden="true" data-marquee></div>
-
-<!-- ===================== FEATURED WORK ===================== -->
-<section class="blk" id="work" data-scene="3">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="kicker reveal">Selected work</div>
-        <h2 class="sec reveal" data-split="words">Real work. <span class="mut">Live &amp; loading.</span></h2>
-      </div>
-      <a class="more reveal" href="work.html">All case studies →</a>
-    </div>
-    <div class="grid2" id="workGrid"><!-- rendered from js/data.js (Notion Portfolio) --></div>
-  </div>
-</section>
-
-<!-- ===================== SERVICES STRIP ===================== -->
-<section class="blk" id="exp" data-scene="4">
-  <div class="wrap">
-    <div class="sec-head">
-      <div>
-        <div class="kicker reveal">The experience</div>
-        <h2 class="sec reveal" data-split="words">One studio. <span class="mut">Every design need.</span></h2>
-      </div>
-      <a class="more reveal" href="services.html">Explore services →</a>
-    </div>
-    <div class="exp-lines" data-exp></div>
   </div>
 </section>
 
@@ -451,11 +484,11 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
-<script src="js/data.js?v=3" defer></script>
-<script src="js/site.js?v=3" defer></script>
-<script src="js/kinetic.js?v=3" defer></script>
-<script src="js/scenes.js?v=3" defer></script>
-<script src="js/pricing.js?v=3" defer></script>
-<script src="js/intro.js?v=3" defer></script>
+<script src="js/data.js?v=4" defer></script>
+<script src="js/site.js?v=4" defer></script>
+<script src="js/kinetic.js?v=4" defer></script>
+<script src="js/scenes.js?v=4" defer></script>
+<script src="js/pricing.js?v=4" defer></script>
+<script src="js/intro.js?v=4" defer></script>
 </body>
 </html>

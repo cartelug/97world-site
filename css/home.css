@@ -68,7 +68,13 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 .hero2 .lead{max-width:520px;color:#c7c7cd;font-size:clamp(16px,2.2vw,18.5px)}
 .hero2 .lead b{color:#fff}
 .hero2 .chips{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-.hero2 .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.hero2 .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px;align-items:center}
+/* quiet third path under the two proof buttons */
+.cta-mini{
+  font-family:var(--font-mono);font-size:12.5px;color:var(--mut);
+  letter-spacing:.06em;padding:10px 6px;transition:color .25s;
+}
+.cta-mini:hover,.cta-mini:focus-visible{color:#fff}
 
 .hero2-stats{
   display:flex;gap:0;margin-top:64px;border:1px solid var(--line);border-radius:18px;
@@ -79,8 +85,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 .hero2-stats .st b{display:block;font-size:26px;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .hero2-stats .st span{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
 .scroll-hint{
-  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;
-  color:var(--mut);font-size:20px;animation:bob 1.8s ease-in-out infinite;
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);z-index:2;
+  color:var(--mut);font-size:20px;padding:12px 16px;animation:bob 1.8s ease-in-out infinite;
 }
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
 
@@ -104,6 +110,14 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 .exp-line .arrow{color:var(--ug-y);font-size:22px;opacity:0;transform:translateX(-8px);transition:.35s}
 .exp-line:hover .arrow{opacity:1;transform:none}
 @media(max-width:640px){.exp-line .desc{display:none}}
+
+/* ============ WORK → QUOTE FUNNEL BRIDGE ============ */
+.work-bridge{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:44px}
+.work-bridge span{color:var(--mut);font-size:15px}
+@media(max-width:640px){
+  .work-bridge{flex-direction:column;gap:12px}
+  .work-bridge .btn{width:100%;justify-content:center}
+}
 
 /* ============ MANIFESTO ============ */
 .manifesto{

@@ -19,8 +19,9 @@
 <meta name="twitter:title" content="About the Studio — 97 Design">
 <meta name="twitter:description" content="The design studio of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.">
 <meta name="twitter:image" content="https://cartelug.github.io/97world-site/assets/og/og-default.jpg">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -130,6 +131,15 @@ nav.links a{padding:8px 13px}
 .no-intro #intro{display:none}
 .intro-logo{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center}
 .intro-mark{width:clamp(150px,26vmin,290px);height:auto;opacity:0}
+/* the Signal Bridge's box is reserved here so the mark's measured
+   position can't shift when the full stylesheet lands (the particle
+   engine samples the mark's rect for its targets) */
+.intro-bridge{width:min(320px,78vw);height:74px;margin-top:16px;opacity:0}
+.intro-bridge svg{display:block;width:100%;height:46px}
+.bcities{display:flex;justify-content:space-between;margin-top:6px}
+.bcity{display:flex;flex-direction:column;gap:3px}
+.bcity b{font-size:11px;letter-spacing:.22em}
+.bcity small{font-size:9.5px}
 /* hero / page-hero skeleton */
 .hero2{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden}
 h1.mega{font-size:clamp(52px,10.5vw,132px);line-height:.92;font-weight:900;letter-spacing:-.035em}
@@ -151,17 +161,17 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 }
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
 </style>
-<link rel="preload" href="css/styles.css?v=3" as="style">
-<link rel="stylesheet" href="css/styles.css?v=3" media="print" onload="this.media='all';this.onload=null">
-<link rel="preload" href="css/kinetic.css?v=3" as="style">
-<link rel="stylesheet" href="css/kinetic.css?v=3" media="print" onload="this.media='all';this.onload=null">
-<link rel="preload" href="css/pages.css?v=3" as="style">
-<link rel="stylesheet" href="css/pages.css?v=3" media="print" onload="this.media='all';this.onload=null">
-<noscript><link rel="stylesheet" href="css/styles.css?v=3"><link rel="stylesheet" href="css/kinetic.css?v=3"><link rel="stylesheet" href="css/pages.css?v=3"></noscript>
+<link rel="preload" href="css/styles.css?v=4" as="style">
+<link rel="stylesheet" href="css/styles.css?v=4" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/kinetic.css?v=4" as="style">
+<link rel="stylesheet" href="css/kinetic.css?v=4" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/pages.css?v=4" as="style">
+<link rel="stylesheet" href="css/pages.css?v=4" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="css/styles.css?v=4"><link rel="stylesheet" href="css/kinetic.css?v=4"><link rel="stylesheet" href="css/pages.css?v=4"></noscript>
 <script type="speculationrules">
 {"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"}]}
 </script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"97 Design","url":"https://cartelug.github.io/97world-site/","image":"https://cartelug.github.io/97world-site/assets/icon-maskable-512.png","telephone":"+256708735878","priceRange":"$35 - $500","slogan":"Proof isn't fabricated. It's built.","areaServed":[{"@type":"Country","name":"Uganda"},{"@type":"Country","name":"South Sudan"}],"address":[{"@type":"PostalAddress","addressLocality":"Kampala","addressCountry":"UG"},{"@type":"PostalAddress","addressLocality":"Juba","addressCountry":"SS"}],"sameAs":["https://wa.me/256708735878"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"97 Design","url":"https://cartelug.github.io/97world-site/","image":"https://cartelug.github.io/97world-site/assets/og/og-default.jpg","telephone":"+256708735878","priceRange":"$35 - $500","slogan":"Proof isn't fabricated. It's built.","areaServed":[{"@type":"Country","name":"Uganda"},{"@type":"Country","name":"South Sudan"}],"address":[{"@type":"PostalAddress","addressLocality":"Kampala","addressCountry":"UG"},{"@type":"PostalAddress","addressLocality":"Juba","addressCountry":"SS"}],"sameAs":["https://wa.me/256708735878"]}</script>
 </head>
 <body data-page="about">
 
@@ -178,8 +188,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
   </a>
   <nav class="links">
-    <a href="services.html">Services</a>
     <a href="work.html">Work</a>
+    <a href="services.html">Services</a>
     <a href="pricing.html">Pricing</a>
     <a href="about.html" class="on" aria-current="page">About</a>
   </nav>
@@ -192,8 +202,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 <div class="mmenu" id="mmenu" aria-hidden="true">
   <nav class="mmenu-links">
     <a href="index.html" style="--i:0"><small>01</small> Home</a>
-    <a href="services.html" style="--i:1"><small>02</small> Services</a>
-    <a href="work.html" style="--i:2"><small>03</small> Work</a>
+    <a href="work.html" style="--i:1"><small>02</small> Work</a>
+    <a href="services.html" style="--i:2"><small>03</small> Services</a>
     <a href="pricing.html" style="--i:3"><small>04</small> Pricing</a>
     <a href="about.html" class="on" style="--i:4"><small>05</small> About</a>
   </nav>
@@ -261,9 +271,9 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
       <div class="p reveal"><b>Built to convert</b><span>Design is judged by what it makes happen — orders, bookings, calls, results.</span></div>
     </div>
 
-    <div class="logo-show reveal">
-      <div class="on-dark"><img src="assets/mark-white.png" alt="97 Design mark on dark"></div>
-      <div class="on-light"><img src="assets/logo-full.png" alt="97 Design full lockup on light"></div>
+    <div class="mark-moment reveal">
+      <img src="assets/mark-white.png" alt="The 97 mark" width="280" height="280" loading="lazy" data-plx="0.06">
+      <p class="mm-cap">One mark · No box · Any surface</p>
     </div>
   </div>
 </section>
@@ -319,8 +329,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
-<script src="js/data.js?v=3" defer></script>
-<script src="js/site.js?v=3" defer></script>
-<script src="js/kinetic.js?v=3" defer></script>
+<script src="js/data.js?v=4" defer></script>
+<script src="js/site.js?v=4" defer></script>
+<script src="js/kinetic.js?v=4" defer></script>
 </body>
 </html>

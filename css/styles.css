@@ -54,7 +54,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
 .marquee-track span,.exp-line .name,.intro-word{font-family:var(--font-display);font-stretch:125%}
 /* Technical labels: JetBrains Mono — spec-sheet texture */
 .kicker,.chip,.crumb,.cat-tag,.badge,.pop,.tags span,.foot-col h5,
-.intro-tag,.intro-nations,.cur-note,.clock,.type,.co,.from,.bk,.intro-count,
+.intro-tag,.cur-note,.clock,.type,.co,.from,.bk,.intro-count,
 .hero2-stats .st span,.field label,.summary h4,.panel h4,.dep .lbl,
 .qbar .qinfo small,.mmenu-nations .cap,.flag-cap{font-family:var(--font-mono);font-weight:500}
 /* mono is naturally wide — pull tracking back in */
@@ -62,7 +62,6 @@ h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
 .chip{letter-spacing:.1em}
 .crumb{letter-spacing:.14em}
 .intro-tag{letter-spacing:.34em}
-.intro-nations{letter-spacing:.2em}
 /* numbers that align */
 .clock,.hero2-stats .st b,.svc .amt,.srow .v,.dep .drow b,.qbar .qinfo b,
 .cat-side .price,.qlist li b,.qtot b,.intro-count b{font-variant-numeric:tabular-nums}
@@ -173,15 +172,68 @@ h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
   font-size:clamp(20px,4vmin,34px);opacity:0;transform:translateY(14px);
   animation:introUp .8s ease .6s forwards;
 }
-.intro-nations{
-  margin-top:15px;display:flex;align-items:center;gap:11px;font-size:11px;
-  color:var(--mut);font-weight:600;
+/* ---- Signal Bridge: two city nodes, one live circuit ---- */
+.intro-bridge{
+  width:min(320px,78vw);height:74px;margin-top:16px;position:relative;
   opacity:0;transform:translateY(14px);animation:introUp .8s ease .85s forwards;
 }
-.intro-nations .mid{color:#4a4a52}
-.intro-nations .fdot{width:8px;height:8px;border-radius:50%;display:inline-block}
-.intro-nations .fdot.ug{background:linear-gradient(90deg,var(--ug-y),var(--ug-r))}
-.intro-nations .fdot.ss{background:linear-gradient(90deg,var(--ss-b),var(--ss-g))}
+.intro-bridge svg{display:block;width:100%;height:46px;overflow:visible}
+.barc{
+  stroke:url(#bgrad);stroke-width:1.3;opacity:.55;
+  stroke-dasharray:1;stroke-dashoffset:1;
+  animation:bdraw .75s var(--ease) 1s forwards;
+}
+@keyframes bdraw{to{stroke-dashoffset:0}}
+/* the signal: a bright comet travelling Kampala → Juba and back */
+.bpulse{
+  stroke:#fff;stroke-width:1.7;stroke-linecap:round;
+  stroke-dasharray:.07 .93;stroke-dashoffset:1.07;
+  filter:drop-shadow(0 0 4px rgba(255,255,255,.8));
+  animation:bpulse 2.1s cubic-bezier(.45,.05,.55,.95) 1.8s infinite alternate;
+}
+@keyframes bpulse{from{stroke-dashoffset:1.07}to{stroke-dashoffset:-1.07}}
+.bflash{stroke:#fff;stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:1;opacity:0}
+.bdot{
+  transform-box:fill-box;transform-origin:center;
+  opacity:.4;transition:transform .35s var(--ease),opacity .3s;
+}
+.bdot.ug{fill:var(--ug-y)}
+.bdot.ss{fill:var(--ss-b)}
+.bcities{display:flex;justify-content:space-between;margin-top:6px}
+.bcity{display:flex;flex-direction:column;gap:3px}
+.bcity+.bcity{align-items:flex-end;text-align:right}
+.bcity b{font-size:11px;font-weight:800;letter-spacing:.22em;color:var(--mut);transition:color .4s}
+.bcity small{
+  display:flex;gap:5px;font-family:var(--font-mono);font-size:9.5px;
+  letter-spacing:.08em;color:var(--dim);font-variant-numeric:tabular-nums;
+}
+.bcity .lat::before{content:"· "}
+/* ignition at logo-lock (engine emits .locked; the CSS-fallback intro
+   ignites on a timer tuned to markIn/introLoad) */
+#intro.locked .bdot{transform:scale(1.45);animation:bBreathe 2.4s ease-in-out .35s infinite alternate}
+#intro.locked .bdot.ug{filter:drop-shadow(0 0 5px rgba(255,206,0,.9))}
+#intro.locked .bdot.ss{filter:drop-shadow(0 0 5px rgba(90,150,235,.9))}
+#intro.locked .barc{opacity:.85}
+#intro.locked .bcity b{color:#fff}
+@keyframes bBreathe{from{opacity:1}to{opacity:.55}}
+#intro:not(.engine) .bdot{animation:bIgnite .4s ease 1.8s forwards}
+#intro:not(.engine) .bcity b{animation:bName .4s ease 1.8s forwards}
+@keyframes bIgnite{to{opacity:1;transform:scale(1.45)}}
+@keyframes bName{to{color:#fff}}
+/* bloom: one white flash rides the whole line with the logo bloom */
+#intro.lockup .bflash{animation:bflashRun .55s var(--ease) forwards}
+@keyframes bflashRun{
+  0%{stroke-dashoffset:1;opacity:.95}
+  70%{stroke-dashoffset:0;opacity:.6}
+  100%{stroke-dashoffset:0;opacity:0}
+}
+#intro.done .intro-bridge *{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){
+  .intro-bridge{animation:none;opacity:1;transform:none}
+  .barc{animation:none;stroke-dashoffset:0}
+  .bpulse{animation:none;visibility:hidden}
+  .bdot{opacity:1}
+}
 .intro-tag{
   margin-top:24px;font-size:10px;color:var(--dim);font-weight:600;
   opacity:0;transform:translateY(14px);animation:introUp .9s ease 1.85s forwards;

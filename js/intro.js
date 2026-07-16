@@ -21,6 +21,22 @@
   var lite = !!(conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ""));
   if (seen || reduce || lite) return; // site.js already dismissed the intro
 
+  /* Signal Bridge: the HTML ships a static copy of the city names so the
+     no-JS paint is complete — this re-sync keeps it from drifting when
+     SITE.nations changes. */
+  try {
+    var nations = (window.SITE || {}).nations || [];
+    var cities = intro.querySelectorAll(".bcity");
+    nations.forEach(function (n, i) {
+      var el = cities[i];
+      if (!el) return;
+      el.querySelector("b").textContent = n.city.toUpperCase();
+      var lat = (n.coords || "").split("·")[0].trim();
+      var latEl = el.querySelector(".lat");
+      if (latEl && lat) latEl.textContent = lat;
+    });
+  } catch (e) {}
+
   var canvas = document.getElementById("introCanvas");
   var markImg = intro.querySelector(".intro-mark");
   var pctEl = intro.querySelector(".intro-count b");

@@ -136,7 +136,8 @@ window.SITE = {
         id: "africa63", title: "AFRICA63", sub: "Public Affairs",
         accent: "linear-gradient(92deg,#ffce00,#63d67f)", grad: "campaign",
         typeLabel: "Website · Brand & Email",
-        focus: ["Custom site — coded & deployed", "Brand direction & A63 monogram", "Domain, SSL, SEO & 4 inboxes"]
+        focus: ["Custom site — coded & deployed", "Brand direction & A63 monogram", "Domain, SSL, SEO & 4 inboxes"],
+        svc: ["web", "brand"]           // "Build like this" quote prefill
       }
     },
     {
@@ -221,7 +222,8 @@ window.SITE = {
         id: "fodman", title: "Fodman", sub: "Online Branch System",
         accent: "linear-gradient(92deg,#63d67f,#7aa2ff)", grad: "watp",
         typeLabel: "Web App · Lending System",
-        focus: ["Loan application tracking", "Borrowers & repayments", "Campaign fliers"]
+        focus: ["Loan application tracking", "Borrowers & repayments", "Campaign fliers"],
+        svc: ["web", "flier"]           // site + the campaign fliers it shipped with
       }
     }
   ]

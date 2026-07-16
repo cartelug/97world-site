@@ -6,7 +6,7 @@
    Bump VERSION on every deploy (tools/build.mjs stamps ?v= to
    match).
    ============================================================ */
-const VERSION = "v3";
+const VERSION = "v4";
 const STATIC_CACHE = "97d-static-" + VERSION;
 const PAGE_CACHE = "97d-pages-" + VERSION;
 
@@ -15,7 +15,7 @@ const PRECACHE = [
   "css/fonts.css", "css/styles.css", "css/kinetic.css", "css/home.css", "css/pages.css",
   "js/data.js", "js/site.js", "js/kinetic.js", "js/scenes.js", "js/pricing.js", "js/start.js", "js/intro.js",
   "assets/fonts/archivo-var.woff2", "assets/fonts/inter-var.woff2", "assets/fonts/jbmono-var.woff2",
-  "assets/mark-white.png", "assets/favicon.png",
+  "assets/mark-white.png", "assets/favicon.png", "assets/favicon.svg",
   "assets/bg/bg1-desktop.avif", "assets/bg/bg1-mobile.avif",
 ];
 

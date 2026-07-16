@@ -86,7 +86,7 @@ const PAGES = [
 /* ---------- JSON-LD builders (from SITE — never hand-written) ---------- */
 const ldBusiness = () => ({
   '@context': 'https://schema.org', '@type': 'ProfessionalService',
-  name: '97 Design', url: BASE, image: BASE + 'assets/icon-maskable-512.png',
+  name: '97 Design', url: BASE, image: BASE + 'assets/og/og-default.jpg',
   telephone: '+' + SITE.whatsapp, priceRange: '$35 - $500',
   slogan: "Proof isn't fabricated. It's built.",
   areaServed: SITE.nations.map((n) => ({ '@type': 'Country', name: n.name })),
@@ -148,8 +148,9 @@ ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonic
 <meta name="twitter:title" content="${p.title}">
 <meta name="twitter:description" content="${p.desc}">
 <meta name="twitter:image" content="${og}">
-${p.headExtra ? p.headExtra + '\n' : ''}<link rel="icon" type="image/png" href="assets/favicon.png">
-<link rel="apple-touch-icon" href="assets/favicon.png">
+${p.headExtra ? p.headExtra + '\n' : ''}<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
@@ -176,8 +177,8 @@ const navChrome = (page) => {
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
   </a>
   <nav class="links">
-    ${on('services', 'Services', 'services.html')}
     ${on('work', 'Work', 'work.html')}
+    ${on('services', 'Services', 'services.html')}
     ${on('pricing', 'Pricing', 'pricing.html')}
     ${on('about', 'About', 'about.html')}
   </nav>
@@ -193,8 +194,8 @@ const mmenuChrome = (page) => {
   return `<div class="mmenu" id="mmenu" aria-hidden="true">
   <nav class="mmenu-links">
     <a href="index.html"${on('home')} style="--i:0"><small>01</small> Home</a>
-    <a href="services.html"${on('services')} style="--i:1"><small>02</small> Services</a>
-    <a href="work.html"${on('work')} style="--i:2"><small>03</small> Work</a>
+    <a href="work.html"${on('work')} style="--i:1"><small>02</small> Work</a>
+    <a href="services.html"${on('services')} style="--i:2"><small>03</small> Services</a>
     <a href="pricing.html"${on('pricing')} style="--i:3"><small>04</small> Pricing</a>
     <a href="about.html"${on('about')} style="--i:4"><small>05</small> About</a>
   </nav>
@@ -251,6 +252,15 @@ const scriptsChrome = (list) =>
 
 /* ---------- build every page ---------- */
 const problems = [];
+
+// funnel guard: every work row's "Build like this" prefill must point at
+// real service ids, or the pricing page silently drops the selection
+const svcIds = new Set(SITE.services.map((s) => s.id));
+for (const w of SITE.work) {
+  for (const id of (w.disp && w.disp.svc) || []) {
+    if (!svcIds.has(id)) problems.push(`data.js: work "${w.project}" disp.svc "${id}" is not a service id`);
+  }
+}
 for (const p of PAGES) {
   let html = read(p.file);
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(p));
