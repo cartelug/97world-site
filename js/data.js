@@ -96,20 +96,20 @@ window.SITE = {
      project: create the row in Notion, then sync it in here. */
   work: [
     {
-      project: "WATP — My Weekly Track",
-      client: "WATP",
-      type: "Web App",
-      status: "Coming Soon",          // Live | Coming Soon | In Progress
-      tags: ["Web", "Tracking", "UI/UX"],
+      project: "AFRICA63",
+      client: "AFRICA63 — Mubembe Nathan",
+      type: "Website",
+      status: "Live",                 // Live | Coming Soon | In Progress
+      tags: ["Web", "Branding"],
       year: 2026,
-      link: "",
+      link: "https://theafrica63.com",
       featured: true,
-      description: "My Weekly Track — a personal tracking platform. Preview slot reserved on the site; live build in progress.",
+      description: "A website and brand foundation for AFRICA63, a public-affairs firm — a custom-built site with refreshed A63 monogram direction, domain, SSL, SEO and four business inboxes. Live at theafrica63.com.",
       disp: {
-        id: "watp", title: "WATP", sub: "My Weekly Track",
-        accent: "linear-gradient(92deg,#7aa2ff,#c58bff)", grad: "watp",
-        typeLabel: "Web App · Personal Tracking",
-        focus: ["Product UI & dashboards", "Tracking flows", "Identity & interface system"]
+        id: "africa63", title: "AFRICA63", sub: "Public Affairs",
+        accent: "linear-gradient(92deg,#ffce00,#63d67f)", grad: "campaign",
+        typeLabel: "Website · Brand & Email",
+        focus: ["Custom site — coded & deployed", "Brand direction & A63 monogram", "Domain, SSL, SEO & 4 inboxes"]
       }
     },
     {
@@ -127,6 +127,74 @@ window.SITE = {
         accent: "linear-gradient(92deg,#63d67f,#ffce00)", grad: "may",
         typeLabel: "Website · Hospitality",
         focus: ["Booking-first structure", "Gallery & storytelling", "Mobile guests covered"]
+      }
+    },
+    {
+      project: "WATP — My Weekly Track",
+      client: "WATP",
+      type: "Web App",
+      status: "Coming Soon",
+      tags: ["Web", "Tracking", "UI/UX"],
+      year: 2026,
+      link: "",
+      featured: true,
+      description: "My Weekly Track — a personal tracking platform. Preview slot reserved on the site; live build in progress.",
+      disp: {
+        id: "watp", title: "WATP", sub: "My Weekly Track",
+        accent: "linear-gradient(92deg,#7aa2ff,#c58bff)", grad: "watp",
+        typeLabel: "Web App · Personal Tracking",
+        focus: ["Product UI & dashboards", "Tracking flows", "Identity & interface system"]
+      }
+    },
+    {
+      project: "Lumu Group of Companies",
+      client: "Lumu Group of Companies",
+      type: "Website",
+      status: "In Progress",
+      tags: ["Web"],
+      year: 2026,
+      link: "",
+      featured: true,
+      description: "A group website presenting the Lumu Group parent brand and routing visitors to its two divisions — Lumu Auto Dealers and Lumu Real Estate — each with its own inquiry flow.",
+      disp: {
+        id: "lumu", title: "Lumu Group", sub: "Group of Companies",
+        accent: "linear-gradient(92deg,#7aa2ff,#63d67f)", grad: "brand",
+        typeLabel: "Website · Auto & Real Estate",
+        focus: ["Parent brand + two divisions", "Auto Dealers inquiry flows", "Real Estate listings & inquiries"]
+      }
+    },
+    {
+      project: "Keer Art Gallery",
+      client: "Keer Art Gallery",
+      type: "Website",
+      status: "In Progress",
+      tags: ["Web", "Booking"],
+      year: 2026,
+      link: "",
+      featured: false,
+      description: "An art-gallery website — browse and buy original works, plus a custom commission builder where clients upload a photo, choose size and framing, and see a live price estimate.",
+      disp: {
+        id: "keer", title: "Keer", sub: "Art Gallery",
+        accent: "linear-gradient(92deg,#e8e8ec,#9a9aa2)", grad: "brand",
+        typeLabel: "Website · Art & Commissions",
+        focus: ["Artwork gallery & sales", "Custom commission builder", "Live price estimate + payments"]
+      }
+    },
+    {
+      project: "Fodman International Ltd",
+      client: "Fodman International Ltd",
+      type: "Web App",
+      status: "In Progress",
+      tags: ["Web", "Tracking"],
+      year: 2026,
+      link: "",
+      featured: false,
+      description: "An online branch system for a money-lending business — track loan applications, borrowers, repayments and follow-ups — delivered alongside professional campaign fliers.",
+      disp: {
+        id: "fodman", title: "Fodman", sub: "Online Branch System",
+        accent: "linear-gradient(92deg,#63d67f,#7aa2ff)", grad: "watp",
+        typeLabel: "Web App · Lending System",
+        focus: ["Loan application tracking", "Borrowers & repayments", "Campaign fliers"]
       }
     }
   ]
