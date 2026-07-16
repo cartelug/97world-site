@@ -113,8 +113,8 @@ window.SITE = {
       }
     },
     {
-      project: "Mayanyure Resort",
-      client: "Mayanyure Resort",
+      project: "Maya Nature Resort",
+      client: "Maya Nature Resort",
       type: "Website",
       status: "Live",
       tags: ["Web", "Hospitality", "Booking"],
@@ -123,7 +123,7 @@ window.SITE = {
       featured: true,
       description: "A full hospitality website — bookings, gallery and story, built to make the resort feel as good online as it does in person.",
       disp: {
-        id: "mayanyure", title: "Mayanyure", sub: "Resort",
+        id: "maya-nature", title: "Maya Nature", sub: "Resort",
         accent: "linear-gradient(92deg,#63d67f,#ffce00)", grad: "may",
         typeLabel: "Website · Hospitality",
         focus: ["Booking-first structure", "Gallery & storytelling", "Mobile guests covered"]

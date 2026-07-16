@@ -34,10 +34,6 @@
     <a href="pricing.html" class="on">Pricing</a>
     <a href="about.html">About</a>
   </nav>
-  <div class="ctry-toggle" role="group" aria-label="Choose country and currency">
-    <button type="button" data-ctry="UG" onclick="setCountry('UG')" aria-pressed="true"><i class="fdot ug"></i>UG</button>
-    <button type="button" data-ctry="SS" onclick="setCountry('SS')" aria-pressed="false"><i class="fdot ss"></i>SS</button>
-  </div>
   <a href="start.html" class="nav-cta">Start a project</a>
   <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -53,10 +49,6 @@
     <a href="about.html" style="--i:4"><small>05</small> About</a>
   </nav>
   <div class="mmenu-foot">
-    <div class="ctry-toggle" role="group" aria-label="Choose country and currency">
-      <button type="button" data-ctry="UG" onclick="setCountry('UG')" aria-pressed="true"><i class="fdot ug"></i>Uganda · UGX</button>
-      <button type="button" data-ctry="SS" onclick="setCountry('SS')" aria-pressed="false"><i class="fdot ss"></i>S. Sudan / Intl · USD</button>
-    </div>
     <a class="btn wa full" href="https://wa.me/256708735878" target="_blank" rel="noopener">Chat on WhatsApp</a>
     <a class="btn ghost full" href="start.html">Start a project →</a>
     <div class="mmenu-nations">
@@ -82,18 +74,27 @@
 <section class="blk tight" id="calculator">
   <div class="wrap">
     <div class="price-shell reveal">
-      <div class="price-top">
-        <div class="ctry">
-          <button data-c="UG" type="button" onclick="setCountry('UG')">
-            <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span> Uganda · UGX
+      <div class="price-gate">
+        <span class="gate-step">Step 1 of 2</span>
+        <h3 class="gate-q">Where are you based?</h3>
+        <p class="gate-sub">Pick one and your prices show in the right currency — instantly.</p>
+        <div class="gate-choices">
+          <button type="button" class="gate-choice" data-ctry="UG" onclick="chooseCountry('UG')">
+            <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span>
+            <b>Uganda</b><span class="cur">Prices in UGX</span>
           </button>
-          <button data-c="SS" type="button" onclick="setCountry('SS')">
-            <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span> South Sudan / Intl · USD
+          <button type="button" class="gate-choice" data-ctry="SS" onclick="chooseCountry('SS')">
+            <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span>
+            <b>South Sudan / International</b><span class="cur">Prices in USD</span>
           </button>
         </div>
-        <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
       </div>
-      <div class="price-body">
+      <div class="price-live" hidden>
+        <div class="price-top">
+          <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
+          <button type="button" class="change-ctry" onclick="changeCountry()">↻ Change country</button>
+        </div>
+        <div class="price-body">
         <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
         <div class="summary">
           <h4>Your Quote</h4>
@@ -107,6 +108,7 @@
           </div>
           <a href="start.html" class="btn wa full mt">Continue to start →</a>
         </div>
+      </div>
       </div>
     </div>
   </div>

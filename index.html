@@ -59,10 +59,6 @@
     <a href="pricing.html">Pricing</a>
     <a href="about.html">About</a>
   </nav>
-  <div class="ctry-toggle" role="group" aria-label="Choose country and currency">
-    <button type="button" data-ctry="UG" onclick="setCountry('UG')" aria-pressed="true"><i class="fdot ug"></i>UG</button>
-    <button type="button" data-ctry="SS" onclick="setCountry('SS')" aria-pressed="false"><i class="fdot ss"></i>SS</button>
-  </div>
   <a href="start.html" class="nav-cta">Start a project</a>
   <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
     <span></span><span></span><span></span>
@@ -79,10 +75,6 @@
     <a href="about.html" style="--i:4"><small>05</small> About</a>
   </nav>
   <div class="mmenu-foot">
-    <div class="ctry-toggle" role="group" aria-label="Choose country and currency">
-      <button type="button" data-ctry="UG" onclick="setCountry('UG')" aria-pressed="true"><i class="fdot ug"></i>Uganda · UGX</button>
-      <button type="button" data-ctry="SS" onclick="setCountry('SS')" aria-pressed="false"><i class="fdot ss"></i>S. Sudan / Intl · USD</button>
-    </div>
     <a class="btn wa full" href="https://wa.me/256708735878" target="_blank" rel="noopener">Chat on WhatsApp</a>
     <a class="btn ghost full" href="start.html">Start a project →</a>
     <div class="mmenu-nations">
@@ -132,7 +124,7 @@
 <div class="trust-strip reveal" id="trust">
   <div class="row">
     <span class="t"><i class="ic" style="background:var(--ug-y);box-shadow:0 0 10px var(--ug-y)"></i><span>Instant quote — <b>right below</b></span></span>
-    <a class="t" href="work.html#mayanyure"><i class="ic" style="background:var(--wa);box-shadow:0 0 10px var(--wa)"></i><span><b>Mayanyure Resort</b> — live now</span></a>
+    <a class="t" href="work.html#maya-nature"><i class="ic" style="background:var(--wa);box-shadow:0 0 10px var(--wa)"></i><span><b>Maya Nature Resort</b> — live now</span></a>
     <span class="t"><i class="ic" style="background:var(--ss-b);box-shadow:0 0 10px var(--ss-b)"></i><span><b>50 / 50</b> deposits — no surprises</span></span>
     <span class="t"><i class="ic" style="background:var(--ug-r);box-shadow:0 0 10px var(--ug-r)"></i><span>Kampala · Juba · <b>Worldwide</b></span></span>
   </div>
@@ -146,30 +138,42 @@
     <p class="sub reveal">Tick what you need — your total updates live in <b>UGX or USD</b>, with the <b>50% deposit</b> that locks your slot. Your quote follows you to checkout.</p>
 
     <div class="price-shell reveal">
-      <div class="price-top">
-        <div class="ctry">
-          <button data-c="UG" type="button" onclick="setCountry('UG')">
-            <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span> Uganda · UGX
+      <!-- STEP 1 — the question -->
+      <div class="price-gate">
+        <span class="gate-step">Step 1 of 2</span>
+        <h3 class="gate-q">Where are you based?</h3>
+        <p class="gate-sub">Pick one and your prices show in the right currency — instantly.</p>
+        <div class="gate-choices">
+          <button type="button" class="gate-choice" data-ctry="UG" onclick="chooseCountry('UG')">
+            <span class="fg"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i></span>
+            <b>Uganda</b><span class="cur">Prices in UGX</span>
           </button>
-          <button data-c="SS" type="button" onclick="setCountry('SS')">
-            <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span> South Sudan / Intl · USD
+          <button type="button" class="gate-choice" data-ctry="SS" onclick="chooseCountry('SS')">
+            <span class="fg"><i style="background:var(--ss-b)"></i><i style="background:var(--ink)"></i><i style="background:var(--ss-g)"></i></span>
+            <b>South Sudan / International</b><span class="cur">Prices in USD</span>
           </button>
         </div>
-        <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
       </div>
-      <div class="price-body">
-        <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
-        <div class="summary">
-          <h4>Your Quote</h4>
-          <div class="srow"><span class="k">Items selected</span><span class="v js-sum-count">0</span></div>
-          <div class="srow total"><span class="k">Project total</span><span class="v js-sum-total">—</span></div>
-          <div class="dep">
-            <div class="lbl">2-Deposit Plan</div>
-            <div class="drow"><span>1st deposit — to start</span><b class="js-dep">—</b></div>
-            <div class="drow"><span>Balance — on delivery</span><b class="js-bal">—</b></div>
-            <small>Every project runs on a 50 / 50 plan: pay the first deposit to lock your slot and begin, then the balance when the work is delivered.</small>
+      <!-- STEP 2 — the prices (revealed after the choice) -->
+      <div class="price-live" hidden>
+        <div class="price-top">
+          <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
+          <button type="button" class="change-ctry" onclick="changeCountry()">↻ Change country</button>
+        </div>
+        <div class="price-body">
+          <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
+          <div class="summary">
+            <h4>Your Quote</h4>
+            <div class="srow"><span class="k">Items selected</span><span class="v js-sum-count">0</span></div>
+            <div class="srow total"><span class="k">Project total</span><span class="v js-sum-total">—</span></div>
+            <div class="dep">
+              <div class="lbl">2-Deposit Plan</div>
+              <div class="drow"><span>1st deposit — to start</span><b class="js-dep">—</b></div>
+              <div class="drow"><span>Balance — on delivery</span><b class="js-bal">—</b></div>
+              <small>Every project runs on a 50 / 50 plan: pay the first deposit to lock your slot and begin, then the balance when the work is delivered.</small>
+            </div>
+            <a href="start.html" class="btn wa full mt">Continue to start →</a>
           </div>
-          <a href="start.html" class="btn wa full mt">Continue to start →</a>
         </div>
       </div>
     </div>

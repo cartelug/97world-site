@@ -96,6 +96,23 @@
     render(); calc();
   });
 
+  /* ---------- interactive gate: ask the country first, then reveal prices ----------
+     chooseCountry() records the pick, sets the currency site-wide, and reveals
+     the price body; changeCountry() reopens the question. Returning visitors
+     (already picked) skip straight to the prices. */
+  (function gate() {
+    var gates = document.querySelectorAll(".price-gate");
+    var lives = document.querySelectorAll(".price-live");
+    if (!gates.length && !lives.length) return;
+    var PK = "q97.picked";
+    function picked() { try { return localStorage.getItem(PK) === "1"; } catch (e) { return false; } }
+    function reveal() { gates.forEach(function (g) { g.classList.add("done"); }); lives.forEach(function (l) { l.hidden = false; }); }
+    function open() { gates.forEach(function (g) { g.classList.remove("done"); }); lives.forEach(function (l) { l.hidden = true; }); }
+    window.chooseCountry = function (c) { try { localStorage.setItem(PK, "1"); } catch (e) {} window.setCountry(c); reveal(); };
+    window.changeCountry = function () { open(); };
+    if (picked()) reveal();
+  })();
+
   render(); calc();
   if (window.kickReveals) window.kickReveals();
 })();
