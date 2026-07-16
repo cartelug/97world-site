@@ -135,3 +135,13 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   .hero2-stats .st{flex:1 1 40%}
   .scroll-hint{display:none}
 }
+
+/* ============ PHASE 2: scroll-driven hero (CSS owns it when supported) ============ */
+@supports (animation-timeline: scroll()){
+  .hero2-inner{animation:heroOut linear both;animation-timeline:scroll(root);animation-range:0 92vh}
+  @keyframes heroOut{to{transform:translateY(28vh);opacity:0}}
+  .hero2 .wm{animation:wmDrift linear both;animation-timeline:scroll(root);animation-range:0 130vh}
+  @keyframes wmDrift{from{transform:translateY(-52%)}to{transform:translateY(calc(-52% + 12vh))}}
+}
+/* rotating word: reserve the widest word so lines never jump */
+.rotwrap{min-inline-size:6.2ch}

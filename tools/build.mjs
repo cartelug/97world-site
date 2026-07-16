@@ -38,44 +38,44 @@ const PAGES = [
     file: 'index.html', page: 'home',
     title: '97 Design — Websites, Brands & Fliers · Uganda & South Sudan',
     desc: "97 Design builds websites, campaign fliers and brands across Uganda & South Sudan. Priced upfront, ordered on WhatsApp, delivered in days. Build your quote in 30 seconds.",
-    scripts: ['data', 'site', 'scenes', 'pricing', 'intro'],
+    scripts: ['data', 'site', 'kinetic', 'scenes', 'pricing', 'intro'],
     home: true,
   },
   {
     file: 'services.html', page: 'services',
     title: 'Services & Prices — 97 Design',
     desc: 'Websites from $500, landing pages, logos, brand kits, fliers, business cards and social packs — with real prices in UGX & USD and honest turnarounds.',
-    scripts: ['data', 'site'], jsonld: ['services', 'faq'],
+    scripts: ['data', 'site', 'kinetic'], jsonld: ['services', 'faq'],
   },
   {
     file: 'work.html', page: 'work',
     title: 'Work & Case Studies — 97 Design',
     desc: 'Live websites and builds in progress from 97 Design — AFRICA63, Maya Nature Resort and more. Proof, not hype.',
-    scripts: ['data', 'site'],
+    scripts: ['data', 'site', 'kinetic'],
   },
   {
     file: 'pricing.html', page: 'pricing',
     title: 'Instant Quote Calculator — 97 Design',
     desc: 'Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.',
-    scripts: ['data', 'site', 'pricing'], jsonld: ['services', 'faq'],
+    scripts: ['data', 'site', 'kinetic', 'pricing'], jsonld: ['services', 'faq'],
   },
   {
     file: 'start.html', page: 'start',
     title: 'Start a Project — 97 Design',
     desc: 'Send your project brief straight to 97 Design on WhatsApp — your quote comes with you. The first deposit confirms your slot.',
-    scripts: ['data', 'site', 'pricing', 'start'],
+    scripts: ['data', 'site', 'kinetic', 'pricing', 'start'],
   },
   {
     file: 'about.html', page: 'about',
     title: 'About the Studio — 97 Design',
     desc: "The design studio of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.",
-    scripts: ['data', 'site'],
+    scripts: ['data', 'site', 'kinetic'],
   },
   {
     file: '404.html', page: '404',
     title: 'Page not found — 97 Design',
     desc: "This page isn't built yet. Head back to 97 Design.",
-    scripts: ['data', 'site'], noindex: true,
+    scripts: ['data', 'site', 'kinetic'], noindex: true,
     headExtra: `<script>
 /* 404 is served for any missing path — anchor relative URLs to the site root */
 (function(){var p=location.pathname.split("/");var root=(location.hostname.slice(-10)===".github.io"&&p[1])?"/"+p[1]+"/":"/";var b=document.createElement("base");b.href=root;document.head.appendChild(b);})();
@@ -123,7 +123,7 @@ function head(p) {
     return `<link rel="preload" href="${u}" as="style">
 <link rel="stylesheet" href="${u}" media="print" onload="this.media='all';this.onload=null">`;
   };
-  const sheets = ['css/styles.css', p.home ? 'css/home.css' : 'css/pages.css'];
+  const sheets = ['css/styles.css', 'css/kinetic.css', p.home ? 'css/home.css' : 'css/pages.css'];
   const lds = [
     ...(p.home || p.page === 'about' ? [ldBusiness()] : []),
     ...((p.jsonld || []).includes('services') ? [ldServices()] : []),

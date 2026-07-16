@@ -1,0 +1,63 @@
+/* ============================================================
+   97 DESIGN — KINETIC TYPE (pairs with js/kinetic.js)
+   Per-word / per-char reveals driven by the .reveal → .in
+   pipeline; a scroll-scrubbed ink variant under @supports.
+   ============================================================ */
+
+[data-split]{--stagger:28ms}
+[data-split] .kw{display:inline-block;white-space:nowrap}
+[data-split] .kc{display:inline-block}
+
+/* the host reveals instantly — its UNITS carry the animation */
+.reveal[data-split]{opacity:1;transform:none;filter:none}
+
+/* rise (default) */
+[data-split]:not(.in) .ku{opacity:0;transform:translateY(.55em)}
+[data-split].in .ku{
+  opacity:1;transform:none;
+  transition:opacity .7s var(--ease),transform .7s var(--ease);
+  transition-delay:calc(var(--d, 0) * var(--stagger));
+}
+
+/* blur */
+[data-split-anim="blur"]:not(.in) .ku{opacity:0;transform:translateY(.25em);filter:blur(8px)}
+[data-split-anim="blur"].in .ku{
+  opacity:1;transform:none;filter:blur(0);
+  transition:opacity .8s var(--ease),transform .8s var(--ease),filter .8s ease;
+  transition-delay:calc(var(--d, 0) * var(--stagger));
+}
+
+/* clip (wipe up from a hidden line) */
+[data-split-anim="clip"] .kw{overflow:hidden}
+[data-split-anim="clip"]:not(.in) .ku{opacity:1;transform:translateY(110%)}
+[data-split-anim="clip"].in .ku{
+  transform:none;
+  transition:transform .65s var(--ease);
+  transition-delay:calc(var(--d, 0) * var(--stagger));
+}
+
+/* scrub-ink: words inked in as they cross the viewport (manifesto) */
+@supports (animation-timeline: view()){
+  [data-split-anim="scrub-ink"] .ku{
+    opacity:1;transform:none;transition:none;
+    color:var(--dim);
+    animation:k-ink linear both;
+    animation-timeline:view();
+    animation-range:entry calc(15% + var(--d, 0) * 1.5%) cover calc(42% + var(--d, 0) * 1.5%);
+  }
+  @keyframes k-ink{to{color:var(--ink)}}
+}
+@supports not (animation-timeline: view()){
+  [data-split-anim="scrub-ink"]:not(.in) .ku{opacity:1;transform:none;color:var(--dim)}
+  [data-split-anim="scrub-ink"].in .ku{
+    color:var(--ink);
+    transition:color .6s ease;
+    transition-delay:calc(var(--d, 0) * var(--stagger));
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  /* kinetic.js leaves the DOM untouched under reduced motion; this is a
+     belt-and-braces guard in case content was split before the setting */
+  [data-split] .ku{opacity:1 !important;transform:none !important;transition:none !important;animation:none !important}
+}

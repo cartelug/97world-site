@@ -14,6 +14,8 @@
   var conn = navigator.connection || {};
   var lite = !!(conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ""));
   var raf = window.requestAnimationFrame || function (f) { return setTimeout(function () { f(Date.now()); }, 16); };
+  // native scroll-driven animations (CSS handles these effects when supported)
+  var sda = !!(window.CSS && CSS.supports && CSS.supports("animation-timeline: scroll()"));
 
   /* ---------- money / quote persistence (shared) ---------- */
   function getCountry() {
@@ -137,7 +139,7 @@
 
   /* ---------- scroll progress + header state ---------- */
   (function () {
-    var bar = document.querySelector(".scroll-progress i");
+    var bar = sda ? null : document.querySelector(".scroll-progress i"); // CSS scroll() timeline when supported
     var nav = document.getElementById("nav");
     var tick = false;
     function upd() {
@@ -190,8 +192,8 @@
     });
   }
 
-  /* ---------- parallax for [data-plx] ---------- */
-  if (!reduce) (function () {
+  /* ---------- parallax for [data-plx] (JS fallback; CSS scroll timeline when supported) ---------- */
+  if (!reduce && !sda) (function () {
     var els = Array.prototype.slice.call(document.querySelectorAll("[data-plx]"));
     if (!els.length) return;
     var tick = false;
@@ -205,8 +207,9 @@
     }, { passive: true });
   })();
 
-  /* ---------- hero scroll-scrub: content rises + fades as you leave ---------- */
-  if (!reduce) (function () {
+  /* ---------- hero scroll-scrub: content rises + fades as you leave
+     (JS fallback only — css/home.css owns this under animation-timeline) ---------- */
+  if (!reduce && !sda) (function () {
     var inner = document.querySelector(".hero2-inner");
     var hero = document.querySelector(".hero2");
     if (!inner || !hero) return;
@@ -298,14 +301,14 @@
   if (intro) {
     var seen = false;
     try { seen = !!sessionStorage.getItem("i97"); } catch (e) {}
-    if (seen || reduce) {
+    if (seen || reduce || lite) {
       intro.classList.add("done", "instant");
       var nav0 = document.getElementById("nav");
       if (nav0) nav0.classList.add("reveal-nav");
     } else {
       // safety net; js/intro.js takes ownership of the deadline when its
       // particle engine actually starts (clears this and re-times from t0)
-      window.__introTimer = setTimeout(endIntro, 4600);
+      window.__introTimer = setTimeout(endIntro, 3400);
     }
   } else {
     var nav1 = document.getElementById("nav");
@@ -331,6 +334,90 @@
           '<a class="btn primary" href="pricing.html?svc=' + s.id + '">Add to quote →</a>' +
         '</aside></article>';
     }).join('');
+  })();
+
+  /* ---------- data-driven blocks (single source: js/data.js) ---------- */
+  function esc2(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  /* marquee: derived from the service list, duplicated for the loop */
+  (function () {
+    var host = document.querySelector("[data-marquee]");
+    if (!host || !D) return;
+    var seq = D.services.map(function (s, i) {
+      return "<span" + (i % 2 ? ' class="fill"' : "") + ">" + esc2(s.name) + "</span>";
+    }).join("");
+    host.innerHTML = '<div class="marquee-track">' + seq + seq + "</div>";
+  })();
+
+  /* services strip (exp-lines): the four flagship services + everything line */
+  (function () {
+    var host = document.querySelector("[data-exp]");
+    if (!host || !D) return;
+    var picks = ["web", "flier", "brand", "social"].map(function (id) {
+      return D.services.filter(function (s) { return s.id === id; })[0];
+    }).filter(Boolean);
+    host.innerHTML = picks.map(function (s, i) {
+      return '<a class="exp-line reveal" href="services.html#' + s.id + '">' +
+        '<span class="idx">0' + (i + 1) + '</span>' +
+        '<span class="name">' + esc2(s.name) + '</span>' +
+        '<span class="desc">' + esc2(s.short) + ' From <b data-usd="' + s.usd + '"></b>.</span>' +
+        '<span class="arrow">→</span></a>';
+    }).join("") +
+      '<a class="exp-line reveal" href="services.html">' +
+      '<span class="idx">05</span>' +
+      '<span class="name" style="color:var(--dim)">…and more — all your needs</span>' +
+      '<span class="desc">If it can be designed, 97 builds it.</span>' +
+      '<span class="arrow">→</span></a>';
+  })();
+
+  /* process rail with who/when chips */
+  (function () {
+    var host = document.querySelector("[data-process]");
+    if (!host || !D) return;
+    host.innerHTML = D.process.map(function (p) {
+      return '<div class="step reveal">' +
+        '<div class="step-meta"><span class="who">' + esc2(p.who) + '</span><span class="when">' + esc2(p.when) + '</span></div>' +
+        '<h3>' + esc2(p.k) + '</h3><p>' + esc2(p.d) + '</p></div>';
+    }).join("");
+  })();
+
+  /* principles grid */
+  (function () {
+    document.querySelectorAll("[data-principles]").forEach(function (host) {
+      if (!D) return;
+      host.innerHTML = D.principles.map(function (p) {
+        return '<div class="p reveal"><b>' + esc2(p.k) + '</b><span>' + esc2(p.d) + '</span></div>';
+      }).join("");
+    });
+  })();
+
+  /* hero stats: honest, derived from the portfolio */
+  (function () {
+    var host = document.querySelector("[data-stats]");
+    if (!host || !D) return;
+    var live = D.work.filter(function (w) { return w.status === "Live"; }).length;
+    var building = D.work.length - live;
+    host.innerHTML =
+      '<div class="st"><b data-count="' + live + '">' + live + '</b><span>Sites live</span></div>' +
+      '<div class="st"><b data-count="' + building + '">' + building + '</b><span>In build</span></div>' +
+      '<div class="st"><b data-count="' + D.services.length + '">' + D.services.length + '</b><span>Services</span></div>' +
+      '<div class="st"><b>50%</b><span>Deposit to start</span></div>';
+  })();
+
+  /* truthful capacity line — hides itself when the month is stale */
+  (function () {
+    var els = document.querySelectorAll("[data-capacity]");
+    if (!els.length || !D || !D.capacity) return;
+    var c = D.capacity;
+    var now = new Date();
+    var cur = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+    var open = c.total - c.taken;
+    els.forEach(function (el) {
+      if (c.month !== cur || open <= 0) { el.hidden = true; return; }
+      var monthName = new Date(c.month + "-02").toLocaleString("en", { month: "long" });
+      el.hidden = false;
+      el.textContent = open + " of " + c.total + " " + monthName + " build slots open";
+    });
   })();
 
   /* ---------- FAQ (any [data-faq] container) ---------- */

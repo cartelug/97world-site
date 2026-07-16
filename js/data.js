@@ -65,11 +65,38 @@ window.SITE = {
 
   /* How every project runs (real sequence — brief → deposit → build → deliver) */
   process: [
-    { k: "Brief us", d: "Tell us what you need on WhatsApp — goals, references, deadline. We shape it into a clear brief with a fixed quote." },
-    { k: "Lock your slot", d: "A 50% deposit locks your place in the build queue. The timeline starts counting the moment it lands." },
-    { k: "We build, you react", d: "Tight feedback loops on WhatsApp while we design and build — no long silences, no surprises." },
-    { k: "Delivery day", d: "Final files, live site, full handover. The balance clears on delivery — and the proof is yours." }
+    { k: "Brief us", who: "You", when: "Day 0", d: "Tell us what you need on WhatsApp — goals, references, deadline. We shape it into a clear brief with a fixed quote." },
+    { k: "Lock your slot", who: "You", when: "Day 0–1", d: "A 50% deposit locks your place in the build queue. The timeline starts counting the moment it lands." },
+    { k: "We build, you react", who: "Us", when: "Days 1–9", d: "Tight feedback loops on WhatsApp while we design and build — no long silences, no surprises." },
+    { k: "Delivery day", who: "Us", when: "Delivery", d: "Final files, live site, full handover. The balance clears on delivery — and the proof is yours." }
   ],
+
+  /* One-tap quote bundles (ids must exist in services) */
+  bundles: [
+    { id: "launch",   name: "Launch",   note: "Website + full brand", services: ["web", "brand"] },
+    { id: "campaign", name: "Campaign", note: "Flier + social pack",  services: ["flier", "social"] },
+    { id: "starter",  name: "Starter",  note: "Logo + business cards", services: ["logo", "cards"] }
+  ],
+
+  /* Honest availability — EDIT MONTHLY. Renderers hide it automatically
+     when `month` is not the current month, so it can never silently lie. */
+  capacity: { month: "2026-07", total: 4, taken: 2 },
+
+  /* How deposits are paid. TODO(owner): fill the real Equity account
+     name/number — panels show a clearly-marked placeholder until then. */
+  payments: {
+    bank: {
+      name: "Equity Bank",
+      accountName: "— account name coming soon —",
+      accountNumber: "— ask on WhatsApp —",
+      note: "Send the payment screenshot on WhatsApp with your order reference — your slot is confirmed the moment it lands."
+    },
+    intl: "Outside Uganda? Ask on WhatsApp for USD payment options (bank transfer or mobile money)."
+  },
+
+  /* Real client quotes only — leave empty until you have permission
+     to quote someone. Renderers hide the block when this is empty. */
+  testimonials: [],
 
   /* What the sector stands on */
   principles: [

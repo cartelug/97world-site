@@ -153,11 +153,13 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 }
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
 </style>
-<link rel="preload" href="css/styles.css?v=2" as="style">
-<link rel="stylesheet" href="css/styles.css?v=2" media="print" onload="this.media='all';this.onload=null">
-<link rel="preload" href="css/home.css?v=2" as="style">
-<link rel="stylesheet" href="css/home.css?v=2" media="print" onload="this.media='all';this.onload=null">
-<noscript><link rel="stylesheet" href="css/styles.css?v=2"><link rel="stylesheet" href="css/home.css?v=2"></noscript>
+<link rel="preload" href="css/styles.css?v=3" as="style">
+<link rel="stylesheet" href="css/styles.css?v=3" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/kinetic.css?v=3" as="style">
+<link rel="stylesheet" href="css/kinetic.css?v=3" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/home.css?v=3" as="style">
+<link rel="stylesheet" href="css/home.css?v=3" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="css/styles.css?v=3"><link rel="stylesheet" href="css/kinetic.css?v=3"><link rel="stylesheet" href="css/home.css?v=3"></noscript>
 <script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
 <script type="speculationrules">
 {"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"}]}
@@ -249,9 +251,9 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   <div class="hero2-grid"></div>
   <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true" data-plx="0.1">
   <div class="wrap hero2-inner">
-    <h1 class="mega reveal">
+    <h1 class="mega reveal" data-split="chars" data-split-anim="clip" data-split-stagger="22">
       <span class="row">WE BUILD</span>
-      <span class="row rotwrap"><span id="rotWord">PROOF.</span></span>
+      <span class="row rotwrap" data-split-skip><span id="rotWord">PROOF.</span></span>
       <span class="row thin">NOT THE HYPE.</span>
     </h1>
     <div class="tail reveal">
@@ -265,12 +267,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
       <a href="#quote" class="btn primary">Build your quote ↓</a>
       <a href="https://wa.me/256708735878" class="btn ghost" target="_blank" rel="noopener">WhatsApp us</a>
     </div>
-    <div class="hero2-stats reveal">
-      <div class="st"><b data-count="2">2</b><span>Nations served</span></div>
-      <div class="st"><b data-count="7">7</b><span>Services offered</span></div>
-      <div class="st"><b>50%</b><span>Deposit to start</span></div>
-      <div class="st"><b>∞</b><span>Ideas built</span></div>
-    </div>
+    <span class="cap-line reveal" data-capacity hidden></span>
+    <div class="hero2-stats reveal" data-stats></div>
   </div>
   <a href="#quote" class="scroll-hint" aria-label="Scroll to quote builder">↓</a>
 </section>
@@ -289,7 +287,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 <section class="blk" id="quote" data-scene="2">
   <div class="wrap">
     <div class="kicker reveal">Instant pricing</div>
-    <h2 class="sec reveal">Build your quote. <span class="mut">Right here.</span></h2>
+    <h2 class="sec reveal" data-split="words">Build your quote. <span class="mut">Right here.</span></h2>
     <p class="sub reveal">Tick what you need — your total updates live in <b>UGX or USD</b>, with the <b>50% deposit</b> that locks your slot. Your quote follows you to checkout.</p>
 
     <div class="price-shell reveal">
@@ -315,11 +313,13 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
           <div class="cur-note js-cur-note">Showing prices in Ugandan Shillings (UGX)</div>
           <button type="button" class="change-ctry" onclick="changeCountry()">↻ Change country</button>
         </div>
+        <div class="bundles" data-bundles><!-- one-tap bundles from js/data.js --></div>
         <div class="price-body">
           <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
           <div class="summary">
             <h4>Your Quote</h4>
             <div class="srow"><span class="k">Items selected</span><span class="v js-sum-count">0</span></div>
+            <div class="srow"><span class="k">Timeline</span><span class="v js-est">—</span></div>
             <div class="srow total"><span class="k">Project total</span><span class="v js-sum-total">—</span></div>
             <div class="dep">
               <div class="lbl">2-Deposit Plan</div>
@@ -327,6 +327,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
               <div class="drow"><span>Balance — on delivery</span><b class="js-bal">—</b></div>
               <small>Every project runs on a 50 / 50 plan: pay the first deposit to lock your slot and begin, then the balance when the work is delivered.</small>
             </div>
+            <p class="rate-note js-rate"></p>
             <a href="start.html" class="btn wa full mt">Continue to start →</a>
           </div>
         </div>
@@ -336,12 +337,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 </section>
 
 <!-- ===================== MARQUEE ===================== -->
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <span>Websites</span><span class="fill">Branding</span><span>Campaign Fliers</span><span class="fill">Logo Design</span><span>Social Kits</span><span class="fill">Landing Pages</span><span>Business Cards</span>
-    <span>Websites</span><span class="fill">Branding</span><span>Campaign Fliers</span><span class="fill">Logo Design</span><span>Social Kits</span><span class="fill">Landing Pages</span><span>Business Cards</span>
-  </div>
-</div>
+<div class="marquee" aria-hidden="true" data-marquee></div>
 
 <!-- ===================== FEATURED WORK ===================== -->
 <section class="blk" id="work" data-scene="3">
@@ -349,7 +345,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
     <div class="sec-head">
       <div>
         <div class="kicker reveal">Selected work</div>
-        <h2 class="sec reveal">Real work. <span class="mut">Live &amp; loading.</span></h2>
+        <h2 class="sec reveal" data-split="words">Real work. <span class="mut">Live &amp; loading.</span></h2>
       </div>
       <a class="more reveal" href="work.html">All case studies →</a>
     </div>
@@ -363,37 +359,11 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
     <div class="sec-head">
       <div>
         <div class="kicker reveal">The experience</div>
-        <h2 class="sec reveal">One sector. <span class="mut">Every design need.</span></h2>
+        <h2 class="sec reveal" data-split="words">One studio. <span class="mut">Every design need.</span></h2>
       </div>
       <a class="more reveal" href="services.html">Explore services →</a>
     </div>
-    <div class="exp-lines">
-      <a class="exp-line reveal" href="services.html#web">
-        <span class="idx">01</span><span class="name">Websites</span>
-        <span class="desc">Fast, modern, conversion-first sites that work on every screen.</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="exp-line reveal" href="services.html#flier">
-        <span class="idx">02</span><span class="name">Campaign Fliers</span>
-        <span class="desc">Posters &amp; fliers that stop the scroll and fill the room.</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="exp-line reveal" href="services.html#logo">
-        <span class="idx">03</span><span class="name">Brand &amp; Logo Design</span>
-        <span class="desc">Identities that hold up from a business card to a billboard.</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="exp-line reveal" href="services.html#social">
-        <span class="idx">04</span><span class="name">Social Media Kits</span>
-        <span class="desc">Content that keeps your brand loud across every feed.</span>
-        <span class="arrow">→</span>
-      </a>
-      <a class="exp-line reveal" href="services.html">
-        <span class="idx">05</span><span class="name" style="color:var(--dim)">…and more — all your needs</span>
-        <span class="desc">If it can be designed, the 97 sector builds it.</span>
-        <span class="arrow">→</span>
-      </a>
-    </div>
+    <div class="exp-lines" data-exp></div>
   </div>
 </section>
 
@@ -401,13 +371,8 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 <section class="blk tight" id="process" data-scene="5">
   <div class="wrap">
     <div class="kicker reveal">How it works</div>
-    <h2 class="sec reveal">Brief to build <span class="mut">in four steps.</span></h2>
-    <div class="rail">
-      <div class="step reveal"><h3>Brief us</h3><p>Tell us what you need on WhatsApp — goals, references, deadline. We shape it into a clear brief with a fixed quote.</p></div>
-      <div class="step reveal"><h3>Lock your slot</h3><p>A 50% deposit locks your place in the build queue. The timeline starts counting the moment it lands.</p></div>
-      <div class="step reveal"><h3>We build, you react</h3><p>Tight feedback loops on WhatsApp while we design and build — no long silences, no surprises.</p></div>
-      <div class="step reveal"><h3>Delivery day</h3><p>Final files, live site, full handover. The balance clears on delivery — and the proof is yours.</p></div>
-    </div>
+    <h2 class="sec reveal" data-split="words">Brief to build <span class="mut">in four steps.</span></h2>
+    <div class="rail" data-process></div>
   </div>
 </section>
 
@@ -415,14 +380,9 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 <section class="blk tight" id="manifesto">
   <div class="wrap">
     <div class="manifesto reveal">
-      <h3><span class="x">PROOF ISN'T</span> <span class="y">FABRICATED.</span><br>IT'S <span class="y">BUILT.</span></h3>
-      <p>Every result on this page is made — not staged</p>
-      <div class="principles">
-        <div class="p"><b>Proof over hype</b><span>We don't decorate promises. Everything we show is something we actually built.</span></div>
-        <div class="p"><b>Speed with standards</b><span>Days, not months — without shipping anything we wouldn't put our mark on.</span></div>
-        <div class="p"><b>Two nations, one bar</b><span>From Kampala to Juba, the quality bar does not move.</span></div>
-        <div class="p"><b>Built to convert</b><span>Design is judged by what it makes happen — orders, bookings, calls, results.</span></div>
-      </div>
+      <h3 data-split="words">Proof isn't <span class="y">fabricated.</span><br><span class="x">It's built.</span></h3>
+      <p class="reveal" data-split="words" data-split-anim="scrub-ink">Every result on this page is made by hand, shipped for real clients, and judged by what it converts — never staged, never fabricated, always built.</p>
+      <div class="principles" data-principles></div>
     </div>
   </div>
 </section>
@@ -431,19 +391,20 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
 <section class="cta-banner">
   <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true">
   <div class="wrap">
-    <h2>LET'S BUILD <em>YOURS.</em></h2>
-    <p>Quotes are instant, the deposit locks your slot, and the sector gets to work.</p>
+    <h2 data-split="chars" data-split-anim="clip" class="reveal">LET'S BUILD <em>YOURS.</em></h2>
+    <p>Quotes are instant, the deposit locks your slot, and the studio gets to work.</p>
     <div class="row">
       <a href="start.html" class="btn primary">Start a project →</a>
       <a href="#quote" class="btn ghost">Build your quote</a>
     </div>
+    <p class="cap-line" data-capacity hidden style="justify-content:center;display:inline-flex"></p>
   </div>
 </section>
 
 <!-- sticky mobile quote bar -->
 <div class="qbar" aria-hidden="true">
   <div class="qinfo">
-    <small>Your quote · <span class="js-qbar-count">0</span> selected</small>
+    <small>Start with · <span class="js-qbar-count">0</span> selected</small>
     <b class="js-qbar-total">—</b>
   </div>
   <a href="start.html" class="btn wa">Start →</a>
@@ -490,10 +451,11 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
   <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
-<script src="js/data.js?v=2" defer></script>
-<script src="js/site.js?v=2" defer></script>
-<script src="js/scenes.js?v=2" defer></script>
-<script src="js/pricing.js?v=2" defer></script>
-<script src="js/intro.js?v=2" defer></script>
+<script src="js/data.js?v=3" defer></script>
+<script src="js/site.js?v=3" defer></script>
+<script src="js/kinetic.js?v=3" defer></script>
+<script src="js/scenes.js?v=3" defer></script>
+<script src="js/pricing.js?v=3" defer></script>
+<script src="js/intro.js?v=3" defer></script>
 </body>
 </html>

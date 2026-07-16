@@ -34,16 +34,45 @@
   /* ---------- render (all instances) ---------- */
   function render() {
     var html = D.services.map(function (s) {
-      var on = selected[s.id] ? " sel" : "";
+      var on = !!selected[s.id];
       var pop = s.popular ? ' <span class="pop">Popular</span>' : "";
-      return '<div class="svc' + on + '" onclick="toggleSvc(\'' + s.id + '\')">' +
-        '<div class="check">✓</div>' +
-        '<div class="info"><b>' + s.name + pop + '</b><span>' + s.short + '</span></div>' +
-        '<div class="amt">' + S.money(s.usd) + '<small>' + s.days + ' days</small></div>' +
-        '</div>';
+      return '<button type="button" class="svc' + (on ? " sel" : "") + '" data-svc="' + s.id + '" aria-pressed="' + on + '">' +
+        '<span class="check">✓</span>' +
+        '<span class="info"><b>' + s.name + pop + '</b><span>' + s.short + '</span></span>' +
+        '<span class="amt">' + S.money(s.usd) + '<small>' + s.days + ' days</small></span>' +
+        '</button>';
     }).join("");
     lists.forEach(function (el) { el.innerHTML = html; });
+    renderBundles();
   }
+  lists.forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest(".svc");
+      if (b) window.toggleSvc(b.getAttribute("data-svc"));
+    });
+  });
+
+  /* one-tap bundles */
+  function renderBundles() {
+    var hosts = document.querySelectorAll("[data-bundles]");
+    if (!hosts.length || !D.bundles) return;
+    var ids = D.services.filter(function (s) { return selected[s.id]; }).map(function (s) { return s.id; }).sort().join(",");
+    var html = D.bundles.map(function (b) {
+      var on = b.services.slice().sort().join(",") === ids;
+      return '<button type="button" class="bundle-chip' + (on ? " on" : "") + '" data-bundle="' + b.id + '" aria-pressed="' + on + '">' +
+        "<b>" + b.name + "</b><small>" + b.note + "</small></button>";
+    }).join("");
+    hosts.forEach(function (h) { h.innerHTML = html; });
+  }
+  document.addEventListener("click", function (e) {
+    var chip = e.target.closest && e.target.closest("[data-bundle]");
+    if (!chip) return;
+    var b = D.bundles.filter(function (x) { return x.id === chip.getAttribute("data-bundle"); })[0];
+    if (!b) return;
+    selected = {};
+    b.services.forEach(function (id) { selected[id] = true; });
+    persist(); render(); calc();
+  });
 
   window.toggleSvc = function (id) { selected[id] = !selected[id]; persist(); render(); calc(); };
 
@@ -56,14 +85,40 @@
     D.services.forEach(function (s) { if (selected[s.id]) { tot += s.usd; n++; } });
     return { tot: tot, n: n };
   }
+  var prevTot = 0, tweenRaf = null;
+  var noTween = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function paintTotals(totUsd, n) {
+    var dep = Math.floor(totUsd / 2), bal = totUsd - dep;
+    put("js-sum-total", n ? S.money(totUsd) : "—");
+    put("js-dep", n ? S.money(dep) : "—");
+    put("js-bal", n ? S.money(bal) : "—");
+    put("js-qbar-total", n ? S.money(dep) : "—");
+  }
   function calc() {
     var q = quote();
-    // floor + derive so deposit + balance always equals the quoted total
-    var dep = Math.floor(q.tot / 2), bal = q.tot - dep;
     put("js-sum-count", q.n);
-    put("js-sum-total", q.n ? S.money(q.tot) : "—");
-    put("js-dep", q.n ? S.money(dep) : "—");
-    put("js-bal", q.n ? S.money(bal) : "—");
+    // honest timeline: work runs in parallel, so the longest item leads
+    var days = 0;
+    D.services.forEach(function (s) { if (selected[s.id] && s.days > days) days = s.days; });
+    put("js-est", q.n ? "~" + days + " working days" : "—");
+    put("js-rate", S.getCountry() === "UG"
+      ? "Rate: 1 USD ≈ " + D.usdToUgx.toLocaleString() + " UGX — confirmed in your final quote."
+      : "Prices in USD — confirmed in your final quote.");
+    // tween money from the previous total (count-up feel)
+    if (tweenRaf) cancelAnimationFrame(tweenRaf);
+    if (noTween || !q.n || prevTot === q.tot) {
+      paintTotals(q.tot, q.n);
+    } else {
+      var from = prevTot, t0 = null;
+      (function step(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / 500);
+        var e = 1 - Math.pow(1 - p, 3);
+        paintTotals(Math.round(from + (q.tot - from) * e), q.n);
+        if (p < 1) tweenRaf = requestAnimationFrame(step);
+      })(performance.now());
+    }
+    prevTot = q.tot;
     updateQbar(q);
   }
 
@@ -72,11 +127,11 @@
     var bars = document.querySelectorAll(".qbar");
     if (!bars.length) return;
     put("js-qbar-count", q.n);
-    put("js-qbar-total", q.n ? S.money(q.tot) : "—");
     var on = q.n > 0;
     bars.forEach(function (bar) {
       bar.classList.toggle("on", on);
       bar.setAttribute("aria-hidden", String(!on));
+      try { bar.inert = !on; } catch (e) {} // hidden bar must not trap focus
     });
     document.body.classList.toggle("qbar-on", on);
   }

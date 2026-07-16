@@ -17,7 +17,9 @@
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var seen = false;
   try { seen = !!sessionStorage.getItem("i97"); } catch (e) {}
-  if (seen || reduce) return; // site.js already dismissed the intro
+  var conn = navigator.connection || {};
+  var lite = !!(conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ""));
+  if (seen || reduce || lite) return; // site.js already dismissed the intro
 
   var canvas = document.getElementById("introCanvas");
   var markImg = intro.querySelector(".intro-mark");
@@ -27,15 +29,16 @@
   if (!ctx) return;
 
   /* ---------- timeline (ms) ---------- */
-  var T_START = 300;     // particles begin moving
-  var T_LOCK = 2050;     // assembled: crisp mark + ring + sheen
-  var T_FADE = 700;      // particle fade-out after lock
-  var T_BLOOM = 3850;    // final bloom
-  var PCT0 = 300, PCT1 = 3450; // boot counter window
+  var T_START = 250;     // particles begin moving
+  var T_LOCK = 1400;     // assembled: crisp mark + ring + sheen
+  var T_FADE = 500;      // particle fade-out after lock
+  var T_BLOOM = 2450;    // final bloom
+  var PCT0 = 250, PCT1 = 2300; // boot counter window
 
   var DPR = Math.min(window.devicePixelRatio || 1, 2);
   var mobile = window.innerWidth < 760;
-  var MAX_P = mobile ? 650 : 1600;
+  var mem = navigator.deviceMemory || 8;
+  var MAX_P = mem <= 2 ? 400 : (mobile ? 650 : 1600);
   var COLORS = [
     [255, 206, 0], [255, 206, 0],      // Uganda yellow (weighted)
     [217, 0, 0], [15, 71, 175],        // Uganda red, SS blue
@@ -88,8 +91,8 @@
       return {
         sx: cx + Math.cos(a) * rad, sy: cy + Math.sin(a) * rad,
         tx: (r.left + p[0]) * DPR, ty: (r.top + p[1]) * DPR,
-        delay: Math.random() * 620,
-        dur: 950 + Math.random() * 520,
+        delay: Math.random() * 420,
+        dur: 700 + Math.random() * 380,
         sz: (mobile ? 1.7 : 1.5) + Math.random() * 1.3,
         c: c
       };
@@ -155,9 +158,9 @@
     }
 
     // the engine owns the intro deadline (timed from ITS t0, not page eval)
-    if (!ended && t >= T_BLOOM + 750) { ended = true; window.endIntro && window.endIntro(); }
+    if (!ended && t >= T_BLOOM + 650) { ended = true; window.endIntro && window.endIntro(); }
 
-    if (t < T_BLOOM + 1400) raf = requestAnimationFrame(frame);
+    if (t < T_BLOOM + 1000) raf = requestAnimationFrame(frame);
     else ctx.clearRect(0, 0, W, H);
   }
 
@@ -168,7 +171,7 @@
     function tick(ts) {
       if (intro.classList.contains("done")) return;
       if (s === null) s = ts;
-      var p = Math.min(1, (ts - s) / 3500); // matches the CSS introLoad bar timing
+      var p = Math.min(1, (ts - s) / 2100); // matches the CSS introLoad bar timing
       var n = Math.round(ease(p) * 100);
       pctEl.textContent = (n < 10 ? "0" : "") + n + "%";
       if (p < 1) requestAnimationFrame(tick);
