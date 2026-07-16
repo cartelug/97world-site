@@ -28,13 +28,14 @@
       return;
     }
     var tot = items.reduce(function (a, s) { return a + s.usd; }, 0);
+    var dep = Math.floor(tot / 2); // floor + derive: deposit + balance always equals the total
     host.innerHTML =
       '<h4>Your quote</h4>' +
       '<ul class="qlist">' + items.map(function (s) {
         return '<li><span>' + s.name + '</span><b>' + S.money(s.usd) + '</b></li>';
       }).join("") + '</ul>' +
       '<div class="qtot"><span>Total</span><b>' + S.money(tot) + '</b></div>' +
-      '<div class="qdep"><span>Start with 50%</span><b>' + S.money(tot / 2) + '</b></div>' +
+      '<div class="qdep"><span>Start with 50%</span><b>' + S.money(dep) + '</b></div>' +
       '<a class="edit" href="pricing.html">Edit quote →</a>';
   }
 
@@ -42,15 +43,18 @@
   function prefill() {
     var items = picked();
     var needs = document.getElementById("fNeeds");
+    // names only — prices live in the quote panel and the final WhatsApp
+    // message, so a currency switch never leaves stale amounts in the text
     if (needs && !needs.value.trim() && items.length) {
-      needs.value = items.map(function (s) { return "• " + s.name + " — " + S.money(s.usd); }).join("\n");
+      needs.value = items.map(function (s) { return "• " + s.name; }).join("\n");
     }
     var sel = document.getElementById("fCountry");
     if (sel) sel.value = S.getCountry() === "SS" ? "SS" : "UG";
   }
   window.setCountryFromForm = function () {
     var v = document.getElementById("fCountry").value;
-    S.setCountry(v === "SS" ? "SS" : "UG");
+    // only Uganda is priced in UGX — "Other / International" quotes in USD
+    S.setCountry(v === "UG" ? "UG" : "SS");
     S.paintPrices();
     renderQuote();
   };
@@ -65,6 +69,7 @@
     var cLabel = cn.options[cn.selectedIndex].text;
     var items = picked();
     var tot = items.reduce(function (a, s) { return a + s.usd; }, 0);
+    var dep = Math.floor(tot / 2), bal = tot - dep;
 
     var msg = "*NEW ORDER — 97 WORLD (Design Sector)*\n";
     msg += "━━━━━━━━━━━━━━\n";
@@ -76,8 +81,8 @@
         return "• " + s.name + " — " + S.money(s.usd);
       }).join("\n");
       msg += "\nTotal: " + S.money(tot);
-      msg += "\n1st deposit (50%): " + S.money(tot / 2);
-      msg += "\nBalance on delivery: " + S.money(tot / 2) + "\n";
+      msg += "\n1st deposit (50%): " + S.money(dep);
+      msg += "\nBalance on delivery: " + S.money(bal) + "\n";
     }
     if (extra) msg += "\nNotes: " + extra + "\n";
     msg += "\nProof isn’t fabricated. It’s built. — Let’s start.";

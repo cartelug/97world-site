@@ -58,9 +58,12 @@
   }
   function calc() {
     var q = quote();
+    // floor + derive so deposit + balance always equals the quoted total
+    var dep = Math.floor(q.tot / 2), bal = q.tot - dep;
     put("js-sum-count", q.n);
     put("js-sum-total", q.n ? S.money(q.tot) : "—");
-    put("js-dep", q.n ? S.money(q.tot / 2) : "—");
+    put("js-dep", q.n ? S.money(dep) : "—");
+    put("js-bal", q.n ? S.money(bal) : "—");
     updateQbar(q);
   }
 
@@ -92,6 +95,17 @@
     render(); calc();
   };
   paintCountry(S.getCountry());
+
+  // back/forward-cache restore: another page may have changed the saved
+  // quote while this document was frozen — re-sync instead of overwriting
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    selected = {};
+    S.getSel().forEach(function (id) { selected[id] = true; });
+    paintCountry(S.getCountry());
+    S.paintPrices();
+    render(); calc();
+  });
 
   render(); calc();
   if (window.kickReveals) window.kickReveals();

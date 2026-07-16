@@ -7,7 +7,7 @@
 /* ============ PAGE HERO ============ */
 .page-hero{position:relative;padding:170px 0 70px;overflow:hidden}
 .page-hero .crumb{
-  display:inline-flex;align-items:center;gap:10px;font-size:11.5px;letter-spacing:.26em;
+  display:inline-flex;align-items:center;gap:10px;font-size:11.5px;
   text-transform:uppercase;color:var(--mut);margin-bottom:22px;font-weight:600;
 }
 .page-hero .crumb a{color:var(--dim);transition:.2s}

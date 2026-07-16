@@ -51,7 +51,7 @@ section[id],main[id]{scroll-margin-top:80px}
 /* Display: Archivo — expanded width for the big brand moments */
 h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
 .mega,.sec,.page-hero h1,.cta-banner h2,.manifesto h3,.lost h1,.foot-wm,
-.marquee-track span,.exp-line .name,.intro-word{font-stretch:125%}
+.marquee-track span,.exp-line .name,.intro-word{font-family:var(--font-display);font-stretch:125%}
 /* Technical labels: JetBrains Mono — spec-sheet texture */
 .kicker,.eyebrow,.chip,.crumb,.cat-tag,.badge,.pop,.tags span,.foot-col h5,
 .intro-tag,.intro-nations,.cur-note,.clock,.type,.co,.from,.bk,.intro-count,
@@ -176,7 +176,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
 }
 .intro-nations{
   margin-top:15px;display:flex;align-items:center;gap:11px;font-size:11px;
-  letter-spacing:.32em;color:var(--mut);font-weight:600;
+  color:var(--mut);font-weight:600;
   opacity:0;transform:translateY(14px);animation:introUp .9s ease 1.45s forwards;
 }
 .intro-nations .mid{color:#4a4a52}
@@ -184,7 +184,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
 .intro-nations .fdot.ug{background:linear-gradient(90deg,var(--ug-y),var(--ug-r))}
 .intro-nations .fdot.ss{background:linear-gradient(90deg,var(--ss-b),var(--ss-g))}
 .intro-tag{
-  margin-top:24px;font-size:10px;letter-spacing:.5em;color:var(--dim);font-weight:600;
+  margin-top:24px;font-size:10px;color:var(--dim);font-weight:600;
   opacity:0;transform:translateY(14px);animation:introUp .9s ease 1.85s forwards;
 }
 @keyframes introUp{to{opacity:1;transform:none}}
@@ -263,7 +263,7 @@ nav.links a.on::after{
 section.blk{position:relative;padding:110px 0}
 section.blk.tight{padding-top:26px}
 .kicker{
-  font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ug-y);
+  font-size:12.5px;text-transform:uppercase;color:var(--ug-y);
   font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:12px;
 }
 .kicker::before{content:"";width:26px;height:1px;background:var(--ug-y);display:inline-block}
@@ -306,7 +306,7 @@ h2.sec .mut{color:var(--mut)}
 .badge.soon{color:#000;background:var(--ug-y)}
 .badge.live{color:#062b13;background:var(--wa)}
 .chip{
-  display:inline-flex;align-items:center;gap:9px;font-size:11px;letter-spacing:.18em;
+  display:inline-flex;align-items:center;gap:9px;font-size:11px;
   text-transform:uppercase;color:var(--mut);border:1px solid var(--line);
   padding:8px 14px;border-radius:40px;background:rgba(255,255,255,.02);font-weight:600;
 }

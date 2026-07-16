@@ -254,7 +254,9 @@
       var nav0 = document.getElementById("nav");
       if (nav0) nav0.classList.add("reveal-nav");
     } else {
-      setTimeout(endIntro, 4600);
+      // safety net; js/intro.js takes ownership of the deadline when its
+      // particle engine actually starts (clears this and re-times from t0)
+      window.__introTimer = setTimeout(endIntro, 4600);
     }
   } else {
     var nav1 = document.getElementById("nav");

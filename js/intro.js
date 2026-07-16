@@ -43,10 +43,15 @@
     [244, 244, 246]                    // white
   ];
 
+  var tEval = (window.performance && performance.now) ? performance.now() : null;
+
   var W = 0, H = 0;
   function size() {
-    W = canvas.width = Math.floor(window.innerWidth * DPR);
-    H = canvas.height = Math.floor(window.innerHeight * DPR);
+    // clientWidth/Height: the canvas is CSS-stretched to the layout viewport,
+    // so sizing from innerWidth (which includes the scrollbar) would skew targets
+    var de = document.documentElement;
+    W = canvas.width = Math.floor(de.clientWidth * DPR);
+    H = canvas.height = Math.floor(de.clientHeight * DPR);
   }
 
   /* ---------- sample the mark into particle targets ---------- */
@@ -92,11 +97,11 @@
   }
 
   /* ---------- render loop ---------- */
-  var t0 = null, raf = null, lockDone = false, bloomDone = false;
+  var t0 = null, raf = null, lockDone = false, bloomDone = false, ended = false;
   function ease(p) { return 1 - Math.pow(1 - p, 3); }
 
   function frame(ts) {
-    if (intro.classList.contains("done")) return; // skipped / ended
+    if (intro.classList.contains("done")) { ctx.clearRect(0, 0, W, H); return; } // skipped / ended
     if (t0 === null) t0 = ts;
     var t = ts - t0;
     ctx.clearRect(0, 0, W, H);
@@ -149,16 +154,46 @@
       pctEl.textContent = (n < 10 ? "0" : "") + n + "%";
     }
 
+    // the engine owns the intro deadline (timed from ITS t0, not page eval)
+    if (!ended && t >= T_BLOOM + 750) { ended = true; window.endIntro && window.endIntro(); }
+
     if (t < T_BLOOM + 1400) raf = requestAnimationFrame(frame);
     else ctx.clearRect(0, 0, W, H);
   }
 
+  /* ---------- CSS-fallback counter: keep 00% ticking when the engine doesn't run ---------- */
+  function fallbackCounter() {
+    if (!pctEl) return;
+    var s = null;
+    function tick(ts) {
+      if (intro.classList.contains("done")) return;
+      if (s === null) s = ts;
+      var p = Math.min(1, (ts - s) / 3500); // matches the CSS introLoad bar timing
+      var n = Math.round(ease(p) * 100);
+      pctEl.textContent = (n < 10 ? "0" : "") + n + "%";
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
   /* ---------- boot ---------- */
   function start() {
+    // If the mark loaded late, the CSS intro is already mid-play and hijacking
+    // it now would blank the visible mark — let CSS finish, just run the counter.
+    var late = tEval === null || (performance.now() - tEval) > 280;
+    if (late) { fallbackCounter(); return; }
     size();
-    parts = build();
-    if (!parts) return; // sampling failed → default CSS intro plays untouched
+    // .engine first: it neutralizes the CSS scale/translate on the mark, so the
+    // particle targets get measured against the mark's true (locked) geometry
     intro.classList.add("engine");
+    parts = build();
+    if (!parts) { // sampling failed → default CSS intro plays untouched
+      intro.classList.remove("engine");
+      fallbackCounter();
+      return;
+    }
+    // the engine took over: its own frame() call ends the intro relative to t0
+    if (window.__introTimer) clearTimeout(window.__introTimer);
     window.addEventListener("resize", function () {
       size();
       var again = build();
@@ -172,6 +207,6 @@
     requestAnimationFrame(start);
   } else {
     markImg.addEventListener("load", function () { requestAnimationFrame(start); });
-    markImg.addEventListener("error", function () { /* keep CSS intro */ });
+    markImg.addEventListener("error", function () { fallbackCounter(); });
   }
 })();
