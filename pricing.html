@@ -3,16 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Instant quotes in UGX or USD. Tick the services you need — websites from $500, fliers from $40 — and start with a 50% deposit.">
+<title>Instant Quote Calculator — 97 Design</title>
+<meta name="description" content="Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.">
 <meta name="theme-color" content="#050506">
-<title>Pricing — 97 World Design Sector</title>
+<link rel="canonical" href="https://cartelug.github.io/97world-site/pricing.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="97 Design">
+<meta property="og:title" content="Instant Quote Calculator — 97 Design">
+<meta property="og:description" content="Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.">
+<meta property="og:url" content="https://cartelug.github.io/97world-site/pricing.html">
+<meta property="og:image" content="https://cartelug.github.io/97world-site/assets/og/og-default.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Instant Quote Calculator — 97 Design">
+<meta name="twitter:description" content="Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.">
+<meta name="twitter:image" content="https://cartelug.github.io/97world-site/assets/og/og-default.jpg">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/fonts.css">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/pages.css">
+<style>
+/* ============================================================
+   97 WORLD — SELF-HOSTED VARIABLE FONTS
+   Archivo (display, wght+wdth axes) · Inter (body/UI, wght)
+   JetBrains Mono (technical labels, wght)
+   ============================================================ */
+
+@font-face{
+  font-family:"Archivo Var";
+  src:url("assets/fonts/archivo-var.woff2") format("woff2-variations");
+  font-weight:100 900;
+  font-stretch:62.5% 125%;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"Inter Var";
+  src:url("assets/fonts/inter-var.woff2") format("woff2-variations");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"JetBrains Mono Var";
+  src:url("assets/fonts/jbmono-var.woff2") format("woff2-variations");
+  font-weight:100 800;
+  font-style:normal;
+  font-display:swap;
+}
+
+/* ============================================================
+   97 DESIGN — CRITICAL CSS
+   Inlined into every <head> by tools/build.mjs so first paint
+   never waits on the full stylesheets (which load async).
+   Keep this file ≤ ~6KB: tokens, shell, nav, hero/page-hero
+   skeleton, initial reveal state, intro overlay.
+   ============================================================ */
+:root{
+  --bg:#050506;--ink:#f4f4f6;--mut:#8a8a93;--dim:#5f5f68;
+  --line:rgba(255,255,255,.09);--line2:rgba(255,255,255,.16);
+  --ug-y:#ffce00;--ug-r:#d90000;--ss-b:#0f47af;--ss-g:#078930;--wa:#25D366;
+  --card:rgba(14,14,18,.6);
+  --font:"Inter Var","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-display:"Archivo Var","Inter Var","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"JetBrains Mono Var",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{
+  scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;
+  background:radial-gradient(120% 130% at 50% -10%,#0d0d16 0%,#070709 55%,#040405 100%);
+  background-attachment:fixed;
+}
+body{
+  background:transparent;color:var(--ink);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.55;letter-spacing:-.005em;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;color:inherit}
+img{max-width:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
+.mega,.sec,.page-hero h1{font-family:var(--font-display);font-stretch:125%}
+/* content is revealed by JS — start hidden so nothing flashes unstyled */
+.reveal{opacity:0;transform:translateY(54px)}
+/* nav shell */
+header.nav{
+  position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;gap:20px;
+  padding:14px 22px;background:rgba(5,5,6,.55);opacity:0;transform:translateY(-16px);
+}
+header.nav.reveal-nav{opacity:1;transform:none}
+.brand .mono{width:42px;height:42px;display:grid;place-items:center;flex:none}
+.brand .mono img{width:100%;height:100%;object-fit:contain;display:block}
+nav.links{display:flex;gap:4px;font-size:13.5px;color:var(--mut);margin:0 auto}
+nav.links a{padding:8px 13px}
+.nav-cta{font-size:13px;font-weight:700;padding:10px 18px;border-radius:40px;background:#fff;color:#000;flex:none}
+.burger{display:none}
+/* scene backdrop shell (home) */
+.scenes{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;background:#050506}
+.scene{position:absolute;inset:0;opacity:0}
+.scene.active{opacity:1}
+.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.scenes-veil{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(4,4,6,.96) 0%,rgba(4,4,6,.82) 30%,rgba(4,4,6,.52) 60%,rgba(4,4,6,.68) 100%),
+    linear-gradient(180deg,rgba(4,4,6,.5),rgba(4,4,6,.28) 20%,rgba(4,4,6,.4) 80%,rgba(4,4,6,.74));
+}
+#fxCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none;filter:blur(46px) saturate(1.35);opacity:.92}
+.fx-veil{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(90% 60% at 50% 8%,transparent 0%,rgba(4,4,6,.35) 70%,rgba(4,4,6,.7) 100%),
+    linear-gradient(180deg,rgba(4,4,6,.25),transparent 22%,transparent 78%,rgba(4,4,6,.55));
+}
+/* intro overlay (home) — must cover instantly, before full CSS lands */
+#intro{
+  position:fixed;inset:0;z-index:9999;background:#020203;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+  transition:opacity .9s ease,visibility .9s;
+}
+#intro.done{opacity:0;visibility:hidden;pointer-events:none}
+#intro.instant{transition:none}
+.no-intro #intro{display:none}
+.intro-logo{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center}
+.intro-mark{width:clamp(150px,26vmin,290px);height:auto;opacity:0}
+/* hero / page-hero skeleton */
+.hero2{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden}
+h1.mega{font-size:clamp(52px,10.5vw,132px);line-height:.92;font-weight:900;letter-spacing:-.035em}
+h1.mega .row{display:block}
+h1.mega .thin{color:transparent;-webkit-text-stroke:1.4px rgba(255,255,255,.5)}
+.page-hero{position:relative;padding:170px 0 70px;overflow:hidden}
+.page-hero h1{font-size:clamp(42px,8vw,96px);font-weight:900;letter-spacing:-.03em;line-height:.96}
+@media(max-width:820px){
+  header.nav{padding:12px 14px;gap:10px}
+  nav.links{display:none}
+  .nav-cta{display:none}
+  .burger{
+    display:flex;width:42px;height:42px;border-radius:12px;border:1px solid var(--line);
+    background:rgba(255,255,255,.04);flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    margin-left:auto;padding:0;
+  }
+  .burger span{display:block;width:18px;height:2px;border-radius:2px;background:#fff}
+  .wrap{padding:0 18px}
+}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+</style>
+<link rel="preload" href="css/styles.css?v=2" as="style">
+<link rel="stylesheet" href="css/styles.css?v=2" media="print" onload="this.media='all';this.onload=null">
+<link rel="preload" href="css/pages.css?v=2" as="style">
+<link rel="stylesheet" href="css/pages.css?v=2" media="print" onload="this.media='all';this.onload=null">
+<noscript><link rel="stylesheet" href="css/styles.css?v=2"><link rel="stylesheet" href="css/pages.css?v=2"></noscript>
+<script type="speculationrules">
+{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"}]}
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"OfferCatalog","name":"97 Design services","itemListElement":[{"@type":"Offer","priceCurrency":"USD","price":500,"itemOffered":{"@type":"Service","name":"Website","description":"Multi-page, responsive, built to convert.","provider":{"@type":"ProfessionalService","name":"97 Design"}}},{"@type":"Offer","priceCurrency":"USD","price":200,"itemOffered":{"@type":"Service","name":"Landing Page","description":"One high-impact page, fast turnaround.","provider":{"@type":"ProfessionalService","name":"97 Design"}}},{"@type":"Offer","priceCurrency":"USD","price":150,"itemOffered":{"@type":"Service","name":"Logo & Brand Mark","description":"Custom logo with full variations.","provider":{"@type":"ProfessionalService","name":"97 Design"}}},{"@type":"Offer","priceCurrency":"USD","price":300,"itemOffered":{"@type":"Service","name":"Full Brand Kit","description":"Logo, colors, fonts, guidelines.","provider":{"@type":"ProfessionalService","name":"97 Design"}}},{"@type":"Offer","priceCurrency":"USD","price":40,"itemOffered":{"@type":"Service","name":"Campaign Flier / Poster","description":"Print + social ready design.","provider":{"@type":"ProfessionalService","name":"97 Design"}}},{"@type":"Offer","priceCurrency":"USD","price":35,"itemOffered":{"@type":"Service","name":"Business Cards","description":"Design + print-ready files.","provider":{"@type":"ProfessionalService","name":"97 Design"}}},{"@type":"Offer","priceCurrency":"USD","price":120,"itemOffered":{"@type":"Service","name":"Social Media Pack","description":"Templates + a set of posts.","provider":{"@type":"ProfessionalService","name":"97 Design"}}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do payments work?","acceptedAnswer":{"@type":"Answer","text":"Every project runs on a 50 / 50 plan: a 50% deposit locks your slot and starts the work, and the balance is paid on delivery. In Uganda you pay in UGX; in South Sudan and internationally, USD."}},{"@type":"Question","name":"How fast will I get my work?","acceptedAnswer":{"@type":"Answer","text":"Each service lists its usual turnaround — from 2 days for fliers and cards up to about 10 days for full websites and brand kits. On a deadline? Say so on WhatsApp and we'll tell you honestly if it's doable."}},{"@type":"Question","name":"What do you need from me to start?","acceptedAnswer":{"@type":"Answer","text":"A short brief: what you do, what you need built, any materials you already have (logo, photos, text) and examples you like. Send it all on WhatsApp — we'll shape it into a plan."}},{"@type":"Question","name":"Do you work outside Uganda & South Sudan?","acceptedAnswer":{"@type":"Answer","text":"Yes. The sector is based in Kampala and Juba but works remotely with clients anywhere — international projects are quoted in USD."}},{"@type":"Question","name":"What about changes and revisions?","acceptedAnswer":{"@type":"Answer","text":"We work in feedback loops, so you react while we build and we adjust as we go. If the scope itself changes mid-project, we re-quote the difference before continuing — no surprise bills."}},{"@type":"Question","name":"How do I start?","acceptedAnswer":{"@type":"Answer","text":"Build your quote on the pricing page, then hit start — it turns into a ready-to-send WhatsApp message straight to the sector."}}]}</script>
 </head>
 <body data-page="pricing">
 
@@ -31,7 +179,7 @@
   <nav class="links">
     <a href="services.html">Services</a>
     <a href="work.html">Work</a>
-    <a href="pricing.html" class="on">Pricing</a>
+    <a href="pricing.html" class="on" aria-current="page">Pricing</a>
     <a href="about.html">About</a>
   </nav>
   <a href="start.html" class="nav-cta">Start a project</a>
@@ -148,7 +296,7 @@
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot-brand">
-        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span><span class="brand-txt">97 DESIGN<small>UG · SS</small></span></a>
+        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40" loading="lazy"></span><span class="brand-txt">97 DESIGN<small>UG · SS</small></span></a>
         <p>The design studio of 97 World. Websites, fliers, brands and everything your idea needs — built, not fabricated.</p>
         <div class="flagline mt">
           <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
@@ -156,7 +304,7 @@
         </div>
       </div>
       <div class="foot-col">
-        <h5>Sector</h5>
+        <h5>Studio</h5>
         <a href="index.html">Home</a><a href="services.html">Services</a><a href="work.html">Work</a><a href="pricing.html">Pricing</a><a href="about.html">About</a>
       </div>
       <div class="foot-col">
@@ -182,8 +330,8 @@
   <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
-<script src="js/data.js"></script>
-<script src="js/site.js"></script>
-<script src="js/pricing.js"></script>
+<script src="js/data.js?v=2" defer></script>
+<script src="js/site.js?v=2" defer></script>
+<script src="js/pricing.js?v=2" defer></script>
 </body>
 </html>

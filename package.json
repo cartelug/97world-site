@@ -1,0 +1,12 @@
+{
+  "name": "97world-site-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "images": "node tools/images.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.0"
+  }
+}

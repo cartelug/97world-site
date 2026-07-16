@@ -4,12 +4,15 @@
    menu, intro (home only), live clocks, count-ups, money utils.
    Vanilla JS, no dependencies, honours reduced motion.
    ============================================================ */
+// @ts-check
 (function () {
   "use strict";
   var D = window.SITE;
   var mqf = window.matchMedia ? window.matchMedia.bind(window) : function () { return { matches: false }; };
   var reduce = mqf("(prefers-reduced-motion: reduce)").matches;
   var fine = mqf("(hover: hover) and (pointer: fine)").matches;
+  var conn = navigator.connection || {};
+  var lite = !!(conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ""));
   var raf = window.requestAnimationFrame || function (f) { return setTimeout(function () { f(Date.now()); }, 16); };
 
   /* ---------- money / quote persistence (shared) ---------- */
@@ -65,7 +68,7 @@
   /* ---------- aurora background ---------- */
   (function aurora() {
     var canvas = document.getElementById("fxCanvas");
-    if (!canvas || !canvas.getContext) return;
+    if (!canvas || !canvas.getContext || lite) return; // Save-Data: static bg only
     var ctx = canvas.getContext("2d");
     var W = 1, H = 1, SCALE = 0.42;
     var blobs = [
@@ -417,6 +420,31 @@
       }).join('') + slot;
     }
   })();
+
+  /* ---------- hero rotating word (home page) ---------- */
+  (function rotator() {
+    var el = document.getElementById("rotWord");
+    if (!el) return;
+    if (reduce) { el.textContent = "PROOF."; return; }
+    var words = ["WEBSITES.", "FLIERS.", "BRANDS.", "LOGOS.", "SOCIAL.", "PROOF."];
+    var i = words.length - 1; // start on PROOF., matching the intro line
+    function next() {
+      i = (i + 1) % words.length;
+      el.classList.remove("swap");
+      void el.offsetWidth; // restart the CSS animation
+      el.textContent = words[i];
+      el.classList.add("swap");
+      setTimeout(next, words[i] === "PROOF." ? 3000 : 1500);
+    }
+    setTimeout(next, 3200);
+  })();
+
+  /* ---------- service worker: repeat visits from cache ---------- */
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () { /* e.g. artifact preview */ });
+    });
+  }
 
   /* ---------- init ---------- */
   var yr = document.getElementById("yr");

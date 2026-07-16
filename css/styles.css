@@ -53,13 +53,12 @@ h1,h2,h3,h4{font-family:var(--font-display);font-stretch:105%}
 .mega,.sec,.page-hero h1,.cta-banner h2,.manifesto h3,.lost h1,.foot-wm,
 .marquee-track span,.exp-line .name,.intro-word{font-family:var(--font-display);font-stretch:125%}
 /* Technical labels: JetBrains Mono — spec-sheet texture */
-.kicker,.eyebrow,.chip,.crumb,.cat-tag,.badge,.pop,.tags span,.foot-col h5,
+.kicker,.chip,.crumb,.cat-tag,.badge,.pop,.tags span,.foot-col h5,
 .intro-tag,.intro-nations,.cur-note,.clock,.type,.co,.from,.bk,.intro-count,
 .hero2-stats .st span,.field label,.summary h4,.panel h4,.dep .lbl,
 .qbar .qinfo small,.mmenu-nations .cap,.flag-cap{font-family:var(--font-mono);font-weight:500}
 /* mono is naturally wide — pull tracking back in */
 .kicker{letter-spacing:.18em}
-.eyebrow{letter-spacing:.16em}
 .chip{letter-spacing:.1em}
 .crumb{letter-spacing:.14em}
 .intro-tag{letter-spacing:.34em}
@@ -241,19 +240,6 @@ nav.links a.on::after{
 }
 .nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(255,255,255,.14)}
 
-/* header country / currency selector */
-.ctry-toggle{
-  display:inline-flex;gap:2px;padding:3px;flex:none;
-  border:1px solid var(--line);border-radius:40px;background:rgba(255,255,255,.03);
-}
-.ctry-toggle button{
-  display:inline-flex;align-items:center;gap:7px;cursor:pointer;
-  font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.08em;
-  padding:6px 13px;border-radius:30px;color:var(--mut);background:transparent;transition:.22s;
-}
-.ctry-toggle button .fdot{width:7px;height:7px;border-radius:50%;flex:none}
-.ctry-toggle button.on{background:#fff;color:#000}
-.ctry-toggle button:not(.on):hover{color:#fff;background:rgba(255,255,255,.06)}
 
 /* burger */
 .burger{
@@ -426,15 +412,6 @@ h2.sec .mut{color:var(--mut)}
   padding:26px 26px 20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;
   justify-content:space-between;border-bottom:1px solid var(--line);
 }
-.ctry{display:flex;gap:8px;flex-wrap:wrap}
-.ctry button{
-  display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:10px 16px;
-  border-radius:40px;cursor:pointer;transition:.25s;background:rgba(255,255,255,.04);
-  color:#cfcfd5;border:1px solid var(--line);
-}
-.ctry button.on{background:#fff;color:#000;border-color:#fff}
-.ctry .fg{display:inline-flex;gap:2px}
-.ctry .fg i{width:6px;height:12px;border-radius:2px;display:block}
 .cur-note{font-size:12.5px;color:var(--mut)}
 .price-body{display:grid;grid-template-columns:1.5fr 1fr}
 .svc-list{padding:8px 26px}
@@ -471,8 +448,6 @@ h2.sec .mut{color:var(--mut)}
   .price-body{grid-template-columns:1fr}
   .summary{border-left:none;border-top:1px solid var(--line);padding:20px 18px}
   .price-top{flex-direction:column;align-items:stretch;gap:12px;padding:18px 18px 16px}
-  .ctry{width:100%}
-  .ctry button{flex:1;justify-content:center}
   .cur-note{text-align:center}
   .svc-list{padding:6px 18px}
 }
@@ -627,11 +602,7 @@ footer{position:relative;border-top:1px solid var(--line);padding:64px 0 40px;ma
   header.nav{padding:12px 14px;gap:10px}
   nav.links{display:none}
   .nav-cta{display:none}
-  .ctry-toggle{margin-left:auto}
-  .ctry-toggle button{padding:6px 11px;font-size:10.5px;letter-spacing:.06em}
-  .burger{display:flex}
-  .mmenu .ctry-toggle{width:100%;justify-content:stretch}
-  .mmenu .ctry-toggle button{flex:1;justify-content:center;padding:12px 10px;font-size:12px}
+  .burger{display:flex;margin-left:auto}
 
   .mmenu{
     display:flex;flex-direction:column;justify-content:space-between;
@@ -678,9 +649,9 @@ footer{position:relative;border-top:1px solid var(--line);padding:64px 0 40px;ma
 
 /* touch feedback */
 @media(hover:none){
-  .btn,.nav-cta,.ctry button,.burger,.float-wa,.work,.svc,.bcard{transition-duration:.18s}
-  .btn:active,.nav-cta:active,.ctry button:active,.burger:active{transform:scale(.96)}
-  .work:active,.bcard:active{transform:scale(.985)}
+  .btn,.nav-cta,.burger,.float-wa,.work,.svc{transition-duration:.18s}
+  .btn:active,.nav-cta:active,.burger:active{transform:scale(.96)}
+  .work:active{transform:scale(.985)}
   .svc:active{transform:scale(.99);background:rgba(255,255,255,.03);border-radius:12px}
   .float-wa:active{transform:scale(.92)}
   .exp-line:active{padding-left:10px}

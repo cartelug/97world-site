@@ -1,39 +1,73 @@
 /* ============================================================
-   97 WORLD — CINEMATIC SCROLL SCENES (home page)
-   Crossfades a fixed background image per section as you scroll
-   the story 1→5 (Lesson → Screen → Hand → Make → Reveal). The
-   section whose center crosses the viewport middle wins.
-   Scene 1 is active on load; degrades to a static first scene
-   without IntersectionObserver.
+   97 DESIGN — CINEMATIC SCROLL SCENES (home page)
+   Crossfades a fixed background <picture> per section as you
+   scroll the story 1→5. Scene 1 ships in the HTML (it's the
+   LCP); scenes 2–5 are injected here on idle / first interaction
+   so they never compete with first paint. Under Save-Data or
+   reduced motion the story stays on scene 1.
    ============================================================ */
+// @ts-check
 (function () {
   "use strict";
-  var scenes = document.getElementById("scenes");
-  if (!scenes) return;
+  try {
+    var scenes = document.getElementById("scenes");
+    if (!scenes) return;
 
-  var byNum = {};
-  Array.prototype.forEach.call(scenes.querySelectorAll(".scene"), function (s) {
-    var m = /\bs(\d)\b/.exec(s.className);
-    if (m) byNum[m[1]] = s;
-  });
+    var conn = navigator.connection || {};
+    var lite = !!(conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ""));
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var sections = document.querySelectorAll("[data-scene]");
-  if (!sections.length || !("IntersectionObserver" in window)) return; // scene 1 stays
+    /* ---------- lazy-inject scenes 2–5 ---------- */
+    var injected = lite; // Save-Data: never inject, scene 1 only
+    function picture(n) {
+      return '<picture>' +
+        '<source type="image/avif" media="(max-width:820px)" srcset="assets/bg/bg' + n + '-mobile.avif">' +
+        '<source type="image/avif" srcset="assets/bg/bg' + n + '-desktop.avif">' +
+        '<source media="(max-width:820px)" srcset="assets/bg/bg' + n + '-mobile.jpg">' +
+        '<img src="assets/bg/bg' + n + '-desktop.jpg" alt="" width="1600" height="900" loading="lazy" decoding="async">' +
+        '</picture>';
+    }
+    function inject() {
+      if (injected) return;
+      injected = true;
+      for (var n = 2; n <= 5; n++) {
+        var d = document.createElement("div");
+        d.className = "scene s" + n;
+        d.innerHTML = picture(n);
+        scenes.appendChild(d);
+      }
+    }
+    if (!injected) {
+      var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 1800); };
+      idle(inject, { timeout: 2500 });
+      window.addEventListener("scroll", inject, { once: true, passive: true });
+      window.addEventListener("pointerdown", inject, { once: true, passive: true });
+    }
 
-  var current = "1";
-  function activate(n) {
-    if (n === current || !byNum[n]) return;
-    if (byNum[current]) byNum[current].classList.remove("active");
-    byNum[n].classList.add("active");
-    current = n;
+    /* ---------- crossfade per section ---------- */
+    var sections = document.querySelectorAll("[data-scene]");
+    if (!sections.length || !("IntersectionObserver" in window) || lite || reduce) return;
+
+    var current = "1";
+    function activate(n) {
+      if (n === current) return;
+      var next = scenes.querySelector(".scene.s" + n);
+      if (!next) return; // not injected yet — stay on the current scene
+      var prev = scenes.querySelector(".scene.s" + current);
+      if (prev) prev.classList.remove("active");
+      next.classList.add("active");
+      current = n;
+    }
+
+    // a thin band across the viewport centre: whichever section spans it wins
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) activate(e.target.getAttribute("data-scene"));
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
+    sections.forEach(function (s) { io.observe(s); });
+  } catch (err) {
+    // fail to content: scene 1 (in the HTML) keeps the page presentable
+    if (window.console) console.error("[97] scenes:", err);
   }
-
-  // a thin band across the viewport centre: whichever section spans it is active
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) activate(e.target.getAttribute("data-scene"));
-    });
-  }, { rootMargin: "-45% 0px -45% 0px", threshold: 0 });
-
-  sections.forEach(function (s) { io.observe(s); });
 })();
