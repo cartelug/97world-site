@@ -241,8 +241,14 @@ const footerChrome = () => `<footer>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© <span id="yr"></span> 97 Design. Uganda · South Sudan.</span>
-      <span>Proof isn't fabricated. It's built.</span>
+      <div class="tblock">
+        <div><small>Project</small><b>97 DESIGN</b></div>
+        <div><small>Location</small><b>Kampala — Juba</b></div>
+        <div><small>Date</small><b>© <span id="yr"></span></b></div>
+        <div><small>Scale</small><b>1:1 — no templates</b></div>
+        <div><small>Sheet</small><b>01 / 01</b></div>
+        <div><small>Note</small><span class="stamp">Built ✦ Approved</span></div>
+      </div>
     </div>
     <span class="foot-wm">97 DESIGN</span>
   </div>

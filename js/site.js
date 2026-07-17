@@ -168,14 +168,20 @@
   }
   window.kickReveals = kickReveals;
 
-  /* ---------- magnetic + tilt (fine pointers) ---------- */
+  /* ---------- magnetic + tilt (fine pointers) ----------
+     Tickets are exempt (a paper stub is not a magnet) and travel is
+     capped — restraint over flourish. */
   if (fine && !reduce) {
-    document.querySelectorAll(".btn.primary,.nav-cta,.send-wa,.float-wa,.ctry button").forEach(function (el) {
+    document.querySelectorAll(".btn.primary:not(.ticket),.nav-cta,.send-wa:not(.ticket),.float-wa,.ctry button").forEach(function (el) {
       var k = el.classList.contains("float-wa") ? 0.4 : 0.28;
+      var CAP = 4;
       el.addEventListener("pointermove", function (e) {
         var r = el.getBoundingClientRect();
-        el.style.transform = "translate(" + ((e.clientX - r.left - r.width / 2) * k) + "px," +
-          ((e.clientY - r.top - r.height / 2) * k - 2) + "px) scale(1.03)";
+        var dx = (e.clientX - r.left - r.width / 2) * k;
+        var dy = (e.clientY - r.top - r.height / 2) * k - 2;
+        dx = Math.max(-CAP, Math.min(CAP, dx));
+        dy = Math.max(-CAP, Math.min(CAP, dy));
+        el.style.transform = "translate(" + dx + "px," + dy + "px) scale(1.03)";
       });
       el.addEventListener("pointerleave", function () { el.style.transform = ""; });
     });
@@ -358,13 +364,14 @@
     }).filter(Boolean);
     host.innerHTML = picks.map(function (s, i) {
       return '<a class="exp-line reveal" href="services.html#' + s.id + '">' +
-        '<span class="idx">0' + (i + 1) + '</span>' +
+        '<span class="idx">Bout 0' + (i + 1) + '</span>' +
         '<span class="name">' + esc2(s.name) + '</span>' +
-        '<span class="desc">' + esc2(s.short) + ' From <b data-usd="' + s.usd + '"></b>.</span>' +
+        '<span class="desc">' + esc2(s.short) + '</span>' +
+        '<span class="amt">From <b data-usd="' + s.usd + '"></b></span>' +
         '<span class="arrow">→</span></a>';
     }).join("") +
       '<a class="exp-line reveal" href="services.html">' +
-      '<span class="idx">05</span>' +
+      '<span class="idx">Bout 05</span>' +
       '<span class="name" style="color:var(--dim)">…and more — all your needs</span>' +
       '<span class="desc">If it can be designed, 97 builds it.</span>' +
       '<span class="arrow">→</span></a>';
@@ -376,8 +383,9 @@
     if (!host || !D) return;
     host.innerHTML = D.process.map(function (p) {
       return '<div class="step reveal">' +
-        '<div class="step-meta"><span class="who">' + esc2(p.who) + '</span><span class="when">' + esc2(p.when) + '</span></div>' +
-        '<h3>' + esc2(p.k) + '</h3><p>' + esc2(p.d) + '</p></div>';
+        '<span class="day">' + esc2(p.when) + '</span>' +
+        '<h3>' + esc2(p.k) + '</h3><p>' + esc2(p.d) + '</p>' +
+        '<div class="step-meta"><span class="who">' + esc2(p.who) + '</span></div></div>';
     }).join("");
   })();
 
@@ -469,14 +477,15 @@
         link: w.link || "", type: w.type, svc: svcFor(w, d), shot: d.shot || ""
       };
     }
-    function browser(v, topBadge) {
+    function browser(v, topBadge, sheet) {
       // real pixels when a capture exists (tools/shots.mjs), gradient title otherwise
       var body = v.shot
         ? '<img class="shotimg" src="' + esc(v.shot) + '" alt="' + esc(v.title) + ' — live site" loading="lazy" decoding="async">' + topBadge
         : topBadge +
           '<div class="lg" style="background:' + v.accent + ';-webkit-background-clip:text;background-clip:text">' + esc(v.title) + '</div>' +
           '<div class="cap">' + esc(v.sub) + '</div>';
-      return '<div class="browser"><div class="bbar"><i></i><i></i><i></i></div>' +
+      return '<div class="browser"><div class="bbar"><i></i><i></i><i></i>' +
+        (sheet ? '<span class="sheet">' + sheet + '</span>' : '') + '</div>' +
         '<div class="bbody">' + body + '</div></div>';
     }
     function statusBadge(v) { return '<span class="badge ' + (v.live ? "live" : "soon") + '">' + esc(v.status) + '</span>'; }
@@ -488,13 +497,15 @@
     if (grid) {
       var feat = D.work.filter(function (w) { return w.featured; });
       if (!feat.length) feat = D.work.slice(0, 2);
-      grid.innerHTML = feat.map(function (w) {
+      grid.innerHTML = feat.map(function (w, i) {
         var v = view(w);
-        return '<a class="work reveal" href="work.html#' + v.id + '">' +
-          '<div class="thumb ' + v.grad + '">' + browser(v, topBadge(v)) + '</div>' +
+        return '<a class="work reveal corners" href="work.html#' + v.id + '">' +
+          '<i class="ct" aria-hidden="true"></i>' +
+          '<div class="thumb ' + v.grad + '">' + browser(v, topBadge(v), 'Sheet 0' + (i + 1)) + '</div>' +
           '<div class="meta"><h4>' + esc(v.title) + ' ' + esc(v.sub) + ' ' + statusBadge(v) + '</h4>' +
           '<p>' + esc(v.desc) + '</p>' +
           '<div class="tags">' + v.tags.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>' +
+          '<span class="fig">Fig. 0' + (i + 1) + ' — ' + esc(v.title) + ' · ' + esc(v.status) + '</span>' +
           '</div></a>';
       }).join('');
     }
@@ -536,7 +547,9 @@
     if (btn && live) {
       btn.href = live.link;
       var name = (live.disp && live.disp.title) || String(live.project || "").split(" — ")[0];
-      btn.textContent = name.toUpperCase() + " — live ↗";
+      var nameEl = btn.querySelector(".pl-name");
+      if (nameEl) nameEl.textContent = name.toUpperCase();
+      else btn.textContent = name.toUpperCase() + " — live ↗";
     }
     var count = document.querySelector("[data-work-count]");
     if (count) count.textContent = D.work.length + " builds";
