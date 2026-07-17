@@ -78,7 +78,14 @@
 
   /* ---------- totals (all instances) ---------- */
   function put(cls, v) {
-    document.querySelectorAll("." + cls).forEach(function (el) { el.textContent = v; });
+    document.querySelectorAll("." + cls).forEach(function (el) {
+      if (el.textContent === String(v)) return;
+      el.textContent = v;
+      // punched-ticket pop on the item counters
+      if (cls === "js-sum-count" || cls === "js-qbar-count") {
+        el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick");
+      }
+    });
   }
   function quote() {
     var tot = 0, n = 0;

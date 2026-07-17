@@ -22,7 +22,7 @@
     var items = picked();
     if (!items.length) {
       host.innerHTML =
-        '<h4>Your quote</h4>' +
+        '<h4>Tale of the Tape</h4>' +
         '<p class="empty">Nothing selected yet. Build a quote first — or just describe what you need in the form.</p>' +
         '<a class="btn ghost full" href="pricing.html">Build your quote →</a>';
       return;
@@ -30,7 +30,7 @@
     var tot = items.reduce(function (a, s) { return a + s.usd; }, 0);
     var dep = Math.floor(tot / 2); // floor + derive: deposit + balance always equals the total
     host.innerHTML =
-      '<h4>Your quote</h4>' +
+      '<h4>Tale of the Tape</h4>' +
       '<ul class="qlist">' + items.map(function (s) {
         return '<li><span>' + s.name + '</span><b>' + S.money(s.usd) + '</b></li>';
       }).join("") + '</ul>' +

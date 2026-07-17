@@ -336,8 +336,11 @@
         '<aside class="cat-side">' +
           '<span class="from">From</span>' +
           '<span class="price" data-usd="' + s.usd + '"></span>' +
-          '<span class="days">~' + s.days + ' days · 50% to start</span>' +
-          '<a class="btn primary" href="pricing.html?svc=' + s.id + '">Add to quote →</a>' +
+          '<div class="side-rows">' +
+            '<div class="srw"><span>Timeline</span><b>~' + s.days + ' days</b></div>' +
+            '<div class="srw"><span>To start</span><b>50%</b></div>' +
+          '</div>' +
+          '<a class="btn primary ticket" href="pricing.html?svc=' + s.id + '">Add to quote →</a>' +
         '</aside></article>';
     }).join('');
   })();
@@ -512,22 +515,25 @@
 
     if (cases) {
       var slot = '<article class="case slot reveal">' +
+        '<span class="stamp lg wh slot-stamp" aria-hidden="true">Reserved</span>' +
         '<h3>This slot is <em>reserved for you.</em></h3>' +
         '<p>The next case study on this page could be your website, your brand, your campaign. Build the quote — the sector does the rest.</p>' +
         '<div class="row"><a href="start.html" class="btn primary">Start a project →</a><a href="pricing.html" class="btn ghost">Build your quote</a></div>' +
         '</article>';
-      cases.innerHTML = D.work.map(function (w) {
+      cases.innerHTML = D.work.map(function (w, i) {
         var v = view(w);
-        return '<article class="case reveal" id="' + v.id + '">' +
-          '<div class="shot ' + v.grad + '">' + browser(v, topBadge(v)) + '</div>' +
+        return '<article class="case reveal corners" id="' + v.id + '">' +
+          '<i class="ct" aria-hidden="true"></i>' +
+          '<div class="shot ' + v.grad + '">' + browser(v, topBadge(v), 'Fig. 0' + (i + 1)) + '</div>' +
           '<div class="body">' +
+          '<span class="fig" style="border:0;padding:0">Fig. 0' + (i + 1) + ' — ' + esc(v.title) + '</span>' +
           '<span class="type">' + esc(v.typeLabel) + '</span>' +
           '<h3>' + esc(v.project) + ' ' + statusBadge(v) + '</h3>' +
           '<p>' + esc(v.desc) + '</p>' +
           (v.focus.length ? '<ul class="focus">' + v.focus.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' : '') +
           (v.svc.length || v.link
             ? '<div class="row caserow">' +
-              (v.svc.length ? '<a class="btn primary" href="pricing.html?svc=' + v.svc.join(',') + '">Build like this →</a>' : '') +
+              (v.svc.length ? '<a class="btn primary ticket" href="pricing.html?svc=' + v.svc.join(',') + '">Build like this →</a>' : '') +
               (v.link ? '<a class="btn ghost caselink" href="' + esc(v.link) + '" target="_blank" rel="noopener">Visit live site ↗</a>' : '') +
               '</div>'
             : '') +
