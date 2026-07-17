@@ -285,7 +285,22 @@
     b.setAttribute("aria-expanded", String(open));
     b.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     document.body.classList.toggle("menu-open", open);
+    // focus contract: into the menu on open, back to the burger on close;
+    // page content is inert behind the overlay
+    var main = document.querySelector("main");
+    try { if (main) main.inert = open; } catch (e) {}
+    if (open) {
+      var first = m.querySelector("a");
+      if (first) first.focus();
+    } else {
+      b.focus();
+    }
   };
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape") return;
+    var m = document.getElementById("mmenu");
+    if (m && m.classList.contains("open")) window.toggleMenu();
+  });
   document.querySelectorAll("#mmenu a").forEach(function (a) {
     a.addEventListener("click", function () {
       var m = document.getElementById("mmenu");
@@ -610,6 +625,69 @@
     if (x) x.addEventListener("click", function () {
       pill.classList.remove("on");
       try { sessionStorage.setItem("w97.cta", "1"); } catch (e) {}
+    });
+  })();
+
+  /* ---------- CORNER TALK (home) — real client quotes, honesty-gated ---------- */
+  (function () {
+    var host = document.querySelector("[data-corner-talk]");
+    if (!host || !D || !D.testimonials || !D.testimonials.length) return; // renders nothing while empty
+    function esc3(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    host.hidden = false;
+    host.innerHTML = '<div class="wrap"><div class="plate reveal" aria-hidden="true"><span style="--i:0">Corner talk</span><i>✦</i><span style="--i:1">In their words</span></div>' +
+      '<div class="corner-grid">' + D.testimonials.slice(0, 2).map(function (q) {
+        return '<figure class="corner reveal"><blockquote>&ldquo;' + esc3(q.line) + '&rdquo;</blockquote>' +
+          '<figcaption>' + esc3(q.name) + (q.org ? ' — ' + esc3(q.org) : '') + '</figcaption></figure>';
+      }).join('') + '</div></div>';
+    if (window.kickReveals) window.kickReveals();
+  })();
+
+  /* ---------- response-time trust chip — renders only when the owner sets it ---------- */
+  (function () {
+    if (!D || !D.responseMinutes) return;
+    document.querySelectorAll("[data-response]").forEach(function (el) {
+      el.hidden = false;
+      el.textContent = "Replies < " + D.responseMinutes + " min";
+    });
+  })();
+
+  /* ---------- WhatsApp context prefill (382) ----------
+     Static hrefs stay as the no-JS fallback; JS adds a friendly opener. */
+  (function () {
+    if (!D) return;
+    var MSG = "Hi 97 Design — I'm on your site and want to talk about a project.";
+    document.querySelectorAll('a[href^="https://wa.me/"]').forEach(function (a) {
+      try {
+        var u = new URL(a.href);
+        if (!u.searchParams.get("text")) { u.searchParams.set("text", MSG); a.href = u.toString(); }
+      } catch (e) {}
+    });
+  })();
+
+  /* ---------- returning-visitor quote ribbon (home + pricing) ---------- */
+  (function () {
+    var page = document.body.getAttribute("data-page");
+    if (page !== "home" && page !== "pricing") return;
+    if (!D) return;
+    var sel = getSel();
+    if (!sel.length) return;
+    var dismissed = false;
+    try { dismissed = sessionStorage.getItem("r97.rib") === "1"; } catch (e) {}
+    if (dismissed) return;
+    var tot = 0;
+    D.services.forEach(function (s) { if (sel.indexOf(s.id) > -1) tot += s.usd; });
+    if (!tot) return;
+    var rib = document.createElement("div");
+    rib.className = "quote-ribbon";
+    rib.innerHTML = '<span>Your tape · ' + sel.length + (sel.length === 1 ? ' item' : ' items') + ' · ' +
+      money(Math.floor(tot / 2)) + ' to start</span>' +
+      '<a href="start.html">Continue →</a>' +
+      '<button type="button" class="rx" aria-label="Dismiss">✕</button>';
+    document.body.appendChild(rib);
+    requestAnimationFrame(function () { rib.classList.add("on"); });
+    rib.querySelector(".rx").addEventListener("click", function () {
+      rib.classList.remove("on");
+      try { sessionStorage.setItem("r97.rib", "1"); } catch (e) {}
     });
   })();
 

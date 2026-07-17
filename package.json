@@ -6,7 +6,8 @@
     "build": "node tools/build.mjs",
     "images": "node tools/images.mjs",
     "shots": "node tools/shots.mjs",
-    "fonts": "node tools/fonts.mjs"
+    "fonts": "node tools/fonts.mjs",
+    "og": "node tools/og.mjs"
   },
   "devDependencies": {
     "fontkit": "^2.0.4",

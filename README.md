@@ -35,10 +35,18 @@ Two **spec-forced platform exceptions**, deliberately rendered as near-black sit
 - `icon-maskable-512.png` — Android maskable icons REQUIRE full bleed (transparency gets composited onto white, which is worse)
 - `apple-touch-icon.png` — iOS composites transparency onto black and rounds corners itself
 
+## The poster system (Update 3 — "The Fight Bill Cut")
+The visual language is a boxing-bill poster (loud) over a working-drawing layer (quiet). Shared primitives live in `css/styles.css` under `POSTER SYSTEM` — stay in this vocabulary when adding UI:
+- **Poster (loud):** `.rule-x` thick/thin rules · `.plate` ROUND-N section strips · `.plate-num`/`.ghost-num` stroke numerals · `.ticket` perforated CTAs · `.tape` ✦-separated strips · marquee ring tape. Knockout Cruiserweight = display, Jr = tickets/mid heads, Ultimate Sumo = stamps/watermarks. **Yellow is the only content accent.**
+- **Blueprint (quiet):** `.dim` dimension lines · `.fig` captions · `.stamp` rubber stamps (IO slam via `.reveal`) · `.tblock` title blocks · `.bp` grid paper · `.reg` registration marks · `.corners` ticks. Decorative instances are `aria-hidden`; informative mono uses `--mut`+.
+- **Honesty gates:** `SITE.testimonials` (CORNER TALK) and `SITE.responseMinutes` render NOTHING until real values exist; `SITE.capacity` hides itself when stale. Never fake proof.
+- Every `data-split` kinetic host must also carry `.reveal` (that's its animation trigger).
+
 ## Dev tools (run locally, outputs committed)
 - `npm run build` — regenerates every page head (critical CSS inline, SEO, JSON-LD from data.js), shared chrome, sitemap; fails on broken internal links and on bad `disp.svc` ids
 - `npm run images` — brand icons per the rule above; scene re-encodes only with `-- --src <original-renders>`
 - `npm run shots` — screenshots every `Live`+`link` work row via Playwright → `assets/work/<id>.{avif,jpg}`; then set `disp.shot` in data.js
-- `npm run fonts -- --src <file>` — converts the licensed Knockout Cruiserweight file to the committed woff2 subset + prints fallback metrics (only the subset is committed, never the desktop original)
+- `npm run og` — regenerates the fight-bill OG share cards (`assets/og/og-<page>.jpg`) from the Knockout subsets via vector paths — rerun after renaming pages or changing taglines
+- `npm run fonts -- --dir <folder>` — converts the licensed Knockout Cruiserweight file to the committed woff2 subset + prints fallback metrics (only the subset is committed, never the desktop original)
 
 Bump `VERSION` in `sw.js` on every deploy — `npm run build` stamps matching `?v=` query strings.

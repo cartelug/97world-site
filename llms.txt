@@ -1,0 +1,24 @@
+# 97 Design
+
+> The design studio of 97 World — websites, landing pages, brand kits, logos, fliers and social packs for Uganda & South Sudan (and worldwide), ordered directly on WhatsApp with transparent upfront prices and a 50/50 deposit plan.
+
+## What we do
+- Websites (from $95) and landing pages — designed, coded, deployed
+- Brand kits and logos
+- Campaign fliers, posters, business cards, social media packs
+- Turnarounds of 2–10 working days per service
+
+## How ordering works
+1. Build a quote at https://cartelug.github.io/97world-site/pricing.html (instant, UGX or USD)
+2. Send it via https://cartelug.github.io/97world-site/start.html — it opens WhatsApp (+256 708 735 878)
+3. A 50% deposit locks the build slot; the balance is due on delivery
+
+## Proof
+Live work including AFRICA63 (theafrica63.com) and Maya Nature Resort: https://cartelug.github.io/97world-site/work.html
+
+## Key pages
+- Home: https://cartelug.github.io/97world-site/
+- Work: https://cartelug.github.io/97world-site/work.html
+- Services & prices: https://cartelug.github.io/97world-site/services.html
+- Instant quote: https://cartelug.github.io/97world-site/pricing.html
+- Start a project: https://cartelug.github.io/97world-site/start.html

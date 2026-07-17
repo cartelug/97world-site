@@ -1049,3 +1049,106 @@ button.svc:last-child{border-bottom:0}
   .plate-num,.ghost-num{animation:plateDrift linear both;animation-timeline:view();animation-range:entry 0% cover 100%}
   @keyframes plateDrift{from{translate:0 44px}to{translate:0 -44px}}
 }
+
+/* ============ UPDATE 3 WAVE 3 — STRENGTHENING LAYER ============ */
+/* skip link: hidden until focused, then a yellow ticket top-left */
+.skip-link{
+  position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;z-index:200;
+  background:var(--ug-y);color:#000;font-family:var(--font-knock-jr);
+  text-transform:uppercase;letter-spacing:.06em;font-size:14px;
+  padding:12px 18px;border-radius:var(--r);
+  transform:translateY(-64px);transition:transform .25s var(--ease);
+}
+.skip-link:focus-visible{transform:none;outline-offset:2px}
+
+/* returning-visitor quote ribbon */
+.quote-ribbon{
+  position:fixed;top:calc(64px + env(safe-area-inset-top));left:50%;z-index:75;
+  display:flex;align-items:center;gap:14px;padding:9px 10px 9px 18px;
+  background:rgba(12,12,15,.94);border:1px solid var(--hair2);border-radius:var(--r);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+  translate:-50% -84px;opacity:0;transition:translate .5s var(--ease),opacity .4s;
+  max-width:calc(100vw - 24px);
+}
+.quote-ribbon.on{translate:-50% 0;opacity:1}
+.quote-ribbon a{color:var(--ug-y);font-weight:700;white-space:nowrap}
+.quote-ribbon .rx{
+  width:30px;height:30px;border:1px solid var(--line);border-radius:2px;background:transparent;
+  color:var(--mut);cursor:pointer;font-size:11px;line-height:1;
+}
+.quote-ribbon .rx:hover{color:#fff}
+
+/* spec-loaded toast (pricing ?svc= hand-off) */
+.spec-toast{
+  position:fixed;bottom:calc(86px + env(safe-area-inset-bottom));left:50%;z-index:90;
+  background:#0a0a0c;border:2px solid var(--ug-y);color:var(--ug-y);border-radius:3px;
+  font-family:var(--font-knock-jr);text-transform:uppercase;letter-spacing:.08em;font-size:14px;
+  padding:.5em .9em .42em;rotate:var(--stamp-r);
+  translate:-50% 20px;opacity:0;transition:translate .35s var(--spring),opacity .3s;
+  max-width:calc(100vw - 32px);text-align:center;
+}
+.spec-toast.on{translate:-50% 0;opacity:1}
+
+/* CORNER TALK — poster pull-quotes (renders only with real quotes) */
+.corner-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:8px}
+.corner{border-left:3px solid var(--ug-y);padding:6px 0 6px 22px}
+.corner blockquote{font-family:var(--font-knock-jr);text-transform:uppercase;letter-spacing:.03em;font-size:clamp(19px,2.6vw,26px);line-height:1.2}
+.corner figcaption{margin-top:12px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+@media(max-width:820px){.corner-grid{grid-template-columns:1fr}}
+
+/* the pledge — anti-promises in blueprint voice */
+.pledge{
+  position:relative;display:flex;justify-content:center;gap:0;flex-wrap:wrap;margin-top:26px;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);
+}
+.pledge span{padding:8px 18px;border-top:1px solid var(--hair)}
+.pledge span+span{border-left:1px solid var(--hair)}
+
+/* start-page reassurance strip */
+.reassure{margin-bottom:14px;font-size:9.5px;color:var(--dim)}
+
+/* a11y: low-vision users get a stronger blueprint layer, not a vanished one */
+@media (prefers-contrast:more){
+  :root{--hair:rgba(255,255,255,.22);--hair2:rgba(255,255,255,.42);--mut:#a9a9b3;--dim:#8a8a93;--bp:rgba(255,255,255,.09)}
+  .grain{display:none}
+}
+/* forced colors: outline type must not vanish */
+@media (forced-colors:active){
+  h1.mega .thin,.exp-line:nth-child(even) .name,.manifesto h3 .x,.lost h1 em,
+  .marquee-track span,.foot-wm,.plate-num,.ghost-num{-webkit-text-stroke:0;color:CanvasText}
+  .stamp,.ticket,.badge{border:1px solid CanvasText}
+  .bp,.grain{display:none}
+}
+
+/* landscape phones: the bill goes two-column */
+@media (max-height:480px) and (orientation:landscape){
+  .hero2{min-height:100svh;padding:86px 0 30px}
+  h1.mega{font-size:clamp(40px,9.5vh,64px)}
+  .hero2-stats{display:none}
+  .intro-mark{width:clamp(90px,30vmin,150px)}
+  .intro-bridge{display:none}
+}
+
+/* perf: below-the-fold sections skip offscreen rendering */
+#exp,#quote,#process,#manifesto,.cta-banner,footer{
+  content-visibility:auto;
+  contain-intrinsic-size:auto 720px;
+}
+.work,.case,.cat-row,.svc{contain:layout paint}
+
+/* print: the quote becomes a black-on-white spec sheet (pricing page) */
+@media print{
+  body{background:#fff;color:#000}
+  header.nav,.mmenu,.scenes,.scenes-veil,#fxCanvas,.fx-veil,.grain,.cursor-glow,.cursor-dot,
+  .scroll-progress,.float-wa,.qbar,.marquee,.cta-banner,footer,.page-hero .ghost-num,
+  .bp,.reg,.plate-num,.quote-ribbon,.spec-toast,.price-gate,.change-ctry,.bundles,.btn{display:none!important}
+  .price-shell{border:2px solid #000;outline:none;background:#fff}
+  .summary,.svc-list{background:#fff;color:#000;border-color:#000}
+  .svc .info b,.srow,.srow .k,.dep .drow,.summary h4{color:#000!important}
+  .srow{border-color:#ccc}
+  .dep{border-color:#000;background:#fff}
+  .dep .lbl{background:#fff;color:#000;border-color:#000}
+  .page-hero h1{color:#000;font-size:40px}
+  .page-hero h1 em{color:#000}
+}

@@ -35,38 +35,38 @@ const SITE = win.SITE;
 /* ---------- per-page config ---------- */
 const PAGES = [
   {
-    file: 'index.html', page: 'home',
+    file: 'index.html', page: 'home', og: 'og-home', ogTitle: 'WE BUILD PROOF.',
     title: '97 Design — Websites, Brands & Fliers · Uganda & South Sudan',
     desc: "97 Design builds websites, campaign fliers and brands across Uganda & South Sudan. Priced upfront, ordered on WhatsApp, delivered in days. Build your quote in 30 seconds.",
     scripts: ['data', 'site', 'kinetic', 'scenes', 'pricing', 'intro'],
     home: true,
   },
   {
-    file: 'services.html', page: 'services',
+    file: 'services.html', page: 'services', og: 'og-services', ogTitle: 'THE CARD.', crumb: 'Services',
     title: 'Services & Prices — 97 Design',
     desc: 'Websites from $500, landing pages, logos, brand kits, fliers, business cards and social packs — with real prices in UGX & USD and honest turnarounds.',
     scripts: ['data', 'site', 'kinetic'], jsonld: ['services', 'faq'],
   },
   {
-    file: 'work.html', page: 'work',
+    file: 'work.html', page: 'work', og: 'og-work', ogTitle: 'REAL WORK. LIVE.', crumb: 'Work',
     title: 'Work & Case Studies — 97 Design',
     desc: 'Live websites and builds in progress from 97 Design — AFRICA63, Maya Nature Resort and more. Proof, not hype.',
     scripts: ['data', 'site', 'kinetic'],
   },
   {
-    file: 'pricing.html', page: 'pricing',
+    file: 'pricing.html', page: 'pricing', og: 'og-pricing', ogTitle: 'THE PURSE.', crumb: 'Pricing',
     title: 'Instant Quote Calculator — 97 Design',
     desc: 'Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.',
     scripts: ['data', 'site', 'kinetic', 'pricing'], jsonld: ['services', 'faq'],
   },
   {
-    file: 'start.html', page: 'start',
+    file: 'start.html', page: 'start', og: 'og-start', ogTitle: 'THE CONTRACT.', crumb: 'Start a project',
     title: 'Start a Project — 97 Design',
     desc: 'Send your project brief straight to 97 Design on WhatsApp — your quote comes with you. The first deposit confirms your slot.',
     scripts: ['data', 'site', 'kinetic', 'pricing', 'start'],
   },
   {
-    file: 'about.html', page: 'about',
+    file: 'about.html', page: 'about', og: 'og-about', ogTitle: 'TWO NATIONS. ONE BAR.', crumb: 'About',
     title: 'About the Studio — 97 Design',
     desc: "The design studio of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.",
     scripts: ['data', 'site', 'kinetic'],
@@ -87,6 +87,7 @@ const PAGES = [
 const ldBusiness = () => ({
   '@context': 'https://schema.org', '@type': 'ProfessionalService',
   name: '97 Design', url: BASE, image: BASE + 'assets/og/og-default.jpg',
+  logo: BASE + 'assets/icon-512.png', foundingDate: '2026',
   telephone: '+' + SITE.whatsapp, priceRange: '$35 - $500',
   slogan: "Proof isn't fabricated. It's built.",
   areaServed: SITE.nations.map((n) => ({ '@type': 'Country', name: n.name })),
@@ -101,6 +102,13 @@ const ldServices = () => ({
     '@type': 'Offer', priceCurrency: 'USD', price: s.usd,
     itemOffered: { '@type': 'Service', name: s.name, description: s.short, provider: { '@type': 'ProfessionalService', name: '97 Design' } },
   })),
+});
+const ldCrumbs = (p) => ({
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: BASE },
+    { '@type': 'ListItem', position: 2, name: p.crumb, item: BASE + p.file },
+  ],
 });
 const ldFaq = () => ({
   '@context': 'https://schema.org', '@type': 'FAQPage',
@@ -117,7 +125,7 @@ const criticalCss = (read('css/fonts.css') + '\n' + read('css/critical.css'))
 /* ---------- head template ---------- */
 function head(p) {
   const canon = BASE + (p.page === 'home' ? '' : p.file);
-  const og = BASE + 'assets/og/og-default.jpg';
+  const og = BASE + 'assets/og/' + (p.og && existsSync(join(ROOT, 'assets/og', p.og + '.jpg')) ? p.og : 'og-default') + '.jpg';
   const asyncCss = (href) => {
     const u = v(href);
     return `<link rel="preload" href="${u}" as="style">
@@ -128,6 +136,7 @@ function head(p) {
     ...(p.home || p.page === 'about' ? [ldBusiness()] : []),
     ...((p.jsonld || []).includes('services') ? [ldServices()] : []),
     ...((p.jsonld || []).includes('faq') ? [ldFaq()] : []),
+    ...(p.crumb && !p.noindex ? [ldCrumbs(p)] : []),
   ];
   return `<head>
 <meta charset="UTF-8">
@@ -135,6 +144,7 @@ function head(p) {
 <title>${p.title}</title>
 <meta name="description" content="${p.desc}">
 <meta name="theme-color" content="#050506">
+<meta name="theme-color" media="(prefers-color-scheme:light)" content="#050506">
 ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical" href="${canon}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="97 Design">
@@ -144,6 +154,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonic
 <meta property="og:image" content="${og}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${(p.ogTitle || '97 DESIGN').replace(/"/g, '&quot;')} — 97 Design fight-bill poster card">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${p.title}">
 <meta name="twitter:description" content="${p.desc}">
@@ -153,6 +164,7 @@ ${p.headExtra ? p.headExtra + '\n' : ''}<link rel="icon" type="image/svg+xml" hr
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/knockout-cruiserweight.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/knockout-jr-middleweight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
 ${p.home ? `<link rel="preload" href="assets/fonts/knockout-ultimate-sumo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" as="image" href="assets/bg/bg1-desktop.avif" media="(min-width:821px)" fetchpriority="high">
@@ -163,7 +175,7 @@ ${sheets.map(asyncCss).join('\n')}
 <noscript>${sheets.map((s) => `<link rel="stylesheet" href="${v(s)}">`).join('')}</noscript>
 ${p.home ? `<script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
 ` : ''}<script type="speculationrules">
-{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"}]}
+{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
 </script>
 ${lds.map((l) => `<script type="application/ld+json">${JSON.stringify(l)}</script>`).join('\n')}
 </head>`;
@@ -173,7 +185,8 @@ ${lds.map((l) => `<script type="application/ld+json">${JSON.stringify(l)}</scrip
 const navChrome = (page) => {
   const on = (k, label, href) =>
     `<a href="${href}"${k === page ? ' class="on" aria-current="page"' : ''}>${label}</a>`;
-  return `<header class="nav" id="nav">
+  return `<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav" id="nav">
   <a href="index.html" class="brand" aria-label="97 Design home">
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
   </a>
@@ -294,7 +307,9 @@ writeFileSync(join(ROOT, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${PAGES.filter((p) => !p.noindex).map((p) =>
-    `  <url><loc>${BASE + (p.page === 'home' ? '' : p.file)}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq></url>`).join('\n')}
+    `  <url><loc>${BASE + (p.page === 'home' ? '' : p.file)}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>${
+      p.page === 'home' ? '1.0' : (p.page === 'work' || p.page === 'pricing') ? '0.9' : p.page === 'services' ? '0.8' : '0.5'
+    }</priority></url>`).join('\n')}
 </urlset>
 `);
 console.log('built sitemap.xml');

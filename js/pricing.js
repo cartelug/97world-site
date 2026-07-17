@@ -20,10 +20,21 @@
   (function () {
     var m = /[?&]svc=([^&#]+)/.exec(location.search);
     if (!m) return;
+    var added = 0;
     m[1].split(",").forEach(function (id) {
-      if (D.services.some(function (s) { return s.id === id; })) selected[id] = true;
+      if (D.services.some(function (s) { return s.id === id; })) { selected[id] = true; added++; }
     });
     persist();
+    // make the hand-off felt: a brief spec-loaded toast
+    if (added) {
+      var toast = document.createElement("div");
+      toast.className = "spec-toast";
+      toast.setAttribute("role", "status");
+      toast.textContent = "Spec loaded — " + added + (added === 1 ? " item" : " items") + " on your tape";
+      document.body.appendChild(toast);
+      requestAnimationFrame(function () { toast.classList.add("on"); });
+      setTimeout(function () { toast.classList.remove("on"); setTimeout(function () { toast.remove(); }, 400); }, 3200);
+    }
     try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
   })();
 

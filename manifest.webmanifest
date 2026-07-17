@@ -7,6 +7,11 @@
   "display": "standalone",
   "background_color": "#050506",
   "theme_color": "#050506",
+  "shortcuts": [
+    { "name": "Start a project", "url": "start.html", "icons": [{ "src": "assets/icon-512.png", "sizes": "512x512" }] },
+    { "name": "See the work", "url": "work.html", "icons": [{ "src": "assets/icon-512.png", "sizes": "512x512" }] },
+    { "name": "Get a quote", "url": "pricing.html", "icons": [{ "src": "assets/icon-512.png", "sizes": "512x512" }] }
+  ],
   "icons": [
     { "src": "assets/favicon.png", "sizes": "256x256", "type": "image/png" },
     { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },

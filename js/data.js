@@ -94,9 +94,13 @@ window.SITE = {
     intl: "Outside Uganda? Ask on WhatsApp for USD payment options (bank transfer or mobile money)."
   },
 
-  /* Real client quotes only — leave empty until you have permission
-     to quote someone. Renderers hide the block when this is empty. */
+  /* CORNER TALK — real client quotes only; leave empty until you have
+     permission to quote someone. The home strip renders NOTHING while
+     this is empty (proof is never fabricated).
+     Shape: { line: "…", name: "Client Name", org: "Company", ref: "africa63" } */
   testimonials: [],
+  /* median WhatsApp reply time in minutes — trust chip renders only when set */
+  responseMinutes: null,
 
   /* What the sector stands on */
   principles: [

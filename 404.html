@@ -6,6 +6,7 @@
 <title>Page not found — 97 Design</title>
 <meta name="description" content="This page isn't built yet. Head back to 97 Design.">
 <meta name="theme-color" content="#050506">
+<meta name="theme-color" media="(prefers-color-scheme:light)" content="#050506">
 <meta name="robots" content="noindex">
 <link rel="canonical" href="https://cartelug.github.io/97world-site/404.html">
 <meta property="og:type" content="website">
@@ -16,6 +17,7 @@
 <meta property="og:image" content="https://cartelug.github.io/97world-site/assets/og/og-default.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="97 DESIGN — 97 Design fight-bill poster card">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Page not found — 97 Design">
 <meta name="twitter:description" content="This page isn't built yet. Head back to 97 Design.">
@@ -29,6 +31,7 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/knockout-cruiserweight.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/knockout-jr-middleweight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ============================================================
@@ -220,7 +223,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
 <link rel="stylesheet" href="css/pages.css?v=7" media="print" onload="this.media='all';this.onload=null">
 <noscript><link rel="stylesheet" href="css/styles.css?v=7"><link rel="stylesheet" href="css/kinetic.css?v=7"><link rel="stylesheet" href="css/pages.css?v=7"></noscript>
 <script type="speculationrules">
-{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"}]}
+{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
 </script>
 
 </head>
@@ -234,6 +237,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
 <div class="cursor-glow" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
 
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" id="nav">
   <a href="index.html" class="brand" aria-label="97 Design home">
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
@@ -271,7 +275,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
   </div>
 </div>
 
-<main data-page="404">
+<main id="main" data-page="404">
 
 <section class="lost">
   <i class="bp" aria-hidden="true"></i>
@@ -287,6 +291,12 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
     </div>
   </div>
 </section>
+<script>
+/* type "97" anywhere: the ref grants a rematch */
+(function(){var b="";document.addEventListener("keydown",function(e){b=(b+e.key).slice(-2);
+if(b==="97"){var s=document.querySelector(".lost .stamp");if(s){s.textContent="Rematch granted";s.style.color="var(--ug-y)";s.style.rotate="-3deg";}
+}});})();
+</script>
 </main>
 
 <footer>

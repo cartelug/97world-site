@@ -1,0 +1,11 @@
+/* TEAM */
+Studio: 97 Design — the design sector of 97 World
+Location: Kampala, Uganda · Juba, South Sudan
+Contact: WhatsApp +256 708 735 878
+
+/* SITE */
+Built: by hand — no templates, no page builders
+Stack: vanilla HTML / CSS / JS, GitHub Pages
+Type: Knockout (Hoefler&Co) · Inter · JetBrains Mono
+Third-party requests: 0
+Motto: Proof isn't fabricated. It's built.
