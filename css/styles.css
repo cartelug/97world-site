@@ -1152,3 +1152,29 @@ button.svc:last-child{border-bottom:0}
   .page-hero h1{color:#000;font-size:40px}
   .page-hero h1 em{color:#000}
 }
+
+/* ============ THE RECORD — client mark wall (home + work) ============ */
+.record{margin-top:56px}
+.record-cap{
+  display:flex;align-items:center;gap:12px;margin-bottom:18px;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--mut);
+}
+.record-cap b{color:var(--ug-y);font-weight:700}
+.record-cap::after{content:"";flex:1;height:1px;background:var(--hair2)}
+.record-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px}
+.record-grid figure{
+  margin:0;border:1px solid var(--hair);border-radius:var(--r);overflow:hidden;
+  background:#0a0a0c;transition:border-color .3s,transform .3s var(--ease);
+}
+.record-grid figure:hover{border-color:var(--hair2);transform:translateY(-3px)}
+.record-grid img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover}
+.record-grid figcaption{
+  font-family:var(--font-mono);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);padding:6px 9px;border-top:1px solid var(--hair);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+@media(max-width:640px){
+  .record-grid{grid-template-columns:repeat(3,1fr);gap:8px}
+  .record-grid figcaption{font-size:7px;letter-spacing:.06em;padding:5px 6px}
+}

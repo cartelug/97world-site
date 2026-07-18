@@ -94,6 +94,31 @@ window.SITE = {
     intl: "Outside Uganda? Ask on WhatsApp for USD payment options (bank transfer or mobile money)."
   },
 
+  /* THE RECORD — every brand the studio has shipped for (client logo
+     pack, tiles in assets/clients/<id>.{avif,jpg} via npm run clients).
+     Real marks only — this list IS the proof. */
+  clients: [
+    { id: "a63",        name: "A63 Africa" },
+    { id: "accessug",   name: "AccessUG" },
+    { id: "acra",       name: "ACRA" },
+    { id: "akright",    name: "Akright Summit" },
+    { id: "biashara",   name: "Biashara Trading Co." },
+    { id: "caretaker",  name: "Caretaker Security" },
+    { id: "fodman",     name: "FODMAN International" },
+    { id: "markh",      name: "MARKH — Honda Distributor" },
+    { id: "khatha",     name: "KHATHA" },
+    { id: "kushite",    name: "Kushite" },
+    { id: "lumu",       name: "Lumu Group" },
+    { id: "maya",       name: "Maya Nature Resort" },
+    { id: "mwt",        name: "My Weekly Track" },
+    { id: "nilelink",   name: "Nile Link" },
+    { id: "socialspot", name: "Social Spot" },
+    { id: "ssuubi",     name: "Ssuubi Fellowship" },
+    { id: "sunafrica",  name: "Sun Over Africa" },
+    { id: "rotarian",   name: "Walking Rotarian" },
+    { id: "watp",       name: "WATP" }
+  ],
+
   /* CORNER TALK — real client quotes only; leave empty until you have
      permission to quote someone. The home strip renders NOTHING while
      this is empty (proof is never fabricated).

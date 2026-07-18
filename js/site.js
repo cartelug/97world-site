@@ -426,7 +426,7 @@
     host.innerHTML =
       '<div class="st"><b data-count="' + live + '">' + live + '</b><span>Sites live</span></div>' +
       '<div class="st"><b data-count="' + building + '">' + building + '</b><span>In build</span></div>' +
-      '<div class="st"><b data-count="' + D.services.length + '">' + D.services.length + '</b><span>Services</span></div>' +
+      '<div class="st"><b data-count="' + ((D.clients || []).length || D.services.length) + '">' + ((D.clients || []).length || D.services.length) + '</b><span>' + ((D.clients || []).length ? 'Brands on record' : 'Services') + '</span></div>' +
       '<div class="st"><b>50%</b><span>Deposit to start</span></div>';
   })();
 
@@ -626,6 +626,24 @@
       pill.classList.remove("on");
       try { sessionStorage.setItem("w97.cta", "1"); } catch (e) {}
     });
+  })();
+
+  /* ---------- THE RECORD — client mark wall (home + work) ---------- */
+  (function () {
+    var hosts = document.querySelectorAll("[data-clients]");
+    if (!hosts.length || !D || !D.clients || !D.clients.length) return;
+    function escR(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    var html = D.clients.map(function (c) {
+      return '<figure class="reveal">' +
+        '<picture>' +
+        '<source type="image/avif" srcset="assets/clients/' + c.id + '.avif">' +
+        '<img src="assets/clients/' + c.id + '.jpg" alt="' + escR(c.name) + ' logo" width="480" height="320" loading="lazy" decoding="async">' +
+        '</picture>' +
+        '<figcaption>' + escR(c.name) + '</figcaption></figure>';
+    }).join("");
+    hosts.forEach(function (h) { h.innerHTML = html; });
+    document.querySelectorAll("[data-brand-count]").forEach(function (el) { el.textContent = D.clients.length; });
+    if (window.kickReveals) window.kickReveals();
   })();
 
   /* ---------- CORNER TALK (home) — real client quotes, honesty-gated ---------- */
