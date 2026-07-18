@@ -97,26 +97,29 @@ window.SITE = {
   /* THE RECORD — every brand the studio has shipped for (client logo
      pack, tiles in assets/clients/<id>.{avif,jpg} via npm run clients).
      Real marks only — this list IS the proof. */
+  /* c = the brand's own accent (drawn from its mark; card chrome inks
+     itself with it) · link = live site (Visit ↗) · ref = case id on
+     work.html (More info →) · neither = WhatsApp more-info */
   clients: [
-    { id: "a63",        name: "A63 Africa" },
-    { id: "accessug",   name: "AccessUG" },
-    { id: "acra",       name: "ACRA" },
-    { id: "akright",    name: "Akright Summit" },
-    { id: "biashara",   name: "Biashara Trading Co." },
-    { id: "caretaker",  name: "Caretaker Security" },
-    { id: "fodman",     name: "FODMAN International" },
-    { id: "markh",      name: "MARKH — Honda Distributor" },
-    { id: "khatha",     name: "KHATHA" },
-    { id: "kushite",    name: "Kushite" },
-    { id: "lumu",       name: "Lumu Group" },
-    { id: "maya",       name: "Maya Nature Resort" },
-    { id: "mwt",        name: "My Weekly Track" },
-    { id: "nilelink",   name: "Nile Link" },
-    { id: "socialspot", name: "Social Spot" },
-    { id: "ssuubi",     name: "Ssuubi Fellowship" },
-    { id: "sunafrica",  name: "Sun Over Africa" },
-    { id: "rotarian",   name: "Walking Rotarian" },
-    { id: "watp",       name: "WATP" }
+    { id: "a63",        name: "A63 Africa",               c: "#f4f4f6", link: "https://theafrica63.com" },
+    { id: "accessug",   name: "AccessUG",                 c: "#ec2fa4" },
+    { id: "acra",       name: "ACRA",                     c: "#2f9e4f" },
+    { id: "akright",    name: "Akright Summit",           c: "#d8a830" },
+    { id: "biashara",   name: "Biashara Trading Co.",     c: "#d81830" },
+    { id: "caretaker",  name: "Caretaker Security",       c: "#a8853a" },
+    { id: "fodman",     name: "FODMAN International",     c: "#7a55c8", ref: "fodman" },
+    { id: "markh",      name: "MARKH — Honda Distributor", c: "#e0161c" },
+    { id: "khatha",     name: "KHATHA",                   c: "#1e8a4a" },
+    { id: "kushite",    name: "Kushite",                  c: "#d8b048" },
+    { id: "lumu",       name: "Lumu Group",               c: "#d8ccb0", ref: "lumu" },
+    { id: "maya",       name: "Maya Nature Resort",       c: "#2fa050", ref: "maya-nature" },
+    { id: "mwt",        name: "My Weekly Track",          c: "#35c26a", ref: "watp" },
+    { id: "nilelink",   name: "Nile Link",                c: "#0f8a40" },
+    { id: "socialspot", name: "Social Spot",              c: "#d83030" },
+    { id: "ssuubi",     name: "Ssuubi Fellowship",        c: "#3fc428" },
+    { id: "sunafrica",  name: "Sun Over Africa",          c: "#c89a3f" },
+    { id: "rotarian",   name: "Walking Rotarian",         c: "#5555c8" },
+    { id: "watp",       name: "WATP",                     c: "#f0008f", ref: "watp" }
   ],
 
   /* CORNER TALK — real client quotes only; leave empty until you have

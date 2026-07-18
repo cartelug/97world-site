@@ -92,6 +92,7 @@ const CARDS = [
   { out: 'og-services', tape: 'ROUND 02 ✦ THE CARD', rows: [{ t: 'SEVEN' }, { t: 'SERVICES.', y: 1 }, { t: 'ONE STUDIO.', o: 1 }], foot: 'PRICES YOU CAN SEE — 97 DESIGN' },
   { out: 'og-pricing', tape: 'ROUND 03 ✦ THE PURSE', rows: [{ t: 'PICK.' }, { t: 'TOTAL.', y: 1 }, { t: 'START.', o: 1 }], foot: '30 SECONDS · UGX OR USD · 50—50' },
   { out: 'og-start', tape: 'THE MAIN EVENT ✦ FINAL CALL', rows: [{ t: 'SEND IT.' }, { t: 'WE BUILD.', y: 1 }], foot: '50% TO START · BALANCE ON DELIVERY' },
+  { out: 'og-partners', tape: 'THE FULL RECORD ✦ 19 BRANDS', rows: [{ t: 'THE RECORD.' }, { t: 'IN FULL.', y: 1 }], foot: 'EVERY MARK REAL — 97 DESIGN' },
   { out: 'og-about', tape: 'EST. 2026 ✦ THE STUDIO', rows: [{ t: 'TWO NATIONS.' }, { t: 'ONE BAR.', y: 1 }], foot: 'THE DESIGN STUDIO OF 97 WORLD' },
 ];
 

@@ -54,6 +54,12 @@ const PAGES = [
     scripts: ['data', 'site', 'kinetic'],
   },
   {
+    file: 'partners.html', page: 'partners', og: 'og-partners', ogTitle: 'THE RECORD. IN FULL.', crumb: 'Partners',
+    title: 'Previous Partners — 97 Design',
+    desc: 'The full record: 19 real brands shipped by 97 Design across Uganda & South Sudan — AFRICA63, Maya Nature Resort, KHATHA, Kushite, Nile Link and more.',
+    scripts: ['data', 'site', 'kinetic'],
+  },
+  {
     file: 'pricing.html', page: 'pricing', og: 'og-pricing', ogTitle: 'THE PURSE.', crumb: 'Pricing',
     title: 'Instant Quote Calculator — 97 Design',
     desc: 'Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.',
@@ -209,9 +215,10 @@ const mmenuChrome = (page) => {
   <nav class="mmenu-links">
     <a href="index.html"${on('home')} style="--i:0"><small>01</small> Home</a>
     <a href="work.html"${on('work')} style="--i:1"><small>02</small> Work</a>
-    <a href="services.html"${on('services')} style="--i:2"><small>03</small> Services</a>
-    <a href="pricing.html"${on('pricing')} style="--i:3"><small>04</small> Pricing</a>
-    <a href="about.html"${on('about')} style="--i:4"><small>05</small> About</a>
+    <a href="partners.html"${on('partners')} style="--i:2"><small>03</small> Partners</a>
+    <a href="services.html"${on('services')} style="--i:3"><small>04</small> Services</a>
+    <a href="pricing.html"${on('pricing')} style="--i:4"><small>05</small> Pricing</a>
+    <a href="about.html"${on('about')} style="--i:5"><small>06</small> About</a>
   </nav>
   <div class="mmenu-foot">
     <a class="btn wa full" href="https://wa.me/${SITE.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>
@@ -240,7 +247,7 @@ const footerChrome = () => `<footer>
       </div>
       <div class="foot-col">
         <h5>Studio</h5>
-        <a href="index.html">Home</a><a href="services.html">Services</a><a href="work.html">Work</a><a href="pricing.html">Pricing</a><a href="about.html">About</a>
+        <a href="index.html">Home</a><a href="work.html">Work</a><a href="partners.html">Partners</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="about.html">About</a>
       </div>
       <div class="foot-col">
         <h5>Build</h5>

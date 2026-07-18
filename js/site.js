@@ -646,6 +646,45 @@
     if (window.kickReveals) window.kickReveals();
   })();
 
+  /* ---------- PARTNERS PAGE — branded record cards (3×7 bill) ---------- */
+  (function () {
+    var host = document.querySelector("[data-partners]");
+    if (!host || !D || !D.clients || !D.clients.length) return;
+    function escP(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    function action(c) {
+      if (c.link) {
+        return '<a class="pgo" href="' + escP(c.link) + '" target="_blank" rel="noopener">Visit <i>↗</i></a>';
+      }
+      if (c.ref) {
+        return '<a class="pgo" href="work.html#' + escP(c.ref) + '">More info <i>→</i></a>';
+      }
+      var msg = encodeURIComponent("Hi 97 Design — I saw " + c.name + " on your record. Tell me more about that project.");
+      return '<a class="pgo" href="https://wa.me/' + D.whatsapp + '?text=' + msg + '" target="_blank" rel="noopener">More info <i>↗</i></a>';
+    }
+    var cards = D.clients.map(function (c, i) {
+      return '<article class="pcard reveal corners" style="--pc:' + escP(c.c || "#f4f4f6") + '">' +
+        '<i class="ct" aria-hidden="true"></i>' +
+        '<span class="pnum" aria-hidden="true">No. ' + (i < 9 ? "0" : "") + (i + 1) + '</span>' +
+        '<picture><source type="image/avif" srcset="assets/clients/' + c.id + '.avif">' +
+        '<img src="assets/clients/' + c.id + '.jpg" alt="' + escP(c.name) + ' logo" width="480" height="320" loading="lazy" decoding="async"></picture>' +
+        '<div class="pbody"><h3>' + escP(c.name) + '</h3>' + action(c) + '</div>' +
+        '</article>';
+    });
+    // slots 20 + 21 complete the 3×7 bill: the reserved slot and the tally
+    cards.push('<article class="pcard reserved reveal" style="--pc:var(--ug-y)">' +
+      '<span class="pnum" aria-hidden="true">No. 20</span>' +
+      '<div class="pres"><span class="stamp" aria-hidden="true">Reserved</span>' +
+      '<h3>Your brand</h3><p>The next mark on this wall could be yours.</p>' +
+      '<a class="pgo" href="start.html">Start my project <i>→</i></a></div></article>');
+    cards.push('<article class="pcard tally reveal" style="--pc:var(--ug-y)">' +
+      '<span class="pnum" aria-hidden="true">No. 21</span>' +
+      '<div class="pres"><b class="ptall">' + D.clients.length + '</b>' +
+      '<h3>Brands on record</h3><p>Two nations · one bar · every mark real.</p>' +
+      '<a class="pgo" href="pricing.html">Build my quote <i>→</i></a></div></article>');
+    host.innerHTML = cards.join("");
+    if (window.kickReveals) window.kickReveals();
+  })();
+
   /* ---------- CORNER TALK (home) — real client quotes, honesty-gated ---------- */
   (function () {
     var host = document.querySelector("[data-corner-talk]");

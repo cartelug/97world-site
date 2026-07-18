@@ -1161,7 +1161,9 @@ button.svc:last-child{border-bottom:0}
   text-transform:uppercase;color:var(--mut);
 }
 .record-cap b{color:var(--ug-y);font-weight:700}
-.record-cap::after{content:"";flex:1;height:1px;background:var(--hair2)}
+.record-cap::after{content:"";flex:1;height:1px;background:var(--hair2);order:1}
+.record-cap .record-link{order:2;color:var(--ug-y);font-weight:700;transition:color .2s}
+.record-cap .record-link:hover{color:#fff}
 .record-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px}
 .record-grid figure{
   margin:0;border:1px solid var(--hair);border-radius:var(--r);overflow:hidden;

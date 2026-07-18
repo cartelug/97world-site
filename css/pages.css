@@ -240,3 +240,55 @@
   .cat-side{padding:20px}
   .case .body{padding:26px 20px}
 }
+
+/* ============ PARTNERS — branded record cards (3×7 bill) ============ */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
+.pcard{
+  position:relative;display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid var(--hair);border-top:3px solid var(--pc,#f4f4f6);border-radius:var(--r);
+  background:#0a0a0c;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--pc,#f4f4f6) 9%,#0a0a0c),#0a0a0c 46%);
+  transition:transform .3s var(--ease),border-color .3s,box-shadow .35s;
+}
+.pcard:hover{
+  transform:translateY(-4px);
+  border-color:color-mix(in srgb,var(--pc,#f4f4f6) 45%,transparent);
+  box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 44px color-mix(in srgb,var(--pc,#f4f4f6) 16%,transparent);
+}
+.pnum{
+  position:absolute;top:10px;left:12px;z-index:2;
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--pc,#f4f4f6);opacity:.85;text-shadow:0 1px 6px rgba(0,0,0,.6);
+}
+.pcard picture{display:block}
+.pcard img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-bottom:1px solid var(--hair)}
+.pbody{display:flex;flex-direction:column;gap:10px;padding:16px 18px 18px;flex:1}
+.pbody h3{
+  font-family:var(--font-knock-jr);text-transform:uppercase;letter-spacing:.05em;
+  font-size:17px;font-weight:800;line-height:1.15;
+}
+.pgo{
+  margin-top:auto;align-self:flex-start;display:inline-flex;align-items:baseline;gap:7px;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--pc,#f4f4f6);padding:6px 0;transition:.25s;
+}
+.pgo i{font-style:normal;display:inline-block;transition:translate .25s}
+.pgo:hover i{translate:3px -1px}
+.pgo::after{content:"";position:absolute;inset:0}  /* whole card is the target */
+/* the two closing slots of the bill */
+.pcard.reserved{border-style:dashed;border-top-style:solid;background:rgba(255,206,0,.03)}
+.pcard.reserved .stamp{align-self:flex-start;font-size:12px}
+.pcard.tally .ptall{
+  font-family:var(--font-display);font-size:clamp(56px,6vw,84px);font-weight:900;
+  line-height:.9;color:var(--ug-y);
+}
+.pres{display:flex;flex-direction:column;gap:12px;padding:26px 20px 20px;flex:1}
+.pres h3{font-family:var(--font-knock-jr);text-transform:uppercase;letter-spacing:.05em;font-size:19px}
+.pres p{color:var(--mut);font-size:13.5px}
+@media(max-width:900px){.pgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){
+  .pgrid{grid-template-columns:1fr 1fr;gap:9px}
+  .pbody{padding:12px 12px 14px;gap:7px}
+  .pbody h3{font-size:14px}
+  .pnum{top:7px;left:9px}
+}
