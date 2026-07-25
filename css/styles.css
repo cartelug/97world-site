@@ -207,6 +207,10 @@ h3,h4{font-family:var(--font)}
 
 /* poster corner ticks */
 .corners{position:relative}
+/* the .ct only carries the top-right + bottom-left ticks; keep it out of
+   flow so it never consumes a grid/flex cell (it hosts absolute pseudos
+   anchored to the card via inset:0) */
+.corners>.ct{position:absolute;inset:0;pointer-events:none;margin:0}
 .corners::before,.corners::after,.corners .ct::before,.corners .ct::after{
   content:"";position:absolute;width:14px;height:14px;pointer-events:none;
 }

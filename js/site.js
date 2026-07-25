@@ -457,6 +457,15 @@
     });
   })();
 
+  /* ---------- social-growth platform chips (services grow band) ---------- */
+  (function () {
+    var host = document.querySelector("[data-grow-plats]");
+    if (!host || !D || !D.social || !D.social.platforms) return;
+    host.innerHTML = D.social.platforms.map(function (p) {
+      return '<span class="grow-chip" style="--pc:' + esc2(p.c || "#ffce00") + '"><i aria-hidden="true"></i>' + esc2(p.name) + '</span>';
+    }).join("");
+  })();
+
   /* ---------- portfolio (home featured grid + work-page cases) ----------
      Renders 1:1 from D.work (which mirrors the Notion Portfolio DB). Visual
      treatment comes from each item's `disp`, or is auto-derived from `type`. */
