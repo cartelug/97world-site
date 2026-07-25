@@ -142,6 +142,72 @@
   display:grid;place-items:center;
 }
 
+/* ============ SOCIAL GROWTH (followers.html) ============ */
+.social-shell{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;margin-top:30px;align-items:start}
+.social-pick{display:flex;flex-direction:column;gap:26px}
+
+/* currency toggle */
+.soc-cur{display:flex;align-items:center;gap:12px}
+.soc-cur-lbl{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.cur-toggle{display:inline-flex;border:1px solid var(--hair2);border-radius:3px;overflow:hidden}
+.cur-toggle button{
+  background:transparent;border:none;padding:8px 16px;cursor:pointer;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;color:var(--mut);transition:.2s;
+}
+.cur-toggle button+button{border-left:1px solid var(--hair2)}
+.cur-toggle button.on{background:var(--ug-y);color:#000;font-weight:700}
+
+/* step blocks */
+.soc-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.soc-head .stamp{font-size:11px;rotate:-3deg}
+.soc-head h3{font-size:clamp(19px,3vw,24px);font-weight:900;letter-spacing:.03em}
+
+/* STEP 1 — platform chips */
+.plat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.plat{
+  --pc:var(--ug-y);
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  padding:16px 16px;border:1px solid var(--hair2);border-radius:var(--r);background:var(--card);
+  cursor:pointer;text-align:left;transition:border-color .25s,transform .25s var(--ease),background .25s;
+}
+.plat:hover{border-color:var(--line2);transform:translateY(-2px)}
+.plat .plat-dot{width:11px;height:11px;border-radius:50%;background:var(--pc);box-shadow:0 0 0 4px color-mix(in srgb,var(--pc) 22%,transparent)}
+.plat b{font-size:15px;font-weight:800;letter-spacing:.01em}
+.plat small{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.plat.sel{border-color:var(--pc);border-width:2px;padding:15px 15px;background:color-mix(in srgb,var(--pc) 8%,var(--card))}
+.plat.sel b{color:#fff}
+
+/* STEP 2 — package cards */
+.pkg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pkg{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  padding:20px 16px 16px;border:1px solid var(--hair2);border-radius:var(--r);background:var(--card);
+  cursor:pointer;text-align:left;transition:border-color .25s,transform .25s var(--ease),box-shadow .3s;
+}
+.pkg:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 20px 44px rgba(0,0,0,.4)}
+.pkg-qty{font-family:var(--font-display);font-size:clamp(26px,3.4vw,34px);font-weight:900;line-height:.95;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.pkg-unit{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.pkg-price{margin-top:12px;font-size:16px;font-weight:800;color:var(--ug-y);font-variant-numeric:tabular-nums}
+.pkg-days{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--dim)}
+.pkg-pop{
+  position:absolute;top:-1px;right:-1px;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:800;color:#000;background:var(--ug-y);padding:3px 8px;border-bottom-left-radius:var(--r);
+}
+.pkg.sel{border-color:var(--ug-y);border-width:2px;padding:19px 15px 15px;box-shadow:0 0 0 4px rgba(255,206,0,.12)}
+.pkg.sel .pkg-qty{color:#fff}
+.soc-note{margin-top:16px;font-size:13px;color:var(--mut);max-width:60ch;line-height:1.5}
+
+/* order rail summary panel */
+.soc-tape .qtot b{color:var(--ug-y)}
+
+@media(max-width:900px){
+  .social-shell{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .plat-grid{grid-template-columns:1fr 1fr}
+  .pkg-grid{grid-template-columns:1fr 1fr}
+}
+
 /* ============ ABOUT ============ */
 .about-cols{display:grid;grid-template-columns:1.2fr .8fr;gap:44px;margin-top:26px;align-items:start}
 .about-story p{color:#c7c7cd;font-size:16.5px;margin-bottom:18px;max-width:60ch}

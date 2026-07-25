@@ -283,8 +283,6 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
 
 <!-- ===================== NAV ===================== -->
 <a class="skip-link" href="#main">Skip to content</a>
-<a class="skip-link" href="#main">Skip to content</a>
-<a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" id="nav">
   <a href="index.html" class="brand" aria-label="97 Design home">
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
@@ -292,6 +290,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
   <nav class="links">
     <a href="work.html">Work</a>
     <a href="services.html">Services</a>
+    <a href="followers.html">Followers</a>
     <a href="pricing.html">Pricing</a>
     <a href="about.html">About</a>
   </nav>
@@ -308,8 +307,9 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
     <a href="work.html" style="--i:1"><small>02</small> Work</a>
     <a href="partners.html" style="--i:2"><small>03</small> Partners</a>
     <a href="services.html" style="--i:3"><small>04</small> Services</a>
-    <a href="pricing.html" style="--i:4"><small>05</small> Pricing</a>
-    <a href="about.html" style="--i:5"><small>06</small> About</a>
+    <a href="followers.html" style="--i:4"><small>05</small> Followers</a>
+    <a href="pricing.html" style="--i:5"><small>06</small> Pricing</a>
+    <a href="about.html" style="--i:6"><small>07</small> About</a>
   </nav>
   <div class="mmenu-foot">
     <a class="btn wa full" href="https://wa.me/256708735878" target="_blank" rel="noopener">Chat on WhatsApp</a>
@@ -332,30 +332,64 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
   <span class="dim v" aria-hidden="true">Fig. 01 — The Main Event</span>
   <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true" data-plx="0.1">
   <div class="wrap hero2-inner">
-    <p class="tape bill-crown reveal"><span>97 Design</span><span>Presents</span></p>
-    <h1 class="mega reveal" data-split="chars" data-split-anim="clip" data-split-stagger="22">
-      <span class="row">WE BUILD</span>
-      <span class="row rotwrap" data-split-skip><span id="rotWord">PROOF.</span></span>
-      <span class="row thin">NOT THE HYPE.</span>
+    <p class="tape bill-crown reveal"><span>97 Design</span><span>Presents</span><span>Your move</span></p>
+    <h1 class="mega reveal" data-split="chars" data-split-anim="clip" data-split-stagger="20">
+      <span class="row">WHAT DO YOU</span>
+      <span class="row rotwrap" data-split-skip><span class="lit">WANT?</span></span>
+      <span class="row thin">LET'S BUILD IT.</span>
     </h1>
     <div class="tail reveal">
-      <p class="lead">Websites, fliers, brands — priced upfront, ordered on WhatsApp, delivered in days. See what's live below, then <b>price yours in 30 seconds</b>.</p>
-      <div class="tape hero-tape" aria-label="Kampala and Juba, sites from $95">
-        <span>Kampala<b class="clock" data-tz="Africa/Kampala"></b></span>
-        <span>Juba<b class="clock" data-tz="Africa/Juba"></b></span>
-        <span>Sites from <b data-usd="95">$95</b></span>
-      </div>
+      <p class="lead">Pick what you came for. We price it, you order on <b>WhatsApp</b>, we deliver in days — websites, followers, brands and more.</p>
     </div>
-    <div class="cta-row reveal">
-      <a href="#work" class="btn primary ticket">See the work ↓</a>
-      <a class="cta-mini" href="https://wa.me/256708735878" target="_blank" rel="noopener">or WhatsApp us ↗</a>
+
+    <!-- THE PICK — intent-led goal grid: the conversion entry.
+         Plain anchors, so it works with zero JS; each drops the
+         visitor into the right funnel (quote or the followers flow). -->
+    <div class="goal-grid reveal" aria-label="What do you want to get?">
+      <a class="goal" href="pricing.html?svc=web">
+        <span class="g-idx" aria-hidden="true">01</span>
+        <span class="g-body"><b>A website</b><span>Turn visitors into customers</span></span>
+        <span class="g-amt">from <b data-usd="500"></b></span>
+        <i class="g-arr" aria-hidden="true">→</i>
+      </a>
+      <a class="goal hot" href="followers.html">
+        <span class="g-idx" aria-hidden="true">02</span>
+        <span class="g-body"><b>Followers &amp; social growth <span class="g-tag">Fast</span></b><span>Instagram, TikTok, YouTube &amp; more</span></span>
+        <span class="g-amt">from <b data-usd="15"></b></span>
+        <i class="g-arr" aria-hidden="true">→</i>
+      </a>
+      <a class="goal" href="pricing.html?svc=logo">
+        <span class="g-idx" aria-hidden="true">03</span>
+        <span class="g-body"><b>A logo &amp; brand</b><span>Look the part everywhere</span></span>
+        <span class="g-amt">from <b data-usd="150"></b></span>
+        <i class="g-arr" aria-hidden="true">→</i>
+      </a>
+      <a class="goal" href="pricing.html?svc=flier">
+        <span class="g-idx" aria-hidden="true">04</span>
+        <span class="g-body"><b>Fliers &amp; posters</b><span>Stop the scroll, fill the room</span></span>
+        <span class="g-amt">from <b data-usd="40"></b></span>
+        <i class="g-arr" aria-hidden="true">→</i>
+      </a>
+      <a class="goal" href="pricing.html?svc=cards">
+        <span class="g-idx" aria-hidden="true">05</span>
+        <span class="g-body"><b>Business cards</b><span>A card people actually keep</span></span>
+        <span class="g-amt">from <b data-usd="35"></b></span>
+        <i class="g-arr" aria-hidden="true">→</i>
+      </a>
+      <a class="goal" href="pricing.html?svc=web,brand">
+        <span class="g-idx" aria-hidden="true">06</span>
+        <span class="g-body"><b>Everything <span class="g-tag alt">Full launch</span></b><span>Site + full brand, done together</span></span>
+        <span class="g-amt">from <b data-usd="800"></b></span>
+        <i class="g-arr" aria-hidden="true">→</i>
+      </a>
     </div>
+    <p class="goal-foot reveal">Not sure yet? <a href="#quote">Build a custom quote →</a> or <a href="work.html">see the proof first →</a></p>
+
     <a class="proof-line reveal" href="https://theafrica63.com" target="_blank" rel="noopener" data-live-proof>
       <span class="stamp" aria-hidden="true">Live</span>
       <b data-work-count>6 builds</b><span>— latest shipped:</span><b class="pl-name">AFRICA63</b><i class="arr" aria-hidden="true">↗</i>
     </a>
     <span class="cap-line reveal" data-capacity hidden></span>
-    <div class="hero2-stats reveal" data-stats></div>
   </div>
 </section>
 
@@ -544,7 +578,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
       </div>
       <div class="foot-col">
         <h5>Build</h5>
-        <a href="services.html#web">Websites</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
+        <a href="services.html#web">Websites</a><a href="followers.html">Followers</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
       </div>
       <div class="foot-col">
         <h5>Talk to us</h5>

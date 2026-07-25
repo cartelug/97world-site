@@ -72,6 +72,12 @@ const PAGES = [
     scripts: ['data', 'site', 'kinetic', 'pricing', 'start'],
   },
   {
+    file: 'followers.html', page: 'followers', og: 'og-followers', ogTitle: 'GROW YOUR FOLLOWING.', crumb: 'Followers',
+    title: 'Followers & Social Growth — 97 Design',
+    desc: 'Grow your Instagram, TikTok, YouTube, Facebook or X following. Pick a platform and a package, priced upfront in UGX or USD, and order straight on WhatsApp.',
+    scripts: ['data', 'site', 'kinetic', 'social'], jsonld: ['social'],
+  },
+  {
     file: 'about.html', page: 'about', og: 'og-about', ogTitle: 'TWO NATIONS. ONE BAR.', crumb: 'About',
     title: 'About the Studio — 97 Design',
     desc: "The design studio of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.",
@@ -109,6 +115,15 @@ const ldServices = () => ({
     itemOffered: { '@type': 'Service', name: s.name, description: s.short, provider: { '@type': 'ProfessionalService', name: '97 Design' } },
   })),
 });
+const ldSocial = () => ({
+  '@context': 'https://schema.org', '@type': 'OfferCatalog',
+  name: '97 Design social growth',
+  itemListElement: (SITE.social?.platforms || []).map((pl) => ({
+    '@type': 'Offer', priceCurrency: 'USD',
+    price: Math.round((SITE.social.packages[0].usd) * (pl.mult || 1)),
+    itemOffered: { '@type': 'Service', name: pl.name + ' ' + pl.unit + ' growth', provider: { '@type': 'ProfessionalService', name: '97 Design' } },
+  })),
+});
 const ldCrumbs = (p) => ({
   '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
@@ -141,6 +156,7 @@ function head(p) {
   const lds = [
     ...(p.home || p.page === 'about' ? [ldBusiness()] : []),
     ...((p.jsonld || []).includes('services') ? [ldServices()] : []),
+    ...((p.jsonld || []).includes('social') ? [ldSocial()] : []),
     ...((p.jsonld || []).includes('faq') ? [ldFaq()] : []),
     ...(p.crumb && !p.noindex ? [ldCrumbs(p)] : []),
   ];
@@ -199,6 +215,7 @@ const navChrome = (page) => {
   <nav class="links">
     ${on('work', 'Work', 'work.html')}
     ${on('services', 'Services', 'services.html')}
+    ${on('followers', 'Followers', 'followers.html')}
     ${on('pricing', 'Pricing', 'pricing.html')}
     ${on('about', 'About', 'about.html')}
   </nav>
@@ -217,8 +234,9 @@ const mmenuChrome = (page) => {
     <a href="work.html"${on('work')} style="--i:1"><small>02</small> Work</a>
     <a href="partners.html"${on('partners')} style="--i:2"><small>03</small> Partners</a>
     <a href="services.html"${on('services')} style="--i:3"><small>04</small> Services</a>
-    <a href="pricing.html"${on('pricing')} style="--i:4"><small>05</small> Pricing</a>
-    <a href="about.html"${on('about')} style="--i:5"><small>06</small> About</a>
+    <a href="followers.html"${on('followers')} style="--i:4"><small>05</small> Followers</a>
+    <a href="pricing.html"${on('pricing')} style="--i:5"><small>06</small> Pricing</a>
+    <a href="about.html"${on('about')} style="--i:6"><small>07</small> About</a>
   </nav>
   <div class="mmenu-foot">
     <a class="btn wa full" href="https://wa.me/${SITE.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>
@@ -251,7 +269,7 @@ const footerChrome = () => `<footer>
       </div>
       <div class="foot-col">
         <h5>Build</h5>
-        <a href="services.html#web">Websites</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
+        <a href="services.html#web">Websites</a><a href="followers.html">Followers</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
       </div>
       <div class="foot-col">
         <h5>Talk to us</h5>
@@ -291,7 +309,9 @@ for (const w of SITE.work) {
 for (const p of PAGES) {
   let html = read(p.file);
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(p));
-  html = html.replace(/<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
+  // consume any pre-existing skip-link lines too, so navChrome's single
+  // skip-link replaces them instead of stacking a new one every build
+  html = html.replace(/(?:<a class="skip-link"[^>]*>[^<]*<\/a>\s*)*<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
   html = html.replace(/<div class="mmenu"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
   html = html.replace(/<footer>[\s\S]*?<\/footer>/, footerChrome());
   html = html.replace(/<script src="js\/data\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));

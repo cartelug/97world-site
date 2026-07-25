@@ -78,6 +78,32 @@ window.SITE = {
     { id: "starter",  name: "Starter",  note: "Logo + business cards", services: ["logo", "cards"] }
   ],
 
+  /* ============================================================
+     SOCIAL GROWTH — the "grow my following" funnel (followers.html).
+     Visitor picks a platform, then a package; the displayed price is
+     package.usd × platform.mult, shown in their currency, then the
+     order goes straight to WhatsApp.
+     TODO(owner): confirm the real prices, quantities and platforms
+     before launch — these are editable defaults, all in one place.
+     ============================================================ */
+  social: {
+    note: "Pick your platform, choose a package, then complete the order on WhatsApp. Growth is delivered gradually for a natural rise — no crash, no reset.",
+    platforms: [
+      { id: "instagram", name: "Instagram",       unit: "followers",   mult: 1,   c: "#e1306c" },
+      { id: "tiktok",    name: "TikTok",           unit: "followers",   mult: 1,   c: "#ff0050" },
+      { id: "facebook",  name: "Facebook",         unit: "followers",   mult: 1,   c: "#1877f2" },
+      { id: "x",         name: "X / Twitter",      unit: "followers",   mult: 1.2, c: "#1d9bf0" },
+      { id: "youtube",   name: "YouTube",          unit: "subscribers", mult: 2.4, c: "#ff0000" },
+      { id: "whatsapp",  name: "WhatsApp Channel", unit: "followers",   mult: 1.1, c: "#25D366" }
+    ],
+    packages: [
+      { id: "s1", qty: 1000,  usd: 15,  days: 4,  popular: false, note: "Kick-start" },
+      { id: "s2", qty: 5000,  usd: 60,  days: 10, popular: true,  note: "Most ordered" },
+      { id: "s3", qty: 10000, usd: 110, days: 16, popular: false, note: "Serious reach" },
+      { id: "s4", qty: 25000, usd: 250, days: 30, popular: false, note: "Go big" }
+    ]
+  },
+
   /* Honest availability — EDIT MONTHLY. Renderers hide it automatically
      when `month` is not the current month, so it can never silently lie. */
   capacity: { month: "2026-07", total: 4, taken: 2 },
