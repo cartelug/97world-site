@@ -63,7 +63,7 @@ section[id],main[id]{scroll-margin-top:80px}
 /* Display: Knockout 52 Cruiserweight — condensed heavyweight, set in caps */
 h1,h2{font-family:var(--font-display)}
 h3,h4{font-family:var(--font)}
-.mega,.sec,.page-hero h1,.cta-banner h2,.manifesto h3,.lost h1,
+.mega,.sec,.hero-h,.page-hero h1,.cta-banner h2,.manifesto h3,.lost h1,
 .exp-line .name,.gate-q,.bbody .lg,.bcity b{font-family:var(--font-display);text-transform:uppercase}
 /* Brand stamps: Knockout 94 Ultmt Sumo — the wide ultra-heavy */
 .foot-wm,.marquee-track span,.intro-word{font-family:var(--font-knock-x)}

@@ -753,17 +753,21 @@
     var el = document.getElementById("rotWord");
     if (!el) return;
     if (reduce) { el.textContent = "PROOF."; return; }
-    var words = ["WEBSITES.", "FLIERS.", "BRANDS.", "LOGOS.", "SOCIAL.", "PROOF."];
-    var i = words.length - 1; // start on PROOF., matching the intro line
+    /* One pass, then it rests on PROOF. A word that changes forever is
+       restless wallpaper; a word that performs once and settles is a
+       headline. */
+    var words = ["WEBSITES.", "BRANDS.", "FLIERS.", "SOCIAL.", "PROOF."];
+    var i = 0;
     function next() {
-      i = (i + 1) % words.length;
       el.classList.remove("swap");
       void el.offsetWidth; // restart the CSS animation
       el.textContent = words[i];
       el.classList.add("swap");
-      setTimeout(next, words[i] === "PROOF." ? 3000 : 1500);
+      if (words[i] === "PROOF.") return; // settled — no further swaps
+      i++;
+      setTimeout(next, 1900);
     }
-    setTimeout(next, 3200);
+    setTimeout(next, 2600);
   })();
 
   /* ---------- service worker: repeat visits from cache ---------- */

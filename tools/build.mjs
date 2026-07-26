@@ -291,7 +291,8 @@ for (const w of SITE.work) {
 for (const p of PAGES) {
   let html = read(p.file);
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(p));
-  html = html.replace(/<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
+  // consume any previously-injected skip-links too, or they stack every build
+  html = html.replace(/(?:<a class="skip-link"[\s\S]*?<\/a>\s*)*<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
   html = html.replace(/<div class="mmenu"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
   html = html.replace(/<footer>[\s\S]*?<\/footer>/, footerChrome());
   html = html.replace(/<script src="js\/data\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));

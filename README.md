@@ -3,7 +3,7 @@
 A multi-page static site. No build step — open `index.html`, or host the folder anywhere (GitHub Pages works out of the box, including `404.html`).
 
 ## Pages
-- `index.html` — home: mega hero, bento overview, featured work, process, manifesto
+- `index.html` — home: photographic hero, then five numbered blocks (work · services · quote · process · standard) and a closing CTA
 - `services.html` — full service catalog with deliverables (rendered from `js/data.js`)
 - `work.html` — case studies
 - `pricing.html` — live quote calculator (UGX/USD, saves your quote)
@@ -41,6 +41,14 @@ The visual language is a boxing-bill poster (loud) over a working-drawing layer 
 - **Blueprint (quiet):** `.dim` dimension lines · `.fig` captions · `.stamp` rubber stamps (IO slam via `.reveal`) · `.tblock` title blocks · `.bp` grid paper · `.reg` registration marks · `.corners` ticks. Decorative instances are `aria-hidden`; informative mono uses `--mut`+.
 - **Honesty gates:** `SITE.testimonials` (CORNER TALK) and `SITE.responseMinutes` render NOTHING until real values exist; `SITE.capacity` hides itself when stale. Never fake proof.
 - Every `data-split` kinetic host must also carry `.reveal` (that's its animation trigger).
+
+### Home is the restrained cut of that system
+The home page (`css/home.css`) deliberately spends less of this vocabulary than the inner pages, because stacking four labelling devices per section is what made it read as noise. On home:
+- **One label per section** — the `01 — SELECTED WORK` mono line in `.blk-head`. No `.plate` strip, no `.plate-num` ghost numeral, no marquee.
+- **The hero holds four things** — statement, lead, actions, standing rail. Clocks, coordinate rails and stat cells are not among them.
+- **The photograph is the asset.** `.scenes-veil` scrims locally (heaviest down the left, where the copy sits) instead of washing the frame flat; the hero and the closing CTA sit on the picture, everything between them sits on the solid `--ground` field so body copy never competes with it.
+- **Mono is for figures and prices only** — never for running labels.
+Keep new home UI inside those limits; the loud cut still lives on `work.html`, `services.html` and `pricing.html`.
 
 ## Dev tools (run locally, outputs committed)
 - `npm run build` — regenerates every page head (critical CSS inline, SEO, JSON-LD from data.js), shared chrome, sitemap; fails on broken internal links and on bad `disp.svc` ids

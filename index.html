@@ -131,7 +131,7 @@ img{max-width:100%}
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 h1,h2{font-family:var(--font-display)}
 h3,h4{font-family:var(--font)}
-.mega,.sec,.page-hero h1{font-family:var(--font-display);text-transform:uppercase}
+.mega,.sec,.hero-h,.page-hero h1{font-family:var(--font-display);text-transform:uppercase}
 /* content is revealed by JS — start hidden so nothing flashes unstyled */
 .reveal{opacity:0;transform:translateY(54px)}
 /* nav shell */
@@ -150,12 +150,16 @@ nav.links a{padding:8px 13px}
 .scenes{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;background:#050506}
 .scene{position:absolute;inset:0;opacity:0}
 .scene.active{opacity:1}
-.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:56% 45%}
 .scenes-veil{
   position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
-    linear-gradient(90deg,rgba(4,4,6,.96) 0%,rgba(4,4,6,.82) 30%,rgba(4,4,6,.52) 60%,rgba(4,4,6,.68) 100%),
-    linear-gradient(180deg,rgba(4,4,6,.5),rgba(4,4,6,.28) 20%,rgba(4,4,6,.4) 80%,rgba(4,4,6,.74));
+    linear-gradient(96deg,rgba(4,4,6,.72) 0%,rgba(4,4,6,.52) 22%,rgba(4,4,6,.16) 46%,rgba(4,4,6,.06) 66%,rgba(4,4,6,.28) 100%),
+    linear-gradient(180deg,rgba(4,4,6,.58) 0%,rgba(4,4,6,.12) 16%,rgba(4,4,6,.10) 62%,rgba(4,4,6,.55) 100%);
+}
+@media(max-width:820px){
+  .scene img{object-position:60% 42%}
+  .scenes-veil{background:linear-gradient(180deg,rgba(4,4,6,.66) 0%,rgba(4,4,6,.30) 22%,rgba(4,4,6,.46) 52%,rgba(4,4,6,.86) 100%)}
 }
 #fxCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:-2;pointer-events:none;filter:blur(46px) saturate(1.35);opacity:.92}
 .fx-veil{
@@ -185,14 +189,16 @@ nav.links a{padding:8px 13px}
 .bcity b{font-family:var(--font-display);font-size:12.5px;letter-spacing:.18em}
 .bcity small{font-size:9.5px}
 /* hero / page-hero skeleton (fold-cut geometry — must match home.css) */
-.hero2{position:relative;min-height:92vh;min-height:92svh;display:flex;align-items:center;padding:104px 0 36px;overflow:hidden}
-h1.mega{font-size:clamp(58px,min(12.5vw,13.5vh),150px);line-height:.88;font-weight:900;letter-spacing:.01em}
-h1.mega .row{display:block}
-h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
-.rotwrap{display:block;border-block:1px solid var(--hair);padding:.05em 0;margin:.03em 0}
+.hero{position:relative;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:132px 0 0}
+.hero-in{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:clamp(48px,7vh,88px)}
+.hero-h{font-size:clamp(52px,min(11.5vw,15.5vh),168px);line-height:.84;font-weight:900;letter-spacing:.005em;max-width:15ch}
+.hero-h .l{display:block}
+.hero-h .rot{color:var(--ug-y);min-inline-size:7ch}
+.hero-rail{border-top:1px solid var(--line)}
+.hero-rail .wrap{display:flex;flex-wrap:wrap;gap:4px 44px;padding-top:20px;padding-bottom:22px}
+@media(max-width:820px){.hero{padding-top:104px;min-height:auto}.hero-h{max-width:none}}
 /* poster shells reserved so first paint = final geometry */
 .tape{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
-.bill-crown{justify-content:flex-start;min-height:18px;margin-bottom:14px}
 .plate{min-height:37px;margin-bottom:26px}
 .btn.primary{border-radius:var(--r)}
 .ticket{font-family:"Knockout Jr","Knockout Fallback","Arial Narrow",Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:15px}
@@ -283,8 +289,6 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
 
 <!-- ===================== NAV ===================== -->
 <a class="skip-link" href="#main">Skip to content</a>
-<a class="skip-link" href="#main">Skip to content</a>
-<a class="skip-link" href="#main">Skip to content</a>
 <header class="nav" id="nav">
   <a href="index.html" class="brand" aria-label="97 Design home">
     <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
@@ -326,104 +330,87 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
 
 <main id="main" data-page="home">
 
-<!-- ===================== HERO ===================== -->
-<section class="hero2" id="top" data-scene="1">
-  <div class="hero2-grid"></div>
-  <span class="dim v" aria-hidden="true">Fig. 01 — The Main Event</span>
-  <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true" data-plx="0.1">
-  <div class="wrap hero2-inner">
-    <p class="tape bill-crown reveal"><span>97 Design</span><span>Presents</span></p>
-    <h1 class="mega reveal" data-split="chars" data-split-anim="clip" data-split-stagger="22">
-      <span class="row">WE BUILD</span>
-      <span class="row rotwrap" data-split-skip><span id="rotWord">PROOF.</span></span>
-      <span class="row thin">NOT THE HYPE.</span>
+<!-- ===================== HERO =====================
+     Four zones only: statement, lead, action, standing rail.
+     Everything that used to crowd this viewport (clocks, coordinate
+     rail, stat cells, tape strips) now lives further down or nowhere. -->
+<section class="hero" id="top" data-scene="1">
+  <div class="wrap hero-in">
+    <h1 class="hero-h reveal" data-split="chars" data-split-anim="clip" data-split-stagger="18">
+      <span class="l">We build</span>
+      <span class="l rot" data-split-skip><span id="rotWord">proof.</span></span>
+      <span class="l">Not the hype.</span>
     </h1>
-    <div class="tail reveal">
-      <p class="lead">Websites, fliers, brands — priced upfront, ordered on WhatsApp, delivered in days. See what's live below, then <b>price yours in 30 seconds</b>.</p>
-      <div class="tape hero-tape" aria-label="Kampala and Juba, sites from $95">
-        <span>Kampala<b class="clock" data-tz="Africa/Kampala"></b></span>
-        <span>Juba<b class="clock" data-tz="Africa/Juba"></b></span>
-        <span>Sites from <b data-usd="95">$95</b></span>
-      </div>
+    <p class="hero-lead reveal">
+      Websites, brands and campaign design out of Kampala and Juba — for anyone,
+      anywhere. Published prices from <b data-usd="35">$35</b>, ordered on WhatsApp,
+      delivered in days.
+    </p>
+    <div class="hero-act reveal">
+      <a href="#quote" class="btn primary ticket">Build your quote — 30 sec</a>
+      <a href="work.html" class="btn ghost">See the work</a>
     </div>
-    <div class="cta-row reveal">
-      <a href="#work" class="btn primary ticket">See the work ↓</a>
-      <a class="cta-mini" href="https://wa.me/256708735878" target="_blank" rel="noopener">or WhatsApp us ↗</a>
-    </div>
-    <a class="proof-line reveal" href="https://theafrica63.com" target="_blank" rel="noopener" data-live-proof>
-      <span class="stamp" aria-hidden="true">Live</span>
-      <b data-work-count>6 builds</b><span>— latest shipped:</span><b class="pl-name">AFRICA63</b><i class="arr" aria-hidden="true">↗</i>
+    <a class="hero-proof reveal" href="https://theafrica63.com" target="_blank" rel="noopener" data-live-proof>
+      <span class="ping" aria-hidden="true"></span>
+      <span class="k">Latest live build</span>
+      <b class="pl-name">AFRICA63</b>
+      <i class="arr" aria-hidden="true">↗</i>
     </a>
-    <span class="cap-line reveal" data-capacity hidden></span>
-    <div class="hero2-stats reveal" data-stats></div>
+  </div>
+
+  <div class="hero-rail">
+    <div class="wrap">
+      <span><b data-work-count>6 builds</b> shipped</span>
+      <span><b data-brand-count>19</b> brands on record</span>
+      <span><b>50 / 50</b> deposits</span>
+      <span><b>2–10</b> working days</span>
+    </div>
   </div>
 </section>
 
-<!-- ===================== TRUST STRIP — THE UNDERCARD ===================== -->
-<div class="trust-strip reveal" id="trust">
-  <span class="undercard-tag" aria-hidden="true">Undercard</span>
-  <div class="row">
-    <a class="t" href="work.html"><span><b data-work-count>6 builds</b> — see them live →</span></a>
-    <a class="t" href="work.html#maya-nature"><span><b>Maya Nature Resort</b> — live now</span></a>
-    <a class="t" href="#quote"><span>Instant quote — <b>30 seconds</b></span></a>
-    <span class="t"><span><b>50 / 50</b> deposits — no surprises</span></span>
-  </div>
-</div>
-
-<!-- ===================== FEATURED WORK ===================== -->
+<!-- ===================== 01 · SELECTED WORK ===================== -->
 <section class="blk" id="work" data-scene="2">
-  <span class="plate-num" aria-hidden="true">01</span>
   <div class="wrap">
-    <div class="plate reveal" aria-hidden="true"><span style="--i:0">Round 01</span><i>✦</i><span style="--i:1">The proof</span><span style="--i:2">Every case real</span></div>
-    <div class="sec-head">
-      <div>
-        <h2 class="sec reveal" data-split="words">Real work. <span class="mut">Live &amp; loading.</span></h2>
-      </div>
-      <a class="more reveal" href="work.html">All case studies →</a>
-    </div>
+    <header class="blk-head">
+      <span class="lab reveal">01 — Selected work</span>
+      <h2 class="sec reveal" data-split="words">Proof, <span class="mut">not promises.</span></h2>
+      <p class="blk-note reveal">Real client builds — live sites and work in progress. No stock, no mock-ups standing in for a portfolio.</p>
+      <a class="blk-more reveal" href="work.html">All case studies →</a>
+    </header>
+
     <div class="grid2" id="workGrid"><!-- rendered from js/data.js (Notion Portfolio) --></div>
+
     <div class="record reveal">
-      <p class="record-cap">Previous partners · <b data-brand-count>19</b> brands shipped<a class="record-link" href="partners.html">All partners →</a></p>
+      <p class="record-cap">The record · <b data-brand-count>19</b> brands shipped<a class="record-link" href="partners.html">All partners →</a></p>
       <div class="record-grid" data-clients><!-- rendered from js/data.js (SITE.clients) --></div>
     </div>
-    <div class="work-bridge reveal">
-      <span>Seen enough?</span>
-      <a href="#quote" class="btn primary ticket">Build my quote — 30 sec →</a>
-    </div>
   </div>
 </section>
 
-<!-- ===================== MARQUEE ===================== -->
-<div class="marquee" aria-hidden="true" data-marquee></div>
-
-<!-- ===================== SERVICES STRIP ===================== -->
+<!-- ===================== 02 · SERVICES ===================== -->
 <section class="blk" id="exp" data-scene="3">
-  <span class="plate-num" aria-hidden="true">02</span>
   <div class="wrap">
-    <div class="plate reveal" aria-hidden="true"><span style="--i:0">Round 02</span><i>✦</i><span style="--i:1">The card</span><span style="--i:2">Seven services</span></div>
-    <div class="sec-head">
-      <div>
-        <h2 class="sec reveal" data-split="words">One studio. <span class="mut">Every design need.</span></h2>
-      </div>
-      <a class="more reveal" href="services.html">Explore services →</a>
-    </div>
+    <header class="blk-head">
+      <span class="lab reveal">02 — What we build</span>
+      <h2 class="sec reveal" data-split="words">One studio. <span class="mut">Every design need.</span></h2>
+      <p class="blk-note reveal">Fixed prices, published. Pick what you need and the quote builds itself below.</p>
+      <a class="blk-more reveal" href="services.html">Full service list →</a>
+    </header>
     <div class="exp-lines" data-exp></div>
   </div>
 </section>
 
-<!-- ===================== QUOTE CALCULATOR ===================== -->
+<!-- ===================== 03 · QUOTE CALCULATOR ===================== -->
 <section class="blk" id="quote" data-scene="4">
-  <span class="plate-num" aria-hidden="true">03</span>
   <div class="wrap">
-    <div class="plate reveal" aria-hidden="true"><span style="--i:0">Round 03</span><i>✦</i><span style="--i:1">The purse</span><span style="--i:2">30 sec · 2 currencies</span></div>
-    <h2 class="sec reveal" data-split="words">Build your quote. <span class="mut">Right here.</span></h2>
-    <p class="sub reveal">Tick what you need — your total updates live in <b>UGX or USD</b>, with the <b>50% deposit</b> that locks your slot. Your quote follows you to checkout.</p>
+    <header class="blk-head">
+      <span class="lab reveal">03 — Your price</span>
+      <h2 class="sec reveal" data-split="words">Build your quote. <span class="mut">Right here.</span></h2>
+      <p class="blk-note reveal">Tick what you need and the total updates live in <b>UGX or USD</b>, with the <b>50% deposit</b> that locks your slot. Your quote follows you to checkout.</p>
+    </header>
 
     <div class="price-shell reveal">
-      <i class="bp" aria-hidden="true"></i>
-      <i class="reg tl" aria-hidden="true"></i><i class="reg tr" aria-hidden="true"></i>
-      <i class="reg bl" aria-hidden="true"></i><i class="reg br" aria-hidden="true"></i>
-      <!-- STEP 1 — the weigh-in -->
+      <!-- STEP 1 — currency gate -->
       <div class="price-gate">
         <span class="gate-step stamp">Step 1 of 2</span>
         <h3 class="gate-q">Where are you based?</h3>
@@ -450,7 +437,7 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
         <div class="price-body">
           <div class="svc-list" data-svc-list><!-- rendered from js/data.js --></div>
           <div class="summary" role="status" aria-live="polite">
-            <h4>Tale of the Tape</h4>
+            <h4>Your quote</h4>
             <hr class="rule-x y" aria-hidden="true">
             <div class="srow"><span class="k">Items selected</span><span class="v js-sum-count">0</span></div>
             <div class="srow"><span class="k">Timeline</span><span class="v js-est">—</span></div>
@@ -473,45 +460,40 @@ h1.mega .thin{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.6)}
 <!-- ===================== CORNER TALK (renders only with real quotes) ===================== -->
 <section class="blk tight" id="corner" data-corner-talk hidden></section>
 
-<!-- ===================== PROCESS — FIGHT WEEK ===================== -->
-<section class="blk tight" id="process" data-scene="5">
-  <span class="plate-num" aria-hidden="true">04</span>
+<!-- ===================== 04 · PROCESS ===================== -->
+<section class="blk" id="process" data-scene="5">
   <div class="wrap">
-    <div class="plate reveal" aria-hidden="true"><span style="--i:0">Round 04</span><i>✦</i><span style="--i:1">Fight week</span><span style="--i:2">Brief → delivery</span></div>
-    <h2 class="sec reveal" data-split="words">Brief to build <span class="mut">in four steps.</span></h2>
+    <header class="blk-head">
+      <span class="lab reveal">04 — How it runs</span>
+      <h2 class="sec reveal" data-split="words">Brief to build <span class="mut">in four steps.</span></h2>
+      <p class="blk-note reveal">No agency theatre. You brief us on WhatsApp, the deposit starts the clock, and you see the work as it's made.</p>
+    </header>
     <div class="rail" data-process></div>
   </div>
 </section>
 
-<!-- ===================== MANIFESTO — THE DRAWING SHEET ===================== -->
-<section class="blk tight" id="manifesto">
+<!-- ===================== 05 · THE STANDARD ===================== -->
+<section class="blk" id="studio">
   <div class="wrap">
-    <div class="manifesto reveal">
-      <i class="bp" aria-hidden="true"></i>
-      <i class="reg tl" aria-hidden="true"></i><i class="reg tr" aria-hidden="true"></i>
-      <i class="reg bl" aria-hidden="true"></i><i class="reg br" aria-hidden="true"></i>
-      <p class="dim" aria-hidden="true">Proof — measured, not claimed</p>
-      <h3 class="reveal" data-split="words">Proof isn't <span class="y">fabricated.</span><br><span class="x">It's built.</span></h3>
-      <p class="reveal" data-split="words" data-split-anim="scrub-ink">Every result on this page is made by hand, shipped for real clients, and judged by what it converts — never staged, never fabricated, always built.</p>
-      <div class="principles" data-principles></div>
-      <p class="pledge" aria-label="No stock proof. No hidden fees. No templates."><span>No stock proof</span><span>No hidden fees</span><span>No templates</span></p>
-      <span class="stamp lg reveal" aria-hidden="true">Built ✦ Not fabricated</span>
-    </div>
+    <header class="blk-head">
+      <span class="lab reveal">05 — The standard</span>
+      <h2 class="sec reveal" data-split="words">Proof isn't fabricated. <span class="mut">It's built.</span></h2>
+      <p class="blk-note reveal">Everything on this page was made by hand for a paying client and judged by what it converts — never staged, never borrowed.</p>
+    </header>
+    <div class="principles" data-principles></div>
   </div>
 </section>
 
-<!-- ===================== CTA — MAIN EVENT ===================== -->
+<!-- ===================== CTA ===================== -->
 <section class="cta-banner">
-  <img class="wm" src="assets/mark-white.png" alt="" aria-hidden="true">
   <div class="wrap">
-    <p class="tape" aria-hidden="true"><span>The main event</span><span>Final call</span></p>
-    <h2 data-split="chars" data-split-anim="clip" class="reveal">LET'S BUILD <em>YOURS.</em></h2>
+    <h2 data-split="chars" data-split-anim="clip" class="reveal">Let's build <em>yours.</em></h2>
     <p>Quotes are instant, the deposit locks your slot, and the studio gets to work.</p>
     <div class="row">
       <a href="start.html" class="btn primary ticket">Start my project →</a>
       <a href="#quote" class="btn ghost">Build my quote</a>
     </div>
-    <p class="cap-line" data-capacity hidden style="justify-content:center;display:inline-flex"></p>
+    <p class="cap-line" data-capacity hidden></p>
   </div>
 </section>
 
