@@ -131,19 +131,145 @@ body.refresh-page :focus-visible{outline:3px solid var(--refresh-yellow);outline
 @media(max-width:500px){.hero h1{font-size:clamp(48px,14vw,70px)}.hero-media figcaption{left:10px;bottom:10px;font-size:10px}.hero-actions{gap:18px}.section-heading h2{font-size:clamp(47px,14vw,70px)}.split-heading{align-items:flex-start;flex-direction:column}.work-grid{grid-template-columns:1fr;grid-template-rows:220px 160px 160px 160px}.work-card.large{grid-row:auto}.service-grid{grid-template-columns:1fr 1fr}.service-card p{min-height:66px}.service-icon{margin-bottom:14px}.offer-copy h2{font-size:clamp(54px,16vw,78px)}.dashboard-frame{padding:20px;min-height:320px}.final-cta{padding-block:92px}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column}.modal-card{padding:30px 22px 24px}.modal-card h2{font-size:50px}.modal-actions{align-items:stretch;flex-direction:column}.modal-actions .button,.modal-actions .text-link{width:100%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.site-nav a,.header-cta,.text-link,.button,.service-card,.work-card img{transition:none}.work-card:hover img{transform:none}}
 
-/* Shared white treatment for the existing inner pages. */
-body:not(.refresh-page){background:#fff!important;color:var(--refresh-ink)!important}
+/* ============================================================
+   97 WORLD — THE LEDGER (unified inner-page system, v2)
+   The poster/blueprint engine (styles.css, pages.css) was built
+   almost entirely on CSS custom properties, so re-theming it from
+   the old dark "fight bill" canvas to the accepted paper-white
+   canvas is mostly a token swap — every dim line, hairline,
+   dossier card, stamp and blueprint grid below just re-resolves.
+   A short list of hardcoded (non-token) dark values gets explicit
+   overrides underneath. Scoped to body:not(.refresh-page) so the
+   home page (its own bespoke system) is untouched. ============ */
+html:has(body:not(.refresh-page)){background:var(--refresh-soft)!important}
+body:not(.refresh-page){
+  background:var(--refresh-soft)!important;color:var(--refresh-ink)!important;
+  /* re-theme the poster-system tokens: dark canvas → warm paper */
+  --bg:#faf9f5;--ink:#111114;--mut:#6b6b74;--dim:#9a9aa2;
+  --line:rgba(17,17,20,.09);--line2:rgba(17,17,20,.16);
+  --card:#fff;--r:12px;--rule:#111114;
+  --hair:rgba(17,17,20,.08);--hair2:rgba(17,17,20,.15);
+  --bp:rgba(17,17,20,.035);
+}
 body:not(.refresh-page) .scenes,body:not(.refresh-page) .scenes-veil,body:not(.refresh-page) #fxCanvas,body:not(.refresh-page) .fx-veil,body:not(.refresh-page) .grain,body:not(.refresh-page) .cursor-glow,body:not(.refresh-page) .cursor-dot,body:not(.refresh-page) #intro{display:none!important}
-body:not(.refresh-page) header.nav{background:rgba(255,255,255,.94)!important;border-bottom:1px solid var(--refresh-line);box-shadow:0 6px 20px rgba(17,17,20,.04)}
+
+/* ---------- nav / mobile menu / footer / floating chrome
+   stay intentionally dark-context surfaces: reset the tokens back
+   inside them so text keeps contrast against their dark fill ---------- */
+body:not(.refresh-page) footer,
+body:not(.refresh-page) .mmenu,
+body:not(.refresh-page) .qbar,
+body:not(.refresh-page) .work-cta{
+  --ink:#f4f4f6;--mut:#aaaab2;--dim:#7c7c85;
+  --line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.2);
+  --hair:rgba(255,255,255,.12);--hair2:rgba(255,255,255,.22);
+  color:var(--ink);
+}
+body:not(.refresh-page) header.nav{background:rgba(250,249,245,.92)!important;border-bottom:1px solid var(--refresh-line);box-shadow:0 6px 20px rgba(17,17,20,.04)}
 body:not(.refresh-page) header.nav .brand .mono img{content:url("../assets/favicon.png");filter:grayscale(1) brightness(.2)}
 body:not(.refresh-page) header.nav nav.links a{color:#5e5e65}
+body:not(.refresh-page) header.nav nav.links a.on{color:var(--refresh-ink)}
 body:not(.refresh-page) header.nav .nav-cta{background:var(--refresh-ink);color:#fff}
-body:not(.refresh-page) .page-hero,body:not(.refresh-page) .blk,body:not(.refresh-page) section{background:#fff;color:var(--refresh-ink)}
-body:not(.refresh-page) .page-hero h1,body:not(.refresh-page) h1,body:not(.refresh-page) h2,body:not(.refresh-page) h3,body:not(.refresh-page) h4,body:not(.refresh-page) .svc .info b,body:not(.refresh-page) .srow .k{color:var(--refresh-ink)!important}
-body:not(.refresh-page) .svc,body:not(.refresh-page) .price-shell,body:not(.refresh-page) .summary,body:not(.refresh-page) .dep,body:not(.refresh-page) .gate,body:not(.refresh-page) .case,body:not(.refresh-page) .work,body:not(.refresh-page) .field input,body:not(.refresh-page) .field textarea,body:not(.refresh-page) .field select{background:#fff!important;color:var(--refresh-ink)!important;border-color:var(--refresh-line)!important}
-body:not(.refresh-page) .btn.primary,body:not(.refresh-page) .ticket{background:var(--refresh-yellow)!important;color:#111!important;border-color:var(--refresh-yellow)!important}
-body:not(.refresh-page) .btn.ghost,body:not(.refresh-page) .btn.wa{background:var(--refresh-ink)!important;color:#fff!important}
+body:not(.refresh-page) .mmenu{background:rgba(9,9,11,.97)!important}
 body:not(.refresh-page) footer{background:var(--refresh-ink);color:#fff}
+
+/* ---------- section shells ---------- */
+body:not(.refresh-page) .page-hero,body:not(.refresh-page) .blk,body:not(.refresh-page) section{background:var(--refresh-soft);color:var(--refresh-ink)}
+body:not(.refresh-page) .page-hero h1,body:not(.refresh-page) h1,body:not(.refresh-page) h2,body:not(.refresh-page) h3,body:not(.refresh-page) h4{color:var(--refresh-ink)!important}
+body:not(.refresh-page) h2.sec .mut,body:not(.refresh-page) .sub{color:var(--mut)}
+body:not(.refresh-page) .page-hero h1 em{color:var(--refresh-yellow-dark)!important}
+body:not(.refresh-page) .page-hero .ghost-num{-webkit-text-stroke:1.5px rgba(17,17,20,.08);color:transparent}
+body:not(.refresh-page) .kicker{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .kicker::before{background:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .page-hero .crumb a:hover{color:var(--refresh-ink)}
+
+/* ---------- hardcoded light-on-dark text colors from the old poster
+   system (not token-driven, so the palette swap above missed them) ---------- */
+body:not(.refresh-page) .sub,
+body:not(.refresh-page) .cat-main .pitch,
+body:not(.refresh-page) .case p,
+body:not(.refresh-page) .faq .a,
+body:not(.refresh-page) .qlist li span,
+body:not(.refresh-page) .about-story p{color:var(--mut)!important}
+body:not(.refresh-page) .sub b,
+body:not(.refresh-page) .order-foot .fine b,
+body:not(.refresh-page) .mini-steps li b,
+body:not(.refresh-page) .about-story p b,
+body:not(.refresh-page) .about-story .drop{color:var(--refresh-ink)!important}
+body:not(.refresh-page) .panel .edit:hover,
+body:not(.refresh-page) .work-cta .wc-x:hover,
+body:not(.refresh-page) .change-ctry:hover{color:var(--refresh-ink)!important}
+body:not(.refresh-page) .change-ctry{color:var(--mut);border-color:var(--refresh-line)}
+
+/* ---------- buttons ---------- */
+body:not(.refresh-page) .btn.primary,body:not(.refresh-page) .ticket{background:var(--refresh-yellow)!important;color:#111!important;border-color:var(--refresh-yellow)!important;box-shadow:0 8px 0 -3px rgba(154,118,0,.18)}
+body:not(.refresh-page) .btn.primary:hover,body:not(.refresh-page) .ticket:hover{box-shadow:0 12px 26px rgba(255,204,0,.32)}
+body:not(.refresh-page) .btn.ghost,body:not(.refresh-page) .btn.wa{background:var(--refresh-ink)!important;color:#fff!important}
+body:not(.refresh-page) .btn.ghost:hover{background:#000!important}
+
+/* ---------- services catalog (THE CARD) ---------- */
+body:not(.refresh-page) .cat-row{box-shadow:0 1px 0 rgba(17,17,20,.02)}
+body:not(.refresh-page) .cat-row:hover{border-color:var(--refresh-yellow-dark)!important;box-shadow:0 20px 46px rgba(17,17,20,.08)}
+body:not(.refresh-page) .cat-side{background:#faf9f5}
+body:not(.refresh-page) .cat-side .srw b{color:var(--refresh-ink)}
+body:not(.refresh-page) .cat-tag{color:var(--refresh-yellow-dark);border-color:rgba(154,118,0,.35)}
+
+/* ---------- work / case studies ---------- */
+body:not(.refresh-page) .case{background:var(--card)}
+body:not(.refresh-page) .case:hover{border-color:var(--refresh-yellow-dark)!important;box-shadow:0 24px 56px rgba(17,17,20,.08)}
+body:not(.refresh-page) .case .type{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .case .focus li::before{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .case.slot{background:rgba(17,17,20,.02)}
+body:not(.refresh-page) .work-cta{box-shadow:0 18px 50px rgba(17,17,20,.25)}
+
+/* ---------- partners (THE RECORD) ---------- */
+body:not(.refresh-page) .pcard{background:#0a0a0c;background:linear-gradient(180deg,color-mix(in srgb,var(--pc,#f4f4f6) 7%,#fff),#fff 46%);border-color:var(--hair)}
+body:not(.refresh-page) .pcard:hover{box-shadow:0 20px 50px rgba(17,17,20,.1),0 0 0 1px color-mix(in srgb,var(--pc,#f4f4f6) 40%,transparent) inset}
+body:not(.refresh-page) .pgo{color:color-mix(in srgb,var(--pc,#111114) 70%,#111114)}
+body:not(.refresh-page) .pcard.reserved{background:rgba(255,206,0,.05)}
+
+/* ---------- pricing calculator + start page ---------- */
+body:not(.refresh-page) .price-shell{background:var(--card)!important;color:var(--refresh-ink)!important;border-color:var(--refresh-line)!important;box-shadow:0 24px 60px rgba(17,17,20,.06)}
+body:not(.refresh-page) .gate-choice{background:#faf9f5!important;color:var(--refresh-ink)!important;border-color:var(--refresh-line)!important}
+body:not(.refresh-page) .gate-choice:hover{border-color:var(--refresh-yellow-dark)!important;background:#fff!important}
+body:not(.refresh-page) .gate-choice .cur{color:var(--mut)}
+body:not(.refresh-page) .svc,body:not(.refresh-page) .summary,body:not(.refresh-page) .dep,body:not(.refresh-page) .case,body:not(.refresh-page) .work,body:not(.refresh-page) .order,body:not(.refresh-page) .panel,body:not(.refresh-page) .nation,body:not(.refresh-page) .field input,body:not(.refresh-page) .field textarea,body:not(.refresh-page) .field select{background:#fff!important;color:var(--refresh-ink)!important;border-color:var(--refresh-line)!important}
+body:not(.refresh-page) .svc .info b,body:not(.refresh-page) .srow .k{color:var(--refresh-ink)!important}
+body:not(.refresh-page) .svc:hover{background:#fff!important}
+body:not(.refresh-page) .check{border-color:#cfcfc8}
+body:not(.refresh-page) .summary{background:#faf9f5!important;border-left-color:var(--refresh-line)!important}
+body:not(.refresh-page) .dep{background:rgba(255,206,0,.08)}
+body:not(.refresh-page) .dep .lbl{background:#111114}
+body:not(.refresh-page) .field input,body:not(.refresh-page) .field textarea,body:not(.refresh-page) .field select{background:#faf9f5!important}
+body:not(.refresh-page) .field input:focus,body:not(.refresh-page) .field textarea:focus,body:not(.refresh-page) .field select:focus{background:#fff!important}
+body:not(.refresh-page) .qbar{box-shadow:0 18px 50px rgba(17,17,20,.28)}
+body:not(.refresh-page) .qtot,body:not(.refresh-page) .qlist li span{color:var(--refresh-ink)}
+body:not(.refresh-page) .qdep{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .mini-steps li::before{border-color:rgba(154,118,0,.4);color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .wa-ico{background:var(--refresh-green)}
+
+/* ---------- about ---------- */
+body:not(.refresh-page) .nation .clock{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .about-story p b{color:var(--refresh-ink)}
+body:not(.refresh-page) .principles .p{background:#fff;box-shadow:0 1px 0 rgba(17,17,20,.02)}
+body:not(.refresh-page) .principles .p b{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .mark-moment img{filter:invert(1) drop-shadow(0 20px 40px rgba(17,17,20,.12))}
+body:not(.refresh-page) .mark-moment .mm-cap{color:var(--mut)}
+
+/* ---------- FAQ / process rail ---------- */
+body:not(.refresh-page) .faq summary:hover{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .faq details[open] summary::after{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .step .day{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .step:hover{background:rgba(17,17,20,.02)}
+
+/* ---------- CTA banner / 404 ---------- */
+body:not(.refresh-page) .cta-banner{background:var(--refresh-soft)}
+body:not(.refresh-page) .cta-banner h2 em{color:var(--refresh-yellow-dark)}
+body:not(.refresh-page) .cta-banner .wm{opacity:.06;filter:invert(1)}
+body:not(.refresh-page) .lost{background:var(--refresh-soft)}
+body:not(.refresh-page) .lost h1 em{-webkit-text-stroke:1.5px rgba(17,17,20,.35)}
+body:not(.refresh-page) .lost img{filter:invert(1);opacity:.85}
+body:not(.refresh-page) .stamp{border-color:currentColor}
 .modal-card{max-height:calc(100vh - 32px);overflow-y:auto}
 .modal-card{padding:28px}
 .modal-card h2{font-size:clamp(40px,7vw,58px);margin-bottom:8px}
