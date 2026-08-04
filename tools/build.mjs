@@ -20,7 +20,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = 'https://cartelug.github.io/97world-site/'; // ← custom-domain swap point
+const BASE = 'https://the97.world/';
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
 
 // keep asset versioning in lockstep with the service worker
@@ -38,7 +38,7 @@ const PAGES = [
     file: 'index.html', page: 'home', og: 'og-home', ogTitle: 'WE BUILD PROOF.',
     title: '97 Design — Websites, Brands & Fliers · Uganda & South Sudan',
     desc: "97 Design builds websites, campaign fliers and brands across Uganda & South Sudan. Priced upfront, ordered on WhatsApp, delivered in days. Build your quote in 30 seconds.",
-    scripts: ['data', 'site', 'kinetic', 'scenes', 'pricing', 'intro'],
+    scripts: ['data', 'refresh'],
     home: true,
   },
   {
@@ -89,12 +89,16 @@ const PAGES = [
   },
 ];
 
+// The white conversion homepage owns its own chrome and messaging.
+PAGES[0].title = '97 World — Websites, Brands, Growth & Systems';
+PAGES[0].desc = '97 World builds websites, brands, audience growth plans and custom systems for ambitious businesses in Uganda, South Sudan and beyond.';
+
 /* ---------- JSON-LD builders (from SITE — never hand-written) ---------- */
 const ldBusiness = () => ({
   '@context': 'https://schema.org', '@type': 'ProfessionalService',
-  name: '97 Design', url: BASE, image: BASE + 'assets/og/og-default.jpg',
+  name: '97 World', url: BASE, image: BASE + 'assets/og/og-default.jpg',
   logo: BASE + 'assets/icon-512.png', foundingDate: '2026',
-  telephone: '+' + SITE.whatsapp, priceRange: '$35 - $500',
+  telephone: '+' + SITE.whatsapp, priceRange: '$35 - $1,650',
   slogan: "Proof isn't fabricated. It's built.",
   areaServed: SITE.nations.map((n) => ({ '@type': 'Country', name: n.name })),
   address: [{ '@type': 'PostalAddress', addressLocality: 'Kampala', addressCountry: 'UG' },
@@ -103,10 +107,10 @@ const ldBusiness = () => ({
 });
 const ldServices = () => ({
   '@context': 'https://schema.org', '@type': 'OfferCatalog',
-  name: '97 Design services',
+  name: '97 World services',
   itemListElement: SITE.services.map((s) => ({
     '@type': 'Offer', priceCurrency: 'USD', price: s.usd,
-    itemOffered: { '@type': 'Service', name: s.name, description: s.short, provider: { '@type': 'ProfessionalService', name: '97 Design' } },
+    itemOffered: { '@type': 'Service', name: s.name, description: s.short, provider: { '@type': 'ProfessionalService', name: '97 World' } },
   })),
 });
 const ldCrumbs = (p) => ({
@@ -179,6 +183,7 @@ ${p.home ? `<link rel="preload" href="assets/fonts/knockout-ultimate-sumo.woff2"
 ${criticalCss}</style>
 ${sheets.map(asyncCss).join('\n')}
 <noscript>${sheets.map((s) => `<link rel="stylesheet" href="${v(s)}">`).join('')}</noscript>
+<link rel="stylesheet" href="css/white-refresh.css?v=19">
 ${p.home ? `<script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
 ` : ''}<script type="speculationrules">
 {"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
@@ -291,10 +296,12 @@ for (const w of SITE.work) {
 for (const p of PAGES) {
   let html = read(p.file);
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(p));
-  html = html.replace(/<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
-  html = html.replace(/<div class="mmenu"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
-  html = html.replace(/<footer>[\s\S]*?<\/footer>/, footerChrome());
-  html = html.replace(/<script src="js\/data\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));
+  if (!p.home) {
+    html = html.replace(/<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
+    html = html.replace(/<div class="mmenu"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
+    html = html.replace(/<footer>[\s\S]*?<\/footer>/, footerChrome());
+    html = html.replace(/<script src="js\/data\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));
+  }
   writeFileSync(join(ROOT, p.file), html);
 
   // link check: every internal href/src resolves to a real file
