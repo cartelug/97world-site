@@ -60,6 +60,28 @@ window.SITE = {
       short: "Templates + a set of posts.",
       pitch: "Reusable templates and a launch batch of posts so your feed stays loud and on-brand long after delivery.",
       includes: ["Reusable post templates", "Profile + cover set", "Launch batch of posts"]
+    },
+    {
+      id: "followers", cat: "Growth", name: "Followers Packages", usd: 120, days: 14, popular: true,
+      short: "Targeted audience growth with a clear delivery plan.",
+      pitch: "A transparent growth plan built around your platform, audience and target. We confirm the source, delivery pace and success measures before anything starts.",
+      includes: ["Platform and audience review", "Targeted growth plan", "Delivery updates", "Handover and next-step advice"],
+      plans: [
+        { id: "starter", name: "Starter", qty: "1,000 followers", usd: 120, note: "For a new page or launch" },
+        { id: "growth", name: "Growth", qty: "2,500 followers", usd: 240, note: "For a page building momentum" },
+        { id: "authority", name: "Authority", qty: "5,000 followers", usd: 420, note: "For a bigger campaign push" }
+      ]
+    },
+    {
+      id: "systems", cat: "Systems", name: "Custom Systems", usd: 525, days: 21, popular: false,
+      short: "Web apps and automations that save time.",
+      pitch: "Custom dashboards, portals and automations that make the work behind your business easier to run and easier to scale.",
+      includes: ["Workflow mapping", "Custom web app or dashboard", "Automation and integrations", "Launch support and handover"],
+      plans: [
+        { id: "starter", name: "Starter System", qty: "One focused workflow", usd: 525, note: "A compact system for one task" },
+        { id: "operations", name: "Operations", qty: "Multi-step workflow", usd: 950, note: "Connected dashboard and automation" },
+        { id: "scale", name: "Scale", qty: "Custom platform", usd: 1650, note: "A larger system built around your team" }
+      ]
     }
   ],
 
