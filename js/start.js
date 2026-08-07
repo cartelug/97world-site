@@ -1,66 +1,60 @@
 /* ============================================================
-   97 WORLD — START (ORDER) PAGE
-   Reads the quote saved by the pricing page (localStorage q97.*),
-   shows it beside the form, prefills the message and turns the
-   whole thing into a ready-to-send WhatsApp order.
+   97 WORLD — KINETIC (v4) START / ORDER PAGE
+   Same WhatsApp message-building logic as before, reading the
+   quote K97 saved from the pricing page, repainted into the new
+   .total4 summary card.
    ============================================================ */
 (function () {
   "use strict";
-  var D = window.SITE, S = window.S97;
-  var form = document.getElementById("fName");
-  if (!form || !D || !S) return;
+  var D = window.SITE, K = window.K97;
+  var nameEl = document.getElementById("fName");
+  if (!nameEl || !D || !K) return;
 
   function picked() {
-    var ids = S.getSel();
+    var ids = K.getSel();
     return D.services.filter(function (s) { return ids.indexOf(s.id) !== -1; });
   }
 
-  /* ---------- quote summary panel ---------- */
   function renderQuote() {
-    var host = document.getElementById("quoteBox");
+    var host = document.getElementById("quoteBox4");
     if (!host) return;
     var items = picked();
     if (!items.length) {
       host.innerHTML =
-        '<h4>Tale of the Tape</h4>' +
-        '<p class="empty">Nothing selected yet. Build a quote first — or just describe what you need in the form.</p>' +
-        '<a class="btn ghost full" href="pricing.html">Build your quote →</a>';
+        '<h4 class="mono">Tale of the tape</h4>' +
+        '<p style="color:var(--muted);font-size:14px;margin-bottom:16px">Nothing selected yet. Build a quote first — or just describe what you need in the form.</p>' +
+        '<a class="btn4 ghost full" href="pricing.html">Build your quote →</a>';
       return;
     }
     var tot = items.reduce(function (a, s) { return a + s.usd; }, 0);
-    var dep = Math.floor(tot / 2); // floor + derive: deposit + balance always equals the total
+    var dep = Math.floor(tot / 2);
     host.innerHTML =
-      '<h4>Tale of the Tape</h4>' +
-      '<ul class="qlist">' + items.map(function (s) {
-        return '<li><span>' + s.name + '</span><b>' + S.money(s.usd) + '</b></li>';
-      }).join("") + '</ul>' +
-      '<div class="qtot"><span>Total</span><b>' + S.money(tot) + '</b></div>' +
-      '<div class="qdep"><span>Start with 50%</span><b>' + S.money(dep) + '</b></div>' +
-      '<a class="edit" href="pricing.html">Edit quote →</a>';
+      '<h4 class="mono">Tale of the tape</h4>' +
+      '<ul class="total4-list">' + items.map(function (s) {
+        return "<li><span>" + s.name + "</span><b>" + K.money(s.usd) + "</b></li>";
+      }).join("") + "</ul>" +
+      '<div class="total4-sum"><span>Total</span><b>' + K.money(tot) + "</b></div>" +
+      '<div class="total4-dep"><span>Start with 50%</span><b>' + K.money(dep) + "</b></div>" +
+      '<a class="btn4 ghost full sm" style="margin-top:16px" href="pricing.html">Edit quote →</a>';
   }
 
-  /* ---------- prefill ---------- */
   function prefill() {
     var items = picked();
     var needs = document.getElementById("fNeeds");
-    // names only — prices live in the quote panel and the final WhatsApp
-    // message, so a currency switch never leaves stale amounts in the text
     if (needs && !needs.value.trim() && items.length) {
       needs.value = items.map(function (s) { return "• " + s.name; }).join("\n");
     }
     var sel = document.getElementById("fCountry");
-    if (sel) sel.value = S.getCountry() === "SS" ? "SS" : "UG";
+    if (sel) sel.value = K.getCountry() === "SS" ? "SS" : "UG";
   }
-  window.setCountryFromForm = function () {
+  window.setCountryFromForm4 = function () {
     var v = document.getElementById("fCountry").value;
-    // only Uganda is priced in UGX — "Other / International" quotes in USD
-    S.setCountry(v === "UG" ? "UG" : "SS");
-    S.paintPrices();
+    K.setCountry(v === "UG" ? "UG" : "SS");
+    K.paintPrices();
     renderQuote();
   };
 
-  /* ---------- send ---------- */
-  window.sendOrder = function (e) {
+  window.sendOrder4 = function (e) {
     if (e) e.preventDefault();
     var name = (document.getElementById("fName").value || "").trim();
     var needs = (document.getElementById("fNeeds").value || "").trim();
@@ -78,14 +72,14 @@
     msg += "*What I need built:*\n" + (needs || "(see quote below)") + "\n";
     if (items.length) {
       msg += "\n*Quote from the website:*\n" + items.map(function (s) {
-        return "• " + s.name + " — " + S.money(s.usd);
+        return "• " + s.name + " — " + K.money(s.usd);
       }).join("\n");
-      msg += "\nTotal: " + S.money(tot);
-      msg += "\n1st deposit (50%): " + S.money(dep);
-      msg += "\nBalance on delivery: " + S.money(bal) + "\n";
+      msg += "\nTotal: " + K.money(tot);
+      msg += "\n1st deposit (50%): " + K.money(dep);
+      msg += "\nBalance on delivery: " + K.money(bal) + "\n";
     }
     if (extra) msg += "\nNotes: " + extra + "\n";
-    msg += "\nProof isn’t fabricated. It’s built. — Let’s start.";
+    msg += "\nProof isn't fabricated. It's built. — Let's start.";
     window.open("https://wa.me/" + D.whatsapp + "?text=" + encodeURIComponent(msg), "_blank");
   };
 

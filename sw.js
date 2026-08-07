@@ -6,19 +6,17 @@
    Bump VERSION on every deploy (tools/build.mjs stamps ?v= to
    match).
    ============================================================ */
-const VERSION = "v9";
+const VERSION = "v10";
 const STATIC_CACHE = "97d-static-" + VERSION;
 const PAGE_CACHE = "97d-pages-" + VERSION;
 
 const PRECACHE = [
-  "css/critical.css",
-  "css/fonts.css", "css/styles.css", "css/kinetic.css", "css/home.css", "css/pages.css",
-  "js/data.js", "js/site.js", "js/kinetic.js", "js/scenes.js", "js/pricing.js", "js/start.js", "js/intro.js",
-  "assets/fonts/knockout-cruiserweight.woff2", "assets/fonts/knockout-jr-middleweight.woff2",
-  "assets/fonts/knockout-ultimate-sumo.woff2",
-  "assets/fonts/inter-var.woff2", "assets/fonts/jbmono-var.woff2",
+  "css/fonts-v4.css", "css/v4.css",
+  "js/data.js", "js/render.js", "js/motion.js", "js/pricing.js", "js/start.js",
+  "assets/fonts/spacegrotesk-var.woff2", "assets/fonts/manrope-var.woff2",
+  "assets/fonts/fraunces-italic-500.woff2", "assets/fonts/fraunces-normal-600.woff2",
+  "assets/fonts/spacemono-400.woff2", "assets/fonts/spacemono-700.woff2",
   "assets/mark-white.png", "assets/favicon.png", "assets/favicon.svg",
-  "assets/bg/bg1-desktop.avif", "assets/bg/bg1-mobile.avif",
 ];
 
 self.addEventListener("install", (e) => {

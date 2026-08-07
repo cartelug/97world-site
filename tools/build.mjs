@@ -1,18 +1,20 @@
 /* ============================================================
-   97 DESIGN — SITE BUILD TOOL (dev-only, run locally, output committed)
+   97 WORLD — SITE BUILD TOOL (dev-only, run locally, output committed)
    `npm run build` after any change to heads/chrome/data.
 
    What it owns (single source of truth):
-   - <head> of every page: critical CSS inline, async full CSS,
-     SEO (title/description/canonical/OG/Twitter), JSON-LD built
-     FROM js/data.js so schema never drifts, font+LCP preloads,
-     speculation rules, manifest link, ?v= cache stamping.
+   - <head> of every page: SEO (title/description/canonical/OG/
+     Twitter), JSON-LD built FROM js/data.js so schema never
+     drifts, font preloads, speculation rules, manifest link,
+     ?v= cache stamping.
    - Shared chrome: nav (with aria-current), mobile menu, footer,
      deferred script tails.
    - sitemap.xml.
    - Post-build link check: every internal href/src must resolve.
 
    Page BODY content (<main>) stays hand-authored in each file.
+   The home page owns its own full chrome (hero is bespoke enough
+   that regenerating it from a shared template isn't worth it).
    Swap BASE below when the custom domain lands — one line.
    ============================================================ */
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -36,62 +38,58 @@ const SITE = win.SITE;
 const PAGES = [
   {
     file: 'index.html', page: 'home', og: 'og-home', ogTitle: 'WE BUILD PROOF.',
-    title: '97 Design — Websites, Brands & Fliers · Uganda & South Sudan',
-    desc: "97 Design builds websites, campaign fliers and brands across Uganda & South Sudan. Priced upfront, ordered on WhatsApp, delivered in days. Build your quote in 30 seconds.",
-    scripts: ['data', 'refresh'],
+    title: '97 World — Websites, Brands, Growth & Systems',
+    desc: '97 World builds websites, brands, audience growth plans and custom systems for ambitious businesses in Uganda, South Sudan and beyond.',
+    scripts: ['data', 'render', 'motion'],
     home: true,
   },
   {
-    file: 'services.html', page: 'services', og: 'og-services', ogTitle: 'THE CARD.', crumb: 'Services',
-    title: 'Services & Prices — 97 Design',
-    desc: 'Websites from $500, landing pages, logos, brand kits, fliers, business cards and social packs — with real prices in UGX & USD and honest turnarounds.',
-    scripts: ['data', 'site', 'kinetic'], jsonld: ['services', 'faq'],
+    file: 'services.html', page: 'services', og: 'og-services', ogTitle: 'EVERYTHING YOUR BRAND NEEDS.', crumb: 'Services',
+    title: 'Services & Prices — 97 World',
+    desc: 'Websites from $500, landing pages, logos, brand kits, fliers, business cards, growth and systems — with real prices in UGX & USD and honest turnarounds.',
+    scripts: ['data', 'render', 'motion'], jsonld: ['services', 'faq'],
   },
   {
     file: 'work.html', page: 'work', og: 'og-work', ogTitle: 'REAL WORK. LIVE.', crumb: 'Work',
-    title: 'Work & Case Studies — 97 Design',
-    desc: 'Live websites and builds in progress from 97 Design — AFRICA63, Maya Nature Resort and more. Proof, not hype.',
-    scripts: ['data', 'site', 'kinetic'],
+    title: 'Work & Case Studies — 97 World',
+    desc: 'Live websites and builds in progress from 97 World — AFRICA63, Maya Nature Resort and more. Proof, not hype.',
+    scripts: ['data', 'render', 'motion'],
   },
   {
     file: 'partners.html', page: 'partners', og: 'og-partners', ogTitle: 'THE RECORD. IN FULL.', crumb: 'Partners',
-    title: 'Previous Partners — 97 Design',
-    desc: 'The full record: 19 real brands shipped by 97 Design across Uganda & South Sudan — AFRICA63, Maya Nature Resort, KHATHA, Kushite, Nile Link and more.',
-    scripts: ['data', 'site', 'kinetic'],
+    title: 'Previous Partners — 97 World',
+    desc: 'The full record: 19 real brands shipped by 97 World across Uganda & South Sudan — AFRICA63, Maya Nature Resort, KHATHA, Kushite, Nile Link and more.',
+    scripts: ['data', 'render', 'motion'],
   },
   {
-    file: 'pricing.html', page: 'pricing', og: 'og-pricing', ogTitle: 'THE PURSE.', crumb: 'Pricing',
-    title: 'Instant Quote Calculator — 97 Design',
+    file: 'pricing.html', page: 'pricing', og: 'og-pricing', ogTitle: 'PICK. TOTAL. START.', crumb: 'Pricing',
+    title: 'Instant Quote Calculator — 97 World',
     desc: 'Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.',
-    scripts: ['data', 'site', 'kinetic', 'pricing'], jsonld: ['services', 'faq'],
+    scripts: ['data', 'render', 'motion', 'pricing'], jsonld: ['services', 'faq'],
   },
   {
-    file: 'start.html', page: 'start', og: 'og-start', ogTitle: 'THE CONTRACT.', crumb: 'Start a project',
-    title: 'Start a Project — 97 Design',
-    desc: 'Send your project brief straight to 97 Design on WhatsApp — your quote comes with you. The first deposit confirms your slot.',
-    scripts: ['data', 'site', 'kinetic', 'pricing', 'start'],
+    file: 'start.html', page: 'start', og: 'og-start', ogTitle: 'SEND IT. WE BUILD.', crumb: 'Start a project',
+    title: 'Start a Project — 97 World',
+    desc: 'Send your project brief straight to 97 World on WhatsApp — your quote comes with you. The first deposit confirms your slot.',
+    scripts: ['data', 'render', 'motion', 'start'],
   },
   {
     file: 'about.html', page: 'about', og: 'og-about', ogTitle: 'TWO NATIONS. ONE BAR.', crumb: 'About',
-    title: 'About the Studio — 97 Design',
-    desc: "The design studio of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.",
-    scripts: ['data', 'site', 'kinetic'],
+    title: 'About the Studio — 97 World',
+    desc: "The design sector of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.",
+    scripts: ['data', 'render', 'motion'],
   },
   {
     file: '404.html', page: '404',
-    title: 'Page not found — 97 Design',
-    desc: "This page isn't built yet. Head back to 97 Design.",
-    scripts: ['data', 'site', 'kinetic'], noindex: true,
+    title: 'Page not found — 97 World',
+    desc: "This page isn't built yet. Head back to 97 World.",
+    scripts: ['data', 'render', 'motion'], noindex: true,
     headExtra: `<script>
 /* 404 is served for any missing path — anchor relative URLs to the site root */
 (function(){var p=location.pathname.split("/");var root=(location.hostname.slice(-10)===".github.io"&&p[1])?"/"+p[1]+"/":"/";var b=document.createElement("base");b.href=root;document.head.appendChild(b);})();
 </script>`,
   },
 ];
-
-// The white conversion homepage owns its own chrome and messaging.
-PAGES[0].title = '97 World — Websites, Brands, Growth & Systems';
-PAGES[0].desc = '97 World builds websites, brands, audience growth plans and custom systems for ambitious businesses in Uganda, South Sudan and beyond.';
 
 /* ---------- JSON-LD builders (from SITE — never hand-written) ---------- */
 const ldBusiness = () => ({
@@ -128,20 +126,10 @@ const ldFaq = () => ({
   })),
 });
 
-/* ---------- critical CSS: critical.css + fonts.css, root-relative ---------- */
-const criticalCss = (read('css/fonts.css') + '\n' + read('css/critical.css'))
-  .split('../assets/').join('assets/');
-
 /* ---------- head template ---------- */
 function head(p) {
   const canon = BASE + (p.page === 'home' ? '' : p.file);
   const og = BASE + 'assets/og/' + (p.og && existsSync(join(ROOT, 'assets/og', p.og + '.jpg')) ? p.og : 'og-default') + '.jpg';
-  const asyncCss = (href) => {
-    const u = v(href);
-    return `<link rel="preload" href="${u}" as="style">
-<link rel="stylesheet" href="${u}" media="print" onload="this.media='all';this.onload=null">`;
-  };
-  const sheets = ['css/styles.css', 'css/kinetic.css', p.home ? 'css/home.css' : 'css/pages.css'];
   const lds = [
     ...(p.home || p.page === 'about' ? [ldBusiness()] : []),
     ...((p.jsonld || []).includes('services') ? [ldServices()] : []),
@@ -153,18 +141,17 @@ function head(p) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>${p.title}</title>
 <meta name="description" content="${p.desc}">
-<meta name="theme-color" content="#050506">
-<meta name="theme-color" media="(prefers-color-scheme:light)" content="#050506">
+<meta name="theme-color" content="#0a0a12">
 ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical" href="${canon}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="97 Design">
+<meta property="og:site_name" content="97 World">
 <meta property="og:title" content="${p.title}">
 <meta property="og:description" content="${p.desc}">
 <meta property="og:url" content="${canon}">
 <meta property="og:image" content="${og}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${(p.ogTitle || '97 DESIGN').replace(/"/g, '&quot;')} — 97 Design fight-bill poster card">
+<meta property="og:image:alt" content="${(p.ogTitle || '97 World').replace(/"/g, '&quot;')}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${p.title}">
 <meta name="twitter:description" content="${p.desc}">
@@ -173,20 +160,12 @@ ${p.headExtra ? p.headExtra + '\n' : ''}<link rel="icon" type="image/svg+xml" hr
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="preload" href="assets/fonts/knockout-cruiserweight.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/knockout-jr-middleweight.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-${p.home ? `<link rel="preload" href="assets/fonts/knockout-ultimate-sumo.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="assets/bg/bg1-desktop.avif" media="(min-width:821px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/bg/bg1-mobile.avif" media="(max-width:820px)" fetchpriority="high">
-` : ''}<style>
-${criticalCss}</style>
-${sheets.map(asyncCss).join('\n')}
-<noscript>${sheets.map((s) => `<link rel="stylesheet" href="${v(s)}">`).join('')}</noscript>
-<link rel="stylesheet" href="css/white-refresh.css?v=21">
-${p.home ? `<script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
-` : ''}<script type="speculationrules">
-{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
+<link rel="preload" href="assets/fonts/spacegrotesk-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/manrope-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="${v('css/fonts-v4.css')}">
+<link rel="stylesheet" href="${v('css/v4.css')}">
+<script type="speculationrules">
+{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu4-links a, .foot4-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
 </script>
 ${lds.map((l) => `<script type="application/ld+json">${JSON.stringify(l)}</script>`).join('\n')}
 </head>`;
@@ -196,28 +175,29 @@ ${lds.map((l) => `<script type="application/ld+json">${JSON.stringify(l)}</scrip
 const navChrome = (page) => {
   const on = (k, label, href) =>
     `<a href="${href}"${k === page ? ' class="on" aria-current="page"' : ''}>${label}</a>`;
-  return `<a class="skip-link" href="#main">Skip to content</a>
-<header class="nav" id="nav">
-  <a href="index.html" class="brand" aria-label="97 Design home">
-    <span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40"></span>
-  </a>
-  <nav class="links">
-    ${on('work', 'Work', 'work.html')}
-    ${on('services', 'Services', 'services.html')}
-    ${on('pricing', 'Pricing', 'pricing.html')}
-    ${on('about', 'About', 'about.html')}
-  </nav>
-  <a href="start.html" class="nav-cta">Start a project</a>
-  <button class="burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
+  return `<header class="nav4" id="nav4">
+  <div class="nav4-inner">
+    <a href="index.html" class="brand" aria-label="97 World home">
+      <img src="assets/favicon.png" alt="" width="26" height="26">97 WORLD
+    </a>
+    <nav class="nav4-links">
+      ${on('work', 'Work', 'work.html')}
+      ${on('services', 'Services', 'services.html')}
+      ${on('pricing', 'Pricing', 'pricing.html')}
+      ${on('about', 'About', 'about.html')}
+    </nav>
+    <a href="start.html" class="nav4-cta" data-magnetic>Start a project</a>
+    <button class="burger4" id="burger4" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu4()">
+      <span></span>
+    </button>
+  </div>
 </header>`;
 };
 
 const mmenuChrome = (page) => {
   const on = (k) => (k === page ? ' class="on"' : '');
-  return `<div class="mmenu" id="mmenu" aria-hidden="true">
-  <nav class="mmenu-links">
+  return `<div class="mmenu4" id="mmenu4" aria-hidden="true">
+  <nav class="mmenu4-links">
     <a href="index.html"${on('home')} style="--i:0"><small>01</small> Home</a>
     <a href="work.html"${on('work')} style="--i:1"><small>02</small> Work</a>
     <a href="partners.html"${on('partners')} style="--i:2"><small>03</small> Partners</a>
@@ -225,58 +205,55 @@ const mmenuChrome = (page) => {
     <a href="pricing.html"${on('pricing')} style="--i:4"><small>05</small> Pricing</a>
     <a href="about.html"${on('about')} style="--i:5"><small>06</small> About</a>
   </nav>
-  <div class="mmenu-foot">
-    <a class="btn wa full" href="https://wa.me/${SITE.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>
-    <a class="btn ghost full" href="start.html">Start a project →</a>
-    <div class="mmenu-nations">
-      <div class="flagline">
-        <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
-        <i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i>
-      </div>
-      <span class="cap">Uganda · South Sudan</span>
+  <div class="mmenu4-foot">
+    <a class="btn4 wa full" href="https://wa.me/${SITE.whatsapp}" target="_blank" rel="noopener">Chat on WhatsApp</a>
+    <a class="btn4 grad full" href="start.html">Start a project →</a>
+    <div class="nations4" style="justify-content:center;margin-top:4px">
+      <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
+      <i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i>
     </div>
   </div>
 </div>`;
 };
 
-const footerChrome = () => `<footer>
+const footerChrome = () => `<footer class="foot4">
   <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <a href="index.html" class="brand"><span class="mono"><img src="assets/mark-white.png" alt="97 Design" width="40" height="40" loading="lazy"></span><span class="brand-txt">97 DESIGN<small>UG · SS</small></span></a>
-        <p>The design studio of 97 World. Websites, fliers, brands and everything your idea needs — built, not fabricated.</p>
-        <div class="flagline mt">
-          <i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i>
-          <i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i>
-        </div>
+    <div class="foot4-cta rv">
+      <div class="eyebrow4" style="justify-content:center">Ready when you are</div>
+      <h2>Let's build <em>something real.</em></h2>
+      <p>Tell us what you need. We reply on WhatsApp with a fixed quote — no long forms, no silence.</p>
+      <div class="row">
+        <a href="start.html" class="btn4 grad" data-magnetic>Start a project →</a>
+        <a href="https://wa.me/${SITE.whatsapp}" target="_blank" rel="noopener" class="btn4 ghost" data-magnetic>Chat on WhatsApp</a>
       </div>
-      <div class="foot-col">
+    </div>
+    <div class="foot4-grid">
+      <div class="foot4-brand">
+        <a href="index.html" class="brand"><img src="assets/favicon.png" alt="" width="24" height="24">97 WORLD</a>
+        <p>The design sector of 97 World. Websites, brands, growth and systems for businesses ready to move.</p>
+        <div class="nations4"><i style="background:var(--ink)"></i><i style="background:var(--ug-y)"></i><i style="background:var(--ug-r)"></i><i style="background:var(--ss-b)"></i><i style="background:var(--ss-g)"></i></div>
+      </div>
+      <div class="foot4-col">
         <h5>Studio</h5>
         <a href="index.html">Home</a><a href="work.html">Work</a><a href="partners.html">Partners</a><a href="services.html">Services</a><a href="pricing.html">Pricing</a><a href="about.html">About</a>
       </div>
-      <div class="foot-col">
+      <div class="foot4-col">
         <h5>Build</h5>
-        <a href="services.html#web">Websites</a><a href="services.html#landing">Landing Pages</a><a href="services.html#brand">Brand Kits</a><a href="services.html#flier">Fliers &amp; Posters</a>
+        <a href="services.html">Websites</a><a href="services.html">Brand kits</a><a href="services.html">Growth</a><a href="services.html">Systems</a>
       </div>
-      <div class="foot-col">
+      <div class="foot4-col">
         <h5>Talk to us</h5>
         <a href="https://wa.me/${SITE.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
         <a href="tel:+${SITE.whatsapp}">${SITE.phonePretty}</a>
         <a href="start.html">Start a project</a>
       </div>
     </div>
-    <div class="foot-bottom">
-      <div class="tblock">
-        <div><small>Project</small><b>97 DESIGN</b></div>
-        <div><small>Location</small><b>Kampala — Juba</b></div>
-        <div><small>Date</small><b>© <span id="yr"></span></b></div>
-        <div><small>Scale</small><b>1:1 — no templates</b></div>
-        <div><small>Sheet</small><b>01 / 01</b></div>
-        <div><small>Note</small><span class="stamp">Built ✦ Approved</span></div>
-      </div>
+    <div class="foot4-bottom">
+      <span>© <span data-year></span> 97 World · Kampala — Juba</span>
+      <span>Built, not fabricated.</span>
     </div>
-    <span class="foot-wm">97 DESIGN</span>
   </div>
+  <span class="foot4-wm" aria-hidden="true">97 WORLD</span>
 </footer>`;
 
 const scriptsChrome = (list) =>
@@ -297,9 +274,9 @@ for (const p of PAGES) {
   let html = read(p.file);
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(p));
   if (!p.home) {
-    html = html.replace(/(?:<a class="skip-link"[^>]*>[\s\S]*?<\/a>\s*)*<header class="nav"[\s\S]*?<\/header>/, navChrome(p.page));
-    html = html.replace(/<div class="mmenu"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
-    html = html.replace(/<footer>[\s\S]*?<\/footer>/, footerChrome());
+    html = html.replace(/(?:<a class="skip-link"[^>]*>[\s\S]*?<\/a>\s*)*<header class="nav4"[\s\S]*?<\/header>/, navChrome(p.page));
+    html = html.replace(/<div class="mmenu4"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
+    html = html.replace(/<footer class="foot4">[\s\S]*?<\/footer>/, footerChrome());
     html = html.replace(/<script src="js\/data\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));
   }
   writeFileSync(join(ROOT, p.file), html);
