@@ -183,7 +183,7 @@ ${p.home ? `<link rel="preload" href="assets/fonts/knockout-ultimate-sumo.woff2"
 ${criticalCss}</style>
 ${sheets.map(asyncCss).join('\n')}
 <noscript>${sheets.map((s) => `<link rel="stylesheet" href="${v(s)}">`).join('')}</noscript>
-<link rel="stylesheet" href="css/white-refresh.css?v=20">
+<link rel="stylesheet" href="css/white-refresh.css?v=21">
 ${p.home ? `<script>try{if(sessionStorage.getItem("i97"))document.documentElement.classList.add("no-intro")}catch(e){}</script>
 ` : ''}<script type="speculationrules">
 {"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu-links a, .foot-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
