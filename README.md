@@ -16,9 +16,13 @@ A multi-page static site. No build step — open `index.html`, or host the folde
 - `css/v4.css` — the whole design system: tokens, layout, components, motion (mesh background, glass cards, marquee, gate/live pricing states, etc.) — single stylesheet for every page, including home
 - `js/data.js` — **all content**: services + prices, process, FAQs, portfolio (mirrors the 97 World Notion hub) — unchanged by the v4 rebuild
 - `js/render.js` — renders `window.SITE` into the v4 markup (catalog, work cards, FAQ, process rail, client marquee, partners grid, nation clocks, principles); also owns money formatting + country state (`window.K97`)
-- `js/motion.js` — the animation layer: custom cursor, magnetic buttons, card tilt, scroll-reveal with stagger, animated counters, glass nav-on-scroll, mobile menu, marquee duplication, scroll progress bar
+- `js/vendor/gsap.min.js` + `ScrollTrigger.min.js` + `SplitText.min.js` — GSAP core + plugins, self-hosted (npm `gsap` package, 100%-free license since 2025 — see gsap.com/standard-license). Not linked from a CDN, so it's cached by the service worker like everything else.
+- `js/motion.js` — the animation engine, GSAP-powered: custom cursor + magnetic buttons + card tilt via `quickTo` (real spring physicality, not raw CSS transforms), a cursor-follow spotlight glow on `.card4`, a sliding nav indicator, `ScrollTrigger.batch` reveals with real stagger, scroll-scrubbed mesh parallax, animated counters, and the hero-entrance timeline (SplitText word/char reveal) that plays once `js/transitions.js` fires `"k97:entrance"`.
+- `js/transitions.js` — the preloader (cold load only, once per session) and cross-page curtain transition. Internal link clicks are intercepted, a gradient curtain wipes the page away, then the browser does a real navigation (this stays a plain multi-page site, no client-side router) — the arriving page reads a sessionStorage flag (checked synchronously in `<head>`, before first paint, via the inline snippet `head()` emits) to skip the long preloader and just wipe the curtain into its own entrance instead.
 - `js/pricing.js` / `js/start.js` — per-page logic (quote totals, country gate, WhatsApp message building) against `window.K97`
 - `assets/` — logo marks, lockups, favicon, self-hosted font subsets
+
+**Script load order matters** and is owned by `tools/build.mjs`'s `VENDOR` + `scripts` arrays: GSAP → data → render (populates the DOM) → motion (queries that DOM, registers the `"k97:entrance"` listener) → transitions (fires that event) → page-specific. Motion.js must register its listener before transitions.js fires the event, or the hero entrance never plays.
 
 ## Edit content
 Change prices, services, FAQs or portfolio in `js/data.js` — the services page, pricing calculator and start page all render from it. The same content lives in the Notion hub ("97 World — Design Sector HQ") so you can keep both in sync.

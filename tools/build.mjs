@@ -40,50 +40,50 @@ const PAGES = [
     file: 'index.html', page: 'home', og: 'og-home', ogTitle: 'WE BUILD PROOF.',
     title: '97 World — Websites, Brands, Growth & Systems',
     desc: '97 World builds websites, brands, audience growth plans and custom systems for ambitious businesses in Uganda, South Sudan and beyond.',
-    scripts: ['data', 'render', 'motion'],
+    scripts: ['data', 'render', 'motion', 'transitions'],
     home: true,
   },
   {
     file: 'services.html', page: 'services', og: 'og-services', ogTitle: 'EVERYTHING YOUR BRAND NEEDS.', crumb: 'Services',
     title: 'Services & Prices — 97 World',
     desc: 'Websites from $500, landing pages, logos, brand kits, fliers, business cards, growth and systems — with real prices in UGX & USD and honest turnarounds.',
-    scripts: ['data', 'render', 'motion'], jsonld: ['services', 'faq'],
+    scripts: ['data', 'render', 'motion', 'transitions'], jsonld: ['services', 'faq'],
   },
   {
     file: 'work.html', page: 'work', og: 'og-work', ogTitle: 'REAL WORK. LIVE.', crumb: 'Work',
     title: 'Work & Case Studies — 97 World',
     desc: 'Live websites and builds in progress from 97 World — AFRICA63, Maya Nature Resort and more. Proof, not hype.',
-    scripts: ['data', 'render', 'motion'],
+    scripts: ['data', 'render', 'motion', 'transitions'],
   },
   {
     file: 'partners.html', page: 'partners', og: 'og-partners', ogTitle: 'THE RECORD. IN FULL.', crumb: 'Partners',
     title: 'Previous Partners — 97 World',
     desc: 'The full record: 19 real brands shipped by 97 World across Uganda & South Sudan — AFRICA63, Maya Nature Resort, KHATHA, Kushite, Nile Link and more.',
-    scripts: ['data', 'render', 'motion'],
+    scripts: ['data', 'render', 'motion', 'transitions'],
   },
   {
     file: 'pricing.html', page: 'pricing', og: 'og-pricing', ogTitle: 'PICK. TOTAL. START.', crumb: 'Pricing',
     title: 'Instant Quote Calculator — 97 World',
     desc: 'Pick what you need and get a real price instantly in UGX or USD. Every project starts with a 50% deposit — the balance on delivery.',
-    scripts: ['data', 'render', 'motion', 'pricing'], jsonld: ['services', 'faq'],
+    scripts: ['data', 'render', 'motion', 'transitions', 'pricing'], jsonld: ['services', 'faq'],
   },
   {
     file: 'start.html', page: 'start', og: 'og-start', ogTitle: 'SEND IT. WE BUILD.', crumb: 'Start a project',
     title: 'Start a Project — 97 World',
     desc: 'Send your project brief straight to 97 World on WhatsApp — your quote comes with you. The first deposit confirms your slot.',
-    scripts: ['data', 'render', 'motion', 'start'],
+    scripts: ['data', 'render', 'motion', 'transitions', 'start'],
   },
   {
     file: 'about.html', page: 'about', og: 'og-about', ogTitle: 'TWO NATIONS. ONE BAR.', crumb: 'About',
     title: 'About the Studio — 97 World',
     desc: "The design sector of 97 World — one studio serving Kampala and Juba with websites, branding and campaign design. Proof isn't fabricated. It's built.",
-    scripts: ['data', 'render', 'motion'],
+    scripts: ['data', 'render', 'motion', 'transitions'],
   },
   {
     file: '404.html', page: '404',
     title: 'Page not found — 97 World',
     desc: "This page isn't built yet. Head back to 97 World.",
-    scripts: ['data', 'render', 'motion'], noindex: true,
+    scripts: ['data', 'render', 'motion', 'transitions'], noindex: true,
     headExtra: `<script>
 /* 404 is served for any missing path — anchor relative URLs to the site root */
 (function(){var p=location.pathname.split("/");var root=(location.hostname.slice(-10)===".github.io"&&p[1])?"/"+p[1]+"/":"/";var b=document.createElement("base");b.href=root;document.head.appendChild(b);})();
@@ -138,6 +138,7 @@ function head(p) {
   ];
   return `<head>
 <meta charset="UTF-8">
+<script>try{if(sessionStorage.getItem("k97-nav"))document.documentElement.classList.add("is-nav")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>${p.title}</title>
 <meta name="description" content="${p.desc}">
@@ -172,6 +173,16 @@ ${lds.map((l) => `<script type="application/ld+json">${JSON.stringify(l)}</scrip
 }
 
 /* ---------- shared chrome ---------- */
+const preloaderChrome = () => {
+  const letters = '97 WORLD'.split('').map((ch) => ch === ' ' ? '<span>&nbsp;</span>' : `<span>${ch}</span>`).join('');
+  return `<div id="preloader" aria-hidden="true">
+  <img class="pl-mark" src="assets/favicon.png" alt="">
+  <div class="pl-word">${letters}</div>
+  <div class="pl-bar"><i></i></div>
+</div>
+<div id="curtain" aria-hidden="true"></div>`;
+};
+
 const navChrome = (page) => {
   const on = (k, label, href) =>
     `<a href="${href}"${k === page ? ' class="on" aria-current="page"' : ''}>${label}</a>`;
@@ -256,8 +267,11 @@ const footerChrome = () => `<footer class="foot4">
   <span class="foot4-wm" aria-hidden="true">97 WORLD</span>
 </footer>`;
 
+// GSAP must load before motion.js (uses it), motion.js must register its
+// "k97:entrance" listener before transitions.js fires that event.
+const VENDOR = ['vendor/gsap.min', 'vendor/ScrollTrigger.min', 'vendor/SplitText.min'];
 const scriptsChrome = (list) =>
-  list.map((s) => `<script src="${v('js/' + s + '.js')}" defer></script>`).join('\n') + '\n</body>';
+  [...VENDOR, ...list].map((s) => `<script src="${v('js/' + s + '.js')}" defer></script>`).join('\n') + '\n</body>';
 
 /* ---------- build every page ---------- */
 const problems = [];
@@ -273,11 +287,12 @@ for (const w of SITE.work) {
 for (const p of PAGES) {
   let html = read(p.file);
   html = html.replace(/<head>[\s\S]*?<\/head>/, head(p));
+  html = html.replace(/<div id="preloader"[\s\S]*?<div id="curtain"[^>]*><\/div>/, preloaderChrome());
+  html = html.replace(/<script src="js\/vendor\/gsap\.min\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));
   if (!p.home) {
     html = html.replace(/(?:<a class="skip-link"[^>]*>[\s\S]*?<\/a>\s*)*<header class="nav4"[\s\S]*?<\/header>/, navChrome(p.page));
     html = html.replace(/<div class="mmenu4"[\s\S]*?<\/div>\n\n<main/, mmenuChrome(p.page) + '\n\n<main');
     html = html.replace(/<footer class="foot4">[\s\S]*?<\/footer>/, footerChrome());
-    html = html.replace(/<script src="js\/data\.js[\s\S]*?<\/body>/, scriptsChrome(p.scripts));
   }
   writeFileSync(join(ROOT, p.file), html);
 

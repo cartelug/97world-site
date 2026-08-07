@@ -47,25 +47,29 @@
   getSel().forEach(function (id) { selected[id] = true; });
   function persistSel() { setSel(D.services.filter(function (s) { return selected[s.id]; }).map(function (s) { return s.id; })); }
 
+  var lastToggled = null;
   function renderSvcList() {
     var hosts = document.querySelectorAll("[data-svc4-list]");
     if (!hosts.length) return;
     var html = D.services.map(function (s, i) {
       var on = !!selected[s.id];
+      var justPopped = on && s.id === lastToggled;
       return '<button type="button" class="svc4-row card4' + (on ? " sel" : "") + '" data-svc4="' + s.id + '" aria-pressed="' + on + '">' +
         '<span class="l"><span class="num mono">0' + (i + 1) + '</span>' +
         '<h3>' + s.name + (s.popular ? ' <span class="tag4 pop">Popular</span>' : "") + '</h3>' +
         '<p>' + s.short + "</p></span>" +
         '<span class="r"><span class="price" data-usd="' + s.usd + '">' + money(s.usd) + '</span><span class="days mono">~' + s.days + " days</span></span>" +
-        '<span class="check4">✓</span></button>';
+        '<span class="check4' + (justPopped ? " pop" : "") + '">✓</span></button>';
     }).join("");
     hosts.forEach(function (el) { el.innerHTML = html; });
+    lastToggled = null;
   }
   document.addEventListener("click", function (e) {
     var b = e.target.closest && e.target.closest("[data-svc4]");
     if (!b) return;
     var id = b.getAttribute("data-svc4");
     selected[id] = !selected[id];
+    lastToggled = selected[id] ? id : null;
     persistSel(); renderSvcList(); paintPrices();
     window.dispatchEvent(new CustomEvent("k97selchange"));
   });

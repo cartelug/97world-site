@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>try{if(sessionStorage.getItem("k97-nav"))document.documentElement.classList.add("is-nav")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Work & Case Studies — 97 World</title>
 <meta name="description" content="Live websites and builds in progress from 97 World — AFRICA63, Maya Nature Resort and more. Proof, not hype.">
@@ -26,14 +27,21 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="assets/fonts/spacegrotesk-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/manrope-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/fonts-v4.css?v=10">
-<link rel="stylesheet" href="css/v4.css?v=10">
+<link rel="stylesheet" href="css/fonts-v4.css?v=11">
+<link rel="stylesheet" href="css/v4.css?v=11">
 <script type="speculationrules">
 {"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu4-links a, .foot4-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='pricing'], a[href^='start']"},"eagerness":"conservative"}]}
 </script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://the97.world/"},{"@type":"ListItem","position":2,"name":"Work","item":"https://the97.world/work.html"}]}</script>
 </head>
 <body class="v4" data-page="work">
+<div id="preloader" aria-hidden="true">
+  <img class="pl-mark" src="assets/favicon.png" alt="">
+  <div class="pl-word"><span>9</span><span>7</span><span>&nbsp;</span><span>W</span><span>O</span><span>R</span><span>L</span><span>D</span></div>
+  <div class="pl-bar"><i></i></div>
+</div>
+<div id="curtain" aria-hidden="true"></div>
+
 
 <div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="grain" aria-hidden="true"></div>
@@ -147,8 +155,12 @@
   <svg viewBox="0 0 32 32" fill="#062b13"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.6 1.9 6.5L4 29l7.2-1.9c1.8 1 3.9 1.5 6 1.5 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.3 1.1 1.1-4.2-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5 10 9.9 5.2 16 5.2S27 10 27 15.5 22.1 25.7 16 25.7zm6.1-7.7c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.8.1-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-1.8-.9-3-1.6-4.2-3.6-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.6-.1-.2-.8-1.9-1.1-2.5-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.5 3.8 6 5.3 2.3.9 3.1.9 4.2.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
 </a>
 
-<script src="js/data.js?v=10" defer></script>
-<script src="js/render.js?v=10" defer></script>
-<script src="js/motion.js?v=10" defer></script>
+<script src="js/vendor/gsap.min.js?v=11" defer></script>
+<script src="js/vendor/ScrollTrigger.min.js?v=11" defer></script>
+<script src="js/vendor/SplitText.min.js?v=11" defer></script>
+<script src="js/data.js?v=11" defer></script>
+<script src="js/render.js?v=11" defer></script>
+<script src="js/motion.js?v=11" defer></script>
+<script src="js/transitions.js?v=11" defer></script>
 </body>
 </html>
