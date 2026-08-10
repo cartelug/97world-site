@@ -23,6 +23,10 @@
 
   var pre = document.getElementById("preloader");
   var curtain = document.getElementById("curtain");
+  if (document.body && /^(privacy-policy|terms-of-service)$/.test(document.body.dataset.page || "")) {
+    if (pre) pre.remove();
+    pre = null;
+  }
 
   function fireEntrance() {
     window.dispatchEvent(new CustomEvent("k97:entrance"));

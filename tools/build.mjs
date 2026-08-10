@@ -160,13 +160,12 @@ function head(p) {
 <title>${p.title}</title>
 <meta name="description" content="${p.desc}">
 <meta name="theme-color" content="#0a0a12">
-${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonical" href="${canon}">
+${p.noindex ? '<meta name="robots" content="noindex">\n' : `<link rel="canonical" href="${canon}">\n`}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="97 World">
 <meta property="og:title" content="${p.title}">
 <meta property="og:description" content="${p.desc}">
-<meta property="og:url" content="${canon}">
-<meta property="og:image" content="${og}">
+${p.noindex ? '' : `<meta property="og:url" content="${canon}">\n`}<meta property="og:image" content="${og}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="${(p.ogTitle || '97 World').replace(/"/g, '&quot;')}">
@@ -180,10 +179,15 @@ ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}<link rel="canonic
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/assets/fonts/spacegrotesk-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/manrope-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-italic-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${v('/css/fonts-v4.css')}">
 <link rel="stylesheet" href="${v('/css/v4.css')}">
+<noscript><style>
+#preloader,#curtain,.progress4{display:none!important}.nav4-inner,.rv{opacity:1!important;transform:none!important;filter:none!important}
+@media(max-width:820px){.nav4{position:absolute}.nav4-links{display:flex;overflow-x:auto}.nav4-links a{padding-inline:10px}.burger4{display:none}}
+</style></noscript>
 <script type="speculationrules">
-{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu4-links a, .foot4-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='/pricing'], a[href^='/start']"},"eagerness":"conservative"}]}
+{"prerender":[{"where":{"selector_matches":".nav4-links a, .mmenu4-links a, .foot4-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='/pricing'], a[href^='/start']"},"eagerness":"conservative"}]}
 </script>
 ${lds.map((l) => `<script type="application/ld+json">${JSON.stringify(l)}</script>`).join('\n')}
 </head>`;
@@ -203,7 +207,8 @@ const preloaderChrome = () => {
 const navChrome = (page) => {
   const on = (k, label, href) =>
     `<a href="${href}"${k === page ? ' class="on" aria-current="page"' : ''}>${label}</a>`;
-  return `<header class="nav4" id="nav4">
+  return `<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav4" id="nav4">
   <div class="nav4-inner">
     <a href="/" class="brand" aria-label="97 World home">
       <img src="/assets/favicon.png" alt="" width="26" height="26">97 WORLD
@@ -215,7 +220,7 @@ const navChrome = (page) => {
       ${on('about', 'About', '/about/')}
     </nav>
     <a href="/start/" class="nav4-cta" data-magnetic>Start a project</a>
-    <button class="burger4" id="burger4" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu4()">
+    <button class="burger4" id="burger4" type="button" aria-label="Open menu" aria-controls="mmenu4" aria-expanded="false" onclick="toggleMenu4()">
       <span></span>
     </button>
   </div>
@@ -294,6 +299,14 @@ const scriptsChrome = (list) =>
 /* ---------- build every page ---------- */
 const problems = [];
 
+// Resolve public clean routes to the file GitHub Pages actually serves.
+// Checking only the directory would let /slug/ pass even if index.html vanished.
+const routeFile = (urlPart) => {
+  const clean = urlPart.replace(/^\/+/, '');
+  if (!clean) return join(ROOT, 'index.html');
+  return join(ROOT, clean.endsWith('/') ? clean + 'index.html' : clean);
+};
+
 // funnel guard: every work row's "Build like this" prefill must point at
 // real service ids, or the pricing page silently drops the selection
 const svcIds = new Set(SITE.services.map((s) => s.id));
@@ -321,7 +334,7 @@ for (const p of PAGES) {
     const u = m[1].split('?')[0];
     if (/^(https?:|mailto:|tel:|data:|\{)/.test(u) || u === '' || u.startsWith('#')) continue;
     for (const part of u.split(',').map((x) => x.trim().split(' ')[0])) {
-      if (part && !existsSync(join(ROOT, part))) problems.push(`${p.file}: missing ${part}`);
+      if (part && !existsSync(routeFile(part))) problems.push(`${p.file}: missing ${part}`);
     }
   }
   console.log('built', p.file);

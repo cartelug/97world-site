@@ -114,7 +114,7 @@
     var host = document.querySelector("[data-faq4]");
     if (!host || !D.faqs) return;
     host.innerHTML = D.faqs.map(function (f) {
-      return '<details class="card4 rv" data-group="faq"><summary>' + f.q + '<span class="plus">+</span></summary><p class="a">' + f.a + "</p></details>";
+      return '<details class="card4 rv" data-group="faq"><summary>' + f.q + '<span class="plus" aria-hidden="true">+</span></summary><p class="a">' + f.a + "</p></details>";
     }).join("");
   }
 
@@ -132,10 +132,8 @@
   function renderClientMarquee() {
     var host = document.querySelector("[data-clients4]");
     if (!host || !D.clients) return;
-    var track = document.createElement("div");
-    track.className = "marquee4-track";
-    track.innerHTML = D.clients.map(function (c) { return "<span>" + c.name + " <i>✦</i></span>"; }).join("");
-    host.appendChild(track);
+    host.setAttribute("aria-label", "Selected clients");
+    host.innerHTML = D.clients.map(function (c) { return "<span>" + c.name + " <i aria-hidden=\"true\">✦</i></span>"; }).join("");
   }
 
   /* ---------- partners grid (partners.html) ---------- */

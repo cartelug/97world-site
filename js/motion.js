@@ -13,8 +13,54 @@
    ============================================================ */
 (function () {
   "use strict";
-  var hasGsap = typeof window.gsap !== "undefined";
-  if (!hasGsap) { document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); el.style.opacity = 1; }); return; }
+  var hasGsap = typeof window.gsap !== "undefined" && typeof window.ScrollTrigger !== "undefined" && typeof window.SplitText !== "undefined";
+
+  // Essential navigation and footer behavior must work even if the optional
+  // motion engine fails to load. Keep this block dependency-free.
+  function setMenu4(open) {
+    var m = document.getElementById("mmenu4");
+    var b = document.getElementById("burger4");
+    if (!m || !b) return;
+    m.classList.toggle("open", open);
+    m.setAttribute("aria-hidden", String(!open));
+    b.setAttribute("aria-expanded", String(open));
+    b.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.classList.toggle("lock", open);
+    if (open) {
+      requestAnimationFrame(function () {
+        var first = m.querySelector("a[href],button:not([disabled])");
+        if (first) first.focus();
+      });
+    }
+  }
+  window.toggleMenu4 = function () {
+    var m = document.getElementById("mmenu4");
+    setMenu4(!(m && m.classList.contains("open")));
+  };
+  document.querySelectorAll(".mmenu4-links a").forEach(function (a, i) {
+    a.style.setProperty("--i", i);
+    a.addEventListener("click", function () { setMenu4(false); });
+  });
+  document.addEventListener("keydown", function (e) {
+    var m = document.getElementById("mmenu4");
+    var b = document.getElementById("burger4");
+    if (!m || !m.classList.contains("open")) return;
+    if (e.key === "Escape") { setMenu4(false); if (b) b.focus(); return; }
+    if (e.key !== "Tab") return;
+    var focusable = Array.from(m.querySelectorAll("a[href],button:not([disabled])"));
+    if (!focusable.length) return;
+    var first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
+
+  if (!hasGsap) {
+    document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); el.style.opacity = 1; });
+    var navFallback = document.querySelector(".nav4-inner");
+    if (navFallback) navFallback.classList.add("on");
+    return;
+  }
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -36,7 +82,7 @@
     window.addEventListener("mousemove", function (e) {
       dotX(e.clientX); dotY(e.clientY); ringX(e.clientX); ringY(e.clientY);
     }, { passive: true });
-    var hoverables = "a, button, .card4, .svc4-row, .work4-card, [data-magnetic]";
+    var hoverables = "a, button, .svc4-row, [data-magnetic]";
     document.addEventListener("mouseover", function (e) {
       if (e.target.closest && e.target.closest(hoverables)) { dot.classList.add("hot"); ring.classList.add("hot"); }
     });
@@ -124,22 +170,6 @@
     });
   })();
 
-  /* ---------- mobile menu ---------- */
-  window.toggleMenu4 = function () {
-    var m = document.getElementById("mmenu4");
-    var b = document.getElementById("burger4");
-    var open = m.classList.toggle("open");
-    b.setAttribute("aria-expanded", String(open));
-    document.body.classList.toggle("lock", open);
-  };
-  document.querySelectorAll(".mmenu4-links a").forEach(function (a, i) {
-    a.style.setProperty("--i", i);
-    a.addEventListener("click", function () {
-      document.getElementById("mmenu4").classList.remove("open");
-      document.body.classList.remove("lock");
-    });
-  });
-
   /* ---------- scroll progress bar ---------- */
   (function () {
     var bar = document.querySelector(".progress4 i");
@@ -154,7 +184,11 @@
   document.querySelectorAll("[data-marquee]").forEach(function (host) {
     var track = host.querySelector(".marquee4-track");
     if (!track || track.dataset.doubled) return;
-    track.insertAdjacentHTML("beforeend", track.innerHTML);
+    Array.from(track.children).forEach(function (item) {
+      var clone = item.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    });
     track.dataset.doubled = "1";
   });
 
@@ -168,9 +202,6 @@
     });
   }
   if (document.querySelector("[data-clock]")) { paintClocks(); setInterval(paintClocks, 15000); }
-
-  /* ---------- footer year ---------- */
-  document.querySelectorAll("[data-year]").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
   /* ---------- animated counters (scroll-triggered) ---------- */
   document.querySelectorAll("[data-count]").forEach(function (el) {
