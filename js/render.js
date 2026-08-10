@@ -86,7 +86,7 @@
         '<h3>' + s.name + (s.popular ? ' <span class="tag4 pop">Popular</span>' : "") + '</h3>' +
         '<p>' + s.pitch + "</p></span>" +
         '<span class="r"><span class="price" data-usd="' + s.usd + '">' + money(s.usd) + '</span><span class="days mono">~' + s.days + ' days</span>' +
-        '<a class="btn4 grad sm" href="pricing.html?svc=' + s.id + '">Add to quote</a></span></article>';
+        '<a class="btn4 grad sm" href="/pricing/?svc=' + s.id + '">Add to quote</a></span></article>';
     }).join("");
   }
 
@@ -97,14 +97,14 @@
     var items = limit ? D.work.filter(function (w) { return w.featured; }).slice(0, limit) : D.work;
     host.innerHTML = items.map(function (w) {
       var d = w.disp || {};
-      var img = d.shot ? '<picture><source srcset="assets/work/' + d.shot + '.avif" type="image/avif"><img src="assets/work/' + d.shot + '.jpg" alt="' + w.project + '" loading="lazy"></picture>' :
+      var img = d.shot ? '<picture><source srcset="/assets/work/' + d.shot + '.avif" type="image/avif"><img src="/assets/work/' + d.shot + '.jpg" alt="' + w.project + '" loading="lazy"></picture>' :
         '<div class="placeholder" style="background:' + (d.accent || "var(--grad-cta)") + ';-webkit-background-clip:text;background-clip:text;color:transparent">' + (d.title || w.project).slice(0, 2) + '</div>';
       return '<article class="work4-card card4 tilt rv" data-group="work">' +
         '<div class="shot">' + img + '</div>' +
         '<div class="body"><span class="type">' + (d.typeLabel || w.type) + '</span>' +
         '<h3>' + (d.title || w.project) + '</h3><p>' + w.description + '</p>' +
         '<div class="foot"><span class="status4' + (w.status !== "Live" ? " soon" : "") + '"><i></i>' + w.status + '</span>' +
-        (w.link ? '<a href="' + w.link + '" target="_blank" rel="noopener" class="btn4 ghost sm" data-magnetic>Visit ↗</a>' : '<a href="work.html#' + (d.id || "") + '" class="btn4 ghost sm">Details</a>') +
+        (w.link ? '<a href="' + w.link + '" target="_blank" rel="noopener" class="btn4 ghost sm" data-magnetic>Visit ↗</a>' : '<a href="/work/#' + (d.id || "") + '" class="btn4 ghost sm">Details</a>') +
         "</div></div></article>";
     }).join("");
   }
@@ -145,10 +145,10 @@
     host.innerHTML = D.clients.map(function (c, i) {
       var num = "NO. " + String(i + 1).padStart(2, "0");
       var action = c.link ? '<a class="btn4 ghost sm" href="' + c.link + '" target="_blank" rel="noopener">Visit ↗</a>' :
-        c.ref ? '<a class="btn4 ghost sm" href="work.html#' + c.ref + '">More info</a>' :
+        c.ref ? '<a class="btn4 ghost sm" href="/work/#' + c.ref + '">More info</a>' :
         '<a class="btn4 ghost sm" href="https://wa.me/' + D.whatsapp + '" target="_blank" rel="noopener">Ask us</a>';
       return '<div class="card4 rv" data-group="partners" style="--pc:' + c.c + ';padding:18px;display:flex;flex-direction:column;gap:14px;border-top:3px solid ' + c.c + '">' +
-        '<picture><source srcset="assets/clients/' + c.id + '.avif" type="image/avif"><img src="assets/clients/' + c.id + '.jpg" alt="' + c.name + ' logo" loading="lazy" style="border-radius:10px;aspect-ratio:3/2;object-fit:cover"></picture>' +
+        '<picture><source srcset="/assets/clients/' + c.id + '.avif" type="image/avif"><img src="/assets/clients/' + c.id + '.jpg" alt="' + c.name + ' logo" loading="lazy" style="border-radius:10px;aspect-ratio:3/2;object-fit:cover"></picture>' +
         '<span class="mono" style="font-size:10px;letter-spacing:.1em;color:var(--dim)">' + num + '</span>' +
         '<h3 style="font-family:var(--font-display);font-size:16px;font-weight:700">' + c.name + "</h3>" + action + "</div>";
     }).join("");

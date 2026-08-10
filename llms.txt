@@ -9,16 +9,18 @@
 - Turnarounds of 2–10 working days per service
 
 ## How ordering works
-1. Build a quote at https://cartelug.github.io/97world-site/pricing.html (instant, UGX or USD)
-2. Send it via https://cartelug.github.io/97world-site/start.html — it opens WhatsApp (+256 708 735 878)
+1. Build a quote at https://the97world.com/pricing/ (instant, UGX or USD)
+2. Send it via https://the97world.com/start/ — it opens WhatsApp (+256 708 735 878)
 3. A 50% deposit locks the build slot; the balance is due on delivery
 
 ## Proof
-Live work including AFRICA63 (theafrica63.com) and Maya Nature Resort: https://cartelug.github.io/97world-site/work.html
+Live work including AFRICA63 (theafrica63.com) and Maya Nature Resort: https://the97world.com/work/
 
 ## Key pages
-- Home: https://cartelug.github.io/97world-site/
-- Work: https://cartelug.github.io/97world-site/work.html
-- Services & prices: https://cartelug.github.io/97world-site/services.html
-- Instant quote: https://cartelug.github.io/97world-site/pricing.html
-- Start a project: https://cartelug.github.io/97world-site/start.html
+- Home: https://the97world.com/
+- Work: https://the97world.com/work/
+- Services & prices: https://the97world.com/services/
+- Instant quote: https://the97world.com/pricing/
+- Start a project: https://the97world.com/start/
+- Privacy Policy: https://the97world.com/privacy-policy/
+- Terms of Service: https://the97world.com/terms-of-service/

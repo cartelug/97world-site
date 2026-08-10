@@ -113,8 +113,21 @@ window.SITE = {
       accountNumber: "— ask on WhatsApp —",
       note: "Send the payment screenshot on WhatsApp with your order reference — your slot is confirmed the moment it lands."
     },
-    intl: "Outside Uganda? Ask on WhatsApp for USD payment options (bank transfer or mobile money)."
+    intl: "Outside Uganda? Ask on WhatsApp for USD payment options (bank transfer or mobile money).",
+    /* Real, generic payment rails per country — offered on the order form,
+       final details confirmed on WhatsApp before the deposit lands. */
+    methods: {
+      UG: ["MTN Mobile Money", "Airtel Money", "Bank transfer", "Cash (Kampala office)"],
+      SS: ["Mobile Money agent", "Bank transfer", "Cash (Juba)"],
+      INTL: ["Bank transfer (USD)", "Ask on WhatsApp for options"]
+    }
   },
+
+  /* Dormant order-logging hook. TODO(owner): set to a real Google Apps
+     Script Web App URL to mirror orders into a spreadsheet. Until then
+     this stays empty and js/start.js skips the log call entirely — no
+     fake network calls, no console noise. */
+  orderLogUrl: "",
 
   /* THE RECORD — every brand the studio has shipped for (client logo
      pack, tiles in assets/clients/<id>.{avif,jpg} via npm run clients).

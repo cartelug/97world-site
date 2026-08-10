@@ -1,15 +1,20 @@
 # 97 World — Design Sector (Website)
 
-A multi-page static site. No build step — open `index.html`, or host the folder anywhere (GitHub Pages works out of the box, including `404.html`).
+A multi-page static site, served at **the97world.com**. No build step to view it — open `index.html`, or host the folder anywhere (GitHub Pages works out of the box via the `CNAME` file, including `404.html`).
+
+URLs are clean (no `.html`): every page besides home and 404 lives at `<slug>/index.html` on disk and is served at `/<slug>/` by GitHub Pages' default directory→index.html resolution. `tools/build.mjs` also writes thin `<slug>.html` redirect stubs at the root so old bookmarks and links land on the clean URL.
 
 ## Pages
-- `index.html` — home: mega hero, bento overview, featured work, process, manifesto
-- `services.html` — full service catalog with deliverables (rendered from `js/data.js`)
-- `work.html` — case studies
-- `pricing.html` — live quote calculator (UGX/USD, saves your quote)
-- `start.html` — WhatsApp order form (picks up the saved quote)
-- `about.html` — the sector story, nations, principles
-- `404.html` — not-found page
+- `index.html` — home (`/`): mega hero, bento overview, featured work, process, manifesto
+- `services/index.html` — full service catalog with deliverables (rendered from `js/data.js`) — `/services/`
+- `work/index.html` — case studies — `/work/`
+- `partners/index.html` — the full client record — `/partners/`
+- `pricing/index.html` — live quote calculator (UGX/USD, saves your quote) — `/pricing/`
+- `start/index.html` — WhatsApp order form (picks up the saved quote) — `/start/`
+- `about/index.html` — the sector story, nations, principles — `/about/`
+- `privacy-policy/index.html` — data practices — `/privacy-policy/`
+- `terms-of-service/index.html` — deposits, delivery, ownership terms — `/terms-of-service/`
+- `404.html` — not-found page (must stay at the root for GitHub Pages)
 
 ## Engine (v4 — "Kinetic")
 - `css/fonts-v4.css` — self-hosted @font-face: Space Grotesk (display), Fraunces italic (editorial accent), Manrope (body), Space Mono (labels)
@@ -28,7 +33,7 @@ A multi-page static site. No build step — open `index.html`, or host the folde
 Change prices, services, FAQs or portfolio in `js/data.js` — the services page, pricing calculator and start page all render from it. The same content lives in the Notion hub ("97 World — Design Sector HQ") so you can keep both in sync.
 
 ## How ordering works
-The pricing page saves the visitor's quote (localStorage) and hands it to `start.html`, which opens WhatsApp to +256 708 735 878 with the order pre-filled. Log incoming orders in the Notion "Orders & Leads" pipeline.
+The pricing page saves the visitor's quote (localStorage) and hands it to `/start/`, which validates name/phone/terms-agreement, then hands off to WhatsApp (+256 708 735 878, via `location.href` — not `window.open`, for reliability on mobile) with the order pre-filled. `js/start.js` also has a dormant order-log hook (`SITE.orderLogUrl` in `js/data.js`) for mirroring orders into a Google Sheet via Apps Script — a no-op until that URL is set. Log incoming orders in the Notion "Orders & Leads" pipeline.
 
 ## Brand rule: the mark never sits on a background
 The 97 mark is always free-floating — no tiles, chips, panels or boxes behind it, anywhere (glows and drop-shadows are light, not surfaces, and are fine). `tools/images.mjs` generates every icon to this rule:
@@ -48,7 +53,7 @@ Dark violet/pink gradient system on glass surfaces — the opposite end of the s
 - **Old assets kept but unused:** the licensed Knockout font trio and Inter/JetBrains Mono files are still in `assets/fonts/` (paid assets, not deleted) even though nothing currently references them — a future revert wouldn't need to re-license them.
 
 ## Dev tools (run locally, outputs committed)
-- `npm run build` — regenerates every page head (SEO, JSON-LD from data.js), shared nav/mmenu/footer chrome, sitemap; fails on broken internal links and on bad `disp.svc` ids
+- `npm run build` — regenerates every page head (SEO, JSON-LD from data.js), shared nav/mmenu/footer chrome, sitemap, and the legacy `<slug>.html` → `/<slug>/` redirect stubs; fails on broken internal links and on bad `disp.svc` ids. The home page (`index.html`) and `404.html` own their nav/mmenu/footer by hand — keep them in sync with the templates in `tools/build.mjs` manually.
 - `npm run images` — brand icons per the mark rule above; scene re-encodes only with `-- --src <original-renders>`
 - `npm run shots` — screenshots every `Live`+`link` work row via Playwright → `assets/work/<id>.{avif,jpg}`; then set `disp.shot` in data.js so `js/render.js` uses the real screenshot instead of the gradient-monogram placeholder
 - `npm run og` — regenerates OG share cards (`assets/og/og-<page>.jpg`) — **still generates the old fight-bill-poster look**; due for a v4 pass to match the new gradient system
