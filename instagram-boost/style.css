@@ -46,13 +46,13 @@ button { cursor: pointer; }
 
 /* --- 2. INSTAGRAM SUNSET BACKGROUND --- */
 .ambient-glow-background { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; background: #f8fafc; }
-.glow-shape { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35; animation: floatBg 25s infinite alternate ease-in-out; }
+.glow-shape { position: absolute; border-radius: 50%; filter: blur(50px); opacity: 0.35; animation: floatBg 25s infinite alternate ease-in-out; }
 /* Sunset Gold */
 .shape-blue { width: 50vw; height: 50vw; background: #fde68a; top: -10%; left: -10%; }
 /* Magenta Pink */
 .shape-pink { width: 60vw; height: 60vw; background: #fbcfe8; bottom: -10%; right: -10%; animation-delay: -5s; animation-direction: alternate-reverse; }
 /* Deep Purple (Added for IG feel) */
-.ambient-glow-background::after { content:''; position: absolute; width: 40vw; height: 40vw; border-radius: 50%; background: #e9d5ff; filter: blur(90px); top: 40%; left: 30%; opacity: 0.3; animation: floatBg 20s infinite alternate ease-in-out; }
+.ambient-glow-background::after { content:''; position: absolute; width: 40vw; height: 40vw; border-radius: 50%; background: #e9d5ff; filter: blur(50px); top: 40%; left: 30%; opacity: 0.3; animation: floatBg 20s infinite alternate ease-in-out; }
 @keyframes floatBg { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10vw, 10vh) scale(1.1); } }
 
 /* --- 3. TOAST ALERTS (Errors/Success) --- */
@@ -104,7 +104,7 @@ button { cursor: pointer; }
 .hero-text { color: var(--text-muted); font-size: 1.05rem; font-weight: 500; line-height: 1.5; }
 
 /* --- 6. STORE PACKAGES (The Cards) --- */
-.bento-stack { padding: 0 24px; display: flex; flex-direction: column; gap: 20px; }
+.bento-stack { padding: 0 24px 130px; display: flex; flex-direction: column; gap: 20px; }
 .bento-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-large); border: 2px solid transparent; box-shadow: 0 8px 30px rgba(0,0,0,0.03); transition: 0.4s var(--smooth); position: relative; overflow: hidden; }
 .bento-card::before { content: ''; position: absolute; inset: 0; background: var(--bg-card); opacity: 0; transition: 0.4s; z-index: -1; }
 

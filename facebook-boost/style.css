@@ -28,7 +28,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 
 /* --- Ambient Background --- */
 .ambient-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-.glow-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.35; }
+.glow-orb { position: absolute; border-radius: 50%; filter: blur(55px); opacity: 0.35; }
 .orb-primary { width: 40vw; height: 40vw; background: var(--primary); top: -10%; left: -10%; animation: float 15s ease-in-out infinite alternate; }
 .orb-secondary { width: 30vw; height: 30vw; background: #60A5FA; bottom: -5%; right: -10%; animation: float 12s ease-in-out infinite alternate-reverse; }
 @keyframes float { 100% { transform: translate(10vw, 5vh) scale(1.2); } }
@@ -50,7 +50,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 .hero-subtitle { color: var(--text-muted); font-size: 1.05rem; font-weight: 500; max-width: 90%; }
 
 /* --- Journey & Grid --- */
-.core-journey { padding: 0 24px; display: flex; flex-direction: column; gap: 48px; margin-top: 24px; }
+.core-journey { padding: 0 24px 130px; display: flex; flex-direction: column; gap: 48px; margin-top: 24px; }
 .step-badge { width: 32px; height: 32px; background: var(--primary); color: #fff; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 1rem; margin-bottom: 12px; box-shadow: 0 4px 15px var(--primary-glow); }
 .step-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 24px; letter-spacing: -0.5px; }
 

@@ -6,18 +6,43 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // === 1. DYNAMIC SPOTLIGHT (GPU Accelerated) ===
+    // transform-only updates (not left/top) so this stays on the compositor
+    // thread and never forces a layout reflow on mousemove.
     const spotlight = document.getElementById('spotlight');
     if (window.matchMedia("(pointer: fine)").matches) {
+        let spotlightRaf = null;
         window.addEventListener('mousemove', (e) => {
-            requestAnimationFrame(() => {
-                spotlight.style.left = `${e.clientX}px`;
-                spotlight.style.top = `${e.clientY}px`;
+            if (spotlightRaf) return;
+            spotlightRaf = requestAnimationFrame(() => {
+                spotlight.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+                spotlightRaf = null;
             });
         });
         document.addEventListener('mouseleave', () => spotlight.style.opacity = '0');
         document.addEventListener('mouseenter', () => spotlight.style.opacity = '1');
     } else {
         spotlight.style.display = 'none';
+    }
+
+    // === 1.5 HERO ROTATOR ("Get Followers. / A Website. / A System. ...") ===
+    const rotator = document.getElementById('heroRotator');
+    if (rotator && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const words = ['Followers.', 'A Website.', 'A System.', 'Business Emails.', 'Social Management.', 'Fliers.'];
+        let idx = 0;
+        setInterval(() => {
+            const current = rotator.querySelector('.rotator-word');
+            if (!current) return;
+            current.classList.remove('is-current');
+            current.classList.add('is-leaving');
+            idx = (idx + 1) % words.length;
+            setTimeout(() => {
+                current.remove();
+                const next = document.createElement('span');
+                next.className = 'rotator-word is-current';
+                next.textContent = words[idx];
+                rotator.appendChild(next);
+            }, 350);
+        }, 2600);
     }
 
     // === 2. PRECISION NAVBAR ===
@@ -123,6 +148,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         stepCards.forEach(card => stepObserver.observe(card));
+    }
+
+    // === 6.5 AMBIENT GLOW PAUSE (perf) ===
+    // premium-aurora / fluid-gradient / social-aura run a 25s/8s CSS animation
+    // forever by default -- pause each one whenever its section scrolls out of
+    // view so the compositor isn't repainting glows nobody can see.
+    const ambientGlows = document.querySelectorAll('.premium-aurora, .fluid-gradient, .social-aura');
+    if (ambientGlows.length > 0) {
+        const glowObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+            });
+        }, { rootMargin: '200px 0px 200px 0px', threshold: 0 });
+        ambientGlows.forEach((el) => glowObserver.observe(el));
     }
 
     // === 6. NUMBER COUNTER ENGINE ===

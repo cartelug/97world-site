@@ -33,10 +33,10 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 
 /* --- Interactive Light Mesh Background --- */
 .mesh-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #FAFAFA; }
-.mesh-blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4; }
+.mesh-blob { position: absolute; border-radius: 50%; filter: blur(55px); opacity: 0.4; }
 .blob-red { width: 50vw; height: 50vw; background: rgba(255, 0, 0, 0.15); top: -10%; left: -10%; animation: drift 20s infinite alternate linear; }
 .blob-light { width: 40vw; height: 40vw; background: rgba(148, 163, 184, 0.1); bottom: -10%; right: -10%; animation: drift 15s infinite alternate-reverse linear; }
-.glass-overlay { position: absolute; inset: 0; backdrop-filter: blur(50px); -webkit-backdrop-filter: blur(50px); }
+.glass-overlay { position: absolute; inset: 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
 @keyframes drift { 100% { transform: translate(10vw, 5vh) scale(1.1); } }
 
 /* --- Workspace Layout --- */
@@ -57,7 +57,7 @@ body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-
 .page-title p { color: var(--text-muted); font-size: 1.1rem; font-weight: 500; }
 
 /* --- Order Flow & Bento Grid --- */
-.order-flow { padding: 0 24px; display: flex; flex-direction: column; gap: 40px; }
+.order-flow { padding: 0 24px 140px; display: flex; flex-direction: column; gap: 40px; }
 .module-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .step-num { width: 32px; height: 32px; background: var(--text-main); color: var(--bg-panel); border-radius: 10px; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 .module-header h2 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text-main); }
