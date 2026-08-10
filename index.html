@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>97 World | Digital Services</title>
     <meta name="description" content="Uganda's premium social growth. Connect First, Pay via Mobile money. Instagram, Facebook, TikTok & YouTube boosts.">
 
@@ -16,11 +16,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
-    
+
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
-    
+
     <link rel="stylesheet" href="HOME/style.css">
 </head>
 <body>
@@ -40,10 +40,10 @@
                 <span class="brand-text">97 <span class="text-emerald">WORLD</span></span>
             </a>
             <div class="nav-links">
-                <a href="#vault" class="nav-item">Growth</a>
-                <a href="#build-with-97" class="nav-item">Build</a>
-                <a href="#framework" class="nav-item">How it works</a>
-                <a href="#intel" class="nav-item">Client Proof</a>
+                <a href="#path" class="nav-item" data-path-link="grow">Grow</a>
+                <a href="#path" class="nav-item" data-path-link="build">Build</a>
+                <a href="#how" class="nav-item">How it works</a>
+                <a href="#proof" class="nav-item">Proof</a>
             </div>
             <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
                 <span></span><span></span><span></span>
@@ -51,30 +51,67 @@
         </div>
     </nav>
 
-    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-        <nav class="mobile-menu-links">
-            <a href="#vault" class="mobile-menu-item">Growth</a>
-            <a href="#build-with-97" class="mobile-menu-item">Build</a>
-            <a href="#framework" class="mobile-menu-item">How it works</a>
-            <a href="#intel" class="mobile-menu-item">Client Proof</a>
-        </nav>
-        <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="mobile-menu-cta">
-            <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-        </a>
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+        <div class="mm-head">
+            <a href="/" class="mm-brand">
+                <img src="/IMAGES/logo.png" alt="" class="mm-logo">
+                <span>97 <span class="text-emerald">WORLD</span></span>
+            </a>
+            <button type="button" class="mm-close" id="mmClose" aria-label="Close menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="mm-scroll">
+            <p class="mm-label">What would you like to get?</p>
+            <div class="mm-intent">
+                <button type="button" class="mm-intent-card" data-path="grow">
+                    <span class="mm-intent-ic"><i class="fas fa-fire-flame-curved"></i></span>
+                    <b>Grow My Audience</b>
+                    <small>Followers, likes &amp; views</small>
+                </button>
+                <button type="button" class="mm-intent-card" data-path="build">
+                    <span class="mm-intent-ic"><i class="fas fa-cube"></i></span>
+                    <b>Build My Business</b>
+                    <small>Website, systems &amp; design</small>
+                </button>
+            </div>
+
+            <p class="mm-label">Pick a platform</p>
+            <div class="mm-tiles">
+                <a href="instagram-boost/" class="mm-tile"><img src="/IMAGES/instagram.png" alt=""><span>Instagram</span></a>
+                <a href="tiktok-boost/" class="mm-tile"><img src="/IMAGES/tiktok.png" alt=""><span>TikTok</span></a>
+                <a href="facebook-boost/" class="mm-tile"><img src="/IMAGES/facebook.png" alt=""><span>Facebook</span></a>
+                <a href="youtube-boost/" class="mm-tile"><img src="/IMAGES/youtube.png" alt=""><span>YouTube</span></a>
+            </div>
+
+            <nav class="mm-links">
+                <a href="#how" class="mm-link">How it works <i class="fas fa-arrow-right"></i></a>
+                <a href="#proof" class="mm-link">Client proof <i class="fas fa-arrow-right"></i></a>
+                <a href="trust/" class="mm-link">Trust centre <i class="fas fa-arrow-right"></i></a>
+            </nav>
+        </div>
+
+        <div class="mm-foot">
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="mm-wa">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+            <a href="tel:+256762193386" class="mm-call"><i class="fas fa-phone"></i> Call us</a>
+        </div>
     </div>
 
     <main class="smooth-scroll-wrapper">
-        
+
         <section class="stage-hero">
             <div class="anti-gravity-bg fade-up delay-1">
-                <img src="/IMAGES/instagram.png" alt="Instagram" class="hero-asset ha-netflix">
-                <img src="/IMAGES/tiktok.png" alt="TikTok" class="hero-asset ha-spotify">
-                <img src="/IMAGES/youtube.png" alt="YouTube" class="hero-asset ha-prime">
-                <img src="/IMAGES/facebook.png" alt="Facebook" class="hero-asset ha-facebook">
-                <img src="IMAGES/uganda-flag.png" alt="Uganda" class="hero-asset ha-uganda">
-                <img src="IMAGES/south-sudan-flag.png" alt="South Sudan" class="hero-asset ha-ssudan">
-                <img src="IMAGES/mtn.png" alt="MTN Mobile Money" class="hero-asset ha-mtn">
-                <img src="IMAGES/airtel.png" alt="Airtel Money" class="hero-asset ha-airtel">
+                <img src="/IMAGES/instagram.png" alt="" class="hero-asset ha-netflix">
+                <img src="/IMAGES/tiktok.png" alt="" class="hero-asset ha-spotify">
+                <img src="/IMAGES/youtube.png" alt="" class="hero-asset ha-prime">
+                <img src="/IMAGES/facebook.png" alt="" class="hero-asset ha-facebook">
+                <img src="IMAGES/uganda-flag.png" alt="" class="hero-asset ha-uganda">
+                <img src="IMAGES/south-sudan-flag.png" alt="" class="hero-asset ha-ssudan">
+                <img src="IMAGES/mtn.png" alt="" class="hero-asset ha-mtn">
+                <img src="IMAGES/airtel.png" alt="" class="hero-asset ha-airtel">
             </div>
 
             <div class="container hero-content">
@@ -85,377 +122,249 @@
                     </div>
                     <span class="pill-text">2,300+ ACTIVE USERS. IN EAST AFRICA.</span>
                 </div>
-                
-                <h1 class="display-massive fade-up delay-2">
-                    Connect First.<br>
+
+                <h1 class="display-hero fade-up delay-2">
+                    Connect First.
                     <span class="text-hollow">Pay After.</span>
                 </h1>
-                
+
                 <p class="lead-text fade-up delay-3">
                     Get <span class="rotator" id="heroRotator"><span class="rotator-word is-current">Followers.</span></span>
                 </p>
 
-                <div class="ask-picker fade-up delay-3">
-                    <p class="ask-picker-label">What would you like to get?</p>
-                    <div class="ask-picker-grid">
-                        <a href="#vault" class="ask-chip"><i class="fas fa-fire-flame-curved"></i> Social Media Growth</a>
-                        <a href="#build-website" class="ask-chip"><i class="fas fa-globe"></i> Build a Website</a>
-                        <a href="#build-system" class="ask-chip"><i class="fas fa-diagram-project"></i> Build a System</a>
-                        <a href="#business-emails" class="ask-chip"><i class="fas fa-envelope"></i> Business Emails</a>
-                        <a href="#social-management" class="ask-chip"><i class="fas fa-chart-line"></i> Social Media Management</a>
-                        <a href="#design-fliers" class="ask-chip"><i class="fas fa-paintbrush"></i> Design Fliers</a>
-                    </div>
-                </div>
+                <div class="hero-ask fade-up delay-3">
+                    <p class="hero-ask-label"><span class="ask-line"></span> What would you like to get? <span class="ask-line"></span></p>
 
-                <div class="action-dock fade-up delay-4">
-                    <a href="#vault" class="btn-hyper-connect">
-                        <span class="btn-border"></span>
-                        <span class="btn-surface">
-                            <i class="fas fa-unlock-alt"></i>
-                            <span class="btn-text">Get Connected</span>
-                        </span>
-                    </a>
-                    <a href="#intel" class="btn-text-only">
-                        View our Verified Status <i class="fas fa-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
+                    <div class="hero-choice">
+                        <button type="button" class="choice-panel" data-path="grow" aria-pressed="false">
+                            <span class="cp-glow"></span>
+                            <span class="cp-ic"><i class="fas fa-fire-flame-curved"></i></span>
+                            <span class="cp-title">Grow My Audience</span>
+                            <span class="cp-sub">Followers, likes &amp; views on Instagram, TikTok, Facebook &amp; YouTube</span>
+                            <span class="cp-meta">From <b>$50</b> · No password needed</span>
+                            <span class="cp-go">Show me <i class="fas fa-arrow-right"></i></span>
+                        </button>
 
-        <section id="vault" class="stage-vault-spatial">
-            <div class="spatial-bg" id="spatial-bg">
-                <div class="premium-aurora"></div>
-                <div class="silk-mesh"></div>
-            </div>
-
-            <div class="container relative-z">
-                <div class="section-title fade-up">
-                    <h2 class="heading-large">Our <span class="text-emerald">Services.</span></h2>
-                </div>
-
-                <div class="search-container fade-up delay-1">
-                    <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="vault-search" placeholder="Search Instagram, Facebook, TikTok, YouTube boosts..." autocomplete="off">
-                    </div>
-                </div>
-
-                <div class="swipe-guide fade-up delay-1">
-                    <span class="hand-icon">👆</span>
-                    <p>← Swipe to explore services →</p>
-                </div>
-
-                <div class="glass-dock scale-in delay-2" id="filter-dock">
-                    <button class="dock-btn active" data-filter="all"><i class="fas fa-layer-group"></i> All</button>
-                    <button class="dock-btn" data-filter="social"><i class="fas fa-fire-flame-curved"></i> Social Boosts</button>
-                </div>
-            </div>
-
-            <div class="carousel-container fade-up delay-3">
-                <div class="native-snap-track" id="vault-track">
-                    
-                    <div class="spatial-card card-youtube" data-category="social" data-keywords="youtube boost views subscribers monetization channel growth engagement real">
-                        <div class="card-top">
-                            <div class="brand-crest"><img src="IMAGES/youtube.png" alt="YouTube" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj48cGF0aCBmaWxsPSIjRkYwMDAwIiBkPSJNNTQ5LjY1NSAxMjQuMDg0Yy02LjI4MS0yMy42NS0yNC43ODctNDIuMjc2LTQ4LjI4NC00OC41OTdDMzU4LjE0NiA2NCAyODggNjQgMjg4IDY0UzIxNy44NTQgNjQgMTc0LjYzMSA3NS40ODdjLTIzLjQ5NyA2LjMyMi00Mi4wMDMgMjQuOTQ3LTQ4LjI4NCA0OC41OTctMTEuNDEyIDQyLjg2Ny0xMS40MTIgMTMyLjMwNS0xMS40MTIgMTMyLjMwNXMuMDAyIDg5LjQzNiAxMS40MTUgMTMyLjMwNWM2LjI4MSAyMy42NSAyNC43ODcgNDIuMjc2IDQ4LjI4NCA0OC41OTdDMTc0LjE1IDQ0OCAyODggNDQ4IDI4OCA0NDhzMTEzLjg1NCAwIDE1Ni4zNy0xMS40ODhjMjMuNDk3LTYuMzIxIDQyLjAwMy0yNC45NDcgNDguMjg0LTQ4LjU5NCAxMS40MTItNDIuODY4IDExLjQxMi0xMzIuMzA1IDExLjQxMi0xMzIuMzA1cy0uMDAyLTg5LjQzOC0xMS40MTEtMTMyLjMwNXpNMjI5LjkwMSAzMjEuMDNWMTkwLjk2TDM3Mi40MDQgMjU2bDExMi41MDMgNjUuMDN6Ii8+PC9zdmc+'"></div>
-                            <span class="status-tag tag-red">Viral Growth</span>
-                        </div>
-                        <div class="card-info">
-                            <h3>YouTube Boost</h3>
-                            <div class="feature-pills">
-                                <div class="f-pill"><i class="fas fa-users"></i> <span>Real Views & Subscribers</span></div>
-                                <div class="f-pill"><i class="fas fa-dollar-sign"></i> <span>Monetization Friendly</span></div>
-                                <div class="f-pill"><i class="fas fa-chart-line"></i> <span>Gradual & Safe Delivery</span></div>
-                                <div class="f-pill"><i class="fas fa-unlock"></i> <span>No Password Needed</span></div>
-                                <div class="f-pill"><i class="fas fa-check-circle"></i> <span>Channel Growth Guaranteed</span></div>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a href="youtube-boost/" class="btn-get-now">Get Now ➔</a>
-                        </div>
-                    </div>
-
-                    <div class="spatial-card card-facebook" data-category="social" data-keywords="facebook boost page likes followers engagement post reach real">
-                        <div class="card-top">
-                            <div class="brand-crest"><i class="fab fa-facebook-f" style="color: var(--brand-color);"></i></div>
-                            <span class="status-tag tag-blue">Trending</span>
-                        </div>
-                        <div class="card-info">
-                            <h3>Facebook Boost</h3>
-                            <div class="feature-pills">
-                                <div class="f-pill"><i class="fas fa-thumbs-up"></i> <span>More Page Likes & Followers</span></div>
-                                <div class="f-pill"><i class="fas fa-bullhorn"></i> <span>Post Reach Amplified</span></div>
-                                <div class="f-pill"><i class="fas fa-comments"></i> <span>Real Engagement Only</span></div>
-                                <div class="f-pill"><i class="fas fa-unlock"></i> <span>No Password Needed</span></div>
-                                <div class="f-pill"><i class="fas fa-bolt"></i> <span>Fast & Discreet Delivery</span></div>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a href="facebook-boost/" class="btn-get-now">Get Now ➔</a>
-                        </div>
-                    </div>
-
-                    <div class="spatial-card card-tiktok" data-category="social" data-keywords="tiktok boost followers views likes viral social media engagement real">
-                        <div class="card-top">
-                            <div class="brand-crest"><img src="IMAGES/tiktok.png" alt="TikTok" loading="lazy"></div>
-                            <span class="status-tag tag-cyan">Viral</span>
-                        </div>
-                        <div class="card-info">
-                            <h3>TikTok Boost</h3>
-                            <div class="feature-pills">
-                                <div class="f-pill"><i class="fas fa-user-plus"></i> <span>Real Followers, Fast</span></div>
-                                <div class="f-pill"><i class="fas fa-heart"></i> <span>More Views & Likes</span></div>
-                                <div class="f-pill"><i class="fas fa-rocket"></i> <span>Go Viral Faster</span></div>
-                                <div class="f-pill"><i class="fas fa-unlock"></i> <span>No Password Needed</span></div>
-                                <div class="f-pill"><i class="fas fa-shield-alt"></i> <span>Safe & Gradual Delivery</span></div>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a href="tiktok-boost/" class="btn-get-now">Get Now ➔</a>
-                        </div>
-                    </div>
-
-                    <div class="spatial-card card-ig" data-category="social" data-keywords="instagram ig boost followers reels views likes real engagement">
-                        <div class="card-top">
-                            <div class="brand-crest"><img src="IMAGES/instagram.png" alt="Instagram" loading="lazy"></div>
-                            <span class="status-tag tag-purple">Popular</span>
-                        </div>
-                        <div class="card-info">
-                            <h3>IG Boost</h3>
-                            <div class="feature-pills">
-                                <div class="f-pill"><i class="fas fa-arrow-up"></i> <span>Grow Your Profile</span></div>
-                                <div class="f-pill"><i class="fas fa-video"></i> <span>More Reel Views</span></div>
-                                <div class="f-pill"><i class="fas fa-user-check"></i> <span>Real-Looking Followers</span></div>
-                                <div class="f-pill"><i class="fas fa-unlock"></i> <span>No Password Needed</span></div>
-                                <div class="f-pill"><i class="fas fa-anchor"></i> <span>Followers Don't Drop</span></div>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a href="instagram-boost/" class="btn-get-now">Get Now ➔</a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="build-with-97" class="stage-build-grid">
-            <div class="container relative-z">
-                <div class="section-title fade-up">
-                    <h2 class="heading-large">Build With <span class="text-emerald">97 World.</span></h2>
-                    <p class="build-subtitle">Real prices. Real turnarounds. Everything else runs straight through WhatsApp.</p>
-                </div>
-
-                <div class="build-grid">
-
-                    <article id="build-website" class="build-card fade-up delay-1">
-                        <div class="build-card-top">
-                            <span class="build-icon"><i class="fas fa-globe"></i></span>
-                            <span class="status-tag tag-green">Flagship Offer</span>
-                        </div>
-                        <h3>Build a Website</h3>
-                        <p class="build-desc">The 7-Day Business Online Launch Package — a professional, mobile-friendly website with hosting, SSL, WhatsApp &amp; call buttons, contact form, social links, basic SEO and 5 business emails included.</p>
-                        <div class="build-price"><span class="build-price-usd">$500</span><span class="build-price-note">$250 to start · $250 before launch</span></div>
-                        <ul class="build-includes">
-                            <li><i class="fas fa-check"></i> Up to 5 pages, mobile-first</li>
-                            <li><i class="fas fa-check"></i> 5 business emails + hosting + SSL</li>
-                            <li><i class="fas fa-check"></i> 2 rounds of small revisions</li>
-                        </ul>
-                        <a class="build-cta" target="_blank" rel="noopener" href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20start%20the%20%24500%20Website%20Launch%20Package%20(%24250%20deposit%20to%20start).%20Can%20you%20tell%20me%20what%20you%20need%20from%20me%3F">Start with $250 <i class="fas fa-arrow-right"></i></a>
-                    </article>
-
-                    <article id="build-system" class="build-card fade-up delay-2">
-                        <div class="build-card-top">
-                            <span class="build-icon"><i class="fas fa-diagram-project"></i></span>
-                            <span class="status-tag tag-blue">Custom Build</span>
-                        </div>
-                        <h3>Build a System</h3>
-                        <p class="build-desc">Booking systems, dashboards, portals and website redesigns built around how your business actually runs — scoped and quoted after we understand what you need.</p>
-                        <div class="build-price"><span class="build-price-usd">Custom quote</span><span class="build-price-note">Scoped on WhatsApp before any price is fixed</span></div>
-                        <ul class="build-includes">
-                            <li><i class="fas fa-check"></i> Booking / ordering systems</li>
-                            <li><i class="fas fa-check"></i> Dashboards &amp; internal tools</li>
-                            <li><i class="fas fa-check"></i> Website redesigns</li>
-                        </ul>
-                        <a class="build-cta" target="_blank" rel="noopener" href="https://wa.me/256762193386?text=Hi%2C%20I%20want%20to%20build%20a%20system%2Fbooking%20tool%2Fdashboard.%20Here%27s%20what%20it%20needs%20to%20do%3A%20">Get a quote <i class="fas fa-arrow-right"></i></a>
-                    </article>
-
-                    <article id="business-emails" class="build-card fade-up delay-3">
-                        <div class="build-card-top">
-                            <span class="build-icon"><i class="fas fa-envelope"></i></span>
-                            <span class="status-tag tag-purple">Included Free</span>
-                        </div>
-                        <h3>Business Emails</h3>
-                        <p class="build-desc">5 professional @yourbusiness.com email addresses come free with every website build. Need email set up on a domain you already own, standalone? We can do that too.</p>
-                        <div class="build-price"><span class="build-price-usd">Free with a website</span><span class="build-price-note">Standalone setup — ask on WhatsApp</span></div>
-                        <ul class="build-includes">
-                            <li><i class="fas fa-check"></i> 5 inboxes on your own domain</li>
-                            <li><i class="fas fa-check"></i> Works with Gmail / Outlook</li>
-                            <li><i class="fas fa-check"></i> Set up during website launch</li>
-                        </ul>
-                        <a class="build-cta" target="_blank" rel="noopener" href="https://wa.me/256762193386?text=Hi%2C%20I%20need%20business%20email%20addresses%20set%20up%20on%20my%20domain.">Ask on WhatsApp <i class="fas fa-arrow-right"></i></a>
-                    </article>
-
-                    <article id="social-management" class="build-card fade-up delay-4">
-                        <div class="build-card-top">
-                            <span class="build-icon"><i class="fas fa-chart-line"></i></span>
-                            <span class="status-tag tag-blue">Monthly Retainer</span>
-                        </div>
-                        <h3>Social Media Management</h3>
-                        <p class="build-desc">Ongoing content, posting and account management for your pages — different from the one-time boost packages above. A real person planning and running your socials every month.</p>
-                        <div class="build-price"><span class="build-price-usd">Custom monthly plan</span><span class="build-price-note">Priced to your platforms &amp; posting pace</span></div>
-                        <ul class="build-includes">
-                            <li><i class="fas fa-check"></i> Content planning &amp; posting</li>
-                            <li><i class="fas fa-check"></i> Account management</li>
-                            <li><i class="fas fa-check"></i> Monthly reporting</li>
-                        </ul>
-                        <a class="build-cta" target="_blank" rel="noopener" href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20monthly%20social%20media%20management%20for%20my%20business.%20My%20platforms%20are%3A%20">Ask on WhatsApp <i class="fas fa-arrow-right"></i></a>
-                    </article>
-
-                    <article id="design-fliers" class="build-card fade-up delay-1">
-                        <div class="build-card-top">
-                            <span class="build-icon"><i class="fas fa-paintbrush"></i></span>
-                            <span class="status-tag tag-green">2-Day Turnaround</span>
-                        </div>
-                        <h3>Design Fliers</h3>
-                        <p class="build-desc">Print- and social-ready campaign fliers and posters that stop the scroll — sized for both the printer and every feed.</p>
-                        <div class="build-price"><span class="build-price-usd">$40</span><span class="build-price-note">Delivered in ~2 days</span></div>
-                        <ul class="build-includes">
-                            <li><i class="fas fa-check"></i> Print-ready artwork</li>
-                            <li><i class="fas fa-check"></i> Social media sizes included</li>
-                            <li><i class="fas fa-check"></i> Quick revision loop</li>
-                        </ul>
-                        <a class="build-cta" target="_blank" rel="noopener" href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20order%20a%20campaign%20flier%2Fposter%20(%2440).">Order for $40 <i class="fas fa-arrow-right"></i></a>
-                    </article>
-
-                </div>
-            </div>
-        </section>
-
-        <section id="framework" class="stage-framework-cinematic">
-            <div class="framework-hero-bg">
-                <div class="fluid-gradient"></div>
-                <div class="noise-overlay"></div>
-                <div class="god-rays"></div>
-                <div class="glass-layer"></div>
-            </div>
-
-            <div class="container relative-z">
-                <div class="framework-grid">
-                    
-                    <div class="sticky-heading-col">
-                        <h2 class="heading-massive">Zero Risk <br><span class="text-gradient-trust">Protocol.</span></h2>
-                        <p class="subtitle-bold">A completely frictionless, architectural standard of trust.</p>
-                    </div>
-                    
-                    <div class="steps-scroller">
-                        
-                        <div class="step-observable">
-                            <div class="watermark">01</div>
-                            <div class="step-icon"><i class="fas fa-layer-group"></i></div>
-                            <h4>Choose Service</h4>
-                            <p>Select your premium upgrade from our Vault. No sign-ups required to begin.</p>
-                        </div>
-                        
-                        <div class="step-observable">
-                            <div class="watermark">02</div>
-                            <div class="step-icon"><i class="fas fa-keyboard"></i></div>
-                            <h4>Enter Details</h4>
-                            <p>Provide your name and WhatsApp number. We use this exclusively to securely deliver your setup.</p>
-                        </div>
-                        
-                        <div class="step-observable">
-                            <div class="watermark">03</div>
-                            <div class="step-icon"><i class="fas fa-satellite-dish"></i></div>
-                            <h4>Instant Connection</h4>
-                            <p>Our technical team connects your TV or phone instantly via WhatsApp. Zero settings to touch.</p>
-                        </div>
-
-                        <div class="step-observable final-vault">
-                            <div class="vault-glow"></div>
-                            <i class="fas fa-shield-check breathing-icon"></i>
-                            <h4>Pay Only When It Works</h4>
-                            <p>We connect your device first. You pay securely via Mobile Money only after you are 100% satisfied.</p>
-                        </div>
-
+                        <button type="button" class="choice-panel" data-path="build" aria-pressed="false">
+                            <span class="cp-glow"></span>
+                            <span class="cp-ic"><i class="fas fa-cube"></i></span>
+                            <span class="cp-title">Build My Business</span>
+                            <span class="cp-sub">A website, business emails, custom systems &amp; campaign design</span>
+                            <span class="cp-meta">From <b>$40</b> · $250 starts a website</span>
+                            <span class="cp-go">Show me <i class="fas fa-arrow-right"></i></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="intel" class="stage-intel-pillars">
-            <div class="container relative-z">
-                <div class="section-title text-center fade-up">
-                    <h2 class="heading-large">Verified <span class="text-emerald">Status.</span></h2>
-                    <p class="subtitle">The undisputed standard in East Africa.</p>
-                </div>
-                
-                <div class="pillar-grid">
-                    <div class="trust-pillar fade-up delay-1">
-                        <div class="css-character char-radar">
-                            <div class="radar-dot"></div>
-                            <div class="radar-ring r1"></div>
-                            <div class="radar-ring r2"></div>
-                        </div>
-                        <h3>Established 2022</h3>
-                        <p>We built the digital bridge. For years, we have been the trusted premium standard.</p>
-                    </div>
-
-                    <div class="trust-pillar fade-up delay-2">
-                        <div class="css-character char-network">
-                            <i class="fas fa-users"></i>
-                            <div class="orbit-ring"></div>
-                        </div>
-                        <h3><span class="anim-counter" data-target="2000">0</span>+ Active VIPs</h3>
-                        <p>From the streets of Kampala to massive growth in Juba, our network dominates.</p>
-                    </div>
-
-                    <div class="trust-pillar fade-up delay-3">
-                        <div class="css-character char-coin">
-                            <i class="fas fa-mobile-screen-button"></i>
-                            <div class="floating-coin"><i class="fas fa-coins"></i></div>
-                        </div>
-                        <h3><span class="anim-counter" data-target="10000">0</span>+ Payments</h3>
-                        <p>Processed flawlessly via Mobile Money. An ecosystem built entirely on speed.</p>
-                    </div>
-
-                    <div class="trust-pillar pillar-guarantee scale-in delay-4">
-                        <div class="css-character char-shield">
-                            <i class="fas fa-shield-halved"></i>
-                            <div class="shield-pulse"></div>
-                        </div>
-                        <h3 class="text-emerald">Zero Upfront Risk</h3>
-                        <p>We never ask for your money first. You only pay when you are 100% satisfied.</p>
-                    </div>
+        <div class="intent-bar" id="intentBar" aria-hidden="true">
+            <div class="container intent-inner">
+                <span class="intent-q">What would you like to get?</span>
+                <div class="intent-switch">
+                    <button type="button" class="intent-btn" data-path="grow"><i class="fas fa-fire-flame-curved"></i> Grow</button>
+                    <button type="button" class="intent-btn" data-path="build"><i class="fas fa-cube"></i> Build</button>
                 </div>
             </div>
+        </div>
 
-            <div class="community-zone scale-in delay-2">
-                <div class="social-aura"></div>
-                <div class="container relative-z text-center">
-                    <div class="fade-up">
-                        <h2 class="heading-large">Join the <span class="text-gradient-fire">Community.</span></h2>
-                        <p class="subtitle">Connect with thousands of active users.</p>
+        <section id="path" class="stage-path">
+            <div class="container relative-z">
+
+                <!-- ============ GROW ============ -->
+                <div class="path-pane" data-pane="grow">
+                    <div class="path-head fade-up">
+                        <span class="path-eyebrow">Social Growth</span>
+                        <h2 class="heading-large">Look like the brand <span class="text-emerald">people follow.</span></h2>
                     </div>
-                    
-                    <div class="social-cards">
-                        <a href="https://www.instagram.com/theaccessug?igsh=MTVjbWhmMDBkM202OA==" target="_blank" class="social-card ig-card slide-in-right delay-1">
-                            <div class="sc-icon"><i class="fab fa-instagram"></i></div>
-                            <div class="sc-info">
-                                <h3>Instagram</h3>
-                                <span class="stat-badge"><i class="fas fa-users"></i> 25k+ Followers</span>
+
+                    <article class="offer-hero fade-up delay-1">
+                        <div class="oh-badge">Most people start here</div>
+                        <div class="oh-body">
+                            <div class="oh-left">
+                                <h3>The Growth Bundle</h3>
+                                <p class="oh-desc">Followers <em>and</em> likes together, split across Instagram and TikTok. The fastest way to stop looking new.</p>
+                                <ul class="oh-proof">
+                                    <li><i class="fas fa-lock-open"></i> We never ask for your password</li>
+                                    <li><i class="fas fa-anchor"></i> Followers don't drop off after delivery</li>
+                                    <li><i class="fas fa-gauge-high"></i> Gradual, safe delivery — nothing looks sudden</li>
+                                </ul>
                             </div>
-                            <div class="sc-arrow"><i class="fas fa-arrow-right"></i></div>
+                            <div class="oh-right">
+                                <div class="oh-figure"><b class="anim-counter" data-target="10000">0</b><span>followers</span></div>
+                                <div class="oh-plus">+ 1,000 bonus likes</div>
+                                <div class="oh-price"><span class="oh-price-main">$99</span><span class="oh-price-note">Smaller bundles from $50</span></div>
+                                <a href="boost-package/" class="oh-cta">Get the bundle <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <p class="path-or fade-up">Or grow one platform on its own</p>
+
+                    <div class="platform-row fade-up delay-1">
+                        <a href="instagram-boost/" class="pf-chip">
+                            <img src="/IMAGES/instagram.png" alt="">
+                            <span class="pf-name">Instagram</span>
+                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
                         </a>
-
-                        <a href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" class="social-card fb-card slide-in-right delay-2">
-                            <div class="sc-icon"><i class="fab fa-facebook-f"></i></div>
-                            <div class="sc-info">
-                                <h3>Facebook</h3>
-                                <span class="stat-badge"><i class="fas fa-globe"></i> VIP Group</span>
-                            </div>
-                            <div class="sc-arrow"><i class="fas fa-arrow-right"></i></div>
+                        <a href="tiktok-boost/" class="pf-chip">
+                            <img src="/IMAGES/tiktok.png" alt="">
+                            <span class="pf-name">TikTok</span>
+                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="facebook-boost/" class="pf-chip">
+                            <img src="/IMAGES/facebook.png" alt="">
+                            <span class="pf-name">Facebook</span>
+                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="youtube-boost/" class="pf-chip">
+                            <img src="/IMAGES/youtube.png" alt="">
+                            <span class="pf-name">YouTube</span>
+                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
                         </a>
                     </div>
+                </div>
+
+                <!-- ============ BUILD ============ -->
+                <div class="path-pane" data-pane="build">
+                    <div class="path-head fade-up">
+                        <span class="path-eyebrow">Build &amp; Design</span>
+                        <h2 class="heading-large">Give the business <span class="text-emerald">somewhere to live.</span></h2>
+                    </div>
+
+                    <article class="offer-hero fade-up delay-1">
+                        <div class="oh-badge">Flagship — 7 day launch</div>
+                        <div class="oh-body">
+                            <div class="oh-left">
+                                <h3>Your Business Website</h3>
+                                <p class="oh-desc">A complete, mobile-first website — built, hosted and launched in 7 days. Everything you need to look real online, in one package.</p>
+                                <ul class="oh-proof">
+                                    <li><i class="fas fa-envelope"></i> 5 business emails on your own domain</li>
+                                    <li><i class="fas fa-shield-halved"></i> Hosting, SSL &amp; basic SEO set up for you</li>
+                                    <li><i class="fab fa-whatsapp"></i> WhatsApp &amp; call buttons wired in</li>
+                                </ul>
+                            </div>
+                            <div class="oh-right">
+                                <div class="oh-figure"><b>$250</b><span>to start</span></div>
+                                <div class="oh-plus">$500 total · balance on launch</div>
+                                <div class="oh-price"><span class="oh-price-note oh-price-note-solo">2 revision rounds included</span></div>
+                                <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20start%20the%20%24500%20Website%20Launch%20Package%20(%24250%20deposit%20to%20start).%20What%20do%20you%20need%20from%20me%3F" target="_blank" rel="noopener" class="oh-cta">Start with $250 <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <p class="path-or fade-up">Or start smaller</p>
+
+                    <div class="offer-pair fade-up delay-1">
+                        <article class="offer-mini">
+                            <span class="om-ic"><i class="fas fa-paintbrush"></i></span>
+                            <h4>Campaign Fliers</h4>
+                            <p>Print- and social-ready artwork that stops the scroll. Delivered in about 2 days.</p>
+                            <div class="om-foot">
+                                <span class="om-price">$40</span>
+                                <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20order%20a%20campaign%20flier%2Fposter%20(%2440)." target="_blank" rel="noopener" class="om-cta">Order <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+
+                        <article class="offer-mini">
+                            <span class="om-ic"><i class="fas fa-diagram-project"></i></span>
+                            <h4>Custom Systems</h4>
+                            <p>Booking tools, dashboards and portals built around how your business actually runs.</p>
+                            <div class="om-foot">
+                                <span class="om-price om-price-sm">Custom quote</span>
+                                <a href="https://wa.me/256762193386?text=Hi%2C%20I%20want%20to%20build%20a%20system%2Fbooking%20tool%2Fdashboard.%20Here%27s%20what%20it%20needs%20to%20do%3A%20" target="_blank" rel="noopener" class="om-cta">Get a quote <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </article>
+                    </div>
+
+                    <p class="path-also fade-up">
+                        Also available:
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%20need%20business%20email%20addresses%20set%20up%20on%20my%20domain." target="_blank" rel="noopener">Business emails</a>
+                        <span class="also-free">free with a website</span>
+                        ·
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20monthly%20social%20media%20management%20for%20my%20business.%20My%20platforms%20are%3A%20" target="_blank" rel="noopener">Monthly social media management</a>
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="how" class="stage-how">
+            <div class="container relative-z">
+                <div class="section-title fade-up">
+                    <h2 class="heading-large">Zero risk. <span class="text-emerald">Every time.</span></h2>
+                    <p class="how-sub">Four steps. No account, no sign-up, no money before you know what you're getting.</p>
+                </div>
+
+                <ol class="how-strip">
+                    <li class="how-step fade-up delay-1">
+                        <span class="hs-num">01</span>
+                        <h4>Choose what you need</h4>
+                        <p>Pick a package above. Nothing to sign up for.</p>
+                    </li>
+                    <li class="how-step fade-up delay-2">
+                        <span class="hs-num">02</span>
+                        <h4>Send it on WhatsApp</h4>
+                        <p>Your order arrives pre-filled. We confirm the details with you first.</p>
+                    </li>
+                    <li class="how-step fade-up delay-3">
+                        <span class="hs-num">03</span>
+                        <h4>We deliver</h4>
+                        <p>Growth starts rolling in, or your build begins — and you see the progress.</p>
+                    </li>
+                    <li class="how-step how-step-final fade-up delay-4">
+                        <span class="hs-num">04</span>
+                        <h4>Pay on Mobile Money</h4>
+                        <p>MTN or Airtel. Boosts are paid on delivery; builds run 50/50 — $250 to start.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="proof" class="stage-proof">
+            <div class="container relative-z">
+                <div class="section-title fade-up">
+                    <h2 class="heading-large">Verified <span class="text-emerald">status.</span></h2>
+                </div>
+
+                <div class="proof-stats fade-up delay-1">
+                    <div class="ps-item">
+                        <b><span class="anim-counter" data-target="2000">0</span>+</b>
+                        <span>Active clients</span>
+                    </div>
+                    <div class="ps-item">
+                        <b><span class="anim-counter" data-target="10000">0</span>+</b>
+                        <span>Payments processed</span>
+                    </div>
+                    <div class="ps-item">
+                        <b>2022</b>
+                        <span>Serving East Africa since</span>
+                    </div>
+                    <div class="ps-item ps-item-hero">
+                        <b><i class="fas fa-shield-halved"></i></b>
+                        <span>Zero upfront risk</span>
+                    </div>
+                </div>
+
+                <div class="proof-social fade-up delay-2">
+                    <a href="https://www.instagram.com/theaccessug?igsh=MTVjbWhmMDBkM202OA==" target="_blank" rel="noopener" class="psoc ig">
+                        <i class="fab fa-instagram"></i>
+                        <span class="psoc-t">Instagram</span>
+                        <span class="psoc-s">25k+ followers</span>
+                        <i class="fas fa-arrow-right psoc-go"></i>
+                    </a>
+                    <a href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener" class="psoc fb">
+                        <i class="fab fa-facebook-f"></i>
+                        <span class="psoc-t">Facebook</span>
+                        <span class="psoc-s">VIP group</span>
+                        <i class="fas fa-arrow-right psoc-go"></i>
+                    </a>
+                    <a href="trust/" class="psoc tc">
+                        <i class="fas fa-user-shield"></i>
+                        <span class="psoc-t">Trust centre</span>
+                        <span class="psoc-s">See the receipts</span>
+                        <i class="fas fa-arrow-right psoc-go"></i>
+                    </a>
                 </div>
             </div>
         </section>
@@ -469,15 +378,16 @@
                 <p>The elite digital standard. Connect first, pay after.</p>
             </div>
             <div class="f-links fade-up delay-2">
-                <h4 class="f-head">Ecosystem</h4>
-                <a href="youtube-boost/">YouTube Boost</a>
-                <a href="facebook-boost/">Facebook Boost</a>
+                <h4 class="f-head">Grow</h4>
+                <a href="instagram-boost/">Instagram Boost</a>
                 <a href="tiktok-boost/">TikTok Boost</a>
-                <a href="instagram-boost/">IG Boost</a>
+                <a href="facebook-boost/">Facebook Boost</a>
+                <a href="youtube-boost/">YouTube Boost</a>
             </div>
             <div class="f-links fade-up delay-3">
                 <h4 class="f-head">Command Center</h4>
                 <a href="https://wa.me/256762193386" target="_blank" rel="noopener">VIP WhatsApp Support</a>
+                <a href="trust/">Trust Centre</a>
                 <a href="terms-of-service/">Terms of Protocol</a>
                 <a href="privacy-policy/">Privacy Doctrine</a>
             </div>
