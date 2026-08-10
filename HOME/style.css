@@ -71,12 +71,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .ha-prime   { width: 60px; top: 40%; left: 110%; opacity: 0.8; animation: float-path-3 28s linear infinite; }
 .ha-uganda  { width: 40px; height: 40px; top: 80%; left: -15%; opacity: 0.5; animation: float-path-4 30s linear infinite; }
 .ha-ssudan  { width: 35px; height: 35px; top: -5%; right: 20%; opacity: 0.6; animation: float-path-5 26s linear infinite reverse; }
+.ha-facebook { width: 50px; top: 65%; left: -8%; opacity: 0.7; animation: float-path-6 24s linear infinite; }
 
 @keyframes float-path-1 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 33% { transform: translate(60vw, 30vh) rotate(15deg); } 66% { transform: translate(20vw, 60vh) rotate(-10deg); } }
 @keyframes float-path-2 { 0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); } 50% { transform: translate(-80vw, -40vh) rotate(-20deg) scale(1.2); } }
 @keyframes float-path-3 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-120vw, 20vh) rotate(25deg); } }
 @keyframes float-path-4 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(90vw, -70vh) rotate(360deg); } }
 @keyframes float-path-5 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-60vw, 80vh) rotate(-360deg); } }
+@keyframes float-path-6 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 40% { transform: translate(70vw, -50vh) rotate(-15deg); } 70% { transform: translate(30vw, -80vh) rotate(10deg); } }
 
 .trust-pill { display: inline-flex; align-items: center; gap: 12px; padding: 10px 24px; border: 1px solid rgba(255,255,255,0.06); border-radius: 100px; background: rgba(255,255,255,0.03); margin-bottom: 40px; position: relative; overflow: hidden; }
 .trust-pill::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transform: translateX(-200%) skewX(-20deg); animation: shimmer-fast 4s infinite; will-change: transform; }
