@@ -28,7 +28,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = 'https://the97world.com/';
+const BASE = 'https://the97.world/';
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
 
 // keep asset versioning in lockstep with the service worker

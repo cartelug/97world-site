@@ -1,6 +1,6 @@
 # 97 World — Design Sector (Website)
 
-A multi-page static site, served at **the97world.com**. No build step to view it — open `index.html`, or host the folder anywhere (GitHub Pages works out of the box via the `CNAME` file, including `404.html`).
+A multi-page static site, served at **the97.world**. No build step to view it — open `index.html`, or host the folder anywhere (GitHub Pages works out of the box via the `CNAME` file, including `404.html`).
 
 URLs are clean (no `.html`): every page besides home and 404 lives at `<slug>/index.html` on disk and is served at `/<slug>/` by GitHub Pages' default directory→index.html resolution. `tools/build.mjs` also writes thin `<slug>.html` redirect stubs at the root so old bookmarks and links land on the clean URL.
 
