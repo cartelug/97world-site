@@ -31,6 +31,7 @@
 </div>
 
 
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
     <div class="cursor-spotlight" id="spotlight"></div>
 
     <nav class="precision-nav fade-up" id="navbar">
@@ -156,6 +157,11 @@
                     </div>
                 </div>
             </div>
+
+            <div class="hero-cue" aria-hidden="true">
+                <span class="hero-cue-track"></span>
+                <span>Scroll</span>
+            </div>
         </section>
 
         <div class="intent-bar" id="intentBar" aria-hidden="true">
@@ -201,7 +207,7 @@
 
                     <p class="path-or fade-up">Or grow one platform on its own</p>
 
-                    <div class="platform-row fade-up delay-1">
+                    <div class="platform-row" data-stagger>
                         <a href="instagram-boost/" class="pf-chip">
                             <img src="/IMAGES/instagram.png" alt="">
                             <span class="pf-name">Instagram</span>
@@ -255,7 +261,7 @@
 
                     <p class="path-or fade-up">Or start smaller</p>
 
-                    <div class="offer-pair fade-up delay-1">
+                    <div class="offer-pair" data-stagger>
                         <article class="offer-mini">
                             <span class="om-ic"><i class="fas fa-paintbrush"></i></span>
                             <h4>Campaign Fliers</h4>
@@ -296,23 +302,23 @@
                     <p class="how-sub">Four steps. No account, no sign-up, no money before you know what you're getting.</p>
                 </div>
 
-                <ol class="how-strip">
-                    <li class="how-step fade-up delay-1">
+                <ol class="how-strip" data-stagger>
+                    <li class="how-step">
                         <span class="hs-num">01</span>
                         <h4>Choose what you need</h4>
                         <p>Pick a package above. Nothing to sign up for.</p>
                     </li>
-                    <li class="how-step fade-up delay-2">
+                    <li class="how-step">
                         <span class="hs-num">02</span>
                         <h4>Send it on WhatsApp</h4>
                         <p>Your order arrives pre-filled. We confirm the details with you first.</p>
                     </li>
-                    <li class="how-step fade-up delay-3">
+                    <li class="how-step">
                         <span class="hs-num">03</span>
                         <h4>We deliver</h4>
                         <p>Growth starts rolling in, or your build begins — and you see the progress.</p>
                     </li>
-                    <li class="how-step how-step-final fade-up delay-4">
+                    <li class="how-step how-step-final">
                         <span class="hs-num">04</span>
                         <h4>Pay on Mobile Money</h4>
                         <p>MTN or Airtel. Boosts are paid on delivery; builds run 50/50 — $250 to start.</p>
@@ -327,7 +333,7 @@
                     <h2 class="heading-large">Verified <span class="text-emerald">status.</span></h2>
                 </div>
 
-                <div class="proof-stats fade-up delay-1">
+                <div class="proof-stats" data-stagger>
                     <div class="ps-item">
                         <b><span class="anim-counter" data-target="2000">0</span>+</b>
                         <span>Active clients</span>
@@ -346,7 +352,7 @@
                     </div>
                 </div>
 
-                <div class="proof-social fade-up delay-2">
+                <div class="proof-social" data-stagger>
                     <a href="https://www.instagram.com/theaccessug?igsh=MTVjbWhmMDBkM202OA==" target="_blank" rel="noopener" class="psoc ig">
                         <i class="fab fa-instagram"></i>
                         <span class="psoc-t">Instagram</span>

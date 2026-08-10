@@ -204,13 +204,43 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
     }
 
-    // === 6. NAVBAR ON SCROLL ===
+    // === 6. ONE BATCHED SCROLL LOOP =========================================
+    // navbar state + progress rail + hero parallax all read/write inside a
+    // single rAF tick, so scrolling never triggers competing layout passes.
     const navbar = document.getElementById('navbar');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-        }, { passive: true });
-    }
+    const progressFill = document.querySelector('#scrollProgress i');
+    const heroContent = document.querySelector('.hero-content');
+    const heroCue = document.querySelector('.hero-cue');
+    let scrollRaf = null;
+
+    const onScrollFrame = () => {
+        const y = window.scrollY;
+
+        if (navbar) navbar.classList.toggle('scrolled', y > 50);
+
+        if (progressFill) {
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            progressFill.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+        }
+
+        // hero drifts up and dissolves as it leaves — cheap depth, transform only
+        if (heroContent && !reduceMotion) {
+            const vh = window.innerHeight;
+            if (y < vh) {
+                const t = y / vh;
+                heroContent.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
+                heroContent.style.opacity = String(Math.max(1 - t * 1.25, 0));
+                if (heroCue) heroCue.style.opacity = String(Math.max(1 - t * 3, 0));
+            }
+        }
+        scrollRaf = null;
+    };
+
+    window.addEventListener('scroll', () => {
+        if (scrollRaf) return;
+        scrollRaf = requestAnimationFrame(onScrollFrame);
+    }, { passive: true });
+    onScrollFrame();
 
     // === 7. COUNTERS ===
     const runCounters = (parent) => {
@@ -233,20 +263,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // === 8. SCROLL REVEAL ===
-    const revealObserver = new IntersectionObserver((entries, observer) => {
+    // === 8. SCROLL REVEAL — IN *AND* OUT ===================================
+    // number every stagger child so CSS can cascade them
+    document.querySelectorAll('[data-stagger]').forEach((group) => {
+        Array.prototype.forEach.call(group.children, (child, i) => {
+            child.style.setProperty('--i', i);
+        });
+    });
+
+    // will-change is switched on only while a transition is actually running,
+    // so we don't pin a compositor layer on every element for the whole session
+    const markBusy = (el) => {
+        el.classList.add('anim-busy');
+        clearTimeout(el._animTimer);
+        el._animTimer = setTimeout(() => el.classList.remove('anim-busy'), 900);
+    };
+
+    const revealTargets = document.querySelectorAll('.fade-up, .scale-in, .slide-in-right, .fade-in, [data-stagger]');
+    const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add('is-visible');
-            if (entry.target.querySelector('.anim-counter') && !entry.target.classList.contains('counted')) {
-                entry.target.classList.add('counted');
-                runCounters(entry.target);
+            const el = entry.target;
+            if (entry.isIntersecting) {
+                el.classList.add('is-visible');
+                el.classList.remove('is-out');
+                markBusy(el);
+                if (el.querySelector('.anim-counter') && !el.classList.contains('counted')) {
+                    el.classList.add('counted');
+                    runCounters(el);
+                }
+            } else if (!reduceMotion) {
+                el.classList.remove('is-visible');
+                el.classList.add('is-out');
+                markBusy(el);
+                // let the counter replay next time it comes back into view
+                el.classList.remove('counted');
             }
-            observer.unobserve(entry.target);
         });
     }, { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0 });
 
-    document.querySelectorAll('.fade-up, .scale-in, .slide-in-right, .fade-in')
-        .forEach((el) => revealObserver.observe(el));
+    revealTargets.forEach((el) => revealObserver.observe(el));
 
 });
