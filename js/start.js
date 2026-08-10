@@ -119,7 +119,7 @@
     var tot = items.reduce(function (a, s) { return a + s.usd; }, 0);
     var dep = Math.floor(tot / 2), bal = tot - dep;
 
-    var msg = "*NEW ORDER — 97 WORLD (Design Sector)*\n";
+    var msg = "*NEW QUOTE REQUEST — 97 WORLD (Design Sector)*\n";
     msg += "━━━━━━━━━━━━━━\n";
     msg += "Name: " + name + "\n";
     msg += "WhatsApp: " + cleanPhone + "\n";

@@ -8,12 +8,11 @@
 <meta name="description" content="This page isn't built yet. Head back to 97 World.">
 <meta name="theme-color" content="#0a0a12">
 <meta name="robots" content="noindex">
-<link rel="canonical" href="https://the97.world/404.html">
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="97 World">
 <meta property="og:title" content="Page not found — 97 World">
 <meta property="og:description" content="This page isn't built yet. Head back to 97 World.">
-<meta property="og:url" content="https://the97.world/404.html">
 <meta property="og:image" content="https://the97.world/assets/og/og-default.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,10 +27,15 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preload" href="/assets/fonts/spacegrotesk-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/manrope-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/css/fonts-v4.css?v=12">
-<link rel="stylesheet" href="/css/v4.css?v=12">
+<link rel="preload" href="/assets/fonts/fraunces-italic-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/fonts-v4.css?v=13">
+<link rel="stylesheet" href="/css/v4.css?v=13">
+<noscript><style>
+#preloader,#curtain,.progress4{display:none!important}.nav4-inner,.rv{opacity:1!important;transform:none!important;filter:none!important}
+@media(max-width:820px){.nav4{position:absolute}.nav4-links{display:flex;overflow-x:auto}.nav4-links a{padding-inline:10px}.burger4{display:none}}
+</style></noscript>
 <script type="speculationrules">
-{"prerender":[{"where":{"selector_matches":"nav.links a, .mmenu4-links a, .foot4-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='/pricing'], a[href^='/start']"},"eagerness":"conservative"}]}
+{"prerender":[{"where":{"selector_matches":".nav4-links a, .mmenu4-links a, .foot4-col a"},"eagerness":"moderate"},{"where":{"selector_matches":"a[href^='/pricing'], a[href^='/start']"},"eagerness":"conservative"}]}
 </script>
 
 </head>
@@ -47,6 +51,7 @@
 <div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="nav4" id="nav4">
   <div class="nav4-inner">
     <a href="/" class="brand" aria-label="97 World home">
@@ -59,7 +64,7 @@
       <a href="/about/">About</a>
     </nav>
     <a href="/start/" class="nav4-cta" data-magnetic>Start a project</a>
-    <button class="burger4" id="burger4" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu4()">
+    <button class="burger4" id="burger4" type="button" aria-label="Open menu" aria-controls="mmenu4" aria-expanded="false" onclick="toggleMenu4()">
       <span></span>
     </button>
   </div>
@@ -106,12 +111,12 @@
   </div>
 </footer>
 
-<script src="/js/vendor/gsap.min.js?v=12" defer></script>
-<script src="/js/vendor/ScrollTrigger.min.js?v=12" defer></script>
-<script src="/js/vendor/SplitText.min.js?v=12" defer></script>
-<script src="/js/data.js?v=12" defer></script>
-<script src="/js/render.js?v=12" defer></script>
-<script src="/js/motion.js?v=12" defer></script>
-<script src="/js/transitions.js?v=12" defer></script>
+<script src="/js/vendor/gsap.min.js?v=13" defer></script>
+<script src="/js/vendor/ScrollTrigger.min.js?v=13" defer></script>
+<script src="/js/vendor/SplitText.min.js?v=13" defer></script>
+<script src="/js/data.js?v=13" defer></script>
+<script src="/js/render.js?v=13" defer></script>
+<script src="/js/motion.js?v=13" defer></script>
+<script src="/js/transitions.js?v=13" defer></script>
 </body>
 </html>
