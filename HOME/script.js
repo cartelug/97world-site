@@ -45,6 +45,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2600);
     }
 
+    // === 1.7 MOBILE MENU ===
+    const burgerBtn = document.getElementById('burgerBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (burgerBtn && mobileMenu) {
+        const closeMenu = () => {
+            burgerBtn.setAttribute('aria-expanded', 'false');
+            mobileMenu.classList.remove('is-open');
+            mobileMenu.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('menu-open');
+        };
+        burgerBtn.addEventListener('click', () => {
+            const isOpen = burgerBtn.getAttribute('aria-expanded') === 'true';
+            burgerBtn.setAttribute('aria-expanded', String(!isOpen));
+            mobileMenu.classList.toggle('is-open', !isOpen);
+            mobileMenu.setAttribute('aria-hidden', String(isOpen));
+            document.body.classList.toggle('menu-open', !isOpen);
+        });
+        mobileMenu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    }
+
     // === 2. PRECISION NAVBAR ===
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
