@@ -341,7 +341,7 @@ resize();
 animate();
 
 window.onload = () => {
-    addMessage("AccessUG Neural Core initialized.");
+    addMessage("97 World Neural Core initialized.");
     setTimeout(() => addMessage("Please select a service protocol from the right."), 800);
 };
 
