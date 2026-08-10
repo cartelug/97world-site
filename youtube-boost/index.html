@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="/assets/preloader.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#FFFFFF">
+    
+    <title>Dominate YouTube | AccessUG Elite</title>
+    <meta name="description" content="Scale your YouTube channel instantly with real subscribers and views.">
+    
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="k97pl" aria-hidden="true">
+  <img src="/IMAGES/logo.png" alt="">
+  <div class="k97pl-word">97 WORLD</div>
+  <div class="k97pl-bar"><i></i></div>
+</div>
+
+
+    <div class="mesh-bg">
+        <div class="mesh-blob blob-red"></div>
+        <div class="mesh-blob blob-light"></div>
+        <div class="glass-overlay"></div>
+    </div>
+
+    <div id="toast-wrapper" class="toast-wrapper" aria-live="polite"></div>
+
+    <div class="sheet-overlay" id="country-modal" aria-hidden="true">
+        <div class="bottom-sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <div class="icon-pulse"><i class="fas fa-globe"></i></div>
+                <h2>Select Your Region</h2>
+                <p>Establishing secure connection for local pricing.</p>
+            </div>
+            
+            <div class="region-grid">
+                <button class="region-card" onclick="YtApp.setCountry('UGX', 'UG')">
+                    <span class="flag">🇺🇬</span>
+                    <div class="r-info">
+                        <span class="r-name">Uganda</span>
+                        <span class="r-curr">UGX</span>
+                    </div>
+                </button>
+                <button class="region-card" onclick="YtApp.setCountry('USD', 'SS')">
+                    <span class="flag">🇸🇸</span>
+                    <div class="r-info">
+                        <span class="r-name">South Sudan</span>
+                        <span class="r-curr">USD</span>
+                    </div>
+                </button>
+                <button class="region-card" onclick="YtApp.setCountry('USD', 'CD')">
+                    <span class="flag">🇨🇩</span>
+                    <div class="r-info">
+                        <span class="r-name">DR Congo</span>
+                        <span class="r-curr">USD</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sheet-overlay" id="trust-modal" aria-hidden="true">
+        <div class="bottom-sheet tall-sheet">
+            <div class="sheet-handle"></div>
+            
+            <div class="slider-viewport">
+                <div class="slider-panel active" id="slide-1">
+                    <div class="panel-icon shield"><i class="fas fa-shield-check"></i></div>
+                    <h3>100% Safe & Organic</h3>
+                    <p>Trusted by <b>500+ creators</b>. We use proprietary, algorithm-friendly methods to scale your channel organically.</p>
+                    <div class="info-alert">
+                        <i class="fas fa-lock text-success"></i>
+                        <span><b>Zero Risk:</b> We will NEVER ask for your YouTube password or Google login.</span>
+                    </div>
+                    <button class="action-btn w-full mt-4" onclick="YtApp.nextSlide(2)">
+                        I Understand <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="slider-panel" id="slide-2">
+                    <div class="panel-icon wallet"><i class="fas fa-wallet"></i></div>
+                    <h3>Fair Milestone Payments</h3>
+                    <p>To ensure high quality, we filter out unserious requests using a strict milestone structure.</p>
+                    
+                    <div class="milestone-timeline">
+                        <div class="m-step">
+                            <div class="m-node">1</div>
+                            <div class="m-text"><b>30% Deposit</b> to initialize the channel algorithm boost.</div>
+                        </div>
+                        <div class="m-step">
+                            <div class="m-node">2</div>
+                            <div class="m-text"><b>70% Balance</b> paid ONLY after all subscribers & views are delivered.</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <p>Secure Mobile Payments via:</p>
+                        <div class="pm-logos">
+                            <img src="../IMAGES/mtn.png" alt="MTN">
+                            <img src="../IMAGES/airtel.png" alt="Airtel">
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group mt-4">
+                        <button class="action-btn outline" onclick="YtApp.nextSlide(1)">Back</button>
+                        <button class="action-btn" onclick="YtApp.nextSlide(3)">I Agree to Terms</button>
+                    </div>
+                </div>
+
+                <div class="slider-panel" id="slide-3">
+                    <div class="panel-icon check"><i class="fas fa-check-circle"></i></div>
+                    <h3>Final Confirmation</h3>
+                    <p>Verify your target details before connecting to our secure WhatsApp dispatch.</p>
+                    
+                    <div class="receipt-card">
+                        <div class="r-row"><span>Target Channel:</span> <b id="sum-target">...</b></div>
+                        <div class="r-row"><span>Growth Tier:</span> <b id="sum-package" class="text-primary">...</b></div>
+                        <div class="r-divider"></div>
+                        <div class="r-row total"><span>Total Investment:</span> <b id="sum-price">...</b></div>
+                    </div>
+
+                    <div class="btn-group mt-4">
+                        <button class="action-btn outline" onclick="YtApp.closeTrustModal()">Cancel</button>
+                        <button class="action-btn confirm" id="btn-final-confirm" onclick="YtApp.finalizeOrder()">
+                            <span id="final-btn-text">Proceed to Checkout</span> <i class="fab fa-whatsapp"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-dots">
+                <div class="dot active" id="dot-1"></div>
+                <div class="dot" id="dot-2"></div>
+                <div class="dot" id="dot-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="workspace">
+        
+        <nav class="glass-header">
+            <a href="../index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back</a>
+            <div class="brand-badge"><img src="/IMAGES/logo.png" alt="" class="brand-icon" style="width:22px;height:22px;object-fit:contain;vertical-align:middle"> AccessUG</div>
+            <div class="spacer"></div>
+        </nav>
+
+        <header class="page-title">
+            <div class="live-status"><span class="pulse"></span> System Active</div>
+            <h1>YouTube <br><span class="text-gradient">Domination</span></h1>
+            <p>Select a premium tier, enter your handle, and watch your channel explode.</p>
+        </header>
+
+        <main class="order-flow">
+            
+            <section class="flow-module">
+                <div class="module-header">
+                    <span class="step-num">1</span>
+                    <h2>Select Growth Tier</h2>
+                </div>
+                <div class="bento-packages" id="package-grid"></div>
+            </section>
+
+            <section class="flow-module" id="details-module">
+                <div class="module-header">
+                    <span class="step-num">2</span>
+                    <h2>Target Details</h2>
+                </div>
+                
+                <div class="smart-form">
+                    
+                    <div class="floating-input">
+                        <input type="text" id="client-name" placeholder=" " autocomplete="name">
+                        <label>Your Full Name</label>
+                        <i class="fas fa-user field-icon"></i>
+                    </div>
+
+                    <div class="floating-input mt-3">
+                        <input type="tel" id="client-number" placeholder=" " autocomplete="tel">
+                        <label id="phone-label">WhatsApp Number</label>
+                        <i class="fab fa-whatsapp field-icon text-whatsapp"></i>
+                    </div>
+
+                    <div class="floating-input mt-3">
+                        <input type="text" id="yt-link" placeholder=" " autocomplete="off">
+                        <label>Channel Link or @Handle</label>
+                        <i class="fas fa-play-circle field-icon text-primary"></i>
+                    </div>
+
+                    <div class="ref-container mt-4">
+                        <button class="ref-toggle" id="ref-btn" onclick="YtApp.toggleReferral()">
+                            <i class="fas fa-gift"></i> Have a referral code?
+                        </button>
+                        <div class="ref-content" id="ref-drawer">
+                            <div class="floating-input mini">
+                                <input type="text" id="ref-code" placeholder=" " autocomplete="off">
+                                <label>Referral Code / Name</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <div class="scroll-pad"></div>
+        </main>
+
+        <footer class="smart-dock">
+            <div class="dock-inner">
+                <div class="dock-calc">
+                    <span class="calc-label">Total Investment</span>
+                    <div class="calc-price">
+                        <span id="ui-val" class="v-num">0</span>
+                        <span id="ui-curr" class="v-cur">UGX</span>
+                    </div>
+                </div>
+                
+                <button class="btn-checkout" id="btn-submit" onclick="YtApp.openTrustModal()" disabled>
+                    <span id="btn-text">Select Tier</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+<script src="/assets/preloader.js" defer></script>
+</body>
+</html>

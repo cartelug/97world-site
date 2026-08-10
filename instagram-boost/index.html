@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<link rel="stylesheet" href="/assets/preloader.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f4f5f8">
+    
+    <title>Boost Your Instagram | AccessUG</title>
+    <meta name="description" content="Get real Instagram Followers and Likes instantly. Simple, secure, and fast.">
+    
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="clean-bento-theme">
+<div id="k97pl" aria-hidden="true">
+  <img src="/IMAGES/logo.png" alt="">
+  <div class="k97pl-word">97 WORLD</div>
+  <div class="k97pl-bar"><i></i></div>
+</div>
+
+
+    <div id="toast-wrapper" class="toast-wrapper" aria-live="polite"></div>
+
+    <div class="modal-backdrop" id="country-modal" aria-hidden="true">
+        <div class="modal-surface">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <div class="modal-icon-badge">🌍</div>
+                <h2>Where are you from?</h2>
+                <p>We need your location to show you the correct local pricing.</p>
+            </div>
+            
+            <div class="modal-button-stack">
+                <button class="loc-btn" onclick="InstaApp.setCountry('UGX', 'UG')">
+                    <span class="loc-flag">🇺🇬</span>
+                    <div class="loc-text">
+                        <span class="loc-name">Uganda</span>
+                        <span class="loc-sub">Prices in UGX</span>
+                    </div>
+                    <i class="fas fa-chevron-right loc-arrow"></i>
+                </button>
+
+                <button class="loc-btn" onclick="InstaApp.setCountry('USD', 'SS')">
+                    <span class="loc-flag">🇸🇸</span>
+                    <div class="loc-text">
+                        <span class="loc-name">South Sudan</span>
+                        <span class="loc-sub">Prices in USD</span>
+                    </div>
+                    <i class="fas fa-chevron-right loc-arrow"></i>
+                </button>
+
+                <button class="loc-btn" onclick="InstaApp.setCountry('USD', 'CD')">
+                    <span class="loc-flag">🇨🇩</span>
+                    <div class="loc-text">
+                        <span class="loc-name">DR Congo</span>
+                        <span class="loc-sub">Prices in USD</span>
+                    </div>
+                    <i class="fas fa-chevron-right loc-arrow"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-layout" id="app-root">
+        
+        <nav class="app-nav">
+            <a href="../index.html" class="nav-back" aria-label="Go Back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="nav-brand">
+                <img src="/IMAGES/logo.png" alt="" class="brand-icon" style="width:22px;height:22px;object-fit:contain;vertical-align:middle"> AccessUG
+            </div>
+            <button class="nav-region-btn" onclick="InstaApp.openCountryModal()">
+                <i class="fas fa-map-marker-alt"></i> <span id="ui-region-badge">UGX</span>
+            </button>
+        </nav>
+
+        <header class="app-header">
+            <h1 class="hero-title">Grow Your <span class="text-gradient">Instagram</span></h1>
+            <p class="hero-text">Select what you need below. Buy both Followers and Likes to unlock an automatic 10% discount.</p>
+        </header>
+
+        <main class="bento-stack">
+            
+            <section class="bento-card" aria-labelledby="heading-followers">
+                <header class="bento-header">
+                    <div class="b-icon-wrap insta-purple-theme"><i class="fas fa-user-plus"></i></div>
+                    <div class="b-title-wrap">
+                        <h2 id="heading-followers">1. Get Followers</h2>
+                        <p>Make your profile look popular.</p>
+                    </div>
+                </header>
+                
+                <div class="bento-grid" id="grid-followers">
+                    </div>
+            </section>
+
+            <section class="bento-card" aria-labelledby="heading-likes">
+                <header class="bento-header">
+                    <div class="b-icon-wrap insta-pink-theme"><i class="fas fa-heart"></i></div>
+                    <div class="b-title-wrap">
+                        <h2 id="heading-likes">2. Get Likes (With Free Views)</h2>
+                        <p>Every Like package includes 2x Free Reels Views!</p>
+                    </div>
+                </header>
+                
+                <div class="bento-grid" id="grid-likes">
+                    </div>
+
+                <div class="split-controls" id="split-ui-box" style="display: none;">
+                    <div class="split-info">
+                        <label>Split across how many posts/reels?</label>
+                        <span id="split-math-output">~200 Likes per post</span>
+                    </div>
+                    <div class="split-stepper">
+                        <button onclick="InstaApp.adjustSplit(-1)" aria-label="Less posts"><i class="fas fa-minus"></i></button>
+                        <span class="split-count" id="split-counter-ui">5</span>
+                        <button onclick="InstaApp.adjustSplit(1)" aria-label="More posts"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bento-card details-card" aria-labelledby="heading-details">
+                <header class="bento-header minimal-header">
+                    <div class="b-title-wrap">
+                        <h2 id="heading-details">3. Your Details</h2>
+                        <p>Where are we sending this boost?</p>
+                    </div>
+                </header>
+                
+                <div class="input-wrapper">
+                    <div class="fat-input-box">
+                        <i class="fas fa-user input-prefix"></i>
+                        <input type="text" id="client-name" class="fat-input" placeholder="Your Full Name" autocomplete="name" spellcheck="false">
+                        <div class="focus-ring"></div>
+                    </div>
+                </div>
+
+                <div class="input-wrapper" style="margin-top: 12px;">
+                    <div class="fat-input-box">
+                        <i class="fab fa-whatsapp input-prefix" style="color: #25D366;"></i>
+                        <input type="tel" id="client-number" class="fat-input" placeholder="WhatsApp Number" autocomplete="tel">
+                        <div class="focus-ring"></div>
+                    </div>
+                </div>
+
+                <div class="input-wrapper" style="margin-top: 12px;">
+                    <div class="fat-input-box">
+                        <i class="fab fa-instagram input-prefix"></i>
+                        <input type="text" id="target-username" class="fat-input" placeholder="Your Instagram Username" autocomplete="off" spellcheck="false">
+                        <div class="focus-ring"></div>
+                    </div>
+                </div>
+
+                <div class="referrer-wrapper">
+                    <div class="referrer-question">
+                        <span>Did a friend refer you?</span>
+                        <div class="ref-pills">
+                            <button class="ref-pill active" id="ref-no" onclick="InstaApp.toggleReferrer(false)">No</button>
+                            <button class="ref-pill" id="ref-yes" onclick="InstaApp.toggleReferrer(true)">Yes</button>
+                        </div>
+                    </div>
+                    
+                    <div class="referrer-slide-box" id="referrer-drawer">
+                        <div class="fat-input-box small-fat-box">
+                            <i class="fas fa-user-friends input-prefix"></i>
+                            <input type="text" id="referrer-name" class="fat-input" placeholder="Enter their name here..." autocomplete="off">
+                            <div class="focus-ring"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="bottom-safe-space"></div>
+        </main>
+
+        <footer class="checkout-dock">
+            <div class="dock-inner">
+                
+                <div class="dock-details">
+                    <div class="dock-badges">
+                        <div class="badge combo-badge" id="ui-badge-combo"><i class="fas fa-check-circle"></i> 10% Bundle Discount</div>
+                        <div class="badge max-badge" id="ui-badge-max"><i class="fas fa-crown"></i> Best Price Cap Reached</div>
+                    </div>
+                    
+                    <span class="total-label">Your Total</span>
+                    <div class="price-cluster">
+                        <span class="price-strikethrough" id="ui-strike-price"></span>
+                        <span class="price-massive" id="ui-final-price">0</span>
+                        <span class="price-currency" id="ui-final-curr">UGX</span>
+                    </div>
+                </div>
+
+                <button class="action-btn" id="btn-submit" onclick="InstaApp.processCheckout()">
+                    <span class="btn-text" id="btn-text">Place Order</span>
+                    <i class="fas fa-arrow-right btn-icon" id="btn-icon"></i>
+                    
+                    <div class="btn-spinner-wrap" id="btn-spinner" style="display: none;">
+                        <svg class="circular-spinner" viewBox="25 25 50 50">
+                            <circle class="spinner-path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+                        </svg>
+                    </div>
+                </button>
+                
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+<script src="/assets/preloader.js" defer></script>
+</body>
+</html>

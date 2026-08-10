@@ -1,0 +1,211 @@
+/* === ACCESSUG NEURAL INTERFACE v3.0 === */
+:root {
+    --void: #020202;
+    --glass: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --text-main: #ffffff;
+    --text-muted: #9CA3AF;
+    --neon-accent: #7D2AE8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--void);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    overflow: hidden; /* App-like feel */
+}
+
+/* --- THE ETHEREAL FLUID BACKGROUND --- */
+#fluid-bg {
+    position: fixed; inset: 0; z-index: -2;
+    /* Canvas handles the colors */
+}
+.noise-overlay {
+    position: fixed; inset: 0; z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+/* --- LAYOUT --- */
+.app-container {
+    max-width: 1400px; margin: 0 auto; height: 100%;
+    display: flex; flex-direction: column; padding: 20px;
+}
+
+/* Nav */
+.glass-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 0; margin-bottom: 20px;
+}
+.nav-pill {
+    background: var(--glass); border: 1px solid var(--glass-border);
+    padding: 10px 20px; border-radius: 50px;
+    font-size: 0.9rem; font-weight: 600; color: #ccc;
+    display: flex; align-items: center; gap: 8px; transition: 0.3s;
+    backdrop-filter: blur(10px); text-decoration: none;
+}
+.nav-pill:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateX(-5px); }
+
+.nav-status {
+    font-family: 'Outfit'; font-weight: 700; font-size: 0.8rem; letter-spacing: 1px;
+    display: flex; align-items: center; gap: 10px; color: #00F57A;
+}
+.led-blink {
+    width: 6px; height: 6px; background: #00F57A; border-radius: 50%;
+    box-shadow: 0 0 10px #00F57A; animation: blink 2s infinite;
+}
+@keyframes blink { 50% { opacity: 0.3; } }
+
+/* Main Grid */
+.neural-grid {
+    flex: 1; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+    height: 85vh;
+}
+
+/* --- CHAT ZONE (Left) --- */
+.chat-zone { height: 100%; }
+.glass-panel {
+    height: 100%; display: flex; flex-direction: column;
+    background: rgba(10, 10, 10, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden; position: relative;
+    transition: transform 0.1s ease; /* For 3D Tilt */
+}
+
+.panel-header {
+    padding: 20px; border-bottom: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.02); position: relative;
+}
+.bot-id { display: flex; align-items: center; gap: 15px; }
+.avatar-ring {
+    width: 45px; height: 45px; border-radius: 12px;
+    background: linear-gradient(135deg, #222, #111);
+    border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--neon-accent); font-size: 1.2rem;
+    box-shadow: 0 0 20px rgba(125, 42, 232, 0.1);
+}
+.bot-meta h3 { font-family: 'Outfit'; font-size: 1rem; color: #fff; }
+.bot-meta p { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Scanline Effect */
+.scan-line {
+    position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(to right, transparent, var(--neon-accent), transparent);
+    opacity: 0.5; animation: scan 3s infinite linear; pointer-events: none;
+}
+@keyframes scan { 0% { top: 0; opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { top: 100%; opacity: 0; } }
+
+.chat-viewport {
+    flex: 1; padding: 25px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 18px;
+    scroll-behavior: smooth;
+}
+.chat-viewport::-webkit-scrollbar { width: 4px; }
+.chat-viewport::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+
+/* Bubbles */
+.msg {
+    max-width: 85%; padding: 14px 20px; border-radius: 18px;
+    font-size: 0.95rem; line-height: 1.5; position: relative;
+    animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.bot-msg {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 4px 18px 18px 18px; color: #eee;
+}
+.user-msg {
+    align-self: flex-end;
+    background: var(--neon-accent); color: #fff;
+    border-radius: 18px 4px 18px 18px;
+    box-shadow: 0 5px 20px rgba(125, 42, 232, 0.3);
+}
+
+.input-dock {
+    padding: 20px; border-top: 1px solid var(--glass-border);
+    display: flex; gap: 10px; background: rgba(0,0,0,0.2);
+    transition: 0.3s; opacity: 0.5;
+}
+.input-dock.active { opacity: 1; background: rgba(125, 42, 232, 0.05); }
+
+.input-dock input {
+    flex: 1; background: transparent; border: none; color: #fff;
+    font-family: 'Inter'; font-size: 1rem; outline: none;
+}
+.input-dock button {
+    background: var(--neon-accent); border: none; width: 40px; height: 40px;
+    border-radius: 10px; color: #fff; cursor: pointer; transition: 0.3s;
+    display: flex; align-items: center; justify-content: center;
+}
+.input-dock button:disabled { background: #333; cursor: default; }
+
+/* Choice Buttons */
+.choice-container { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+.msg-choice-btn {
+    background: transparent; border: 1px solid var(--neon-accent); color: var(--neon-accent);
+    padding: 8px 16px; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.85rem;
+    transition: 0.3s;
+}
+.msg-choice-btn:hover { background: var(--neon-accent); color: #fff; box-shadow: 0 0 15px rgba(125, 42, 232, 0.4); }
+
+/* Whatsapp Link Button */
+.whatsapp-btn-chat {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #25D366; color: #fff; text-decoration: none;
+    padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 0.9rem;
+    margin-top: 10px; transition: 0.3s; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.2);
+}
+.whatsapp-btn-chat:hover { background: #20b857; transform: translateY(-2px); }
+
+/* --- COMMAND ZONE (Right) --- */
+.command-zone { display: flex; flex-direction: column; justify-content: center; padding-left: 20px; }
+.zone-header { margin-bottom: 30px; }
+.zone-header h2 { font-family: 'Outfit'; font-size: 2.5rem; margin-bottom: 5px; }
+.zone-header p { color: var(--text-muted); }
+
+.card-stack { display: flex; flex-direction: column; gap: 15px; }
+
+.holo-card {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px; width: 100%; text-align: left;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px; cursor: pointer; position: relative; overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.holo-card:hover { transform: translateX(15px) scale(1.02); border-color: rgba(255,255,255,0.2); }
+
+.card-glow {
+    position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+    background: var(--c); opacity: 0.5; transition: 0.3s;
+    box-shadow: 0 0 15px var(--c);
+}
+.holo-card:hover .card-glow { width: 100%; opacity: 0.1; }
+
+.icon-box {
+    width: 45px; height: 45px; background: rgba(0,0,0,0.4); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; color: #fff; z-index: 2;
+}
+.card-data { z-index: 2; }
+.card-data h3 { font-family: 'Outfit'; font-size: 1.1rem; color: #fff; margin-bottom: 2px; }
+.card-data p { font-size: 0.85rem; color: #888; }
+
+@keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .neural-grid { display: flex; flex-direction: column-reverse; height: auto; padding-bottom: 50px; }
+    .chat-zone { height: 60vh; width: 100%; }
+    .command-zone { padding-left: 0; margin-bottom: 20px; }
+    .holo-card:hover { transform: translateX(0) translateY(-5px); }
+    body { height: auto; overflow-y: auto; }
+}

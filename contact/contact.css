@@ -1,0 +1,610 @@
+
+/* === Contact Page Specific Styles === */
+
+/* Enhanced Help Hub Section */
+.help-hub-section .section-title {
+    margin-bottom: 15px; /* Closer title */
+}
+/* Styles for .help-subtitle were removed as it wasn't used in contact.html */
+
+/* Enhanced Issue Grid & Cards */
+.issue-grid.enhanced-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Min card width */
+    gap: 40px; /* Larger gap */
+    margin-bottom: 90px;
+    align-items: start; /* Prevents cards stretching vertically */
+}
+
+.issue-card-link, .issue-card-wrapper {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    border-radius: 18px; /* Smoother radius */
+    transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), /* Smoother transition */
+                box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden; /* Ensure content respects border radius */
+    background-color: var(--card-bg); /* BG on wrapper */
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Initial subtle shadow */
+}
+.issue-card-link:hover, .issue-card-wrapper:hover {
+    transform: translateY(-10px) scale(1.02); /* More pronounced hover */
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.4);
+}
+
+.issue-card {
+    background: none;
+    backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    padding: 35px 30px;
+    text-align: left;
+    font-family: inherit;
+    color: var(--text-light);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+
+.issue-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 50%);
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+.issue-card-link:hover .issue-card::before,
+.issue-card-wrapper:hover .issue-card::before {
+    opacity: 0.8;
+}
+
+/* Bigger, styled icons/logos */
+.issue-card-icon {
+    width: 75px;
+    height: 75px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    background-color: rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.issue-card-icon.logo-icon {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+}
+.issue-card-icon.logo-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.issue-card-icon i {
+    font-size: 2.5rem;
+    color: #fff;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+/* Icon colors tied to card type */
+.issue-card.type-netflix .issue-card-icon { background-color: var(--netflix-red); border-color: rgba(255,255,255,0.2); }
+.issue-card.type-prime .issue-card-icon.logo-icon { background-color: transparent; }
+.issue-card.type-other .issue-card-icon { background-color: var(--cta-blue); border-color: rgba(255,255,255,0.2); }
+
+.issue-card-link:hover .issue-card-icon i,
+.issue-card-wrapper:hover .issue-card-icon i {
+     opacity: 1;
+}
+
+/* Card Content */
+.issue-card-content {
+    flex-grow: 1;
+}
+.issue-card-content h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff;
+}
+.issue-card-content p {
+    font-size: 1rem;
+    color: var(--text-medium);
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Image Preview Styling */
+.issue-card-image-preview {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 0;
+    position: relative;
+    max-width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.issue-card-image-preview img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide mobile image by default */
+.household-mobile-img {
+    display: none;
+}
+
+/* Prompts (Buttons at bottom) */
+.contact-prompt, .get-help-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #fff;
+    padding: 14px 25px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-top: auto; /* Pushes button to bottom */
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.contact-prompt i, .get-help-prompt i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Specific prompt styling + hover */
+.contact-prompt { background: var(--whatsapp-green); }
+.contact-prompt:hover { background: #1fbc5d; box-shadow: 0 7px 20px rgba(37, 211, 102, 0.35); }
+.contact-prompt:hover i.fa-whatsapp { transform: scale(1.1); }
+
+.get-help-prompt { background: var(--cta-blue); }
+.get-help-prompt:hover { background: var(--cta-blue-hover); box-shadow: 0 7px 20px rgba(0, 122, 255, 0.35); }
+.get-help-prompt:hover i.fa-arrow-right { transform: translateX(4px); }
+
+.issue-card.type-netflix .get-help-prompt {
+     margin-top: 15px; /* Ensure spacing even with image */
+}
+
+/* Enhanced Direct Contact Section */
+.direct-contact-enhanced {
+    background: var(--gradient-dark);
+    border-radius: 20px;
+    padding: 50px 40px;
+    margin-top: 80px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.direct-contact-title {
+    font-size: clamp(1.6rem, 4.5vw, 2rem);
+    color: #fff;
+    margin-bottom: 10px;
+}
+.direct-contact-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-medium);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.direct-contact-methods {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+}
+.direct-contact-button {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    padding: 25px;
+    text-decoration: none;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 280px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+.direct-contact-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.direct-contact-button i:not(.arrow) {
+    font-size: 2.2rem;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+}
+.direct-contact-button.whatsapp i:not(.arrow) { color: var(--whatsapp-green); }
+.direct-contact-button.email i:not(.arrow) { color: var(--cta-blue); }
+
+.contact-button-text {
+    text-align: left;
+    flex-grow: 1;
+}
+.contact-button-text span {
+    font-size: 1.15rem;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 3px;
+}
+.contact-button-text small {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    display: block;
+}
+.direct-contact-button .arrow {
+    font-size: 1rem;
+    color: var(--text-medium);
+    opacity: 0.7;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.direct-contact-button:hover .arrow {
+    transform: translateX(5px);
+    opacity: 1;
+    color: #fff;
+}
+
+/* --- Contact Page Responsiveness --- */
+@media (max-width: 992px) {
+    .issue-grid.enhanced-grid { gap: 30px; }
+    .direct-contact-methods { gap: 25px; }
+    .direct-contact-button { min-width: 250px; }
+}
+@media (max-width: 768px) {
+    .issue-grid.enhanced-grid { grid-template-columns: 1fr; gap: 25px; margin-bottom: 60px; } /* Stack cards */
+    .issue-card { min-height: auto; padding: 25px 20px; }
+    .issue-card-icon { width: 60px; height: 60px; margin-bottom: 20px; }
+    .issue-card-content h3 { font-size: 1.15rem; }
+    .issue-card-content p { font-size: 0.95rem; }
+    .contact-prompt, .get-help-prompt { font-size: 0.95rem; padding: 12px 20px; }
+
+    /* Image Preview Responsive */
+    .household-desktop-img { display: none; }
+    .household-mobile-img { display: block; }
+    .issue-card-image-preview { margin-top: 10px; margin-bottom: 15px; }
+
+    .direct-contact-enhanced { padding: 40px 25px; margin-top: 60px; }
+    .direct-contact-title { font-size: 1.6rem; }
+    .direct-contact-subtitle { font-size: 1rem; }
+    .direct-contact-button { min-width: 280px; width: 100%; }
+}
+@media (max-width: 480px) {
+    .issue-grid.enhanced-grid { gap: 20px; margin-bottom: 50px; }
+    .issue-card { padding: 25px; }
+    .issue-card-icon { width: 55px; height: 55px; }
+    .issue-card-icon i { font-size: 2rem; }
+    .issue-card-content h3 { font-size: 1.1rem; }
+    .issue-card-content p { font-size: 0.9rem; }
+    .contact-prompt, .get-help-prompt { font-size: 0.9rem; }
+
+    .direct-contact-enhanced { padding: 30px 20px; }
+    .direct-contact-methods { gap: 20px; }
+    .direct-contact-button { flex-direction: column; align-items: flex-start; text-align: left; gap: 15px; padding: 20px; }
+    .direct-contact-button i:not(.arrow) { margin-bottom: 5px; width: auto; text-align: left;}
+    .direct-contact-button .arrow { display: none; }
+}
+`css
+/* === Styles for Netflix Signed Out Modal === */
+
+/* Make the modal content slightly wider */
+.signed-out-modal-content {
+    max-width: 650px; /* Adjust as needed */
+    padding: 30px 40px; /* Adjust padding */
+    text-align: left; /* Align text left by default */
+}
+
+.modal-step {
+    /* Basic styling for each step container */
+    padding: 10px 0;
+    animation: fadeInStep 0.5s ease-in-out; /* Add fade-in */
+}
+
+@keyframes fadeInStep {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-step-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.modal-step-title i {
+    color: var(--netflix-red); /* Use Netflix red for icons */
+    font-size: 0.9em; /* Slightly smaller icon */
+}
+
+.modal-intro-text {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.modal-step p {
+    color: var(--text-medium);
+    line-height: 1.7;
+    margin-bottom: 15px;
+    font-size: 1rem;
+}
+.modal-step p strong {
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+/* Email Options Styling */
+.email-options-container {
+    max-height: 250px; /* Limit height and make scrollable */
+    overflow-y: auto;
+    padding: 10px;
+    margin: 20px 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background-color: rgba(0,0,0, 0.1);
+}
+.email-option {
+    display: block; /* Each option on its own line */
+    margin-bottom: 8px;
+}
+.email-option input[type="radio"] {
+    opacity: 0; /* Hide actual radio */
+    position: absolute;
+    width: 1px; height: 1px;
+}
+.email-option label {
+    display: block;
+    padding: 12px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+.email-option label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.email-option input[type="radio"]:checked + label {
+    border-color: var(--netflix-red); /* Use Netflix red for selection */
+    background-color: rgba(229, 9, 20, 0.15);
+    color: #fff;
+    font-weight: 600;
+}
+.email-option input[type="radio"]:focus + label {
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.4); /* Red focus outline */
+}
+.email-option label b { /* Style for the bold numbers */
+    font-weight: 800; /* Extra bold */
+    color: #fff; /* White color for emphasis */
+    margin: 0 1px; /* Tiny spacing around number */
+}
+
+/* Modal Navigation Buttons */
+.modal-nav {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: flex-end; /* Align buttons right by default */
+    gap: 15px;
+    flex-wrap: wrap; /* Allow wrapping */
+}
+.confirmation-nav {
+    justify-content: space-between; /* Space out Yes/No buttons */
+}
+.device-nav {
+    justify-content: center; /* Center device buttons */
+    gap: 25px;
+}
+
+/* General Modal Button Styles */
+.modal-button-next,
+.modal-button-primary,
+.modal-button-secondary,
+.modal-button-choice {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0, 0.2);
+}
+.modal-button-next i,
+.modal-button-primary i,
+.modal-button-secondary i,
+.modal-button-choice i {
+    transition: transform 0.3s ease;
+}
+
+/* Primary Button (Next, Yes, Done) */
+.modal-button-next,
+.modal-button-primary {
+    background-color: var(--netflix-red); /* Netflix Red */
+    color: #fff;
+}
+.modal-button-next:hover:not(:disabled),
+.modal-button-primary:hover {
+    background-color: #b80710; /* Darker Red */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+}
+.modal-button-next:hover:not(:disabled) i.fa-arrow-right { transform: translateX(4px); }
+.modal-button-primary:hover i { transform: scale(1.1); }
+
+/* Secondary Button (No, Choose Again) */
+.modal-button-secondary {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.modal-button-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.modal-button-secondary:hover i.fa-arrow-left { transform: translateX(-4px); }
+
+/* Choice Button (TV, Phone) */
+.modal-button-choice {
+    background-color: var(--cta-blue); /* Use CTA blue */
+    color: #fff;
+    min-width: 150px; /* Give buttons some width */
+    justify-content: center;
+}
+.modal-button-choice:hover {
+    background-color: var(--cta-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
+}
+
+/* Disabled State */
+.modal-button-next:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Back Button */
+.modal-back-button {
+    background: none;
+    border: 1px solid var(--text-medium);
+    color: var(--text-medium);
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px; /* Space above back button */
+}
+.modal-back-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: #fff;
+}
+
+/* Specific Step Content Styling */
+#modal-selected-email { /* Display of selected email in step 2 */
+    display: block;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin: 10px 0 20px 0;
+    font-size: 1.1rem;
+    text-align: center;
+    color: #fff;
+    word-break: break-all;
+}
+.selected-email-display b { /* Bold numbers in confirmation */
+    font-weight: 800;
+    color: #fff;
+}
+
+.instructions-content {
+    background-color: rgba(0,0,0, 0.15);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.instructions-content p {
+    margin-bottom: 12px;
+    font-size: 1rem;
+}
+.instructions-content p:last-child {
+    margin-bottom: 0;
+}
+.instruction-value { /* Styling for email/password display */
+    color: #fff;
+    font-family: monospace; /* Monospace for clarity */
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 1.05em;
+    word-break: break-all;
+}
+.highlight-url {
+    color: var(--cta-blue);
+    font-weight: 600;
+}
+
+/* Responsive Adjustments for Modal */
+@media (max-width: 600px) {
+    .signed-out-modal-content {
+        padding: 25px 20px;
+        max-width: 95%;
+    }
+    .modal-step-title {
+        font-size: 1.4rem;
+        gap: 10px;
+    }
+    .modal-step p {
+        font-size: 0.95rem;
+    }
+    .email-options-container {
+        max-height: 200px; /* Adjust height */
+    }
+    .modal-nav {
+        flex-direction: column;
+        align-items: stretch; /* Make buttons full width */
+    }
+    .confirmation-nav {
+        flex-direction: column-reverse; /* Put Yes button on bottom */
+    }
+    .device-nav {
+        gap: 15px;
+    }
+    .modal-button-choice {
+        min-width: unset; /* Remove min-width */
+    }
+    .modal-back-button {
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+    }
+}

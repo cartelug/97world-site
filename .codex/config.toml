@@ -1,7 +1,0 @@
-[mcp_servers."21st"]
-url = "https://21st.dev/api/mcp"
-env_http_headers = { "x-api-key" = "TWENTY_FIRST_API_KEY" }
-enabled = true
-startup_timeout_sec = 20
-tool_timeout_sec = 90
-

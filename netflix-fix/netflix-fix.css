@@ -1,0 +1,324 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Calmer gradient background */
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align top */
+    min-height: 100vh;
+    padding: 40px 20px; /* More padding top */
+}
+
+.container {
+    background-color: rgba(42, 42, 70, 0.8); /* Slightly transparent dark blue/purple */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+}
+
+header {
+    margin-bottom: 40px;
+}
+
+.icon-calm {
+    font-size: 3em;
+    color: #E50914; /* Netflix Red */
+    margin-bottom: 15px;
+    /* Removed pulse animation for less distraction */
+}
+
+header h1 {
+    color: #f5f5f5; /* Brighter white */
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: clamp(1.5em, 4vw, 2em); /* Responsive font size */
+}
+
+.subtitle {
+    font-size: clamp(1em, 3vw, 1.2em);
+    color: #b0b0d0; /* Lighter purple/grey */
+    margin-bottom: 30px;
+}
+
+/* Device Choice Section */
+.choice-section h2 {
+    color: #e0e0e0;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Space between buttons */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.choice-button {
+    background: linear-gradient(145deg, #e50914, #b30710); /* Netflix Red Gradient */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+}
+
+.choice-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
+}
+
+.choice-button:active {
+     transform: translateY(-1px);
+}
+
+/* Instructions Section */
+.instructions {
+    margin-top: 40px;
+    text-align: left; /* Align steps to the left */
+    animation: fadeIn 0.5s ease-in-out; /* Fade in animation */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+.instructions h2 {
+    text-align: center;
+    color: #f5f5f5;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.step {
+    background-color: rgba(255, 255, 255, 0.05); /* Very subtle background for steps */
+    padding: 20px 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start; /* Align number top-left */
+    gap: 15px; /* Space between number and text */
+    border-left: 4px solid #4CAF50; /* Green accent */
+}
+
+.step-number {
+    background-color: #4CAF50; /* Green background for numbers */
+    color: #fff;
+    font-weight: 600;
+    border-radius: 50%;
+    min-width: 30px; /* Ensure circle shape */
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    flex-shrink: 0; /* Prevent number from shrinking */
+}
+
+/* Select the div wrapper inside the step for better text alignment */
+.step > div {
+    flex-grow: 1; /* Allow text/image container to take available space */
+}
+
+.step p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #d0d0e0; /* Slightly lighter text for steps */
+    margin-bottom: 5px; /* Add space below paragraph if image follows */
+}
+
+.step strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.final-step {
+     border-left-color: #E50914; /* Red accent for final step */
+     text-align: center; /* Center content in final step */
+     display: block; /* Override flex for centering button */
+     padding-top: 30px; /* Add some space above */
+}
+
+.final-step .step-number {
+    background-color: #E50914; /* Red number for final step */
+    margin: 0 auto 15px auto; /* Center the number */
+}
+
+.whatsapp-button {
+    display: inline-block;
+    background-color: #25D366; /* WhatsApp Green */
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    gap: 10px;
+}
+
+.whatsapp-button:hover {
+    background-color: #1DAE56;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.note {
+    font-size: 0.9em;
+    color: #aaa;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.back-button {
+    background: none;
+    border: 1px solid #aaa;
+    color: #aaa;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 30px;
+    display: block; /* Center button */
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: #fff;
+}
+
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: 50px;
+    font-size: 0.9em;
+    color: #888;
+}
+
+.footer-link {
+    color: #aab;
+    text-decoration: none;
+}
+.footer-link:hover {
+    color: #eef;
+    text-decoration: underline;
+}
+
+/* Styling for the instruction image in the phone section */
+#phone-instructions .step img {
+    max-width: 60%;  /* Reduced size - You can adjust this % */
+    height: auto;     /* Maintain aspect ratio */
+    margin-top: 15px; /* Add some space above the image */
+    margin-bottom: 5px; /* Add some space below the image */
+    border: 1px solid #666; /* Slightly lighter border */
+    border-radius: 6px; /* Slightly more rounded corners */
+    display: block;    /* Ensure it takes its own line */
+    margin-left: auto; /* Center the image within the step */
+    margin-right: auto;/* Center the image within the step */
+}
+
+/* Styling for the instruction image in the TV section */
+#tv-instructions .step img {
+    max-width: 70%;  /* Adjust as needed - slightly larger for TV? */
+    height: auto;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    border: 1px solid #666;
+    border-radius: 6px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        padding: 25px; /* Ensure container has padding on mobile */
+        margin-top: 20px; /* Reduce top margin */
+    }
+
+    .button-group {
+        flex-direction: column; /* Stack choice buttons */
+        gap: 15px;
+    }
+    .choice-button {
+        width: 100%; /* Full width buttons */
+        justify-content: center;
+        font-size: 1em;
+        padding: 12px 20px;
+    }
+    .step {
+        padding: 15px; /* Adjust step padding on mobile */
+        flex-direction: column; /* Stack number and content */
+        align-items: center; /* Center items when stacked */
+        text-align: center; /* Center text */
+    }
+    .step > div {
+        width: 100%; /* Ensure content div takes full width */
+    }
+    .step-number {
+        margin-bottom: 10px; /* Add space below number when stacked */
+    }
+    /* Adjust image size specifically for mobile if needed */
+    #phone-instructions .step img {
+        max-width: 85%; /* Make image slightly larger percentage on mobile */
+    }
+    #tv-instructions .step img {
+        max-width: 90%; /* Make TV image slightly larger percentage on mobile */
+    }
+
+    .whatsapp-button {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    header h1 {
+        font-size: 1.4em; /* Further reduce header size */
+    }
+    .subtitle {
+        font-size: 0.9em;
+    }
+    #phone-instructions .step img {
+        max-width: 95%; /* Allow image to be almost full width on very small screens */
+    }
+    #tv-instructions .step img {
+        max-width: 95%; /* Allow TV image to be almost full width on very small screens */
+    }
+}

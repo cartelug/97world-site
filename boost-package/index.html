@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="/assets/preloader.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Viral Boost | AccessUG</title>
+    
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="stylesheet" href="../HOME/style.css?v=7.0">
+    <link rel="stylesheet" href="style.css?v=13.0">
+</head>
+<body class="boost-mode">
+<div id="k97pl" aria-hidden="true">
+  <img src="/IMAGES/logo.png" alt="">
+  <div class="k97pl-word">97 WORLD</div>
+  <div class="k97pl-bar"><i></i></div>
+</div>
+
+
+    <div class="viral-bg">
+        <div class="blob pink-blob"></div>
+        <div class="blob cyan-blob"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="../index.html" class="logo-wrapper">
+                <img src="/IMAGES/logo.png" alt="AccessUG" class="brand-logo">
+            </a>
+            <a href="../index.html" class="nav-item back-link"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </nav>
+
+    <main class="order-container">
+        
+        <div class="progress-track">
+            <div class="step active" data-step="1">1. Level</div>
+            <div class="step" data-step="2">2. Platform</div>
+            <div class="step" data-step="3">3. Trust</div>
+            <div class="step" data-step="4">4. Fame</div>
+        </div>
+
+        <div class="wizard-card glass-panel">
+            
+            <div class="wizard-step active-step" id="step-1">
+                <div class="step-header">
+                    <h2>Choose Your <span class="highlight-mix">Fame Level</span></h2>
+                    <p>Go viral instantly. Followers + Likes included.</p>
+                </div>
+
+                <div class="plan-grid">
+                    
+                    <div class="plan-card vvip-card" onclick="selectPlan(this, 'VVIP Status', '11,000 Followers', '1000 Likes', '99')">
+                        <div class="tag glitch">BEST SELLER</div>
+                        <div class="card-content">
+                            <div class="plan-header">
+                                <h3>VVIP Status</h3>
+                                <div class="price-box">$99</div>
+                            </div>
+                            
+                            <div class="stat-grid">
+                                <div class="stat-item big">
+                                    <span class="num">10K</span>
+                                    <span class="label">Followers</span>
+                                </div>
+                                <div class="plus-sign">+</div>
+                                <div class="stat-item bonus">
+                                    <span class="num">1K</span>
+                                    <span class="label">Bonus Gift</span>
+                                </div>
+                            </div>
+
+                            <div class="engagement-pill">
+                                <i class="fas fa-heart"></i> Includes 1,000 Likes (5 Posts)
+                            </div>
+                        </div>
+                        <div class="glow-border"></div>
+                    </div>
+
+                    <div class="plan-card" onclick="selectPlan(this, 'Starter Pack', '7,000 Followers', '600 Likes', '75')">
+                        <div class="tag">POPULAR</div>
+                        <div class="card-content">
+                            <div class="plan-header">
+                                <h3>Starter Pack</h3>
+                                <div class="price-box">$75</div>
+                            </div>
+                            
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <span class="num">6K</span>
+                                    <span class="label">Followers</span>
+                                </div>
+                                <div class="plus-sign">+</div>
+                                <div class="stat-item bonus">
+                                    <span class="num">1K</span>
+                                    <span class="label">Bonus Gift</span>
+                                </div>
+                            </div>
+
+                            <div class="engagement-pill">
+                                <i class="fas fa-heart"></i> Includes 600 Likes (5 Posts)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="plan-card" onclick="selectPlan(this, 'Creator Mode', '5,000 Followers', '400 Likes', '50')">
+                        <div class="tag">ENTRY</div>
+                        <div class="card-content">
+                            <div class="plan-header">
+                                <h3>Creator Mode</h3>
+                                <div class="price-box">$50</div>
+                            </div>
+                            
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <span class="num">4K</span>
+                                    <span class="label">Followers</span>
+                                </div>
+                                <div class="plus-sign">+</div>
+                                <div class="stat-item bonus">
+                                    <span class="num">1K</span>
+                                    <span class="label">Bonus Gift</span>
+                                </div>
+                            </div>
+
+                            <div class="engagement-pill">
+                                <i class="fas fa-heart"></i> Includes 400 Likes (5 Posts)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="scroll-target-1"></div>
+                <button class="btn primary-mix disabled" id="btn-step-1" onclick="goToStep(2)">
+                    Select Level <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="wizard-step" id="step-2">
+                <div class="step-header">
+                    <h2>Where Do You Want <span class="highlight-mix">Fame?</span></h2>
+                    <p>Apply your package to one or both platforms.</p>
+                </div>
+
+                <div class="platform-grid">
+                    
+                    <div class="plat-card ig-theme" onclick="selectPlatform(this, 'Instagram Only')">
+                        <div class="plat-icon"><i class="fab fa-instagram"></i></div>
+                        <h3>Instagram Only</h3>
+                        <p>Get all followers & likes on Instagram.</p>
+                        <div class="selection-dot"></div>
+                    </div>
+
+                    <div class="plat-card tt-theme" onclick="selectPlatform(this, 'TikTok Only')">
+                        <div class="plat-icon"><i class="fab fa-tiktok"></i></div>
+                        <h3>TikTok Only</h3>
+                        <p>Get all followers & likes on TikTok.</p>
+                        <div class="selection-dot"></div>
+                    </div>
+
+                    <div class="plat-card mix-theme" onclick="selectPlatform(this, 'Ultimate Mix')">
+                        <div class="plat-icons">
+                            <i class="fab fa-tiktok"></i>
+                            <span>+</span>
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3>Ultimate Mix (Both)</h3>
+                        <p>Split Fame: Core on TikTok + Bonus on IG.</p>
+                        <div class="selection-dot"></div>
+                    </div>
+
+                </div>
+
+                <div class="info-note" id="split-info">
+                    <i class="fas fa-info-circle"></i> Select a platform to see distribution details.
+                </div>
+
+                <button class="btn primary-mix disabled" id="btn-step-2" onclick="goToStep(3)">
+                    Confirm Platform <i class="fas fa-check"></i>
+                </button>
+            </div>
+
+            <div class="wizard-step" id="step-3">
+                <div class="step-header">
+                    <h2>Real <span class="highlight-mix">Results</span></h2>
+                    <p>See how others went viral with AccessUG.</p>
+                </div>
+
+                <div class="proof-viewer">
+                    <div class="proof-track">
+                        <img src="../IMAGES/boost1.png" alt="Proof 1" class="proof-img">
+                        <img src="../IMAGES/boost2.png" alt="Proof 2" class="proof-img">
+                        <img src="../IMAGES/boost3.png" alt="Proof 3" class="proof-img">
+                    </div>
+                    <div class="scroll-hint"><i class="fas fa-hand-pointer"></i> Swipe to inspect</div>
+                </div>
+
+                <button class="btn primary-mix" onclick="goToStep(4)">
+                    I'm Ready to Blow Up. Next. <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="wizard-step" id="step-4">
+                <div class="step-header">
+                    <h2>Claim Your <span class="highlight-mix">Clout</span></h2>
+                    <p>Enter details to start the boost.</p>
+                </div>
+
+                <div class="policy-alert">
+                    <div class="alert-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="alert-text">
+                        <strong>Instant Start Guarantee</strong>
+                        <p>We start processing your boost immediately after payment.</p>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Your @Username (Handle)</label>
+                    <input type="text" id="socialHandle" placeholder="e.g. @king_david">
+                </div>
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="clientName" placeholder="e.g. David M.">
+                </div>
+
+                <div class="input-group">
+                    <label>Payment Method</label>
+                    <select id="paymentMethod">
+                        <option value="MTN Mobile Money">MTN Mobile Money</option>
+                        <option value="Airtel Money">Airtel Money</option>
+                        <option value="Cash in Office">Cash (Office Visit)</option>
+                    </select>
+                </div>
+
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Package</span>
+                        <span class="val" id="sum-plan">...</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Target</span>
+                        <span class="val" id="sum-plat">...</span>
+                    </div>
+                    <hr>
+                    <div class="summary-row total">
+                        <span>Total Price</span>
+                        <span class="val highlight-mix" id="sum-total">...</span>
+                    </div>
+                </div>
+
+                <a href="#" id="whatsapp-btn" class="btn whatsapp-green-btn" onclick="return validateAndSend()">
+                    <i class="fab fa-whatsapp"></i> Order on WhatsApp
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="script.js?v=13.0"></script>
+<script src="/assets/preloader.js" defer></script>
+</body>
+</html>
