@@ -31,6 +31,16 @@
 </div>
 
 
+    <!-- region gate: we cannot show a price until we know where they are -->
+    <div class="gate" id="regionGate" role="dialog" aria-modal="true" aria-labelledby="gate-h" hidden>
+        <div class="gate-card">
+            <img src="/IMAGES/logo.png" alt="" class="gate-logo">
+            <h2 id="gate-h">Where are you?</h2>
+            <p>So every price on this site is one you can actually pay.</p>
+            <div class="region-grid"></div>
+        </div>
+    </div>
+
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
     <div class="cursor-spotlight" id="spotlight"></div>
 
@@ -41,8 +51,8 @@
                 <span class="brand-text">WORLD</span>
             </a>
             <div class="nav-links">
-                <a href="#path" class="nav-item" data-path-link="grow">Grow</a>
-                <a href="#path" class="nav-item" data-path-link="build">Build</a>
+                <a href="#path" class="nav-item">Grow</a>
+                <a href="#build" class="nav-item">Build</a>
                 <a href="#how" class="nav-item">How it works</a>
                 <a href="#proof" class="nav-item">Proof</a>
             </div>
@@ -124,7 +134,7 @@
 
                 <div class="hero-ask fade-up delay-2">
                     <div class="hero-choice">
-                        <button type="button" class="choice-panel" data-path="grow" aria-pressed="false">
+                        <button type="button" class="choice-panel is-featured" data-path="grow">
                             <span class="cp-glow"></span>
                             <span class="cp-tag">Most popular</span>
                             <span class="cp-marks">
@@ -141,7 +151,7 @@
                             </span>
                         </button>
 
-                        <button type="button" class="choice-panel" data-path="build" aria-pressed="false">
+                        <button type="button" class="choice-panel" data-path="build">
                             <span class="cp-glow"></span>
                             <!-- inline SVG, not icon-font glyphs: this row carries the
                                  card's whole visual weight and must render even if the
@@ -176,213 +186,96 @@
             </div>
         </section>
 
-        <div class="intent-bar" id="intentBar" aria-hidden="true">
-            <div class="container intent-inner">
-                <span class="intent-q">What would you like to get?</span>
-                <div class="intent-switch">
-                    <button type="button" class="intent-btn" data-path="grow"><i class="fas fa-fire-flame-curved"></i> Grow</button>
-                    <button type="button" class="intent-btn" data-path="build"><i class="fas fa-cube"></i> Build</button>
-                </div>
-            </div>
-        </div>
 
+
+        <!-- =================================================== 2. BUILDER ===
+             The offers section is now the first step of the order itself:
+             pick a platform, pick a size, see the real price, continue. They
+             have built the order before they have left the home page. -->
         <section id="path" class="stage-path">
-            <div class="container relative-z">
+            <div class="container">
+                <div class="sec-head fade-up">
+                    <span class="sec-kicker">Build your order</span>
+                    <h2 class="sec-title">What are we <em>growing?</em></h2>
+                    <p class="sec-sub">Two taps to a real price. Nothing to sign up for.</p>
+                </div>
 
-                <!-- ============ GROW ============ -->
-                <div class="path-pane" data-pane="grow">
-                    <div class="path-head fade-up">
-                        <span class="path-eyebrow">Social Growth</span>
-                        <h2 class="heading-large">Look like the brand <span class="text-emerald">people follow.</span></h2>
+                <div class="builder fade-up" id="builder">
+                    <div class="bd-step">
+                        <span class="bd-label">1 — Platform</span>
+                        <div class="bd-plats" id="bd-plats" role="group" aria-label="Platform"></div>
                     </div>
 
-                    <article class="offer-hero fade-up delay-1">
-                        <div class="oh-badge">Most people start here</div>
-                        <div class="oh-body">
-                            <div class="oh-left">
-                                <h3>The Growth Bundle</h3>
-                                <p class="oh-desc">Followers <em>and</em> likes together, split across Instagram and TikTok. The fastest way to stop looking new.</p>
-                                <ul class="oh-proof">
-                                    <li><i class="fas fa-lock-open"></i> We never ask for your password</li>
-                                    <li><i class="fas fa-anchor"></i> Followers don't drop off after delivery</li>
-                                    <li><i class="fas fa-gauge-high"></i> Gradual, safe delivery — nothing looks sudden</li>
-                                </ul>
-                            </div>
-                            <div class="oh-right">
-                                <div class="oh-figure"><b class="anim-counter" data-target="10000">0</b><span>followers</span></div>
-                                <div class="oh-plus">+ 10,000 likes + 20,000 views</div>
-                                <div class="oh-price"><span class="oh-price-main">$250</span><span class="oh-price-note">Followers only, from $35</span></div>
-                                <a href="boost-package/" class="oh-cta">Get the bundle <i class="fas fa-arrow-right"></i></a>
-                            </div>
+                    <div class="bd-step">
+                        <span class="bd-label">2 — Package</span>
+                        <div class="bd-plans" id="bd-plans" role="group" aria-label="Package"></div>
+                    </div>
+
+                    <div class="bd-foot">
+                        <div class="bd-total">
+                            <span class="bd-total-label">Your price</span>
+                            <b id="bd-price">—</b>
+                            <span class="bd-was" id="bd-was"></span>
                         </div>
-                    </article>
+                        <a href="/instagram-boost/" class="bd-go" id="bd-go">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <p class="bd-note" id="bd-note">Prices for <b id="bd-region">Uganda</b>. <button type="button" id="bd-change">Change</button></p>
+                </div>
 
-                    <p class="path-or fade-up">Or grow one platform on its own</p>
-
-                    <div class="platform-row" data-stagger>
-                        <a href="instagram-boost/" class="pf-chip">
-                            <img src="/IMAGES/instagram.png" alt="">
-                            <span class="pf-name">Instagram</span>
-                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
+                <div class="build-alt fade-up" id="build">
+                    <span class="ba-head">Need a website or business emails instead?</span>
+                    <div class="ba-row">
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20the%20%24500%20Website%20Package." target="_blank" rel="noopener" class="ba-item">
+                            <b>Website</b><span>$500 · $250 starts it</span>
                         </a>
-                        <a href="tiktok-boost/" class="pf-chip">
-                            <img src="/IMAGES/tiktok.png" alt="">
-                            <span class="pf-name">TikTok</span>
-                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20business%20emails%20on%20my%20domain." target="_blank" rel="noopener" class="ba-item">
+                            <b>Business emails</b><span>Free with a website</span>
                         </a>
-                        <a href="facebook-boost/" class="pf-chip">
-                            <img src="/IMAGES/facebook.png" alt="">
-                            <span class="pf-name">Facebook</span>
-                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
-                        </a>
-                        <a href="youtube-boost/" class="pf-chip">
-                            <img src="/IMAGES/youtube.png" alt="">
-                            <span class="pf-name">YouTube</span>
-                            <span class="pf-go"><i class="fas fa-arrow-right"></i></span>
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20order%20a%20campaign%20flier." target="_blank" rel="noopener" class="ba-item">
+                            <b>Fliers &amp; design</b><span>From $40</span>
                         </a>
                     </div>
                 </div>
-
-                <!-- ============ BUILD ============ -->
-                <div class="path-pane" data-pane="build">
-                    <div class="path-head fade-up">
-                        <span class="path-eyebrow">Build &amp; Design</span>
-                        <h2 class="heading-large">Give the business <span class="text-emerald">somewhere to live.</span></h2>
-                    </div>
-
-                    <article class="offer-hero fade-up delay-1">
-                        <div class="oh-badge">Flagship — 7 day launch</div>
-                        <div class="oh-body">
-                            <div class="oh-left">
-                                <h3>Your Business Website</h3>
-                                <p class="oh-desc">A complete, mobile-first website — built, hosted and launched in 7 days. Everything you need to look real online, in one package.</p>
-                                <ul class="oh-proof">
-                                    <li><i class="fas fa-envelope"></i> 5 business emails on your own domain</li>
-                                    <li><i class="fas fa-shield-halved"></i> Hosting, SSL &amp; basic SEO set up for you</li>
-                                    <li><i class="fab fa-whatsapp"></i> WhatsApp &amp; call buttons wired in</li>
-                                </ul>
-                            </div>
-                            <div class="oh-right">
-                                <div class="oh-figure"><b>$250</b><span>to start</span></div>
-                                <div class="oh-plus">$500 total · balance on launch</div>
-                                <div class="oh-price"><span class="oh-price-note oh-price-note-solo">2 revision rounds included</span></div>
-                                <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20start%20the%20%24500%20Website%20Launch%20Package%20(%24250%20deposit%20to%20start).%20What%20do%20you%20need%20from%20me%3F" target="_blank" rel="noopener" class="oh-cta">Start with $250 <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <p class="path-or fade-up">Or start smaller</p>
-
-                    <div class="offer-pair" data-stagger>
-                        <article class="offer-mini">
-                            <span class="om-ic"><i class="fas fa-paintbrush"></i></span>
-                            <h4>Campaign Fliers</h4>
-                            <p>Print- and social-ready artwork that stops the scroll. Delivered in about 2 days.</p>
-                            <div class="om-foot">
-                                <span class="om-price">$40</span>
-                                <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20order%20a%20campaign%20flier%2Fposter%20(%2440)." target="_blank" rel="noopener" class="om-cta">Order <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </article>
-
-                        <article class="offer-mini">
-                            <span class="om-ic"><i class="fas fa-diagram-project"></i></span>
-                            <h4>Custom Systems</h4>
-                            <p>Booking tools, dashboards and portals built around how your business actually runs.</p>
-                            <div class="om-foot">
-                                <span class="om-price om-price-sm">Custom quote</span>
-                                <a href="https://wa.me/256762193386?text=Hi%2C%20I%20want%20to%20build%20a%20system%2Fbooking%20tool%2Fdashboard.%20Here%27s%20what%20it%20needs%20to%20do%3A%20" target="_blank" rel="noopener" class="om-cta">Get a quote <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </article>
-                    </div>
-
-                    <p class="path-also fade-up">
-                        Also available:
-                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%20need%20business%20email%20addresses%20set%20up%20on%20my%20domain." target="_blank" rel="noopener">Business emails</a>
-                        <span class="also-free">free with a website</span>
-                        ·
-                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20monthly%20social%20media%20management%20for%20my%20business.%20My%20platforms%20are%3A%20" target="_blank" rel="noopener">Monthly social media management</a>
-                    </p>
-                </div>
-
             </div>
         </section>
 
+        <!-- ============================================ 3. HOW + 4. PROOF ===
+             Four steps and the trust case, in one band. Both used to be
+             full-height sections saying very little per screen. -->
         <section id="how" class="stage-how">
-            <div class="container relative-z">
-                <div class="section-title fade-up">
-                    <h2 class="heading-large">Zero risk. <span class="text-emerald">Every time.</span></h2>
-                    <p class="how-sub">Four steps. No account, no sign-up, no money before you know what you're getting.</p>
+            <div class="container">
+                <div class="sec-head fade-up">
+                    <span class="sec-kicker">Zero risk</span>
+                    <h2 class="sec-title">How it <em>works</em></h2>
                 </div>
 
-                <ol class="how-strip" data-stagger>
-                    <li class="how-step">
-                        <span class="hs-num">01</span>
-                        <h4>Choose what you need</h4>
-                        <p>Pick a package above. Nothing to sign up for.</p>
-                    </li>
-                    <li class="how-step">
-                        <span class="hs-num">02</span>
-                        <h4>Send it on WhatsApp</h4>
-                        <p>Your order arrives pre-filled. We confirm the details with you first.</p>
-                    </li>
-                    <li class="how-step">
-                        <span class="hs-num">03</span>
-                        <h4>We deliver</h4>
-                        <p>Growth starts rolling in, or your build begins — and you see the progress.</p>
-                    </li>
-                    <li class="how-step how-step-final">
-                        <span class="hs-num">04</span>
-                        <h4>Pay on Mobile Money</h4>
-                        <p>MTN or Airtel. Boosts are paid on delivery; builds run 50/50 — $250 to start.</p>
-                    </li>
+                <ol class="how-line" data-stagger>
+                    <li><b>01</b><span>Build your order above</span></li>
+                    <li><b>02</b><span>Send it on WhatsApp — already typed out</span></li>
+                    <li><b>03</b><span>We start, you watch it move</span></li>
+                    <li><b>04</b><span>Pay on MTN or Airtel Money</span></li>
                 </ol>
-            </div>
-        </section>
 
-        <section id="proof" class="stage-proof">
-            <div class="container relative-z">
-                <div class="section-title fade-up">
-                    <h2 class="heading-large">Verified <span class="text-emerald">status.</span></h2>
-                </div>
+                <div class="proof-band fade-up" id="proof">
+                    <div class="pb-stats" data-stagger>
+                        <div><b class="anim-counter" data-target="2000">0</b><span>Active clients</span></div>
+                        <div><b class="anim-counter" data-target="10000">0</b><span>Payments processed</span></div>
+                        <div><b>2022</b><span>Serving East Africa since</span></div>
+                    </div>
 
-                <div class="proof-stats" data-stagger>
-                    <div class="ps-item">
-                        <b><span class="anim-counter" data-target="2000">0</span>+</b>
-                        <span>Active clients</span>
-                    </div>
-                    <div class="ps-item">
-                        <b><span class="anim-counter" data-target="10000">0</span>+</b>
-                        <span>Payments processed</span>
-                    </div>
-                    <div class="ps-item">
-                        <b>2022</b>
-                        <span>Serving East Africa since</span>
-                    </div>
-                    <div class="ps-item ps-item-hero">
-                        <b><i class="fas fa-shield-halved"></i></b>
-                        <span>Zero upfront risk</span>
-                    </div>
-                </div>
+                    <ul class="pb-points" data-stagger>
+                        <li><i class="fas fa-lock"></i> We never ask for your password</li>
+                        <li><i class="fas fa-anchor"></i> Followers don't drop off after delivery</li>
+                        <li><i class="fas fa-hand-holding-dollar"></i> 30% starts it, the rest on delivery</li>
+                    </ul>
 
-                <div class="proof-social" data-stagger>
-                    <a href="https://www.instagram.com/theaccessug?igsh=MTVjbWhmMDBkM202OA==" target="_blank" rel="noopener" class="psoc ig">
-                        <i class="fab fa-instagram"></i>
-                        <span class="psoc-t">Instagram</span>
-                        <span class="psoc-s">25k+ followers</span>
-                        <i class="fas fa-arrow-right psoc-go"></i>
-                    </a>
-                    <a href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener" class="psoc fb">
-                        <i class="fab fa-facebook-f"></i>
-                        <span class="psoc-t">Facebook</span>
-                        <span class="psoc-s">VIP group</span>
-                        <i class="fas fa-arrow-right psoc-go"></i>
-                    </a>
-                    <a href="trust/" class="psoc tc">
-                        <i class="fas fa-user-shield"></i>
-                        <span class="psoc-t">Trust centre</span>
-                        <span class="psoc-s">See the receipts</span>
-                        <i class="fas fa-arrow-right psoc-go"></i>
-                    </a>
+                    <div class="pb-links">
+                        <a href="https://www.instagram.com/the97world" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>
+                        <a href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> VIP group</a>
+                        <a href="trust/"><i class="fas fa-shield-halved"></i> Trust centre</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -418,6 +311,7 @@
     </footer>
 
     <script src="HOME/script.js" defer></script>
+<script src="/assets/pricing.js"></script>
 <script src="/assets/preloader.js" defer></script>
 </body>
 </html>

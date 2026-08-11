@@ -29,96 +29,140 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === 2. THE CHOOSER — "What would you like to get?" =====================
-    // One question, two answers. Picking one reveals only that path's offers
-    // and collapses the other, so the page never shows 15 options at once.
-    const pathSection = document.getElementById('path');
-    const panes = document.querySelectorAll('.path-pane');
-    const choicePanels = document.querySelectorAll('.choice-panel');
-    const intentBtns = document.querySelectorAll('.intent-btn');
-    const mmIntentCards = document.querySelectorAll('.mm-intent-card');
-    const pathLinks = document.querySelectorAll('[data-path-link]');
-    const VALID = ['grow', 'build'];
-    let activePath = null;
+    // === 2. REGION GATE ====================================================
+    // No price appears anywhere on this site until we know which currency to
+    // show it in. The answer is stored once and reused by every order page.
+    const P = window.K97Pricing;
+    const gate = document.getElementById('regionGate');
 
-    const readStoredPath = () => {
-        try {
-            const v = sessionStorage.getItem('k97-path');
-            return VALID.indexOf(v) !== -1 ? v : null;
-        } catch (e) { return null; }
+    function openGate() {
+        if (!gate) return;
+        gate.hidden = false;
+        document.body.classList.add('gate-open');
+    }
+
+    function closeGate() {
+        if (!gate) return;
+        gate.hidden = true;
+        document.body.classList.remove('gate-open');
+    }
+
+    if (gate) {
+        const grid = gate.querySelector('.region-grid');
+        grid.innerHTML = Object.keys(P.REGIONS).map((code) => {
+            const r = P.REGIONS[code];
+            return `<button type="button" class="region-btn" data-region="${code}">
+                <span class="flag">${r.flag}</span>
+                <span class="rb-copy"><b>${r.name}</b><small>${r.blurb}</small></span>
+                <i class="fas fa-chevron-right"></i>
+            </button>`;
+        }).join('');
+
+        grid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.region-btn');
+            if (!btn) return;
+            P.Region.set(btn.dataset.region);
+            closeGate();
+            builder.setRegion(btn.dataset.region);
+        });
+    }
+
+    // === 3. THE PRICE BUILDER ==============================================
+    // Section 2 is the first step of the order: platform, package, real price.
+    // The choice is handed to the order page so nothing has to be picked twice.
+    const builder = {
+        region: P.Region.get() || 'UG',
+        platform: 'ig',
+        plan: 0,
+
+        setRegion(code) {
+            builder.region = code;
+            builder.render();
+        },
+
+        render() {
+            const platEl = document.getElementById('bd-plats');
+            const planEl = document.getElementById('bd-plans');
+            if (!platEl || !planEl) return;
+
+            platEl.innerHTML = ['ig', 'tt', 'fb', 'yt'].map((key) => {
+                const p = P.PLATFORMS[key];
+                const on = builder.platform === key;
+                return `<button type="button" class="bd-plat${on ? ' is-on' : ''}"
+                    data-plat="${key}" aria-pressed="${on}">
+                    <img src="${p.logo}" alt=""><span>${p.name}</span></button>`;
+            }).join('');
+
+            const plans = P.plansFor(builder.platform, builder.region);
+            if (builder.plan >= plans.length) builder.plan = 0;
+
+            planEl.innerHTML = plans.map((plan, i) => {
+                const on = builder.plan === i;
+                return `<button type="button" class="bd-plan${on ? ' is-on' : ''}"
+                    data-plan="${i}" aria-pressed="${on}">
+                    ${plan.tag ? `<span class="bd-plan-tag">${plan.tag}</span>` : ''}
+                    <span class="bd-plan-copy">
+                        <b>${plan.name}</b>
+                        ${plan.note ? `<small>${plan.note}</small>` : ''}
+                    </span>
+                    <span class="bd-plan-price">${P.money(plan.price, plan.currency)}</span>
+                </button>`;
+            }).join('');
+
+            const chosen = plans[builder.plan];
+            document.getElementById('bd-price').textContent = P.money(chosen.price, chosen.currency);
+            document.getElementById('bd-was').textContent =
+                chosen.was ? P.money(chosen.was, chosen.currency) : '';
+            document.getElementById('bd-go').setAttribute('href', P.PLATFORMS[builder.platform].href);
+            document.getElementById('bd-region').textContent = P.Region.data(builder.region).name;
+        }
     };
 
-    function setPath(path, opts) {
-        if (VALID.indexOf(path) === -1) return;
-        const options = opts || {};
-        activePath = path;
-        try { sessionStorage.setItem('k97-path', path); } catch (e) {}
+    if (document.getElementById('builder')) {
+        builder.render();
 
-        panes.forEach((pane) => {
-            pane.classList.toggle('is-active', pane.dataset.pane === path);
-        });
-        choicePanels.forEach((btn) => {
-            btn.setAttribute('aria-pressed', String(btn.dataset.path === path));
-        });
-        intentBtns.forEach((btn) => {
-            btn.classList.toggle('is-active', btn.dataset.path === path);
-        });
-        mmIntentCards.forEach((btn) => {
-            btn.setAttribute('aria-pressed', String(btn.dataset.path === path));
+        document.getElementById('bd-plats').addEventListener('click', (e) => {
+            const btn = e.target.closest('.bd-plat');
+            if (!btn) return;
+            builder.platform = btn.dataset.plat;
+            builder.plan = 0;
+            builder.render();
+            if (navigator.vibrate) navigator.vibrate(10);
         });
 
-        if (options.scroll && pathSection) {
-            pathSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-        }
+        document.getElementById('bd-plans').addEventListener('click', (e) => {
+            const btn = e.target.closest('.bd-plan');
+            if (!btn) return;
+            builder.plan = Number(btn.dataset.plan);
+            builder.render();
+            if (navigator.vibrate) navigator.vibrate(10);
+        });
+
+        // carry the built order into the order page so step 1 arrives done
+        document.getElementById('bd-go').addEventListener('click', () => {
+            const plans = P.plansFor(builder.platform, builder.region);
+            P.Pending.set(builder.platform, plans[builder.plan].id);
+        });
+
+        document.getElementById('bd-change').addEventListener('click', openGate);
+
+        // first visit — we genuinely cannot price anything until they answer
+        if (!P.Region.get()) openGate();
     }
 
-    if (panes.length) {
-        // Only hide the inactive pane once JS is confirmed running — without
-        // this class both paths stay visible, so a JS failure never hides content.
-        if (pathSection) pathSection.classList.add('js-paths');
-        setPath(readStoredPath() || 'grow');
-
-        choicePanels.forEach((btn) => {
-            btn.addEventListener('click', () => setPath(btn.dataset.path, { scroll: true }));
+    // the hero cards just route to the right part of the page now
+    document.querySelectorAll('.choice-panel').forEach((panel) => {
+        panel.addEventListener('click', () => {
+            const target = document.getElementById(panel.dataset.path === 'build' ? 'build' : 'path');
+            if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
         });
-        intentBtns.forEach((btn) => {
-            btn.addEventListener('click', () => setPath(btn.dataset.path));
+    });
+    document.querySelectorAll('.mm-intent-card').forEach((card) => {
+        card.addEventListener('click', () => {
+            const target = document.getElementById(card.dataset.path === 'build' ? 'build' : 'path');
+            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 380);
         });
-        pathLinks.forEach((link) => {
-            link.addEventListener('click', () => setPath(link.dataset.pathLink, { scroll: false }));
-        });
-    }
-
-    // === 4. STICKY INTENT BAR — keeps the question with them while scrolling ==
-    const intentBar = document.getElementById('intentBar');
-    const proofSection = document.getElementById('proof');
-    if (intentBar && pathSection) {
-        let atOffers = false;
-        let atProof = false;
-        const sync = () => {
-            const show = atOffers && !atProof;
-            intentBar.classList.toggle('is-visible', show);
-            intentBar.setAttribute('aria-hidden', String(!show));
-        };
-        // show it whenever the offers are on screen — that's exactly when
-        // being able to switch path is useful
-        // the -30% bottom margin means the offers must actually rise into the
-        // upper 70% of the viewport before the bar appears — otherwise it
-        // triggers while still parked at the very bottom edge on first paint
-        new IntersectionObserver(([entry]) => {
-            atOffers = entry.isIntersecting;
-            sync();
-        }, { rootMargin: '-70px 0px -30% 0px', threshold: 0 }).observe(pathSection);
-
-        // hide it again once they've reached the proof section — the question
-        // has been asked, stop nagging
-        if (proofSection) {
-            new IntersectionObserver(([entry]) => {
-                atProof = entry.isIntersecting;
-                sync();
-            }, { threshold: 0 }).observe(proofSection);
-        }
-    }
+    });
 
     // === 5. MOBILE MENU ===
     const burgerBtn = document.getElementById('burgerBtn');
@@ -148,13 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
         burgerBtn.addEventListener('click', () => (isOpen() ? closeMenu() : openMenu()));
         if (mmClose) mmClose.addEventListener('click', closeMenu);
 
-        // any link closes it; the intent cards also set the path first
+        // any link closes it; so do the two intent cards
         mobileMenu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
-        mmIntentCards.forEach((card) => {
-            card.addEventListener('click', () => {
-                setPath(card.dataset.path, { scroll: true });
-                closeMenu();
-            });
+        document.querySelectorAll('.mm-intent-card').forEach((card) => {
+            card.addEventListener('click', closeMenu);
         });
 
         // Escape + focus trap

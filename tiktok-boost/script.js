@@ -9,79 +9,10 @@
 OrderWizard.start({
     "sheetUrl": "https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec",
     "whatsapp": "256762193386",
-    "storeKey": "k97_region_tt",
+    "platform": "tt",
     "service": "TikTok Boost",
     "targetLabel": "TikTok username",
     "targetError": "We need the username to deliver to",
-    "plans": [
-        {
-            "id": "combo",
-            "name": "Everything",
-            "note": "Followers + likes + video views",
-            "usd": 250,
-            "wasUsd": 300,
-            "tag": "Ultimate value",
-            "hero": true,
-            "label": "Everything — 10,000 followers + 10,000 likes + 20,000 video views",
-            "feats": [
-                {
-                    "icon": "fa-user-plus",
-                    "text": "10,000 followers",
-                    "gold": true
-                },
-                {
-                    "icon": "fa-heart",
-                    "text": "10,000 likes"
-                },
-                {
-                    "icon": "fa-eye",
-                    "text": "20,000 video views"
-                },
-                {
-                    "icon": "fa-rotate-left",
-                    "text": "30-day refill"
-                }
-            ]
-        },
-        {
-            "id": "f10",
-            "name": "10,000 followers",
-            "usd": 100,
-            "tag": "Best seller",
-            "label": "10,000 followers",
-            "feats": [
-                {
-                    "icon": "fa-user-plus",
-                    "text": "10,000 followers"
-                },
-                {
-                    "icon": "fa-gauge-simple",
-                    "text": "Gradual, natural pace"
-                },
-                {
-                    "icon": "fa-rotate-left",
-                    "text": "30-day refill"
-                }
-            ]
-        },
-        {
-            "id": "f3",
-            "name": "3,000 followers",
-            "usd": 35,
-            "tag": "Starter",
-            "label": "3,000 followers",
-            "feats": [
-                {
-                    "icon": "fa-user-plus",
-                    "text": "3,000 followers"
-                },
-                {
-                    "icon": "fa-gauge-simple",
-                    "text": "Gradual, natural pace"
-                }
-            ]
-        }
-    ],
     "gifts": [
         {
             "icon": "fa-rotate-left",

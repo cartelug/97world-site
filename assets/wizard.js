@@ -15,47 +15,12 @@
 (function (window, document) {
     'use strict';
 
-    /* 1 USD = 3,750 UGX. Not a guess — it is the exact rate already encoded in
-       the Facebook and YouTube tier tables (375,000/100, 262,500/70, ...). */
-    var UGX_PER_USD = 3750;
-
-    var REGIONS = {
-        UG: {
-            name: 'Uganda',
-            currency: 'UGX',
-            flag: '🇺🇬',
-            blurb: 'Prices in UGX · Mobile Money',
-            phone: 'e.g. +256 700 000 000',
-            payments: ['MTN Mobile Money', 'Airtel Money', 'Cash in office (Kampala)']
-        },
-        SS: {
-            name: 'South Sudan',
-            currency: 'USD',
-            flag: '🇸🇸',
-            blurb: 'Prices in USD',
-            phone: 'e.g. +211 900 000 000',
-            payments: ['Mobile Money via agent', 'Cash in South Sudan']
-        },
-        CD: {
-            name: 'DR Congo',
-            currency: 'USD',
-            flag: '🇨🇩',
-            blurb: 'Prices in USD',
-            phone: 'e.g. +243 800 000 000',
-            payments: ['Mobile Money', 'Cash on delivery']
-        }
-    };
-
-    /** USD figure -> what this region actually pays. */
-    function localPrice(usd, currency) {
-        return currency === 'UGX' ? usd * UGX_PER_USD : usd;
-    }
+    var P = window.K97Pricing;
+    var REGIONS = P.REGIONS;
 
     var Wizard = {
 
-        UGX_PER_USD: UGX_PER_USD,
         REGIONS: REGIONS,
-        localPrice: localPrice,
 
         cfg: null,
         state: {
@@ -97,9 +62,7 @@
             if (!region) return;
             Wizard.state.region = code;
 
-            if (save !== false) {
-                try { localStorage.setItem(Wizard.cfg.storeKey, code); } catch (e) { /* private mode */ }
-            }
+            if (save !== false) P.Region.set(code);
 
             // region badge in the nav
             var badge = Wizard.$('regionBadge');
@@ -118,8 +81,15 @@
                 }).join('');
             }
 
-            // prices changed, so any earlier choice is void
+            // prices changed, so any earlier choice is void — unless they
+            // already built this exact order on the home page
             Wizard.state.plan = -1;
+            var pending = P.Pending.take(Wizard.cfg.platform);
+            if (pending) {
+                Wizard.plans().forEach(function (plan, i) {
+                    if (plan.id === pending) Wizard.state.plan = i;
+                });
+            }
             Wizard.renderPlans();
             Wizard.syncPlanBtn();
 
@@ -132,23 +102,9 @@
 
         /* ---------------------------------------------------------- plans */
 
-        /** Plans for the active region, with USD figures converted. */
+        /** Plans for this platform, priced for the active region. */
         plans: function () {
-            var currency = Wizard.region().currency;
-            return Wizard.cfg.plans.map(function (plan) {
-                return {
-                    id: plan.id,
-                    name: plan.name,
-                    note: plan.note,
-                    tag: plan.tag,
-                    feats: plan.feats,
-                    hero: !!plan.hero,
-                    price: localPrice(plan.usd, currency),
-                    was: plan.wasUsd ? localPrice(plan.wasUsd, currency) : null,
-                    // what goes in the Sheet / WhatsApp message
-                    label: plan.label || plan.name
-                };
-            });
+            return P.plansFor(Wizard.cfg.platform, Wizard.state.region);
         },
 
         renderPlans: function () {
@@ -309,7 +265,7 @@
 
             var region = Wizard.region();
             var rows = [
-                '<div class="sum-row"><span>Package</span><b>' + order.plan.label + '</b></div>'
+                '<div class="sum-row"><span>Package</span><b>' + (order.plan.label || order.plan.name) + '</b></div>'
             ];
             order.plan.feats.forEach(function (f) {
                 rows.push('<div class="sum-row"><span>Includes</span><b>' + f.text + '</b></div>');
@@ -349,7 +305,7 @@
 
             var message = '*NEW ORDER [' + region.name.toUpperCase() + ']*\n\n' +
                 '*Service:* ' + service + '\n' +
-                '*Package:* ' + order.plan.label + '\n' +
+                '*Package:* ' + (order.plan.label || order.plan.name) + '\n' +
                 '*Price:* ' + total + '\n' +
                 '*Referrer:* ' + order.referrer + '\n\n' +
                 '*Name:* ' + order.name + '\n' +
@@ -366,7 +322,7 @@
                     ClientName: order.name,
                     Number: order.phone.sheet,
                     Service: service + ' [' + region.currency + ']',
-                    Package: order.plan.label +
+                    Package: (order.plan.label || order.plan.name) +
                         (order.extra ? ' [' + order.extra + ']' : '') +
                         (order.target ? ' [Target: ' + order.target + ']' : '') +
                         ' [Pay: ' + order.payment + ']',
@@ -393,10 +349,9 @@
             Wizard.renderProof();
             Wizard.openGate();
 
-            // a returning customer already told us where they are
-            var saved = null;
-            try { saved = localStorage.getItem(cfg.storeKey); } catch (e) { /* ignore */ }
-            if (saved && REGIONS[saved]) Wizard.setRegion(saved, false);
+            // the home page (or an earlier order) already told us where they are
+            var saved = P.Region.get();
+            if (saved) Wizard.setRegion(saved, false);
 
             var trigger = Wizard.$('regionBtn');
             if (trigger) {

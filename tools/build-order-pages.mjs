@@ -17,74 +17,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
 const WHATSAPP = '256762193386';
 
-/* --------------------------------------------------------------- pricing ---
- * Everything is declared in USD. UGX is derived at 3,750 UGX = $1 — the rate
- * already baked into the existing Facebook and YouTube tables, so converting
- * reproduces those prices exactly rather than inventing new ones.
- *
- *   10,000 followers .......... $100   (375,000 UGX)
- *   all three together ........ $250   (937,500 UGX)
+/* Plan tables and regions live in assets/pricing.js — the one place prices are
+ * defined, shared with the home page's price builder. Pages name a catalog
+ * key ('ig', 'tt', 'fb', 'yt', 'bundle'); the wizard looks up the rest.
  * -------------------------------------------------------------------------- */
-
-const socialPlans = (likesWord, viewsWord) => [
-    {
-        id: 'combo',
-        name: 'Everything',
-        note: `Followers + ${likesWord.toLowerCase()} + ${viewsWord.toLowerCase()}`,
-        usd: 250,
-        // a real anchor: the three bought one at a time come to $300
-        wasUsd: 300,
-        tag: 'Ultimate value',
-        hero: true,
-        label: `Everything — 10,000 followers + 10,000 ${likesWord.toLowerCase()} + 20,000 ${viewsWord.toLowerCase()}`,
-        feats: [
-            { icon: 'fa-user-plus', text: '10,000 followers', gold: true },
-            { icon: 'fa-heart', text: `10,000 ${likesWord.toLowerCase()}` },
-            { icon: 'fa-eye', text: `20,000 ${viewsWord.toLowerCase()}` },
-            { icon: 'fa-rotate-left', text: '30-day refill' }
-        ]
-    },
-    {
-        id: 'f10',
-        name: '10,000 followers',
-        usd: 100,
-        tag: 'Best seller',
-        label: '10,000 followers',
-        feats: [
-            { icon: 'fa-user-plus', text: '10,000 followers' },
-            { icon: 'fa-gauge-simple', text: 'Gradual, natural pace' },
-            { icon: 'fa-rotate-left', text: '30-day refill' }
-        ]
-    },
-    {
-        id: 'f3',
-        name: '3,000 followers',
-        usd: 35,
-        tag: 'Starter',
-        label: '3,000 followers',
-        feats: [
-            { icon: 'fa-user-plus', text: '3,000 followers' },
-            { icon: 'fa-gauge-simple', text: 'Gradual, natural pace' }
-        ]
-    }
-];
-
-// YouTube keeps its own ladder. Declared in USD; the converter reproduces the
-// existing UGX prices exactly (262,500 / 412,500 / 600,000 / ...).
-const youtubePlans = [
-    { id: 'yt5', name: 'Domination', usd: 400, tag: 'Max impact', hero: true, label: 'Domination Tier',
-      feats: [{ icon: 'fa-users', text: '10k subs', gold: true }, { icon: 'fa-eye', text: '15k views' }, { icon: 'fa-thumbs-up', text: '10k likes' }] },
-    { id: 'yt4', name: 'Viral', usd: 310, label: 'Viral Tier',
-      feats: [{ icon: 'fa-users', text: '7.5k subs' }, { icon: 'fa-eye', text: '13k views' }, { icon: 'fa-thumbs-up', text: '8k likes' }] },
-    { id: 'yt3', name: 'Authority', usd: 230, label: 'Authority Tier',
-      feats: [{ icon: 'fa-users', text: '5.5k subs' }, { icon: 'fa-eye', text: '11k views' }, { icon: 'fa-thumbs-up', text: '6.5k likes' }] },
-    { id: 'yt2', name: 'Growth', usd: 160, tag: 'Most popular', label: 'Growth Tier',
-      feats: [{ icon: 'fa-users', text: '3.5k subs' }, { icon: 'fa-eye', text: '9k views' }, { icon: 'fa-thumbs-up', text: '5k likes' }] },
-    { id: 'yt1', name: 'Kickstart', usd: 110, label: 'Kickstart Tier',
-      feats: [{ icon: 'fa-users', text: '2k subs' }, { icon: 'fa-eye', text: '7k views' }, { icon: 'fa-thumbs-up', text: '3.5k likes' }] },
-    { id: 'yt0', name: 'Starter', usd: 70, tag: 'Starter', label: 'Starter Tier',
-      feats: [{ icon: 'fa-users', text: '1k subs' }, { icon: 'fa-eye', text: '5k views' }, { icon: 'fa-thumbs-up', text: '2k likes' }] }
-];
 
 /* Gifts and proof are identical everywhere — same promises, same wording. */
 const GIFTS = [
@@ -110,7 +46,7 @@ const PAGES = [
         targetLabel: 'Instagram username', targetPlaceholder: 'Your Instagram username',
         targetError: 'We need the username to deliver to',
         icon: 'fab fa-instagram',
-        plans: socialPlans('Likes', 'Reels views')
+        platform: 'ig'
     },
     {
         dir: 'tiktok-boost', accent: 'tiktok', store: 'k97_region_tt',
@@ -121,7 +57,7 @@ const PAGES = [
         targetLabel: 'TikTok username', targetPlaceholder: 'Your TikTok username',
         targetError: 'We need the username to deliver to',
         icon: 'fab fa-tiktok',
-        plans: socialPlans('Likes', 'Video views')
+        platform: 'tt'
     },
     {
         dir: 'facebook-boost', accent: 'facebook', store: 'k97_region_fb',
@@ -132,7 +68,7 @@ const PAGES = [
         targetLabel: 'Facebook page', targetPlaceholder: 'Your page name or username',
         targetError: 'We need the page name to deliver to',
         icon: 'fab fa-facebook-f',
-        plans: socialPlans('Page likes', 'Post reactions')
+        platform: 'fb'
     },
     {
         dir: 'youtube-boost', accent: 'youtube', store: 'k97_region_yt',
@@ -143,7 +79,7 @@ const PAGES = [
         targetLabel: 'YouTube channel', targetPlaceholder: 'Your channel name or link',
         targetError: 'We need the channel to deliver to',
         icon: 'fab fa-youtube',
-        plans: youtubePlans
+        platform: 'yt'
     },
     {
         dir: 'boost-package', accent: 'bundle', store: 'k97_region_bundle',
@@ -156,7 +92,7 @@ const PAGES = [
         icon: 'fas fa-at',
         extraLabel: 'Platform',
         extraOptions: ['Instagram', 'TikTok', 'Split across both'],
-        plans: socialPlans('Likes', 'Views')
+        platform: 'bundle'
     }
 ];
 
@@ -388,6 +324,7 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
         </div>
     </div>
 
+    <script src="/assets/pricing.js"></script>
     <script src="/assets/order.js"></script>
     <script src="/assets/wizard.js"></script>
     <script src="script.js"></script>
@@ -407,12 +344,11 @@ const script = (p) => `/**
 OrderWizard.start(${JSON.stringify({
     sheetUrl: SHEET_URL,
     whatsapp: WHATSAPP,
-    storeKey: p.store,
+    platform: p.platform,
     service: p.service,
     targetLabel: p.targetLabel,
     targetError: p.targetError,
     ...(p.extraLabel ? { extraLabel: p.extraLabel } : {}),
-    plans: p.plans,
     gifts: GIFTS,
     proof: PROOF
 }, null, 4)});
