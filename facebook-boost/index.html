@@ -1,237 +1,213 @@
 <!DOCTYPE html>
-<html lang="en" class="dark-theme">
+<html lang="en" dir="ltr">
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#05080F">
-    
-    <title>Boost Your Facebook | 97 World Elite</title>
-    <meta name="description" content="Get real Facebook followers and likes easily and safely.">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+
+    <title>Facebook Boost | 97 World</title>
+    <meta name="description" content="Grow your Facebook page with followers, page likes, reactions and post likes. Local pricing, no password required.">
+
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
-    
+
+    <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet" href="/assets/order.css">
 </head>
-<body>
+<body class="order-page" data-accent="facebook">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
   <div class="k97pl-bar"><i></i></div>
 </div>
 
+    <div class="ord-aura" aria-hidden="true"></div>
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
-    <div class="ambient-bg">
-        <div class="glow-orb orb-primary"></div>
-        <div class="glow-orb orb-secondary"></div>
-    </div>
+    <nav class="ord-nav">
+        <a href="/" class="ord-back" aria-label="Back to 97 World"><i class="fas fa-arrow-left"></i></a>
+        <a href="/" class="ord-brand">
+            <img src="/IMAGES/logo.png" alt="">
+            <span>World</span>
+        </a>
+        <button class="ord-region" id="regionBtn" type="button">
+            <span class="flag" id="regionFlag">🌍</span>
+            <span id="regionBadge">UGX</span>
+        </button>
+    </nav>
 
-    <div id="toast-wrapper" class="toast-wrapper" aria-live="polite"></div>
+    <main class="ord-shell">
 
-    <div class="modal-overlay" id="country-modal" aria-hidden="true">
-        <div class="modal-glass-card">
-            <div class="modal-drag-pill"></div>
-            <div class="modal-header">
-                <div class="modal-icon-glow"><i class="fas fa-globe"></i></div>
-                <h2>Select Region</h2>
-                <p>We need your location to show local pricing.</p>
-            </div>
-            
-            <div class="region-list">
-                <button class="region-btn" onclick="FbApp.setCountry('UGX', 'UG')">
-                    <span class="flag">🇺🇬</span>
-                    <div class="r-info">
-                        <span class="r-name">Uganda</span>
-                        <span class="r-curr">Pay in UGX</span>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </button>
-                <button class="region-btn" onclick="FbApp.setCountry('USD', 'SS')">
-                    <span class="flag">🇸🇸</span>
-                    <div class="r-info">
-                        <span class="r-name">South Sudan</span>
-                        <span class="r-curr">Pay in USD</span>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </button>
-                <button class="region-btn" onclick="FbApp.setCountry('USD', 'CD')">
-                    <span class="flag">🇨🇩</span>
-                    <div class="r-info">
-                        <span class="r-name">DR Congo</span>
-                        <span class="r-curr">Pay in USD</span>
-                    </div>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="trust-modal" aria-hidden="true">
-        <div class="trust-slider-card">
-            
-            <div class="slider-pane active" id="slide-1">
-                <div class="pane-icon shield-icon"><i class="fas fa-shield-check"></i></div>
-                <h3 class="pane-title">100% Safe & Secure</h3>
-                <p class="pane-text">97 World is trusted by over <b>500+ creators and brands</b>. We use algorithm-safe methods to grow your page naturally.</p>
-                <div class="trust-highlight">
-                    <i class="fas fa-lock text-green"></i> <b>Zero Risk:</b> We will NEVER ask for your Facebook password or admin access.
-                </div>
-                <button class="pane-btn" onclick="FbApp.nextSlide(2)">
-                    Yes, I Understand <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-
-            <div class="slider-pane" id="slide-2">
-                <div class="pane-icon wallet-icon"><i class="fas fa-wallet"></i></div>
-                <h3 class="pane-title">Fair Payment Terms</h3>
-                <p class="pane-text">To filter out unserious orders, we operate on a strict milestone basis.</p>
-                
-                <div class="milestone-box">
-                    <div class="milestone">
-                        <div class="ms-dot">1</div>
-                        <div class="ms-content"><b>30% Deposit</b> to initiate the boost.</div>
-                    </div>
-                    <div class="milestone">
-                        <div class="ms-dot">2</div>
-                        <div class="ms-content"><b>70% Balance</b> ONLY after you fully receive your followers/likes.</div>
-                    </div>
-                </div>
-
-                <div class="payment-logos">
-                    <span>Pay securely via:</span>
-                    <div class="logo-flex">
-                        <img src="../IMAGES/mtn.png" alt="MTN MoMo" class="momo-logo">
-                        <img src="../IMAGES/airtel.png" alt="Airtel Money" class="momo-logo">
-                    </div>
-                </div>
-                
-                <div class="slide-actions">
-                    <button class="pane-btn-secondary" onclick="FbApp.nextSlide(1)">Back</button>
-                    <button class="pane-btn" onclick="FbApp.nextSlide(3)">I Agree to the Terms</button>
-                </div>
-            </div>
-
-            <div class="slider-pane" id="slide-3">
-                <div class="pane-icon check-icon"><i class="fas fa-check-circle"></i></div>
-                <h3 class="pane-title">Order Summary</h3>
-                <p class="pane-text">Please confirm your details before we connect you to an agent on WhatsApp.</p>
-                
-                <div class="summary-card">
-                    <div class="sum-row"><span>Target:</span> <b id="sum-target">...</b></div>
-                    <div class="sum-row"><span>Package:</span> <b id="sum-package" class="text-primary">...</b></div>
-                    <div class="sum-row total-row"><span>Total Price:</span> <b id="sum-price">...</b></div>
-                </div>
-
-                <div class="slide-actions">
-                    <button class="pane-btn-secondary" onclick="FbApp.closeTrustModal()">Cancel</button>
-                    <button class="pane-btn confirm-btn" id="btn-final-confirm" onclick="FbApp.finalizeOrder()">
-                        <span id="final-btn-text">Confirm & Proceed</span> <i class="fab fa-whatsapp"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="slider-dots">
-                <div class="dot active" id="dot-1"></div>
-                <div class="dot" id="dot-2"></div>
-                <div class="dot" id="dot-3"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="app-layout">
-        
-        <nav class="elite-nav">
-            <a href="../index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back</a>
-            <div class="nav-brand"><img src="/IMAGES/logo.png" alt="" class="brand-icon" style="width:22px;height:22px;object-fit:contain;vertical-align:middle"> 97 World</div>
-            <div style="width: 60px;"></div>
-        </nav>
-
-        <header class="hero-module">
-            <div class="status-indicator"><span class="status-dot"></span> Network Active</div>
-            <h1 class="hero-title">Dominate <br><span class="gradient-text">Facebook</span></h1>
-            <p class="hero-subtitle">Select an elite package. Enter your page name. Skyrocket your authority instantly.</p>
+        <header class="ord-hero">
+            <span class="ord-plat r-up">
+                <img src="/IMAGES/facebook.png" alt="">
+                Facebook
+            </span>
+            <h1 class="ord-title r-up">Build a <em>Facebook</em> page people trust</h1>
+            <p class="ord-sub r-up">One package covers followers, page likes, reactions and post likes together. Pick a size and we handle the rest.</p>
+            <ul class="ord-trust r-up" data-stagger>
+                <li><i class="fas fa-lock"></i> No password needed</li>
+                <li><i class="fas fa-bolt"></i> Starts in 1–6 hrs</li>
+                <li><i class="fas fa-hand-holding-dollar"></i> 30% deposit to start</li>
+            </ul>
         </header>
 
-        <main class="core-journey">
-            
-            <section class="journey-step">
-                <div class="step-badge">1</div>
-                <h2 class="step-title">Select Growth Tier</h2>
-                <div class="grid-packages" id="package-list"></div>
-            </section>
+        <ol class="ord-rail" id="ordRail">
+            <li class="is-current"><b>1</b><span>Package</span></li>
+            <li><b>2</b><span>Details</span></li>
+            <li><b>3</b><span>Confirm</span></li>
+        </ol>
 
-            <section class="journey-step" id="details-section">
-                <div class="step-badge">2</div>
-                <h2 class="step-title">Target Details</h2>
-                
-                <div class="form-container">
-                    
-                    <div class="input-group">
-                        <label>Your Full Name</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user input-icon"></i>
-                            <input type="text" id="client-name" placeholder="E.g. John Doe" autocomplete="name">
-                        </div>
+        <section class="ord-card r-up" aria-labelledby="h-packages">
+            <div class="ord-card-head">
+                <span class="ord-step-num">1</span>
+                <div>
+                    <h2 id="h-packages">Choose your package</h2>
+                    <p>Everything in a tier is delivered together across your page.</p>
+                </div>
+            </div>
+            <div class="tier-list" id="package-list" role="group" aria-labelledby="h-packages"></div>
+        </section>
+
+        <section class="ord-card r-up" id="details" aria-labelledby="h-details">
+            <div class="ord-card-head">
+                <span class="ord-step-num">2</span>
+                <div>
+                    <h2 id="h-details">Your details</h2>
+                    <p>Which page we're boosting and how we reach you.</p>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="field-box">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="client-name" placeholder="Your full name" autocomplete="name" spellcheck="false">
+                </div>
+                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Please enter your name</span></p>
+            </div>
+
+            <div class="field">
+                <div class="field-box">
+                    <i class="fab fa-whatsapp" style="color:var(--ord-wa)"></i>
+                    <input type="tel" id="client-number" placeholder="WhatsApp number" autocomplete="tel" inputmode="tel">
+                </div>
+                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Enter a valid WhatsApp number</span></p>
+            </div>
+
+            <div class="field">
+                <div class="field-box">
+                    <i class="fab fa-facebook-f"></i>
+                    <input type="text" id="fb-link" placeholder="Page name or username" autocomplete="off" spellcheck="false">
+                </div>
+                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>We need the page to boost</span></p>
+            </div>
+
+            <div class="ref-block">
+                <div class="ref-row">
+                    <span>Did a friend refer you?</span>
+                    <div class="pill-group" role="group" aria-label="Referral">
+                        <button type="button" class="pill is-on" id="ref-no" aria-pressed="true">No</button>
+                        <button type="button" class="pill" id="ref-yes" aria-pressed="false">Yes</button>
                     </div>
-
-                    <div class="input-group mt-4">
-                        <label>WhatsApp Number</label>
-                        <div class="input-wrapper">
-                            <i class="fab fa-whatsapp input-icon text-whatsapp"></i>
-                            <input type="tel" id="client-number" placeholder="Enter WhatsApp Number" autocomplete="tel">
-                        </div>
-                    </div>
-
-                    <div class="input-group mt-4">
-                        <label>Facebook Username or Page Name</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-search input-icon"></i>
-                            <input type="text" id="fb-link" placeholder="E.g. 97 World Official" autocomplete="off">
-                        </div>
-                    </div>
-
-                    <div class="referral-module mt-5">
-                        <button class="ref-trigger" id="ref-btn" onclick="FbApp.toggleReferral()">
-                            <i class="fas fa-gift"></i> Add Referral Code (Optional)
-                        </button>
-                        <div class="ref-expandable" id="ref-drawer">
-                            <div class="input-wrapper mini-wrapper">
-                                <i class="fas fa-hashtag input-icon"></i>
-                                <input type="text" id="ref-code" placeholder="Enter code or friend's name" autocomplete="off">
+                </div>
+                <div class="ref-drawer" id="ref-drawer">
+                    <div>
+                        <div class="field">
+                            <div class="field-box">
+                                <i class="fas fa-user-group"></i>
+                                <input type="text" id="ref-code" placeholder="Their name" autocomplete="off">
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <div class="bottom-padding"></div>
-        </main>
+        <p class="ord-foot">
+            Your page stays yours — we never ask for a password.<br>
+            <a href="/terms-of-service/">Terms</a> · <a href="/privacy-policy/">Privacy</a>
+        </p>
+    </main>
 
-        <footer class="action-dock">
-            <div class="dock-container">
+    <footer class="ord-dock">
+        <div class="dock-in">
+            <div class="dock-sum">
+                <div class="dock-chips">
+                    <span class="dock-chip" id="chip-tier"><i class="fas fa-layer-group"></i> <span id="chip-tier-name">Tier</span></span>
+                </div>
+                <span class="dock-label">Your total</span>
                 <div class="dock-price">
-                    <span class="dock-label">Order Total</span>
-                    <div class="price-lock">
-                        <span id="ui-val" class="val">0</span>
-                        <span id="ui-curr" class="curr">UGX</span>
-                    </div>
+                    <b id="dock-price">0</b>
+                    <i id="dock-curr">UGX</i>
                 </div>
-                
-                <button class="checkout-btn" id="btn-submit" onclick="FbApp.openTrustModal()" disabled>
-                    <span id="btn-text">Place Order</span>
-                    <i class="fas fa-arrow-right btn-arrow"></i>
+            </div>
+            <button class="dock-cta" id="btn-submit" type="button">
+                <span class="cta-label">Review order</span>
+                <span class="cta-icon"><i class="fas fa-arrow-right"></i></span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- region -->
+    <div class="sheet" id="regionSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="region-h">
+        <div class="sheet-card">
+            <div class="sheet-grab"></div>
+            <div class="sheet-head">
+                <div class="sheet-icon"><i class="fas fa-earth-africa"></i></div>
+                <h2 id="region-h">Where are you ordering from?</h2>
+                <p>So we show you the right currency and payment options.</p>
+            </div>
+            <div class="geo-list">
+                <button type="button" class="geo-btn" data-geo="UGX:UG">
+                    <span class="flag">🇺🇬</span>
+                    <div><b>Uganda</b><small>Prices in UGX · Mobile Money</small></div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button type="button" class="geo-btn" data-geo="USD:SS">
+                    <span class="flag">🇸🇸</span>
+                    <div><b>South Sudan</b><small>Prices in USD</small></div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button type="button" class="geo-btn" data-geo="USD:CD">
+                    <span class="flag">🇨🇩</span>
+                    <div><b>DR Congo</b><small>Prices in USD</small></div>
+                    <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
-        </footer>
-
+        </div>
     </div>
 
+    <!-- confirm -->
+    <div class="sheet" id="confirmSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirm-h">
+        <div class="sheet-card">
+            <div class="sheet-grab"></div>
+            <div class="sheet-head">
+                <div class="sheet-icon"><i class="fas fa-receipt"></i></div>
+                <h2 id="confirm-h">Check it over</h2>
+                <p>This is exactly what we'll receive.</p>
+            </div>
+            <div class="sum-list" id="sum-list"></div>
+            <div class="sheet-note">
+                <i class="fas fa-shield-halved"></i>
+                <span>You start with a <b>30% deposit</b> and pay the rest once delivery begins. Next you'll land in WhatsApp with this order already typed out.</span>
+            </div>
+            <div class="sheet-actions">
+                <button type="button" class="btn-wa" id="btn-confirm">
+                    <span class="cta-icon"><i class="fab fa-whatsapp"></i></span>
+                    <span class="cta-label">Send on WhatsApp</span>
+                </button>
+                <button type="button" class="btn-ghost" data-close="confirmSheet">Go back and edit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/order.js"></script>
     <script src="script.js"></script>
 <script src="/assets/preloader.js" defer></script>
 </body>

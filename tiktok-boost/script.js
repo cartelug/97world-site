@@ -1,428 +1,371 @@
 /**
- * ==========================================================================
- * ACCESSUG TIKTOK ENGINE (V6 - FULL SYNC & SANITIZATION LOGIC)
- * ==========================================================================
+ * 97 WORLD — TIKTOK BOOST
+ * Pricing, discount rules, Sheets logging and the WhatsApp hand-off.
+ * All shared UI behaviour lives in /assets/order.js (OrderKit).
  */
+(function () {
+    'use strict';
 
-const AppConfig = {
-    // ⚠️ Replace with your live Google Sheets Web App URL
-    googleSheetUrl: 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec', 
-    whatsappNumber: '256762193386',
-    
-    // Strict Pricing Arrays
-    prices: {
-        'UGX': {
-            followers: [ 
-                { v: 1000, p: 75000 }, { v: 4000, p: 141000 }, 
-                { v: 7000, p: 208000 }, { v: 10000, p: 250000 } 
-            ],
-            likes: [ 
-                { v: 1000, p: 50000 }, { v: 4000, p: 83000 }, 
-                { v: 7000, p: 116000 }, { v: 10000, p: 150000 } 
-            ],
-            rules: { floor: 50000, ceiling: 360000, symbol: 'UGX' }
-        },
-        'USD': {
-            followers: [ 
-                { v: 3000, p: 35 }, { v: 5000, p: 50 }, 
-                { v: 8000, p: 75 }, { v: 10000, p: 100 } 
-            ],
-            likes: [ 
-                { v: 2500, p: 35 }, { v: 5000, p: 50 }, 
-                { v: 7500, p: 75 }, { v: 10000, p: 100 } 
-            ],
-            rules: { floor: 35, ceiling: 100, symbol: '$' }
+    var CONFIG = {
+        sheetUrl: 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec',
+        whatsapp: '256762193386',
+
+        prices: {
+            UGX: {
+                followers: [
+                    { v: 1000, p: 75000 }, { v: 4000, p: 141000 },
+                    { v: 7000, p: 208000 }, { v: 10000, p: 250000 }
+                ],
+                likes: [
+                    { v: 1000, p: 50000 }, { v: 4000, p: 83000 },
+                    { v: 7000, p: 116000 }, { v: 10000, p: 150000 }
+                ],
+                rules: { floor: 50000, ceiling: 360000 }
+            },
+            USD: {
+                followers: [
+                    { v: 3000, p: 35 }, { v: 5000, p: 50 },
+                    { v: 8000, p: 75 }, { v: 10000, p: 100 }
+                ],
+                likes: [
+                    { v: 2500, p: 35 }, { v: 5000, p: 50 },
+                    { v: 7500, p: 75 }, { v: 10000, p: 100 }
+                ],
+                rules: { floor: 35, ceiling: 100 }
+            }
         }
+    };
+
+    var state = {
+        currency: 'UGX',
+        code: 'UG',
+        fol: -1,          // -1 = not buying this category
+        lik: -1,
+        splits: 5,
+        referred: false,
+        busy: false,
+        total: 0
+    };
+
+    var $ = function (id) { return document.getElementById(id); };
+
+    /* ------------------------------------------------------------ render */
+
+    function tierMarkup(kind, tier, index, selected, bonus) {
+        return '<button type="button" class="tier' + (selected ? ' is-on' : '') + '"' +
+            ' data-kind="' + kind + '" data-index="' + index + '"' +
+            ' aria-pressed="' + selected + '">' +
+            '<span class="tier-check"></span>' +
+            '<span class="tier-vol">' + OrderKit.vol(tier.v) + '</span>' +
+            (bonus ? '<span class="tier-bonus">+ ' + bonus + ' views</span>' : '') +
+            '<span class="tier-price">' + OrderKit.money(tier.p, state.currency) + '</span>' +
+            '</button>';
     }
-};
 
-const AppState = {
-    country: 'UGX',
-    countryCode: 'UG',
-    folSelection: -1,   // -1 = Skipped/None
-    likSelection: -1,   // -1 = Skipped/None
-    videoSplits: 5,
-    hasReferrer: false,
-    isProcessing: false,
-    finalMathematicalPrice: 0 // Clean integer for sheets
-};
+    function skipMarkup(kind, label, selected) {
+        return '<button type="button" class="tier tier--skip' + (selected ? ' is-on' : '') + '"' +
+            ' data-kind="' + kind + '" data-index="-1" aria-pressed="' + selected + '">' +
+            '<i class="fas fa-ban"></i> ' + label + '</button>';
+    }
 
-const CoreApp = {
+    function renderTiers() {
+        var matrix = CONFIG.prices[state.currency];
 
-    // --- 1. BOOTSTRAP ---
-    init() {
-        const savedRegion = localStorage.getItem('accessug_loc_v5');
-        const savedCode = localStorage.getItem('accessug_code_v5');
-        
-        if (savedRegion && savedCode) {
-            this.setCountry(savedRegion, savedCode, false);
-        } else {
-            this.openCountryModal();
+        $('grid-followers').innerHTML =
+            matrix.followers.map(function (tier, i) {
+                return tierMarkup('fol', tier, i, state.fol === i, null);
+            }).join('') +
+            skipMarkup('fol', "I don't need followers", state.fol === -1);
+
+        $('grid-likes').innerHTML =
+            matrix.likes.map(function (tier, i) {
+                return tierMarkup('lik', tier, i, state.lik === i, OrderKit.vol(tier.v * 2));
+            }).join('') +
+            skipMarkup('lik', "I don't need likes", state.lik === -1);
+
+        $('split-box').hidden = state.lik === -1;
+    }
+
+    /* -------------------------------------------------------- the maths */
+
+    function recalc() {
+        var matrix = CONFIG.prices[state.currency];
+        var subtotal = 0;
+        var categories = 0;
+
+        if (state.fol > -1) {
+            subtotal += matrix.followers[state.fol].p;
+            categories++;
         }
 
-        // Enter key listener for rapid checkout
-        ['client-name', 'client-number', 'target-username', 'referrer-name'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) {
-                el.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !AppState.isProcessing) this.processCheckout();
-                });
-            }
-        });
-    },
-
-    // --- 2. COUNTRY MANAGEMENT ---
-    openCountryModal() {
-        document.getElementById('country-modal').setAttribute('aria-hidden', 'false');
-    },
-
-    setCountry(currency, code = 'UG', saveToMemory = true) {
-        if(saveToMemory) {
-            localStorage.setItem('accessug_loc_v5', currency);
-            localStorage.setItem('accessug_code_v5', code);
-        }
-        AppState.country = currency;
-        AppState.countryCode = code;
-        
-        document.getElementById('country-modal').setAttribute('aria-hidden', 'true');
-        document.getElementById('ui-region-badge').innerText = currency;
-
-        // Dynamic WhatsApp Placeholder
-        const phoneInput = document.getElementById('client-number');
-        if (phoneInput) {
-            if (code === 'UG') phoneInput.placeholder = "e.g. +256 700 000 000";
-            else if (code === 'SS') phoneInput.placeholder = "e.g. +211 000 000 000";
-            else if (code === 'CD') phoneInput.placeholder = "e.g. +243 000 000 000";
-        }
-        
-        // Reset selections to defaults (Select lowest tier of followers, skip likes)
-        AppState.folSelection = 0;
-        AppState.likSelection = -1;
-        AppState.videoSplits = 5;
-        
-        this.renderBentoGrids();
-        this.calculateMath();
-    },
-
-    // --- 3. BENTO UI RENDERING ---
-    renderBentoGrids() {
-        const matrix = AppConfig.prices[AppState.country];
-        const formatVol = (v) => v >= 1000 ? (v/1000) + 'k' : v;
-        const formatPrice = (p) => AppState.country === 'USD' ? `$${p}` : `${p.toLocaleString()} UGX`;
-
-        // 3a. Render Followers Grid
-        const gridFol = document.getElementById('grid-followers');
-        gridFol.innerHTML = '';
-        
-        // Generate the 4 Pricing Buttons
-        matrix.followers.forEach((tier, index) => {
-            let activeClass = AppState.folSelection === index ? 'selected-cyan' : '';
-            gridFol.innerHTML += `
-                <div class="pack-btn ${activeClass}" onclick="CoreApp.selectTier('fol', ${index})">
-                    <span class="p-vol">${formatVol(tier.v)}</span>
-                    <span class="p-price">${formatPrice(tier.p)}</span>
-                </div>
-            `;
-        });
-        
-        // Append the Explicit "Skip" Button
-        let skipFolClass = AppState.folSelection === -1 ? 'selected-skip' : '';
-        gridFol.innerHTML += `
-            <div class="pack-btn skip-btn ${skipFolClass}" onclick="CoreApp.selectTier('fol', -1)" style="grid-column: span 2;">
-                <span class="p-vol">I don't need Followers</span>
-            </div>
-        `;
-
-        // 3b. Render Likes Grid
-        const gridLik = document.getElementById('grid-likes');
-        gridLik.innerHTML = '';
-        
-        // Generate the 4 Pricing Buttons
-        matrix.likes.forEach((tier, index) => {
-            let activeClass = AppState.likSelection === index ? 'selected-pink' : '';
-            let freeViews = formatVol(tier.v * 2);
-            gridLik.innerHTML += `
-                <div class="pack-btn ${activeClass}" onclick="CoreApp.selectTier('lik', ${index})">
-                    <span class="p-vol">${formatVol(tier.v)}</span>
-                    <span class="p-views">+ ${freeViews} Views</span>
-                    <span class="p-price">${formatPrice(tier.p)}</span>
-                </div>
-            `;
-        });
-
-        // Append the Explicit "Skip" Button
-        let skipLikClass = AppState.likSelection === -1 ? 'selected-skip' : '';
-        gridLik.innerHTML += `
-            <div class="pack-btn skip-btn ${skipLikClass}" onclick="CoreApp.selectTier('lik', -1)" style="grid-column: span 2;">
-                <span class="p-vol">I don't need Likes</span>
-            </div>
-        `;
-
-        // Toggle Video Splitter UI Visibility
-        const splitterUI = document.getElementById('split-ui-box');
-        if (AppState.likSelection > -1) {
-            splitterUI.style.display = 'flex';
-        } else {
-            splitterUI.style.display = 'none';
-        }
-    },
-
-    // --- 4. TACTILE INTERACTIONS ---
-    selectTier(type, index) {
-        if (AppState.isProcessing) return;
-        
-        if (type === 'fol') AppState.folSelection = index;
-        if (type === 'lik') AppState.likSelection = index;
-        
-        this.renderBentoGrids();
-        this.calculateMath();
-        this.triggerVibration();
-    },
-
-    adjustSplit(direction) {
-        if (AppState.isProcessing) return;
-        
-        AppState.videoSplits += direction;
-        if (AppState.videoSplits < 1) AppState.videoSplits = 1;
-        if (AppState.videoSplits > 10) AppState.videoSplits = 10;
-        
-        document.getElementById('split-counter-ui').innerText = AppState.videoSplits;
-        this.calculateMath();
-        this.triggerVibration();
-    },
-
-    toggleReferrer(hasFriend) {
-        if (AppState.isProcessing) return;
-        AppState.hasReferrer = hasFriend;
-        
-        const btnNo = document.getElementById('ref-no');
-        const btnYes = document.getElementById('ref-yes');
-        const drawer = document.getElementById('referrer-drawer');
-        
-        if (hasFriend) {
-            btnNo.classList.remove('active');
-            btnYes.classList.add('active');
-            drawer.classList.add('is-open');
-            setTimeout(() => document.getElementById('referrer-name').focus(), 250);
-        } else {
-            btnYes.classList.remove('active');
-            btnNo.classList.add('active');
-            drawer.classList.remove('is-open');
-            document.getElementById('referrer-name').value = ''; 
-        }
-    },
-
-    triggerVibration() {
-        if (navigator.vibrate) navigator.vibrate(10);
-    },
-
-    // --- 5. THE CORE MATHEMATICS ENGINE ---
-    calculateMath() {
-        const matrix = AppConfig.prices[AppState.country];
-        let runningTotal = 0;
-        let activeCategories = 0;
-
-        // Add Followers Math
-        if (AppState.folSelection > -1) {
-            runningTotal += matrix.followers[AppState.folSelection].p;
-            activeCategories++;
-        }
-        
-        // Add Likes Math & Update Split Text
-        if (AppState.likSelection > -1) {
-            const likObj = matrix.likes[AppState.likSelection];
-            runningTotal += likObj.p;
-            activeCategories++;
-            
-            const likesPerPost = Math.floor(likObj.v / AppState.videoSplits);
-            document.getElementById('split-math-output').innerText = `~${likesPerPost.toLocaleString()} Likes per video`;
+        if (state.lik > -1) {
+            var lik = matrix.likes[state.lik];
+            subtotal += lik.p;
+            categories++;
+            $('split-math').textContent =
+                '~' + Math.floor(lik.v / state.splits).toLocaleString() + ' likes per video';
         }
 
-        // Apply Business Rules
-        let finalPrice = runningTotal;
-        
-        const tagCombo = document.getElementById('ui-badge-combo');
-        const tagMax = document.getElementById('ui-badge-max');
-        const textStrike = document.getElementById('ui-strike-price');
+        var total = subtotal;
+        var chipBundle = $('chip-bundle');
+        var chipCap = $('chip-cap');
+        var strike = $('dock-strike');
 
-        tagCombo.style.display = 'none';
-        tagMax.style.display = 'none';
-        textStrike.innerText = '';
+        chipBundle.classList.remove('is-on');
+        chipCap.classList.remove('is-on');
+        strike.textContent = '';
 
-        // Rule 1: 10% Bundle Discount
-        if (activeCategories === 2 && runningTotal > 0) {
-            finalPrice = runningTotal * 0.90;
-            tagCombo.style.display = 'flex';
-            textStrike.innerText = AppState.country === 'USD' ? `$${runningTotal}` : runningTotal.toLocaleString();
+        // both categories together earn 10% off
+        if (categories === 2 && subtotal > 0) {
+            total = subtotal * 0.90;
+            chipBundle.classList.add('is-on');
+            strike.textContent = OrderKit.money(subtotal, state.currency);
         }
 
-        // Rule 2: Strict Min Floor & Max Ceiling Overrides
-        if (activeCategories > 0) {
-            if (finalPrice < matrix.rules.floor) finalPrice = matrix.rules.floor;
-            if (finalPrice >= matrix.rules.ceiling) {
-                finalPrice = matrix.rules.ceiling;
-                tagCombo.style.display = 'none'; 
-                tagMax.style.display = 'flex';
-                textStrike.innerText = ''; 
+        if (categories > 0) {
+            if (total < matrix.rules.floor) total = matrix.rules.floor;
+            if (total >= matrix.rules.ceiling) {
+                total = matrix.rules.ceiling;
+                chipBundle.classList.remove('is-on');
+                chipCap.classList.add('is-on');
+                strike.textContent = '';
             }
         } else {
-            finalPrice = 0;
+            total = 0;
         }
 
-        // Output to DOM
-        if (AppState.country === 'USD') {
-            document.getElementById('ui-final-price').innerText = `$${finalPrice}`;
-            document.getElementById('ui-final-curr').innerText = '';
+        state.total = total;
+
+        if (state.currency === 'USD') {
+            $('dock-price').textContent = '$' + total.toLocaleString();
+            $('dock-curr').textContent = 'USD';
         } else {
-            document.getElementById('ui-final-price').innerText = finalPrice.toLocaleString();
-            document.getElementById('ui-final-curr').innerText = 'UGX';
-        }
-        
-        // Save to state for payload
-        AppState.finalMathematicalPrice = finalPrice;
-    },
-
-    // --- 6. SHADOW-SYNC & WHATSAPP BRIDGE ---
-    async processCheckout() {
-        if (AppState.isProcessing) return;
-
-        // 1. Validations
-        if (AppState.folSelection === -1 && AppState.likSelection === -1) {
-            this.showToast("Please select a Follower or Like package to buy.", "error");
-            return;
+            $('dock-price').textContent = total.toLocaleString();
+            $('dock-curr').textContent = 'UGX';
         }
 
-        const clientName = document.getElementById('client-name').value.trim();
-        if (!clientName) {
-            this.showToast("Please enter your Full Name.", "error");
-            document.getElementById('client-name').focus();
-            return;
+        syncRail();
+    }
+
+    function syncRail() {
+        var picked = state.fol > -1 || state.lik > -1;
+        var filled = $('client-name').value.trim().length > 1 &&
+            $('client-number').value.trim().replace(/\D/g, '').length >= 8 &&
+            $('target-username').value.trim().length > 0;
+
+        if (!picked) OrderKit.rail(1, 0);
+        else if (!filled) OrderKit.rail(2, 1);
+        else OrderKit.rail(3, 2);
+    }
+
+    /* --------------------------------------------------------- packaging */
+
+    function describe() {
+        var matrix = CONFIG.prices[state.currency];
+        var sheetStr = '';
+        var waStr = '';
+        var lines = [];
+
+        if (state.fol > -1) {
+            var folVol = matrix.followers[state.fol].v;
+            sheetStr += folVol + ' Followers. ';
+            waStr += '🚀 *Followers:* ' + folVol.toLocaleString() + '\n';
+            lines.push(['Followers', folVol.toLocaleString()]);
         }
 
-        const rawNumber = document.getElementById('client-number').value.trim();
-        if (rawNumber.length < 8) {
-            this.showToast("Please enter a valid WhatsApp Number.", "error");
-            document.getElementById('client-number').focus();
-            return;
+        if (state.lik > -1) {
+            var likVol = matrix.likes[state.lik].v;
+            var views = likVol * 2;
+            sheetStr += likVol + ' Likes (Split ' + state.splits + ') + ' + views + ' Views.';
+            waStr += '❤️ *Likes:* ' + likVol.toLocaleString() + ' (Split across ' + state.splits + ' videos)\n';
+            waStr += '👁️ *Free Views:* ' + views.toLocaleString() + '\n';
+            lines.push(['Likes', likVol.toLocaleString() + ' across ' + state.splits + ' videos']);
+            lines.push(['Free views', views.toLocaleString()]);
         }
 
-        const clientUsername = document.getElementById('target-username').value.trim();
-        if (!clientUsername) {
-            this.showToast("We need your TikTok Username.", "error");
-            document.getElementById('target-username').focus();
-            return;
+        return { sheet: sheetStr, wa: waStr, lines: lines };
+    }
+
+    /* -------------------------------------------------------- validation */
+
+    function validate() {
+        if (state.fol === -1 && state.lik === -1) {
+            OrderKit.toast('Pick a followers or likes package first.');
+            OrderKit.scrollTo('grid-followers');
+            return null;
         }
 
-        // 2. Plain text number sanitizer for Google Sheets
-        const cleanNumber = rawNumber.replace(/\D/g, ''); 
-        const sheetNumber = "'" + cleanNumber; 
+        OrderKit.clearErrors();
 
-        // 3. Format Referrer
-        let referrerText = "Direct";
-        if (AppState.hasReferrer) {
-            const inputVal = document.getElementById('referrer-name').value.trim();
-            if (inputVal) referrerText = inputVal;
+        var name = $('client-name').value.trim();
+        if (name.length < 2) {
+            OrderKit.fieldError('client-name', 'Please enter your name');
+            return null;
         }
 
-        this.setLoading(true);
-
-        // 4. Construct Strings
-        const matrix = AppConfig.prices[AppState.country];
-        let sheetPackageStr = "";
-        let waPackageStr = "";
-        
-        if (AppState.folSelection > -1) {
-            let folVol = matrix.followers[AppState.folSelection].v;
-            sheetPackageStr += `${folVol} Followers. `;
-            waPackageStr += `🚀 *Followers:* ${folVol.toLocaleString()}\n`;
+        var raw = $('client-number').value.trim();
+        if (raw.replace(/\D/g, '').length < 8) {
+            OrderKit.fieldError('client-number', 'Enter a valid WhatsApp number');
+            return null;
         }
-        
-        if (AppState.likSelection > -1) {
-            let likVol = matrix.likes[AppState.likSelection].v;
-            let freeViews = likVol * 2;
-            sheetPackageStr += `${likVol} Likes (Split ${AppState.videoSplits}) + ${freeViews} Views.`;
-            waPackageStr += `❤️ *Likes:* ${likVol.toLocaleString()} (Split across ${AppState.videoSplits} videos)\n`;
-            waPackageStr += `👁️ *Free Views:* ${freeViews.toLocaleString()}\n`;
+
+        var username = $('target-username').value.trim().replace(/^@/, '');
+        if (!username) {
+            OrderKit.fieldError('target-username', 'We need the username to send to');
+            return null;
         }
-        
-        // Append Target Username to Sheet description to ensure it's logged securely
-        sheetPackageStr += ` [Target: ${clientUsername}]`;
 
-        const finalBillDisplay = document.getElementById('ui-final-price').innerText + " " + document.getElementById('ui-final-curr').innerText;
+        var referrer = 'Direct';
+        if (state.referred) {
+            var typed = $('referrer-name').value.trim();
+            if (typed) referrer = typed;
+        }
 
-        // --- GOOGLE SHEETS INTEGRATION ---
-        const formData = new URLSearchParams();
-        formData.append('ClientName', clientName);
-        formData.append('Number', sheetNumber); // Safe Plain-Text format
-        formData.append('Service', `TikTok Boost [${AppState.country}]`);
-        formData.append('Package', sheetPackageStr.trim());
-        formData.append('Price', AppState.finalMathematicalPrice.toString()); 
-        formData.append('Referrer', referrerText);
+        return { name: name, phone: OrderKit.phone(raw), username: username, referrer: referrer };
+    }
 
-        try {
-            await fetch(AppConfig.googleSheetUrl, { 
-                method: 'POST', 
-                body: formData, 
-                mode: 'no-cors' 
+    /* ------------------------------------------------------------ review */
+
+    function openReview() {
+        var order = validate();
+        if (!order) return;
+
+        var pack = describe();
+        var rows = pack.lines.map(function (pair) {
+            return '<div class="sum-row"><span>' + pair[0] + '</span><b>' + pair[1] + '</b></div>';
+        });
+        rows.push('<div class="sum-row"><span>TikTok</span><b>@' + order.username + '</b></div>');
+        rows.push('<div class="sum-row"><span>WhatsApp</span><b>' + order.phone.clean + '</b></div>');
+        rows.push('<div class="sum-row is-total"><span>Total</span><b>' +
+            OrderKit.money(state.total, state.currency) + '</b></div>');
+
+        $('sum-list').innerHTML = rows.join('');
+        OrderKit.openSheet('confirmSheet');
+        OrderKit.haptic(12);
+    }
+
+    function confirmOrder() {
+        if (state.busy) return;
+        var order = validate();
+        if (!order) { OrderKit.closeSheet('confirmSheet'); return; }
+
+        state.busy = true;
+        var btn = $('btn-confirm');
+        btn.classList.add('is-busy');
+        btn.querySelector('.cta-label').textContent = 'Opening WhatsApp…';
+        btn.querySelector('.cta-icon').innerHTML = '<span class="spinner"></span>';
+
+        var pack = describe();
+        var totalText = OrderKit.money(state.total, state.currency);
+
+        var message = '*NEW ORDER [' + order.username.toUpperCase() + ']*\n\n' +
+            '*Service:* TikTok Boost\n' +
+            '*Client Name:* ' + order.name + '\n' +
+            '*WhatsApp:* ' + order.phone.clean + '\n' +
+            '*Package:* \n' + pack.wa + '\n' +
+            '*Price:* ' + totalText + '\n' +
+            '*Referrer:* ' + order.referrer + '\n' +
+            '*Target Username:* ' + order.username;
+
+        OrderKit.send({
+            sheetUrl: CONFIG.sheetUrl,
+            whatsapp: CONFIG.whatsapp,
+            message: message,
+            sheet: {
+                ClientName: order.name,
+                Number: order.phone.sheet,
+                Service: 'TikTok Boost [' + state.currency + ']',
+                Package: (pack.sheet + ' [Target: ' + order.username + ']').trim(),
+                Price: String(state.total),
+                Referrer: order.referrer
+            }
+        });
+
+        setTimeout(function () {
+            state.busy = false;
+            btn.classList.remove('is-busy');
+            btn.querySelector('.cta-label').textContent = 'Send on WhatsApp';
+            btn.querySelector('.cta-icon').innerHTML = '<i class="fab fa-whatsapp"></i>';
+        }, 6000);
+    }
+
+    /* -------------------------------------------------------------- wire */
+
+    function init() {
+        OrderKit.boot();
+
+        OrderKit.region({
+            key: 'k97_tt',
+            onChange: function (currency, code) {
+                state.currency = currency;
+                state.code = code;
+                // reset to a sensible starting point for the new price list
+                state.fol = 0;
+                state.lik = -1;
+                state.splits = 5;
+                $('split-count').textContent = '5';
+                renderTiers();
+                recalc();
+            }
+        });
+
+        // tiers are re-rendered on every change, so delegate rather than rebind
+        document.querySelectorAll('.tier-grid').forEach(function (grid) {
+            grid.addEventListener('click', function (e) {
+                var btn = e.target.closest('.tier');
+                if (!btn || state.busy) return;
+                var index = parseInt(btn.dataset.index, 10);
+                if (btn.dataset.kind === 'fol') state.fol = index;
+                else state.lik = index;
+                renderTiers();
+                recalc();
+                OrderKit.haptic(10);
             });
-        } catch (e) { 
-            console.log("Sheet sync bypassed, proceeding to WhatsApp."); 
-        }
+        });
 
-        // --- WHATSAPP REDIRECTION ---
-        const waTotalDisplay = AppState.country === 'USD' ? `$${AppState.finalMathematicalPrice}` : `${AppState.finalMathematicalPrice.toLocaleString()} UGX`;
-        
-        let message = `*NEW ORDER [${clientUsername.toUpperCase()}]*\n\n`;
-        message += `*Service:* TikTok Boost\n`;
-        message += `*Client Name:* ${clientName}\n`;
-        message += `*WhatsApp:* ${cleanNumber}\n`;
-        message += `*Package:* \n${waPackageStr}\n`;
-        message += `*Price:* ${waTotalDisplay}\n`;
-        message += `*Referrer:* ${referrerText}\n`;
-        message += `*Target Username:* ${clientUsername}`;
+        var adjust = function (delta) {
+            state.splits = Math.min(10, Math.max(1, state.splits + delta));
+            $('split-count').textContent = state.splits;
+            recalc();
+            OrderKit.haptic(8);
+        };
+        $('split-minus').addEventListener('click', function () { adjust(-1); });
+        $('split-plus').addEventListener('click', function () { adjust(1); });
 
-        window.location.href = `https://wa.me/${AppConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
-        
-        setTimeout(() => this.setLoading(false), 5000);
-    },
+        var setReferred = function (yes) {
+            state.referred = yes;
+            $('ref-yes').classList.toggle('is-on', yes);
+            $('ref-yes').setAttribute('aria-pressed', String(yes));
+            $('ref-no').classList.toggle('is-on', !yes);
+            $('ref-no').setAttribute('aria-pressed', String(!yes));
+            $('ref-drawer').classList.toggle('is-open', yes);
+            if (yes) setTimeout(function () { $('referrer-name').focus(); }, 260);
+            else $('referrer-name').value = '';
+        };
+        $('ref-yes').addEventListener('click', function () { setReferred(true); });
+        $('ref-no').addEventListener('click', function () { setReferred(false); });
 
-    // --- 7. UTILITIES ---
-    setLoading(isLoading) {
-        AppState.isProcessing = isLoading;
-        const btnNode = document.getElementById('btn-submit');
-        const btnText = document.getElementById('btn-text');
-        const btnIcon = document.getElementById('btn-icon');
-        const btnSpinner = document.getElementById('btn-spinner');
+        ['client-name', 'client-number', 'target-username'].forEach(function (id) {
+            $(id).addEventListener('input', syncRail);
+        });
 
-        if (isLoading) {
-            btnNode.disabled = true;
-            btnText.innerText = "Securing Order...";
-            btnIcon.style.display = 'none';
-            btnSpinner.style.display = 'block';
-        } else {
-            btnNode.disabled = false;
-            btnText.innerText = "Place Order";
-            btnIcon.style.display = 'inline-block';
-            btnSpinner.style.display = 'none';
-        }
-    },
+        // Enter anywhere in the form jumps straight to review
+        document.querySelectorAll('.field input').forEach(function (input) {
+            input.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') { e.preventDefault(); openReview(); }
+            });
+        });
 
-    showToast(message, type = 'error') {
-        const wrapper = document.getElementById('toast-wrapper');
-        const toast = document.createElement('div');
-        toast.className = `toast-msg ${type}-toast`;
-        
-        const iconClass = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
-        toast.innerHTML = `<i class="fas ${iconClass}"></i> <span>${message}</span>`;
-        
-        wrapper.appendChild(toast);
-        this.triggerVibration();
+        $('btn-submit').addEventListener('click', openReview);
+        $('btn-confirm').addEventListener('click', confirmOrder);
 
-        setTimeout(() => {
-            toast.classList.add('fade-out');
-            toast.addEventListener('animationend', () => toast.remove());
-        }, 3500);
+        renderTiers();
+        recalc();
     }
-};
 
-CoreApp.init();
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();

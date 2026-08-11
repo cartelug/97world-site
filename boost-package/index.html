@@ -1,272 +1,236 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Viral Boost | 97 World</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+
+    <title>Growth Bundle | 97 World</title>
+    <meta name="description" content="One bundle, followers and likes together, on Instagram, TikTok or split across both.">
+
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
-    
+
+    <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <link rel="stylesheet" href="../HOME/style.css?v=7.0">
-    <link rel="stylesheet" href="style.css?v=13.0">
+
+    <link rel="stylesheet" href="/assets/order.css">
 </head>
-<body class="boost-mode">
+<body class="order-page" data-accent="bundle">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
   <div class="k97pl-bar"><i></i></div>
 </div>
 
+    <div class="ord-aura" aria-hidden="true"></div>
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
-    <div class="viral-bg">
-        <div class="blob pink-blob"></div>
-        <div class="blob cyan-blob"></div>
-        <div class="grid-overlay"></div>
-    </div>
-
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="../index.html" class="logo-wrapper">
-                <img src="/IMAGES/logo.png" alt="97 World" class="brand-logo">
-            </a>
-            <a href="../index.html" class="nav-item back-link"><i class="fas fa-arrow-left"></i> Back</a>
-        </div>
+    <nav class="ord-nav">
+        <a href="/" class="ord-back" aria-label="Back to 97 World"><i class="fas fa-arrow-left"></i></a>
+        <a href="/" class="ord-brand">
+            <img src="/IMAGES/logo.png" alt="">
+            <span>World</span>
+        </a>
+        <span class="ord-region" style="pointer-events:none">
+            <span class="flag">💵</span>
+            <span>USD</span>
+        </span>
     </nav>
 
-    <main class="order-container">
-        
-        <div class="progress-track">
-            <div class="step active" data-step="1">1. Level</div>
-            <div class="step" data-step="2">2. Platform</div>
-            <div class="step" data-step="3">3. Trust</div>
-            <div class="step" data-step="4">4. Fame</div>
-        </div>
+    <main class="ord-shell">
 
-        <div class="wizard-card glass-panel">
-            
-            <div class="wizard-step active-step" id="step-1">
-                <div class="step-header">
-                    <h2>Choose Your <span class="highlight-mix">Fame Level</span></h2>
-                    <p>Go viral instantly. Followers + Likes included.</p>
+        <header class="ord-hero">
+            <span class="ord-plat r-up">
+                <i class="fas fa-layer-group"></i>
+                Growth Bundle
+            </span>
+            <h1 class="ord-title r-up">Followers <em>and</em> likes, one bundle</h1>
+            <p class="ord-sub r-up">Pick a size, choose where it lands — Instagram, TikTok, or split across both. Every bundle includes 1,000 bonus followers.</p>
+            <ul class="ord-trust r-up" data-stagger>
+                <li><i class="fas fa-gift"></i> 1,000 bonus followers</li>
+                <li><i class="fas fa-lock"></i> No password needed</li>
+                <li><i class="fas fa-bolt"></i> Starts in 1–6 hrs</li>
+            </ul>
+        </header>
+
+        <ol class="ord-rail" id="ordRail">
+            <li class="is-current"><b>1</b><span>Bundle</span></li>
+            <li><b>2</b><span>Where</span></li>
+            <li><b>3</b><span>Details</span></li>
+        </ol>
+
+        <section class="ord-card r-up" aria-labelledby="h-plans">
+            <div class="ord-card-head">
+                <span class="ord-step-num">1</span>
+                <div>
+                    <h2 id="h-plans">Pick your bundle</h2>
+                    <p>Bigger bundles carry more likes and spread across more posts.</p>
                 </div>
+            </div>
+            <div class="tier-list" id="plan-list" role="group" aria-labelledby="h-plans"></div>
+        </section>
 
-                <div class="plan-grid">
-                    
-                    <div class="plan-card vvip-card" onclick="selectPlan(this, 'VVIP Status', '11,000 Followers', '1000 Likes', '99')">
-                        <div class="tag glitch">BEST SELLER</div>
-                        <div class="card-content">
-                            <div class="plan-header">
-                                <h3>VVIP Status</h3>
-                                <div class="price-box">$99</div>
-                            </div>
-                            
-                            <div class="stat-grid">
-                                <div class="stat-item big">
-                                    <span class="num">10K</span>
-                                    <span class="label">Followers</span>
-                                </div>
-                                <div class="plus-sign">+</div>
-                                <div class="stat-item bonus">
-                                    <span class="num">1K</span>
-                                    <span class="label">Bonus Gift</span>
-                                </div>
-                            </div>
-
-                            <div class="engagement-pill">
-                                <i class="fas fa-heart"></i> Includes 1,000 Likes (5 Posts)
-                            </div>
-                        </div>
-                        <div class="glow-border"></div>
-                    </div>
-
-                    <div class="plan-card" onclick="selectPlan(this, 'Starter Pack', '7,000 Followers', '600 Likes', '75')">
-                        <div class="tag">POPULAR</div>
-                        <div class="card-content">
-                            <div class="plan-header">
-                                <h3>Starter Pack</h3>
-                                <div class="price-box">$75</div>
-                            </div>
-                            
-                            <div class="stat-grid">
-                                <div class="stat-item">
-                                    <span class="num">6K</span>
-                                    <span class="label">Followers</span>
-                                </div>
-                                <div class="plus-sign">+</div>
-                                <div class="stat-item bonus">
-                                    <span class="num">1K</span>
-                                    <span class="label">Bonus Gift</span>
-                                </div>
-                            </div>
-
-                            <div class="engagement-pill">
-                                <i class="fas fa-heart"></i> Includes 600 Likes (5 Posts)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="plan-card" onclick="selectPlan(this, 'Creator Mode', '5,000 Followers', '400 Likes', '50')">
-                        <div class="tag">ENTRY</div>
-                        <div class="card-content">
-                            <div class="plan-header">
-                                <h3>Creator Mode</h3>
-                                <div class="price-box">$50</div>
-                            </div>
-                            
-                            <div class="stat-grid">
-                                <div class="stat-item">
-                                    <span class="num">4K</span>
-                                    <span class="label">Followers</span>
-                                </div>
-                                <div class="plus-sign">+</div>
-                                <div class="stat-item bonus">
-                                    <span class="num">1K</span>
-                                    <span class="label">Bonus Gift</span>
-                                </div>
-                            </div>
-
-                            <div class="engagement-pill">
-                                <i class="fas fa-heart"></i> Includes 400 Likes (5 Posts)
-                            </div>
-                        </div>
-                    </div>
-
+        <section class="ord-card r-up" id="where" aria-labelledby="h-where">
+            <div class="ord-card-head">
+                <span class="ord-step-num">2</span>
+                <div>
+                    <h2 id="h-where">Where should it land?</h2>
+                    <p>All on one platform, or split across both.</p>
                 </div>
+            </div>
 
-                <div id="scroll-target-1"></div>
-                <button class="btn primary-mix disabled" id="btn-step-1" onclick="goToStep(2)">
-                    Select Level <i class="fas fa-arrow-right"></i>
+            <div class="pick-grid" id="platform-list" role="group" aria-labelledby="h-where">
+                <button type="button" class="pick" data-platform="Instagram Only">
+                    <span class="tier-check"></span>
+                    <span class="pick-icon"><i class="fab fa-instagram"></i></span>
+                    <span class="pick-copy">
+                        <b>Instagram only</b>
+                        <small>Everything lands on your Instagram account.</small>
+                    </span>
+                </button>
+                <button type="button" class="pick" data-platform="TikTok Only">
+                    <span class="tier-check"></span>
+                    <span class="pick-icon"><i class="fab fa-tiktok"></i></span>
+                    <span class="pick-copy">
+                        <b>TikTok only</b>
+                        <small>Everything lands on your TikTok account.</small>
+                    </span>
+                </button>
+                <button type="button" class="pick" data-platform="Ultimate Mix">
+                    <span class="tier-check"></span>
+                    <span class="pick-icon"><i class="fab fa-tiktok"></i><i class="fab fa-instagram"></i></span>
+                    <span class="pick-copy">
+                        <b>Split across both</b>
+                        <small>Core followers on TikTok, bonus on Instagram.</small>
+                    </span>
                 </button>
             </div>
 
-            <div class="wizard-step" id="step-2">
-                <div class="step-header">
-                    <h2>Where Do You Want <span class="highlight-mix">Fame?</span></h2>
-                    <p>Apply your package to one or both platforms.</p>
+            <div class="ord-hint" id="split-info">
+                <i class="fas fa-circle-info"></i>
+                <span>Choose a platform to see exactly how your followers get distributed.</span>
+            </div>
+        </section>
+
+        <section class="ord-card r-up" id="details" aria-labelledby="h-details">
+            <div class="ord-card-head">
+                <span class="ord-step-num">3</span>
+                <div>
+                    <h2 id="h-details">Your details</h2>
+                    <p>Where the bundle goes and how we reach you.</p>
                 </div>
+            </div>
 
-                <div class="platform-grid">
-                    
-                    <div class="plat-card ig-theme" onclick="selectPlatform(this, 'Instagram Only')">
-                        <div class="plat-icon"><i class="fab fa-instagram"></i></div>
-                        <h3>Instagram Only</h3>
-                        <p>Get all followers & likes on Instagram.</p>
-                        <div class="selection-dot"></div>
+            <div class="field">
+                <div class="field-box">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="client-name" placeholder="Your full name" autocomplete="name" spellcheck="false">
+                </div>
+                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Please enter your name</span></p>
+            </div>
+
+            <div class="field">
+                <div class="field-box">
+                    <i class="fab fa-whatsapp" style="color:var(--ord-wa)"></i>
+                    <input type="tel" id="client-number" placeholder="WhatsApp number" autocomplete="tel" inputmode="tel">
+                </div>
+                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Enter a valid WhatsApp number</span></p>
+            </div>
+
+            <div class="field">
+                <div class="field-box">
+                    <i class="fas fa-at"></i>
+                    <input type="text" id="social-handle" placeholder="Your @handle" autocomplete="off" spellcheck="false" autocapitalize="none">
+                </div>
+                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>We need the handle to send to</span></p>
+            </div>
+
+            <div class="field select-box" style="margin-top:11px">
+                <select id="payment-method" aria-label="Payment method">
+                    <option value="MTN Mobile Money">MTN Mobile Money</option>
+                    <option value="Airtel Money">Airtel Money</option>
+                    <option value="Cash in Office">Cash (office visit)</option>
+                </select>
+            </div>
+
+            <div class="ref-block">
+                <div class="ref-row">
+                    <span>Did a friend refer you?</span>
+                    <div class="pill-group" role="group" aria-label="Referral">
+                        <button type="button" class="pill is-on" id="ref-no" aria-pressed="true">No</button>
+                        <button type="button" class="pill" id="ref-yes" aria-pressed="false">Yes</button>
                     </div>
-
-                    <div class="plat-card tt-theme" onclick="selectPlatform(this, 'TikTok Only')">
-                        <div class="plat-icon"><i class="fab fa-tiktok"></i></div>
-                        <h3>TikTok Only</h3>
-                        <p>Get all followers & likes on TikTok.</p>
-                        <div class="selection-dot"></div>
-                    </div>
-
-                    <div class="plat-card mix-theme" onclick="selectPlatform(this, 'Ultimate Mix')">
-                        <div class="plat-icons">
-                            <i class="fab fa-tiktok"></i>
-                            <span>+</span>
-                            <i class="fab fa-instagram"></i>
+                </div>
+                <div class="ref-drawer" id="ref-drawer">
+                    <div>
+                        <div class="field">
+                            <div class="field-box">
+                                <i class="fas fa-user-group"></i>
+                                <input type="text" id="ref-code" placeholder="Their name" autocomplete="off">
+                            </div>
                         </div>
-                        <h3>Ultimate Mix (Both)</h3>
-                        <p>Split Fame: Core on TikTok + Bonus on IG.</p>
-                        <div class="selection-dot"></div>
                     </div>
-
                 </div>
-
-                <div class="info-note" id="split-info">
-                    <i class="fas fa-info-circle"></i> Select a platform to see distribution details.
-                </div>
-
-                <button class="btn primary-mix disabled" id="btn-step-2" onclick="goToStep(3)">
-                    Confirm Platform <i class="fas fa-check"></i>
-                </button>
             </div>
+        </section>
 
-            <div class="wizard-step" id="step-3">
-                <div class="step-header">
-                    <h2>Real <span class="highlight-mix">Results</span></h2>
-                    <p>See how others went viral with 97 World.</p>
-                </div>
-
-                <div class="proof-viewer">
-                    <div class="proof-track">
-                        <img src="../IMAGES/boost1.png" alt="Proof 1" class="proof-img">
-                        <img src="../IMAGES/boost2.png" alt="Proof 2" class="proof-img">
-                        <img src="../IMAGES/boost3.png" alt="Proof 3" class="proof-img">
-                    </div>
-                    <div class="scroll-hint"><i class="fas fa-hand-pointer"></i> Swipe to inspect</div>
-                </div>
-
-                <button class="btn primary-mix" onclick="goToStep(4)">
-                    I'm Ready to Blow Up. Next. <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-
-            <div class="wizard-step" id="step-4">
-                <div class="step-header">
-                    <h2>Claim Your <span class="highlight-mix">Clout</span></h2>
-                    <p>Enter details to start the boost.</p>
-                </div>
-
-                <div class="policy-alert">
-                    <div class="alert-icon"><i class="fas fa-rocket"></i></div>
-                    <div class="alert-text">
-                        <strong>Instant Start Guarantee</strong>
-                        <p>We start processing your boost immediately after payment.</p>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label>Your @Username (Handle)</label>
-                    <input type="text" id="socialHandle" placeholder="e.g. @king_david">
-                </div>
-
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="clientName" placeholder="e.g. David M.">
-                </div>
-
-                <div class="input-group">
-                    <label>Payment Method</label>
-                    <select id="paymentMethod">
-                        <option value="MTN Mobile Money">MTN Mobile Money</option>
-                        <option value="Airtel Money">Airtel Money</option>
-                        <option value="Cash in Office">Cash (Office Visit)</option>
-                    </select>
-                </div>
-
-                <div class="order-summary">
-                    <div class="summary-row">
-                        <span>Package</span>
-                        <span class="val" id="sum-plan">...</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Target</span>
-                        <span class="val" id="sum-plat">...</span>
-                    </div>
-                    <hr>
-                    <div class="summary-row total">
-                        <span>Total Price</span>
-                        <span class="val highlight-mix" id="sum-total">...</span>
-                    </div>
-                </div>
-
-                <a href="#" id="whatsapp-btn" class="btn whatsapp-green-btn" onclick="return validateAndSend()">
-                    <i class="fab fa-whatsapp"></i> Order on WhatsApp
-                </a>
-            </div>
-
-        </div>
+        <p class="ord-foot">
+            Your accounts stay yours — we never ask for a password.<br>
+            <a href="/terms-of-service/">Terms</a> · <a href="/privacy-policy/">Privacy</a>
+        </p>
     </main>
 
-    <script src="script.js?v=13.0"></script>
+    <footer class="ord-dock">
+        <div class="dock-in">
+            <div class="dock-sum">
+                <div class="dock-chips">
+                    <span class="dock-chip" id="chip-plan"><i class="fas fa-layer-group"></i> <span id="chip-plan-name">Bundle</span></span>
+                    <span class="dock-chip" id="chip-plat"><i class="fas fa-location-arrow"></i> <span id="chip-plat-name">Platform</span></span>
+                </div>
+                <span class="dock-label">Your total</span>
+                <div class="dock-price">
+                    <b id="dock-price">$0</b>
+                    <i id="dock-curr">USD</i>
+                </div>
+            </div>
+            <button class="dock-cta" id="btn-submit" type="button">
+                <span class="cta-label">Pick a bundle</span>
+                <span class="cta-icon"><i class="fas fa-arrow-right"></i></span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- confirm -->
+    <div class="sheet" id="confirmSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirm-h">
+        <div class="sheet-card">
+            <div class="sheet-grab"></div>
+            <div class="sheet-head">
+                <div class="sheet-icon"><i class="fas fa-receipt"></i></div>
+                <h2 id="confirm-h">Check it over</h2>
+                <p>This is exactly what we'll receive.</p>
+            </div>
+            <div class="sum-list" id="sum-list"></div>
+            <div class="sheet-note">
+                <i class="fas fa-shield-halved"></i>
+                <span>Next you'll land in WhatsApp with this order already typed out. Nothing is charged here — we confirm the details with you first.</span>
+            </div>
+            <div class="sheet-actions">
+                <button type="button" class="btn-wa" id="btn-confirm">
+                    <span class="cta-icon"><i class="fab fa-whatsapp"></i></span>
+                    <span class="cta-label">Send on WhatsApp</span>
+                </button>
+                <button type="button" class="btn-ghost" data-close="confirmSheet">Go back and edit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/order.js"></script>
+    <script src="script.js"></script>
 <script src="/assets/preloader.js" defer></script>
 </body>
 </html>
