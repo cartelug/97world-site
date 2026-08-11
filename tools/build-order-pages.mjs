@@ -38,8 +38,8 @@ const PROOF = [
 
 const PAGES = [
     {
-        dir: 'instagram-boost', accent: 'instagram', store: 'k97_region_ig',
-        platform: 'Instagram', logo: '/IMAGES/instagram.png',
+        dir: 'instagram-boost', accent: 'instagram',
+        platformName: 'Instagram', logo: '/IMAGES/instagram.png',
         title: 'Instagram Boost', service: 'Instagram Boost',
         headline: 'Grow your <em>Instagram</em>',
         blurb: 'Real followers, likes and reels views. No password, ever.',
@@ -49,8 +49,8 @@ const PAGES = [
         platform: 'ig'
     },
     {
-        dir: 'tiktok-boost', accent: 'tiktok', store: 'k97_region_tt',
-        platform: 'TikTok', logo: '/IMAGES/tiktok.png',
+        dir: 'tiktok-boost', accent: 'tiktok',
+        platformName: 'TikTok', logo: '/IMAGES/tiktok.png',
         title: 'TikTok Boost', service: 'TikTok Boost',
         headline: 'Blow up on <em>TikTok</em>',
         blurb: 'Real followers, likes and video views. No password, ever.',
@@ -60,8 +60,8 @@ const PAGES = [
         platform: 'tt'
     },
     {
-        dir: 'facebook-boost', accent: 'facebook', store: 'k97_region_fb',
-        platform: 'Facebook', logo: '/IMAGES/facebook.png',
+        dir: 'facebook-boost', accent: 'facebook',
+        platformName: 'Facebook', logo: '/IMAGES/facebook.png',
         title: 'Facebook Boost', service: 'Facebook Boost',
         headline: 'Build a <em>Facebook</em> page people trust',
         blurb: 'Real followers, page likes and post reactions. No password, ever.',
@@ -71,8 +71,8 @@ const PAGES = [
         platform: 'fb'
     },
     {
-        dir: 'youtube-boost', accent: 'youtube', store: 'k97_region_yt',
-        platform: 'YouTube', logo: '/IMAGES/youtube.png',
+        dir: 'youtube-boost', accent: 'youtube',
+        platformName: 'YouTube', logo: '/IMAGES/youtube.png',
         title: 'YouTube Boost', service: 'YouTube Boost',
         headline: 'Get your channel <em>watched</em>',
         blurb: 'Subscribers, views and likes delivered together. No password, ever.',
@@ -82,8 +82,8 @@ const PAGES = [
         platform: 'yt'
     },
     {
-        dir: 'boost-package', accent: 'bundle', store: 'k97_region_bundle',
-        platform: 'Growth Bundle', logo: '/IMAGES/logo.png',
+        dir: 'boost-package', accent: 'bundle',
+        platformName: 'Growth Bundle', logo: '/IMAGES/logo.png',
         title: 'Growth Bundle', service: 'Growth Bundle',
         headline: 'One bundle, <em>any platform</em>',
         blurb: 'Pick a package, tell us where it lands. Instagram or TikTok.',
@@ -157,7 +157,7 @@ const html = (p) => `<!DOCTYPE html>
         <header class="ord-hero">
             <span class="ord-plat r-up">
                 <img src="${p.logo}" alt="">
-                ${p.platform}
+                ${p.platformName}
             </span>
             <h1 class="ord-title r-up">${p.headline}</h1>
             <p class="ord-sub r-up">${p.blurb}</p>
