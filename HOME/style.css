@@ -33,9 +33,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 /* Bidirectional reveal system. Everything animates on transform+opacity
    only (compositor-friendly); `will-change` is applied by JS just for the
    duration of a transition instead of being pinned on every element. */
-.fade-up        { opacity: 0; transform: translate3d(0, 42px, 0); transition: opacity 0.75s var(--curve-smooth), transform 0.75s var(--curve-smooth); }
-.scale-in       { opacity: 0; transform: scale(0.9); transition: opacity 0.75s var(--curve-smooth), transform 0.75s var(--curve-smooth); }
-.slide-in-right { opacity: 0; transform: translate3d(52px, 0, 0); transition: opacity 0.75s var(--curve-smooth), transform 0.75s var(--curve-smooth); }
+.fade-up        { opacity: 0; transform: translate3d(0, 42px, 0); transition: opacity 0.9s var(--curve-smooth), transform 0.9s var(--curve-smooth); }
+.scale-in       { opacity: 0; transform: scale(0.9); transition: opacity 0.9s var(--curve-smooth), transform 0.9s var(--curve-smooth); }
+.slide-in-right { opacity: 0; transform: translate3d(52px, 0, 0); transition: opacity 0.9s var(--curve-smooth), transform 0.9s var(--curve-smooth); }
 .fade-in        { opacity: 0; transition: opacity 0.9s ease-in-out; }
 
 .is-visible { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
@@ -54,7 +54,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .delay-4 { transition-delay: 0.4s; }
 
 /* ---- staggered groups: children cascade instead of arriving as a slab ---- */
-[data-stagger][data-stagger] > * { opacity: 0; transform: translate3d(0, 30px, 0); transition: opacity 0.62s var(--curve-smooth), transform 0.62s var(--curve-spring); transition-delay: calc(var(--i, 0) * 85ms); }
+[data-stagger][data-stagger] > * { opacity: 0; transform: translate3d(0, 30px, 0); transition: opacity 0.72s var(--curve-smooth), transform 0.72s var(--curve-spring); transition-delay: calc(var(--i, 0) * 95ms); }
 [data-stagger][data-stagger].is-visible > * { opacity: 1; transform: translate3d(0, 0, 0); }
 [data-stagger][data-stagger].is-out > * { opacity: 0; transform: translate3d(0, -18px, 0); transition-duration: 0.4s; transition-delay: 0s; }
 
@@ -109,8 +109,12 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .precision-nav.scrolled { padding: 16px 0; background: rgba(5,5,5,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255,255,255,0.06); }
 .nav-grid { display: flex; justify-content: space-between; align-items: center; }
 .brand-monolith { display: flex; align-items: center; gap: 12px; }
-.brand-icon { width: 32px; }
-.brand-text { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; letter-spacing: 0.05em; }
+.brand-icon { width: 34px; }
+/* the mark already says "97" — the wordmark only needs to say WORLD.
+   Outfit's geometric forms sit closer to the logo than Clash Display did. */
+.brand-text { font-family: 'Outfit', var(--font-display); font-size: 1.5rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
+.brand-monolith { gap: 11px; }
+.mm-brand { font-family: 'Outfit', var(--font-display); font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
 .nav-links { display: flex; gap: 40px; }
 .nav-item { font-size: 0.95rem; font-weight: 500; color: var(--clr-muted); transition: color 0.3s; }
 .nav-item:hover { color: var(--clr-text); }
@@ -341,7 +345,10 @@ body.menu-open { overflow: hidden; }
 
 .path-head { text-align: center; margin-bottom: 40px; }
 .path-eyebrow { display: inline-block; font-family: var(--font-body); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-emerald); margin-bottom: 14px; }
-.path-or { text-align: center; color: var(--clr-muted); font-size: 0.9rem; margin: 44px 0 22px; position: relative; }
+.path-or { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 40px auto 22px; color: rgba(255,255,255,0.45); font-family: var(--font-body); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; max-width: 620px; }
+.path-or::before, .path-or::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18)); }
+.path-or::after { background: linear-gradient(90deg, rgba(255,255,255,0.18), transparent); }
+@media(max-width: 520px) { .path-or { gap: 12px; font-size: 0.68rem; letter-spacing: 0.1em; } }
 .path-also { text-align: center; color: var(--clr-muted); font-size: 0.9rem; margin-top: 30px; line-height: 1.9; }
 .path-also a { color: #fff; font-weight: 700; border-bottom: 1px solid rgba(0,255,178,0.4); }
 .path-also a:hover { color: var(--clr-emerald); }
@@ -350,23 +357,23 @@ body.menu-open { overflow: hidden; }
 /* ---- the dominant "recommended" offer ---- */
 .offer-hero { position: relative; border-radius: 28px; overflow: hidden; background: linear-gradient(150deg, rgba(20,22,28,0.95) 0%, rgba(10,10,13,0.95) 60%); border: 1px solid rgba(0,255,178,0.3); box-shadow: 0 26px 60px rgba(0,0,0,0.55); }
 .offer-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(700px circle at 88% 8%, rgba(0,255,178,0.12), transparent 62%); pointer-events: none; }
-.oh-badge { position: relative; display: inline-block; margin: 22px 0 0 26px; padding: 7px 16px; border-radius: 100px; background: var(--clr-emerald); color: #04140c; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
-.oh-body { position: relative; display: grid; grid-template-columns: 1.35fr 1fr; gap: 34px; padding: 20px 26px 30px; align-items: center; }
-.oh-left h3 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.1; margin-bottom: 12px; }
-.oh-desc { color: var(--clr-muted); font-size: 1rem; line-height: 1.65; margin-bottom: 20px; }
+.oh-badge { position: relative; display: inline-block; margin: 18px 0 0 24px; padding: 6px 14px; border-radius: 100px; background: var(--clr-emerald); color: #04140c; font-size: 0.72rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; }
+.oh-body { position: relative; display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; padding: 16px 24px 24px; align-items: center; }
+.oh-left h3 { font-size: clamp(1.5rem, 2.9vw, 2.05rem); line-height: 1.12; margin-bottom: 9px; }
+.oh-desc { color: var(--clr-muted); font-size: 0.94rem; line-height: 1.55; margin-bottom: 15px; }
 .oh-desc em { color: #fff; font-style: normal; font-weight: 700; }
-.oh-proof { list-style: none; display: flex; flex-direction: column; gap: 11px; }
-.oh-proof li { display: flex; align-items: flex-start; gap: 11px; font-size: 0.92rem; color: rgba(255,255,255,0.82); line-height: 1.45; }
+.oh-proof { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.oh-proof li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.87rem; color: rgba(255,255,255,0.82); line-height: 1.45; }
 .oh-proof i { color: var(--clr-emerald); font-size: 0.85rem; margin-top: 4px; flex-shrink: 0; }
-.oh-right { text-align: center; padding: 26px 20px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; }
-.oh-figure b { display: block; font-family: var(--font-display); font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 700; line-height: 1; color: #fff; }
+.oh-right { text-align: center; padding: 20px 18px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; }
+.oh-figure b { display: block; font-family: var(--font-display); font-size: clamp(2.1rem, 4.6vw, 2.9rem); font-weight: 700; line-height: 1; color: #fff; }
 .oh-figure span { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--clr-muted); margin-top: 6px; }
 .oh-plus { font-size: 0.88rem; color: var(--clr-emerald); font-weight: 700; margin-top: 12px; }
-.oh-price { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); }
-.oh-price-main { display: block; font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: #fff; }
+.oh-price { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); }
+.oh-price-main { display: block; font-family: var(--font-display); font-size: 1.65rem; font-weight: 700; color: #fff; }
 .oh-price-note { display: block; font-size: 0.78rem; color: var(--clr-muted); margin-top: 4px; }
 .oh-price-note-solo { margin-top: 0; }
-.oh-cta { display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 18px; padding: 15px 22px; border-radius: 14px; background: var(--clr-emerald); color: #04140c; font-weight: 800; font-size: 0.95rem; transition: transform 0.25s, box-shadow 0.25s; }
+.oh-cta { display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 14px; padding: 14px 20px; border-radius: 14px; background: var(--clr-emerald); color: #04140c; font-weight: 800; font-size: 0.95rem; transition: transform 0.25s, box-shadow 0.25s; }
 .oh-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,255,178,0.28); }
 .oh-cta i { transition: transform 0.25s; }
 .oh-cta:hover i { transform: translateX(4px); }

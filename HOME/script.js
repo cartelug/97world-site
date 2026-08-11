@@ -226,11 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // hero drifts up and dissolves as it leaves — cheap depth, transform only
         if (heroContent && !reduceMotion) {
             const vh = window.innerHeight;
-            if (y < vh) {
+            if (y < vh * 1.2) {
                 const t = y / vh;
-                heroContent.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
-                heroContent.style.opacity = String(Math.max(1 - t * 1.25, 0));
-                if (heroCue) heroCue.style.opacity = String(Math.max(1 - t * 3, 0));
+                // gentle: content is still ~40% visible at the point the hero
+                // leaves, instead of snapping to invisible a third of the way down
+                heroContent.style.transform = `translate3d(0, ${y * 0.12}px, 0)`;
+                heroContent.style.opacity = String(Math.max(1 - t * 0.75, 0));
+                if (heroCue) heroCue.style.opacity = String(Math.max(1 - t * 2, 0));
             }
         }
         scrollRaf = null;
