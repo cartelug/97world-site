@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#050505">
 
     <title>Facebook Boost | 97 World</title>
-    <meta name="description" content="Grow your Facebook page with followers, page likes, reactions and post likes. Local pricing, no password required.">
+    <meta name="description" content="Real followers, page likes and post reactions. No password, ever.">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
@@ -30,6 +30,16 @@
     <div class="ord-aura" aria-hidden="true"></div>
     <div class="toast-stack" id="toastStack" aria-live="polite"></div>
 
+    <!-- region gate: we cannot show a price until we know where they are -->
+    <div class="gate" id="regionGate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
+        <div class="gate-card">
+            <img src="/IMAGES/logo.png" alt="" class="gate-logo">
+            <h2 id="gate-h">Where are you ordering from?</h2>
+            <p>So we show you the right currency and payment options.</p>
+            <div class="region-grid"></div>
+        </div>
+    </div>
+
     <nav class="ord-nav">
         <a href="/" class="ord-back" aria-label="Back to 97 World"><i class="fas fa-arrow-left"></i></a>
         <a href="/" class="ord-brand">
@@ -50,138 +60,139 @@
                 Facebook
             </span>
             <h1 class="ord-title r-up">Build a <em>Facebook</em> page people trust</h1>
-            <p class="ord-sub r-up">One package covers followers, page likes, reactions and post likes together. Pick a size and we handle the rest.</p>
-            <ul class="ord-trust r-up" data-stagger>
-                <li><i class="fas fa-lock"></i> No password needed</li>
-                <li><i class="fas fa-bolt"></i> Starts in 1–6 hrs</li>
-                <li><i class="fas fa-hand-holding-dollar"></i> 30% deposit to start</li>
-            </ul>
+            <p class="ord-sub r-up">Real followers, page likes and post reactions. No password, ever.</p>
         </header>
 
-        <ol class="ord-rail" id="ordRail">
-            <li class="is-current"><b>1</b><span>Package</span></li>
-            <li><b>2</b><span>Details</span></li>
-            <li><b>3</b><span>Confirm</span></li>
-        </ol>
+        <div class="ord-card" id="wizardCard">
+            <ol class="wiz-track">
+                <li class="is-on">1. Package</li>
+                <li>2. Gifts</li>
+                <li>3. Proof</li>
+                <li>4. Finish</li>
+            </ol>
 
-        <section class="ord-card r-up" aria-labelledby="h-packages">
-            <div class="ord-card-head">
-                <span class="ord-step-num">1</span>
-                <div>
-                    <h2 id="h-packages">Choose your package</h2>
-                    <p>Everything in a tier is delivered together across your page.</p>
+            <!-- 1 ------------------------------------------------------- -->
+            <section class="wiz-step is-on" data-step="1" aria-label="Choose your package">
+                <div class="wiz-head">
+                    <h2>Choose your <em>package</em></h2>
+                    <p>Best value first. Everything is delivered together.</p>
                 </div>
-            </div>
-            <div class="tier-list" id="package-list" role="group" aria-labelledby="h-packages"></div>
-        </section>
+                <div class="plan-grid" id="plan-grid" role="group"></div>
+                <button type="button" class="wiz-btn" id="btn-step-1" data-go="2" disabled>
+                    <span class="wb-label">Choose a package</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </section>
 
-        <section class="ord-card r-up" id="details" aria-labelledby="h-details">
-            <div class="ord-card-head">
-                <span class="ord-step-num">2</span>
-                <div>
-                    <h2 id="h-details">Your details</h2>
-                    <p>Which page we're boosting and how we reach you.</p>
+            <!-- 2 ------------------------------------------------------- -->
+            <section class="wiz-step" data-step="2" aria-label="Your free gifts">
+                <div class="wiz-head">
+                    <h2>Your <em>free gifts</em></h2>
+                    <p>Included with every order. Tap each one to claim it.</p>
                 </div>
-            </div>
+                <div class="gift-list" id="gift-list"></div>
+                <button type="button" class="wiz-btn" id="btn-step-2" data-go="3" disabled>
+                    <span class="wb-label">Claim your gifts</span>
+                    <i class="fas fa-check"></i>
+                </button>
+                <button type="button" class="wiz-back" data-go="1">Back</button>
+            </section>
 
-            <div class="field">
-                <div class="field-box">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="client-name" placeholder="Your full name" autocomplete="name" spellcheck="false">
+            <!-- 3 ------------------------------------------------------- -->
+            <section class="wiz-step" data-step="3" aria-label="Why people trust us">
+                <div class="wiz-head">
+                    <h2>Why people <em>trust us</em></h2>
+                    <p>The three things customers ask before every order.</p>
                 </div>
-                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Please enter your name</span></p>
-            </div>
+                <div class="proof-list" id="proof-list"></div>
+                <button type="button" class="wiz-btn" data-go="4">
+                    <span class="wb-label">Makes sense — continue</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button type="button" class="wiz-back" data-go="2">Back</button>
+            </section>
 
-            <div class="field">
-                <div class="field-box">
-                    <i class="fab fa-whatsapp" style="color:var(--ord-wa)"></i>
-                    <input type="tel" id="client-number" placeholder="WhatsApp number" autocomplete="tel" inputmode="tel">
+            <!-- 4 ------------------------------------------------------- -->
+            <section class="wiz-step" data-step="4" aria-label="Finish your order">
+                <div class="wiz-head">
+                    <h2>Finish your <em>order</em></h2>
+                    <p>Last step. Nothing is charged on this page.</p>
                 </div>
-                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Enter a valid WhatsApp number</span></p>
-            </div>
 
-            <div class="field">
-                <div class="field-box">
-                    <i class="fab fa-facebook-f"></i>
-                    <input type="text" id="fb-link" placeholder="Page name or username" autocomplete="off" spellcheck="false">
-                </div>
-                <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>We need the page to boost</span></p>
-            </div>
-
-            <div class="ref-block">
-                <div class="ref-row">
-                    <span>Did a friend refer you?</span>
-                    <div class="pill-group" role="group" aria-label="Referral">
-                        <button type="button" class="pill is-on" id="ref-no" aria-pressed="true">No</button>
-                        <button type="button" class="pill" id="ref-yes" aria-pressed="false">Yes</button>
+                <div class="guarantee">
+                    <i class="fas fa-shield-halved"></i>
+                    <div>
+                        <b>30% starts it, the rest on delivery</b>
+                        <p>We begin your order on a 30% deposit. The balance is only due once you can see it working.</p>
                     </div>
                 </div>
-                <div class="ref-drawer" id="ref-drawer">
-                    <div>
-                        <div class="field">
-                            <div class="field-box">
-                                <i class="fas fa-user-group"></i>
-                                <input type="text" id="ref-code" placeholder="Their name" autocomplete="off">
+
+                <div class="field">
+                    <div class="field-box">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="client-name" placeholder="Your full name" autocomplete="name" spellcheck="false">
+                    </div>
+                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Please enter your name</span></p>
+                </div>
+
+                <div class="field">
+                    <div class="field-box">
+                        <i class="fab fa-whatsapp" style="color:var(--ord-wa)"></i>
+                        <input type="tel" id="client-number" placeholder="WhatsApp number" autocomplete="tel" inputmode="tel">
+                    </div>
+                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Enter a valid WhatsApp number</span></p>
+                </div>
+
+                <div class="field">
+                    <div class="field-box">
+                        <i class="fab fa-facebook-f"></i>
+                        <input type="text" id="target-handle" placeholder="Your page name or username" autocomplete="off" spellcheck="false" autocapitalize="none">
+                    </div>
+                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>We need the page name to deliver to</span></p>
+                </div>
+
+                <div class="field select-box">
+                    <select id="payment-method" aria-label="Payment method"></select>
+                </div>
+
+                <div class="ref-block">
+                    <div class="ref-row">
+                        <span>Did a friend refer you?</span>
+                        <div class="pill-group" role="group" aria-label="Referral">
+                            <button type="button" class="pill is-on" id="ref-no" aria-pressed="true">No</button>
+                            <button type="button" class="pill" id="ref-yes" aria-pressed="false">Yes</button>
+                        </div>
+                    </div>
+                    <div class="ref-drawer" id="ref-drawer">
+                        <div>
+                            <div class="field">
+                                <div class="field-box">
+                                    <i class="fas fa-user-group"></i>
+                                    <input type="text" id="ref-code" placeholder="Their name" autocomplete="off">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+
+                <div class="total-line">
+                    <span>Total</span>
+                    <b id="total-value">—</b>
+                </div>
+
+                <button type="button" class="wiz-btn" id="btn-submit">
+                    <span class="wb-label">Review my order</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button type="button" class="wiz-back" data-go="3">Back</button>
+            </section>
+        </div>
 
         <p class="ord-foot">
-            Your page stays yours — we never ask for a password.<br>
+            Your account stays yours — we never ask for a password.<br>
             <a href="/terms-of-service/">Terms</a> · <a href="/privacy-policy/">Privacy</a>
         </p>
     </main>
-
-    <footer class="ord-dock">
-        <div class="dock-in">
-            <div class="dock-sum">
-                <div class="dock-chips">
-                    <span class="dock-chip" id="chip-tier"><i class="fas fa-layer-group"></i> <span id="chip-tier-name">Tier</span></span>
-                </div>
-                <span class="dock-label">Your total</span>
-                <div class="dock-price">
-                    <b id="dock-price">0</b>
-                    <i id="dock-curr">UGX</i>
-                </div>
-            </div>
-            <button class="dock-cta" id="btn-submit" type="button">
-                <span class="cta-label">Review order</span>
-                <span class="cta-icon"><i class="fas fa-arrow-right"></i></span>
-            </button>
-        </div>
-    </footer>
-
-    <!-- region -->
-    <div class="sheet" id="regionSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="region-h">
-        <div class="sheet-card">
-            <div class="sheet-grab"></div>
-            <div class="sheet-head">
-                <div class="sheet-icon"><i class="fas fa-earth-africa"></i></div>
-                <h2 id="region-h">Where are you ordering from?</h2>
-                <p>So we show you the right currency and payment options.</p>
-            </div>
-            <div class="geo-list">
-                <button type="button" class="geo-btn" data-geo="UGX:UG">
-                    <span class="flag">🇺🇬</span>
-                    <div><b>Uganda</b><small>Prices in UGX · Mobile Money</small></div>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <button type="button" class="geo-btn" data-geo="USD:SS">
-                    <span class="flag">🇸🇸</span>
-                    <div><b>South Sudan</b><small>Prices in USD</small></div>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <button type="button" class="geo-btn" data-geo="USD:CD">
-                    <span class="flag">🇨🇩</span>
-                    <div><b>DR Congo</b><small>Prices in USD</small></div>
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- confirm -->
     <div class="sheet" id="confirmSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirm-h">
@@ -195,7 +206,7 @@
             <div class="sum-list" id="sum-list"></div>
             <div class="sheet-note">
                 <i class="fas fa-shield-halved"></i>
-                <span>You start with a <b>30% deposit</b> and pay the rest once delivery begins. Next you'll land in WhatsApp with this order already typed out.</span>
+                <span>Next you'll land in WhatsApp with this order already typed out. Nothing is charged here — we confirm everything with you first.</span>
             </div>
             <div class="sheet-actions">
                 <button type="button" class="btn-wa" id="btn-confirm">
@@ -208,6 +219,7 @@
     </div>
 
     <script src="/assets/order.js"></script>
+    <script src="/assets/wizard.js"></script>
     <script src="script.js"></script>
 <script src="/assets/preloader.js" defer></script>
 </body>

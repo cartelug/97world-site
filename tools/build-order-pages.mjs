@@ -1,4 +1,168 @@
-<!DOCTYPE html>
+/**
+ * Generates every boost order page from one template.
+ *
+ * The five order pages must be identical in flow and markup — the only things
+ * that may differ are the accent colour, the platform wording and the plan
+ * table. Generating them guarantees that instead of hoping five hand-edited
+ * files stay in sync.
+ *
+ *   node tools/build-order-pages.mjs
+ */
+import { writeFileSync, mkdirSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
+const WHATSAPP = '256762193386';
+
+/* --------------------------------------------------------------- pricing ---
+ * Everything is declared in USD. UGX is derived at 3,750 UGX = $1 — the rate
+ * already baked into the existing Facebook and YouTube tables, so converting
+ * reproduces those prices exactly rather than inventing new ones.
+ *
+ *   10,000 followers .......... $100   (375,000 UGX)
+ *   all three together ........ $250   (937,500 UGX)
+ * -------------------------------------------------------------------------- */
+
+const socialPlans = (likesWord, viewsWord) => [
+    {
+        id: 'combo',
+        name: 'Everything',
+        note: `Followers + ${likesWord.toLowerCase()} + ${viewsWord.toLowerCase()}`,
+        usd: 250,
+        // a real anchor: the three bought one at a time come to $300
+        wasUsd: 300,
+        tag: 'Ultimate value',
+        hero: true,
+        label: `Everything — 10,000 followers + 10,000 ${likesWord.toLowerCase()} + 20,000 ${viewsWord.toLowerCase()}`,
+        feats: [
+            { icon: 'fa-user-plus', text: '10,000 followers', gold: true },
+            { icon: 'fa-heart', text: `10,000 ${likesWord.toLowerCase()}` },
+            { icon: 'fa-eye', text: `20,000 ${viewsWord.toLowerCase()}` },
+            { icon: 'fa-rotate-left', text: '30-day refill' }
+        ]
+    },
+    {
+        id: 'f10',
+        name: '10,000 followers',
+        usd: 100,
+        tag: 'Best seller',
+        label: '10,000 followers',
+        feats: [
+            { icon: 'fa-user-plus', text: '10,000 followers' },
+            { icon: 'fa-gauge-simple', text: 'Gradual, natural pace' },
+            { icon: 'fa-rotate-left', text: '30-day refill' }
+        ]
+    },
+    {
+        id: 'f3',
+        name: '3,000 followers',
+        usd: 35,
+        tag: 'Starter',
+        label: '3,000 followers',
+        feats: [
+            { icon: 'fa-user-plus', text: '3,000 followers' },
+            { icon: 'fa-gauge-simple', text: 'Gradual, natural pace' }
+        ]
+    }
+];
+
+// YouTube keeps its own ladder. Declared in USD; the converter reproduces the
+// existing UGX prices exactly (262,500 / 412,500 / 600,000 / ...).
+const youtubePlans = [
+    { id: 'yt5', name: 'Domination', usd: 400, tag: 'Max impact', hero: true, label: 'Domination Tier',
+      feats: [{ icon: 'fa-users', text: '10k subs', gold: true }, { icon: 'fa-eye', text: '15k views' }, { icon: 'fa-thumbs-up', text: '10k likes' }] },
+    { id: 'yt4', name: 'Viral', usd: 310, label: 'Viral Tier',
+      feats: [{ icon: 'fa-users', text: '7.5k subs' }, { icon: 'fa-eye', text: '13k views' }, { icon: 'fa-thumbs-up', text: '8k likes' }] },
+    { id: 'yt3', name: 'Authority', usd: 230, label: 'Authority Tier',
+      feats: [{ icon: 'fa-users', text: '5.5k subs' }, { icon: 'fa-eye', text: '11k views' }, { icon: 'fa-thumbs-up', text: '6.5k likes' }] },
+    { id: 'yt2', name: 'Growth', usd: 160, tag: 'Most popular', label: 'Growth Tier',
+      feats: [{ icon: 'fa-users', text: '3.5k subs' }, { icon: 'fa-eye', text: '9k views' }, { icon: 'fa-thumbs-up', text: '5k likes' }] },
+    { id: 'yt1', name: 'Kickstart', usd: 110, label: 'Kickstart Tier',
+      feats: [{ icon: 'fa-users', text: '2k subs' }, { icon: 'fa-eye', text: '7k views' }, { icon: 'fa-thumbs-up', text: '3.5k likes' }] },
+    { id: 'yt0', name: 'Starter', usd: 70, tag: 'Starter', label: 'Starter Tier',
+      feats: [{ icon: 'fa-users', text: '1k subs' }, { icon: 'fa-eye', text: '5k views' }, { icon: 'fa-thumbs-up', text: '2k likes' }] }
+];
+
+/* Gifts and proof are identical everywhere — same promises, same wording. */
+const GIFTS = [
+    { icon: 'fa-rotate-left', title: '30-day refill guarantee', sub: 'Anything that drops off inside 30 days, we top back up. Free.' },
+    { icon: 'fa-comments', title: 'Free profile review', sub: "We'll tell you what's holding your page back, on WhatsApp." }
+];
+
+const PROOF = [
+    { icon: 'fa-lock', title: 'We never ask for your password', body: 'Delivery works entirely from your public handle. Your login stays yours.' },
+    { icon: 'fa-bolt', title: 'You watch it start before you finish paying', body: 'The first batch lands in 1–6 hours. 30% starts the order, the balance is due once delivery is running.' },
+    { icon: 'fa-location-dot', title: 'We are actually here', body: 'Kampala-based. Pay by MTN or Airtel Money, or bring cash to the office.' }
+];
+
+/* ----------------------------------------------------------------- pages --- */
+
+const PAGES = [
+    {
+        dir: 'instagram-boost', accent: 'instagram', store: 'k97_region_ig',
+        platform: 'Instagram', logo: '/IMAGES/instagram.png',
+        title: 'Instagram Boost', service: 'Instagram Boost',
+        headline: 'Grow your <em>Instagram</em>',
+        blurb: 'Real followers, likes and reels views. No password, ever.',
+        targetLabel: 'Instagram username', targetPlaceholder: 'Your Instagram username',
+        targetError: 'We need the username to deliver to',
+        icon: 'fab fa-instagram',
+        plans: socialPlans('Likes', 'Reels views')
+    },
+    {
+        dir: 'tiktok-boost', accent: 'tiktok', store: 'k97_region_tt',
+        platform: 'TikTok', logo: '/IMAGES/tiktok.png',
+        title: 'TikTok Boost', service: 'TikTok Boost',
+        headline: 'Blow up on <em>TikTok</em>',
+        blurb: 'Real followers, likes and video views. No password, ever.',
+        targetLabel: 'TikTok username', targetPlaceholder: 'Your TikTok username',
+        targetError: 'We need the username to deliver to',
+        icon: 'fab fa-tiktok',
+        plans: socialPlans('Likes', 'Video views')
+    },
+    {
+        dir: 'facebook-boost', accent: 'facebook', store: 'k97_region_fb',
+        platform: 'Facebook', logo: '/IMAGES/facebook.png',
+        title: 'Facebook Boost', service: 'Facebook Boost',
+        headline: 'Build a <em>Facebook</em> page people trust',
+        blurb: 'Real followers, page likes and post reactions. No password, ever.',
+        targetLabel: 'Facebook page', targetPlaceholder: 'Your page name or username',
+        targetError: 'We need the page name to deliver to',
+        icon: 'fab fa-facebook-f',
+        plans: socialPlans('Page likes', 'Post reactions')
+    },
+    {
+        dir: 'youtube-boost', accent: 'youtube', store: 'k97_region_yt',
+        platform: 'YouTube', logo: '/IMAGES/youtube.png',
+        title: 'YouTube Boost', service: 'YouTube Boost',
+        headline: 'Get your channel <em>watched</em>',
+        blurb: 'Subscribers, views and likes delivered together. No password, ever.',
+        targetLabel: 'YouTube channel', targetPlaceholder: 'Your channel name or link',
+        targetError: 'We need the channel to deliver to',
+        icon: 'fab fa-youtube',
+        plans: youtubePlans
+    },
+    {
+        dir: 'boost-package', accent: 'bundle', store: 'k97_region_bundle',
+        platform: 'Growth Bundle', logo: '/IMAGES/logo.png',
+        title: 'Growth Bundle', service: 'Growth Bundle',
+        headline: 'One bundle, <em>any platform</em>',
+        blurb: 'Pick a package, tell us where it lands. Instagram or TikTok.',
+        targetLabel: 'Your @handle', targetPlaceholder: 'Your @handle',
+        targetError: 'We need the handle to deliver to',
+        icon: 'fas fa-at',
+        extraLabel: 'Platform',
+        extraOptions: ['Instagram', 'TikTok', 'Split across both'],
+        plans: socialPlans('Likes', 'Views')
+    }
+];
+
+/* -------------------------------------------------------------- template --- */
+
+const html = (p) => `<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
@@ -6,8 +170,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="theme-color" content="#050505">
 
-    <title>Growth Bundle | 97 World</title>
-    <meta name="description" content="Pick a package, tell us where it lands. Instagram or TikTok.">
+    <title>${p.title} | 97 World</title>
+    <meta name="description" content="${p.blurb}">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
@@ -20,7 +184,7 @@
 
     <link rel="stylesheet" href="/assets/order.css">
 </head>
-<body class="order-page" data-accent="bundle">
+<body class="order-page" data-accent="${p.accent}">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
@@ -56,11 +220,11 @@
 
         <header class="ord-hero">
             <span class="ord-plat r-up">
-                <img src="/IMAGES/logo.png" alt="">
-                Growth Bundle
+                <img src="${p.logo}" alt="">
+                ${p.platform}
             </span>
-            <h1 class="ord-title r-up">One bundle, <em>any platform</em></h1>
-            <p class="ord-sub r-up">Pick a package, tell us where it lands. Instagram or TikTok.</p>
+            <h1 class="ord-title r-up">${p.headline}</h1>
+            <p class="ord-sub r-up">${p.blurb}</p>
         </header>
 
         <div class="ord-card" id="wizardCard">
@@ -145,20 +309,18 @@
 
                 <div class="field">
                     <div class="field-box">
-                        <i class="fas fa-at"></i>
-                        <input type="text" id="target-handle" placeholder="Your @handle" autocomplete="off" spellcheck="false" autocapitalize="none">
+                        <i class="${p.icon}"></i>
+                        <input type="text" id="target-handle" placeholder="${p.targetPlaceholder}" autocomplete="off" spellcheck="false" autocapitalize="none">
                     </div>
-                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>We need the handle to deliver to</span></p>
+                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>${p.targetError}</span></p>
                 </div>
-
+${p.extraOptions ? `
                 <div class="field select-box">
-                    <select id="extra-select" aria-label="Platform">
-                        <option value="Instagram">Instagram</option>
-                        <option value="TikTok">TikTok</option>
-                        <option value="Split across both">Split across both</option>
+                    <select id="extra-select" aria-label="${p.extraLabel}">
+${p.extraOptions.map((o) => `                        <option value="${o}">${o}</option>`).join('\n')}
                     </select>
                 </div>
-
+` : ''}
                 <div class="field select-box">
                     <select id="payment-method" aria-label="Payment method"></select>
                 </div>
@@ -232,3 +394,34 @@
 <script src="/assets/preloader.js" defer></script>
 </body>
 </html>
+`;
+
+const script = (p) => `/**
+ * 97 WORLD — ${p.title.toUpperCase()}
+ *
+ * Data only. The flow lives in /assets/wizard.js and is identical on every
+ * order page. Generated by tools/build-order-pages.mjs — edit that, not this.
+ *
+ * Prices are USD; UGX is derived at 3,750 UGX = $1.
+ */
+OrderWizard.start(${JSON.stringify({
+    sheetUrl: SHEET_URL,
+    whatsapp: WHATSAPP,
+    storeKey: p.store,
+    service: p.service,
+    targetLabel: p.targetLabel,
+    targetError: p.targetError,
+    ...(p.extraLabel ? { extraLabel: p.extraLabel } : {}),
+    plans: p.plans,
+    gifts: GIFTS,
+    proof: PROOF
+}, null, 4)});
+`;
+
+for (const page of PAGES) {
+    const dir = join(ROOT, page.dir);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'index.html'), html(page));
+    writeFileSync(join(dir, 'script.js'), script(page));
+    console.log(`built ${page.dir}/`);
+}

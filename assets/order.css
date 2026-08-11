@@ -869,6 +869,305 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 @keyframes ordSpin { to { transform: rotate(360deg); } }
 
+/* ======================================================= THE WIZARD =======
+   The flow the Netflix / Spotify / Prime order pages used, standardised:
+   region gate -> plan -> free gifts -> proof -> finalise.
+   ========================================================================= */
+
+/* ---- region gatekeeper: blocks the page until we know how to price ---- */
+.gate {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: grid;
+    place-items: center;
+    padding: 22px;
+    background: rgba(3, 3, 4, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+.gate[hidden] { display: grid; opacity: 0; visibility: hidden; pointer-events: none; }
+
+.gate-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 30px 24px 26px;
+    border-radius: 26px;
+    border: 1px solid var(--ord-line);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)), #0b0b0f;
+    text-align: center;
+    animation: gateIn 0.6s var(--smooth);
+}
+@keyframes gateIn { from { opacity: 0; transform: translateY(22px) scale(0.97); } }
+
+.gate-card img.gate-logo { width: 42px; height: 42px; margin: 0 auto 16px; display: block; }
+.gate-card h2 { font-size: 1.5rem; margin-bottom: 8px; }
+.gate-card > p { color: var(--ord-muted); font-size: 0.9rem; margin-bottom: 22px; }
+
+.region-grid { display: grid; gap: 10px; }
+.region-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--ord-line);
+    background: var(--ord-surface);
+    text-align: left;
+    transition: transform 0.25s var(--spring), border-color 0.25s ease, background 0.25s ease;
+}
+.region-btn:hover { border-color: var(--acc); background: var(--ord-surface-2); }
+.region-btn:active { transform: scale(0.98); }
+.region-btn .flag { font-size: 1.7rem; line-height: 1; flex: none; }
+.region-btn span.rb-copy { flex: 1; min-width: 0; }
+.region-btn b { display: block; font-size: 1rem; font-weight: 700; }
+.region-btn small { color: var(--ord-muted); font-size: 0.78rem; }
+.region-btn > i { color: var(--ord-dim); font-size: 0.82rem; }
+
+/* ---- progress track ---- */
+.wiz-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 6px;
+    list-style: none;
+    margin-bottom: 22px;
+}
+.wiz-track li {
+    padding-top: 9px;
+    border-top: 2px solid var(--ord-line);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--ord-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.4s ease, border-color 0.4s ease;
+}
+.wiz-track li.is-on { color: #fff; border-top-color: var(--acc); }
+
+/* ---- step panes ---- */
+.wiz-step { display: none; }
+.wiz-step.is-on { display: block; animation: stepIn 0.45s var(--smooth); }
+@keyframes stepIn { from { opacity: 0; transform: translateY(14px); } }
+
+.wiz-head { text-align: center; margin-bottom: 22px; }
+.wiz-head h2 { font-size: clamp(1.5rem, 5.4vw, 1.95rem); letter-spacing: -0.02em; margin-bottom: 7px; }
+.wiz-head h2 em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--acc), var(--acc-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.wiz-head p { color: var(--ord-muted); font-size: 0.9rem; }
+
+/* ---- plan cards: best value first, anchored against a struck-out price ---- */
+.plan-grid { display: grid; gap: 12px; margin-bottom: 22px; }
+
+.plan-card {
+    position: relative;
+    width: 100%;
+    padding: 20px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--ord-line);
+    background: var(--ord-surface);
+    text-align: left;
+    transition: transform 0.3s var(--spring), border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
+}
+.plan-card:hover { border-color: var(--ord-line-strong); background: var(--ord-surface-2); }
+.plan-card:active { transform: scale(0.985); }
+.plan-card.is-on {
+    border-color: var(--acc);
+    background: color-mix(in srgb, var(--acc) 9%, rgba(255, 255, 255, 0.03));
+    box-shadow: 0 0 0 1px var(--acc), 0 20px 44px -24px color-mix(in srgb, var(--acc) 80%, transparent);
+}
+.plan-card.is-hero { border-color: color-mix(in srgb, var(--acc) 40%, transparent); }
+.plan-card:has(.tier-tag) { padding-top: 30px; }
+
+.pc-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+.pc-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
+.pc-note { display: block; font-family: var(--font-body); font-size: 0.76rem; font-weight: 600; color: var(--ord-muted); margin-top: 3px; }
+
+.pc-price { text-align: right; white-space: nowrap; }
+.pc-old { display: block; font-size: 0.78rem; color: var(--ord-dim); text-decoration: line-through; }
+.pc-new { font-family: var(--font-display); font-size: 1.42rem; font-weight: 700; letter-spacing: -0.02em; }
+.pc-cur { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ord-dim); margin-left: 3px; }
+
+.pc-feats { display: flex; flex-wrap: wrap; gap: 7px; list-style: none; }
+.pc-feats li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--ord-line);
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #c2c2cb;
+}
+.pc-feats li i { color: var(--acc); font-size: 0.72rem; }
+.pc-feats li.is-gold { border-color: rgba(255, 199, 76, 0.32); color: #ffd88a; }
+.pc-feats li.is-gold i { color: #ffc74c; }
+
+/* ---- free gifts: reciprocity, and it costs us nothing ---- */
+.gift-list { display: grid; gap: 10px; margin-bottom: 20px; }
+.gift {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 15px 16px;
+    border-radius: 18px;
+    border: 1px dashed var(--ord-line-strong);
+    background: var(--ord-surface);
+    text-align: left;
+    transition: transform 0.3s var(--spring), border-color 0.3s ease, background 0.3s ease;
+}
+.gift:active { transform: scale(0.98); }
+.gift-ic {
+    flex: none;
+    width: 46px; height: 46px;
+    display: grid; place-items: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--ord-line);
+    font-size: 1.1rem;
+    color: var(--ord-muted);
+    transition: all 0.35s var(--spring);
+}
+.gift-copy { flex: 1; min-width: 0; }
+.gift-copy b { display: block; font-size: 0.97rem; font-weight: 700; }
+.gift-copy small { color: var(--ord-muted); font-size: 0.79rem; }
+.gift-state {
+    flex: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--ord-line-strong);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ord-muted);
+    transition: all 0.35s ease;
+}
+.gift.is-open {
+    border-style: solid;
+    border-color: var(--acc);
+    background: color-mix(in srgb, var(--acc) 9%, rgba(255, 255, 255, 0.03));
+}
+.gift.is-open .gift-ic {
+    background: color-mix(in srgb, var(--acc) 16%, transparent);
+    border-color: color-mix(in srgb, var(--acc) 40%, transparent);
+    color: var(--acc);
+    transform: rotate(-8deg) scale(1.06);
+}
+.gift.is-open .gift-state {
+    background: var(--acc);
+    border-color: var(--acc);
+    color: var(--acc-ink);
+}
+
+/* ---- proof: promises we can actually keep, not stock screenshots ---- */
+.proof-list { display: grid; gap: 10px; margin-bottom: 20px; }
+.proof-row {
+    display: flex;
+    gap: 13px;
+    padding: 15px 16px;
+    border-radius: 18px;
+    border: 1px solid var(--ord-line);
+    background: var(--ord-surface);
+}
+.proof-row > i {
+    flex: none;
+    width: 38px; height: 38px;
+    display: grid; place-items: center;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--acc) 13%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 28%, transparent);
+    color: var(--acc);
+    font-size: 0.92rem;
+}
+.proof-row div { flex: 1; min-width: 0; }
+.proof-row b { display: block; font-size: 0.94rem; font-weight: 700; margin-bottom: 2px; }
+.proof-row p { color: var(--ord-muted); font-size: 0.83rem; line-height: 1.5; }
+
+/* ---- the guarantee banner on the final step ---- */
+.guarantee {
+    display: flex;
+    gap: 13px;
+    padding: 15px 16px;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent);
+    background: color-mix(in srgb, var(--acc) 8%, transparent);
+    margin-bottom: 20px;
+}
+.guarantee > i { flex: none; font-size: 1.15rem; color: var(--acc); margin-top: 2px; }
+.guarantee b { display: block; font-size: 0.96rem; font-weight: 700; margin-bottom: 2px; }
+.guarantee p { color: #c2c2cb; font-size: 0.83rem; line-height: 1.5; }
+
+/* ---- wizard buttons ---- */
+.wiz-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 56px;
+    border-radius: 999px;
+    background: linear-gradient(100deg, var(--acc), var(--acc-2));
+    color: var(--acc-ink);
+    font-size: 1rem;
+    font-weight: 800;
+    box-shadow: 0 14px 34px -14px color-mix(in srgb, var(--acc) 90%, transparent);
+    transition: transform 0.28s var(--spring), opacity 0.25s ease, background 0.25s ease, box-shadow 0.3s ease;
+}
+.wiz-btn:active { transform: scale(0.97); }
+.wiz-btn[disabled] {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--ord-dim);
+    box-shadow: none;
+    cursor: not-allowed;
+}
+.wiz-back {
+    display: block;
+    width: 100%;
+    margin-top: 11px;
+    padding: 12px;
+    color: var(--ord-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+    transition: color 0.25s ease;
+}
+.wiz-back:hover { color: #fff; }
+
+.total-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    border: 1px solid color-mix(in srgb, var(--acc) 28%, transparent);
+    background: color-mix(in srgb, var(--acc) 8%, transparent);
+    margin: 4px 0 16px;
+}
+.total-line span { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ord-muted); }
+.total-line b { font-family: var(--font-display); font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; color: var(--acc); }
+
+@media (min-width: 560px) {
+    .plan-grid { gap: 14px; }
+    .wiz-track li { font-size: 0.75rem; }
+}
+
 /* --------------------------------------------------------------- sheet --- */
 .sheet {
     position: fixed;

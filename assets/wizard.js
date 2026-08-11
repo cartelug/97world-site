@@ -1,0 +1,458 @@
+/**
+ * 97 WORLD — ORDER WIZARD
+ *
+ * The flow the old Netflix / Spotify / Prime order pages used, rebuilt as one
+ * engine every order page shares:
+ *
+ *   region gate  ->  1. Plan  ->  2. Gifts  ->  3. Proof  ->  4. Finalise
+ *
+ * A page supplies data only (plans, gifts, proof, copy) — never behaviour.
+ * That is the whole point: one flow, one set of bugs, one place to fix them.
+ *
+ * Depends on OrderKit (/assets/order.js) for money formatting, the phone
+ * sanitiser, toasts, field errors and the Sheets + WhatsApp hand-off.
+ */
+(function (window, document) {
+    'use strict';
+
+    /* 1 USD = 3,750 UGX. Not a guess — it is the exact rate already encoded in
+       the Facebook and YouTube tier tables (375,000/100, 262,500/70, ...). */
+    var UGX_PER_USD = 3750;
+
+    var REGIONS = {
+        UG: {
+            name: 'Uganda',
+            currency: 'UGX',
+            flag: '🇺🇬',
+            blurb: 'Prices in UGX · Mobile Money',
+            phone: 'e.g. +256 700 000 000',
+            payments: ['MTN Mobile Money', 'Airtel Money', 'Cash in office (Kampala)']
+        },
+        SS: {
+            name: 'South Sudan',
+            currency: 'USD',
+            flag: '🇸🇸',
+            blurb: 'Prices in USD',
+            phone: 'e.g. +211 900 000 000',
+            payments: ['Mobile Money via agent', 'Cash in South Sudan']
+        },
+        CD: {
+            name: 'DR Congo',
+            currency: 'USD',
+            flag: '🇨🇩',
+            blurb: 'Prices in USD',
+            phone: 'e.g. +243 800 000 000',
+            payments: ['Mobile Money', 'Cash on delivery']
+        }
+    };
+
+    /** USD figure -> what this region actually pays. */
+    function localPrice(usd, currency) {
+        return currency === 'UGX' ? usd * UGX_PER_USD : usd;
+    }
+
+    var Wizard = {
+
+        UGX_PER_USD: UGX_PER_USD,
+        REGIONS: REGIONS,
+        localPrice: localPrice,
+
+        cfg: null,
+        state: {
+            region: null,
+            step: 1,
+            plan: -1,
+            gifts: 0,
+            referred: false,
+            busy: false
+        },
+
+        $: function (id) { return document.getElementById(id); },
+
+        /* --------------------------------------------------------- region */
+
+        openGate: function () {
+            var gate = Wizard.$('regionGate');
+            var list = gate.querySelector('.region-grid');
+
+            list.innerHTML = Object.keys(REGIONS).map(function (code) {
+                var r = REGIONS[code];
+                return '<button type="button" class="region-btn" data-region="' + code + '">' +
+                    '<span class="flag">' + r.flag + '</span>' +
+                    '<span class="rb-copy"><b>' + r.name + '</b><small>' + r.blurb + '</small></span>' +
+                    '<i class="fas fa-chevron-right"></i>' +
+                    '</button>';
+            }).join('');
+
+            list.addEventListener('click', function (e) {
+                var btn = e.target.closest('.region-btn');
+                if (btn) Wizard.setRegion(btn.dataset.region, true);
+            });
+
+            document.body.classList.add('is-locked');
+        },
+
+        setRegion: function (code, save) {
+            var region = REGIONS[code];
+            if (!region) return;
+            Wizard.state.region = code;
+
+            if (save !== false) {
+                try { localStorage.setItem(Wizard.cfg.storeKey, code); } catch (e) { /* private mode */ }
+            }
+
+            // region badge in the nav
+            var badge = Wizard.$('regionBadge');
+            var flag = Wizard.$('regionFlag');
+            if (badge) badge.textContent = region.currency;
+            if (flag) flag.textContent = region.flag;
+
+            // phone placeholder + the payment methods this region can actually use
+            var phone = Wizard.$('client-number');
+            if (phone) phone.placeholder = region.phone;
+
+            var pay = Wizard.$('payment-method');
+            if (pay) {
+                pay.innerHTML = region.payments.map(function (m) {
+                    return '<option value="' + m + '">' + m + '</option>';
+                }).join('');
+            }
+
+            // prices changed, so any earlier choice is void
+            Wizard.state.plan = -1;
+            Wizard.renderPlans();
+            Wizard.syncPlanBtn();
+
+            var gate = Wizard.$('regionGate');
+            gate.hidden = true;
+            document.body.classList.remove('is-locked');
+        },
+
+        region: function () { return REGIONS[Wizard.state.region]; },
+
+        /* ---------------------------------------------------------- plans */
+
+        /** Plans for the active region, with USD figures converted. */
+        plans: function () {
+            var currency = Wizard.region().currency;
+            return Wizard.cfg.plans.map(function (plan) {
+                return {
+                    id: plan.id,
+                    name: plan.name,
+                    note: plan.note,
+                    tag: plan.tag,
+                    feats: plan.feats,
+                    hero: !!plan.hero,
+                    price: localPrice(plan.usd, currency),
+                    was: plan.wasUsd ? localPrice(plan.wasUsd, currency) : null,
+                    // what goes in the Sheet / WhatsApp message
+                    label: plan.label || plan.name
+                };
+            });
+        },
+
+        renderPlans: function () {
+            var currency = Wizard.region().currency;
+            Wizard.$('plan-grid').innerHTML = Wizard.plans().map(function (plan, i) {
+                var on = Wizard.state.plan === i;
+                return '<button type="button" class="plan-card' +
+                    (on ? ' is-on' : '') + (plan.hero ? ' is-hero' : '') + '"' +
+                    ' data-index="' + i + '" aria-pressed="' + on + '">' +
+                    (plan.tag ? '<span class="tier-tag">' + plan.tag + '</span>' : '') +
+                    '<span class="pc-top">' +
+                        '<span class="pc-name">' + plan.name +
+                            (plan.note ? '<small class="pc-note">' + plan.note + '</small>' : '') +
+                        '</span>' +
+                        '<span class="pc-price">' +
+                            (plan.was ? '<span class="pc-old">' + OrderKit.money(plan.was, currency) + '</span>' : '') +
+                            '<span class="pc-new">' + (currency === 'USD' ? '$' : '') + plan.price.toLocaleString() +
+                                '<span class="pc-cur">' + currency + '</span></span>' +
+                        '</span>' +
+                    '</span>' +
+                    '<ul class="pc-feats">' +
+                        plan.feats.map(function (f) {
+                            return '<li' + (f.gold ? ' class="is-gold"' : '') + '>' +
+                                '<i class="fas ' + f.icon + '"></i>' + f.text + '</li>';
+                        }).join('') +
+                    '</ul>' +
+                    '</button>';
+            }).join('');
+        },
+
+        selectedPlan: function () {
+            return Wizard.state.plan === -1 ? null : Wizard.plans()[Wizard.state.plan];
+        },
+
+        syncPlanBtn: function () {
+            var btn = Wizard.$('btn-step-1');
+            var plan = Wizard.selectedPlan();
+            btn.disabled = !plan;
+            btn.querySelector('.wb-label').textContent = plan ? 'Continue' : 'Choose a package';
+            Wizard.syncTotal();
+        },
+
+        syncTotal: function () {
+            var plan = Wizard.selectedPlan();
+            var el = Wizard.$('total-value');
+            if (!el) return;
+            el.textContent = plan
+                ? OrderKit.money(plan.price, Wizard.region().currency)
+                : '—';
+        },
+
+        /* ---------------------------------------------------------- gifts */
+
+        renderGifts: function () {
+            Wizard.$('gift-list').innerHTML = Wizard.cfg.gifts.map(function (gift, i) {
+                return '<button type="button" class="gift" data-gift="' + i + '">' +
+                    '<span class="gift-ic"><i class="fas ' + gift.icon + '"></i></span>' +
+                    '<span class="gift-copy"><b>' + gift.title + '</b><small>' + gift.sub + '</small></span>' +
+                    '<span class="gift-state">Tap to claim</span>' +
+                    '</button>';
+            }).join('');
+        },
+
+        claimGift: function (btn) {
+            if (btn.classList.contains('is-open')) return;
+            btn.classList.add('is-open');
+            btn.querySelector('.gift-state').textContent = 'Claimed';
+            Wizard.state.gifts++;
+            OrderKit.haptic(14);
+
+            if (Wizard.state.gifts >= Wizard.cfg.gifts.length) {
+                var btn2 = Wizard.$('btn-step-2');
+                btn2.disabled = false;
+                btn2.querySelector('.wb-label').textContent = 'Continue';
+            }
+        },
+
+        /* ---------------------------------------------------------- proof */
+
+        renderProof: function () {
+            Wizard.$('proof-list').innerHTML = Wizard.cfg.proof.map(function (row) {
+                return '<div class="proof-row">' +
+                    '<i class="fas ' + row.icon + '"></i>' +
+                    '<div><b>' + row.title + '</b><p>' + row.body + '</p></div>' +
+                    '</div>';
+            }).join('');
+        },
+
+        /* ----------------------------------------------------------- flow */
+
+        go: function (step) {
+            Wizard.state.step = step;
+            document.querySelectorAll('.wiz-step').forEach(function (pane) {
+                pane.classList.toggle('is-on', Number(pane.dataset.step) === step);
+            });
+            document.querySelectorAll('.wiz-track li').forEach(function (li, i) {
+                li.classList.toggle('is-on', i + 1 <= step);
+            });
+            if (step === 4) Wizard.syncTotal();
+            OrderKit.scrollTo('wizardCard', 40);
+        },
+
+        /* ----------------------------------------------------- validation */
+
+        validate: function () {
+            var plan = Wizard.selectedPlan();
+            if (!plan) { Wizard.go(1); return null; }
+
+            OrderKit.clearErrors();
+
+            var name = Wizard.$('client-name').value.trim();
+            if (name.length < 2) {
+                OrderKit.fieldError('client-name', 'Please enter your name');
+                return null;
+            }
+
+            var raw = Wizard.$('client-number').value.trim();
+            if (raw.replace(/\D/g, '').length < 8) {
+                OrderKit.fieldError('client-number', 'Enter a valid WhatsApp number');
+                return null;
+            }
+
+            var target = null;
+            var targetEl = Wizard.$('target-handle');
+            if (targetEl) {
+                target = targetEl.value.trim().replace(/^@/, '');
+                if (!target) {
+                    OrderKit.fieldError('target-handle', Wizard.cfg.targetError || 'We need this to deliver');
+                    return null;
+                }
+            }
+
+            var referrer = 'Direct';
+            if (Wizard.state.referred) {
+                var typed = Wizard.$('ref-code').value.trim();
+                if (typed) referrer = typed;
+            }
+
+            // one optional extra choice (the bundle page uses it for platform)
+            var extraEl = Wizard.$('extra-select');
+
+            return {
+                plan: plan,
+                name: name,
+                phone: OrderKit.phone(raw),
+                target: target,
+                extra: extraEl ? extraEl.value : null,
+                payment: Wizard.$('payment-method').value,
+                referrer: referrer
+            };
+        },
+
+        /* --------------------------------------------------------- review */
+
+        openReview: function () {
+            var order = Wizard.validate();
+            if (!order) return;
+
+            var region = Wizard.region();
+            var rows = [
+                '<div class="sum-row"><span>Package</span><b>' + order.plan.label + '</b></div>'
+            ];
+            order.plan.feats.forEach(function (f) {
+                rows.push('<div class="sum-row"><span>Includes</span><b>' + f.text + '</b></div>');
+            });
+            if (order.extra) {
+                rows.push('<div class="sum-row"><span>' + (Wizard.cfg.extraLabel || 'Choice') +
+                    '</span><b>' + order.extra + '</b></div>');
+            }
+            if (order.target) {
+                rows.push('<div class="sum-row"><span>' + (Wizard.cfg.targetLabel || 'Account') +
+                    '</span><b>' + order.target + '</b></div>');
+            }
+            rows.push('<div class="sum-row"><span>WhatsApp</span><b>' + order.phone.clean + '</b></div>');
+            rows.push('<div class="sum-row"><span>Payment</span><b>' + order.payment + '</b></div>');
+            rows.push('<div class="sum-row is-total"><span>Total</span><b>' +
+                OrderKit.money(order.plan.price, region.currency) + '</b></div>');
+
+            Wizard.$('sum-list').innerHTML = rows.join('');
+            OrderKit.openSheet('confirmSheet');
+            OrderKit.haptic(12);
+        },
+
+        confirm: function () {
+            if (Wizard.state.busy) return;
+            var order = Wizard.validate();
+            if (!order) { OrderKit.closeSheet('confirmSheet'); return; }
+
+            Wizard.state.busy = true;
+            var btn = Wizard.$('btn-confirm');
+            btn.classList.add('is-busy');
+            btn.querySelector('.cta-label').textContent = 'Opening WhatsApp…';
+            btn.querySelector('.cta-icon').innerHTML = '<span class="spinner"></span>';
+
+            var region = Wizard.region();
+            var total = OrderKit.money(order.plan.price, region.currency);
+            var service = Wizard.cfg.service;
+
+            var message = '*NEW ORDER [' + region.name.toUpperCase() + ']*\n\n' +
+                '*Service:* ' + service + '\n' +
+                '*Package:* ' + order.plan.label + '\n' +
+                '*Price:* ' + total + '\n' +
+                '*Referrer:* ' + order.referrer + '\n\n' +
+                '*Name:* ' + order.name + '\n' +
+                '*WhatsApp:* ' + order.phone.clean + '\n' +
+                (order.extra ? '*' + (Wizard.cfg.extraLabel || 'Choice') + ':* ' + order.extra + '\n' : '') +
+                (order.target ? '*' + (Wizard.cfg.targetLabel || 'Account') + ':* ' + order.target + '\n' : '') +
+                '*Payment Method:* ' + order.payment;
+
+            OrderKit.send({
+                sheetUrl: Wizard.cfg.sheetUrl,
+                whatsapp: Wizard.cfg.whatsapp,
+                message: message,
+                sheet: {
+                    ClientName: order.name,
+                    Number: order.phone.sheet,
+                    Service: service + ' [' + region.currency + ']',
+                    Package: order.plan.label +
+                        (order.extra ? ' [' + order.extra + ']' : '') +
+                        (order.target ? ' [Target: ' + order.target + ']' : '') +
+                        ' [Pay: ' + order.payment + ']',
+                    Price: String(order.plan.price),
+                    Referrer: order.referrer
+                }
+            });
+
+            setTimeout(function () {
+                Wizard.state.busy = false;
+                btn.classList.remove('is-busy');
+                btn.querySelector('.cta-label').textContent = 'Send on WhatsApp';
+                btn.querySelector('.cta-icon').innerHTML = '<i class="fab fa-whatsapp"></i>';
+            }, 6000);
+        },
+
+        /* ----------------------------------------------------------- boot */
+
+        start: function (cfg) {
+            Wizard.cfg = cfg;
+            OrderKit.boot();
+
+            Wizard.renderGifts();
+            Wizard.renderProof();
+            Wizard.openGate();
+
+            // a returning customer already told us where they are
+            var saved = null;
+            try { saved = localStorage.getItem(cfg.storeKey); } catch (e) { /* ignore */ }
+            if (saved && REGIONS[saved]) Wizard.setRegion(saved, false);
+
+            var trigger = Wizard.$('regionBtn');
+            if (trigger) {
+                trigger.addEventListener('click', function () {
+                    Wizard.$('regionGate').hidden = false;
+                    document.body.classList.add('is-locked');
+                });
+            }
+
+            Wizard.$('plan-grid').addEventListener('click', function (e) {
+                var card = e.target.closest('.plan-card');
+                if (!card) return;
+                Wizard.state.plan = Number(card.dataset.index);
+                Wizard.renderPlans();
+                Wizard.syncPlanBtn();
+                OrderKit.haptic(14);
+            });
+
+            Wizard.$('gift-list').addEventListener('click', function (e) {
+                var gift = e.target.closest('.gift');
+                if (gift) Wizard.claimGift(gift);
+            });
+
+            document.querySelectorAll('[data-go]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    if (btn.disabled) return;
+                    Wizard.go(Number(btn.dataset.go));
+                });
+            });
+
+            var setReferred = function (yes) {
+                Wizard.state.referred = yes;
+                Wizard.$('ref-yes').classList.toggle('is-on', yes);
+                Wizard.$('ref-yes').setAttribute('aria-pressed', String(yes));
+                Wizard.$('ref-no').classList.toggle('is-on', !yes);
+                Wizard.$('ref-no').setAttribute('aria-pressed', String(!yes));
+                Wizard.$('ref-drawer').classList.toggle('is-open', yes);
+                if (yes) setTimeout(function () { Wizard.$('ref-code').focus(); }, 260);
+                else Wizard.$('ref-code').value = '';
+            };
+            Wizard.$('ref-yes').addEventListener('click', function () { setReferred(true); });
+            Wizard.$('ref-no').addEventListener('click', function () { setReferred(false); });
+
+            document.querySelectorAll('.field input').forEach(function (input) {
+                input.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') { e.preventDefault(); Wizard.openReview(); }
+                });
+            });
+
+            Wizard.$('btn-submit').addEventListener('click', Wizard.openReview);
+            Wizard.$('btn-confirm').addEventListener('click', Wizard.confirm);
+
+            Wizard.go(1);
+        }
+    };
+
+    window.OrderWizard = Wizard;
+
+})(window, document);
