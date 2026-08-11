@@ -29,28 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // === 2. HERO ROTATOR ===
-    const rotator = document.getElementById('heroRotator');
-    if (rotator && !reduceMotion) {
-        const words = ['Followers.', 'A Website.', 'A System.', 'Business Emails.', 'Fliers.'];
-        let idx = 0;
-        setInterval(() => {
-            const current = rotator.querySelector('.rotator-word');
-            if (!current) return;
-            current.classList.remove('is-current');
-            current.classList.add('is-leaving');
-            idx = (idx + 1) % words.length;
-            setTimeout(() => {
-                current.remove();
-                const next = document.createElement('span');
-                next.className = 'rotator-word is-current';
-                next.textContent = words[idx];
-                rotator.appendChild(next);
-            }, 350);
-        }, 2600);
-    }
-
-    // === 3. THE CHOOSER — "What would you like to get?" =====================
+    // === 2. THE CHOOSER — "What would you like to get?" =====================
     // One question, two answers. Picking one reveals only that path's offers
     // and collapses the other, so the page never shows 15 options at once.
     const pathSection = document.getElementById('path');

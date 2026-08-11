@@ -78,9 +78,14 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .oh-cta { position: relative; overflow: hidden; }
 .oh-cta::after { content: ''; position: absolute; top: 0; left: 0; width: 45%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent); transform: translateX(-200%) skewX(-20deg); animation: ctaSheen 3.6s ease-in-out infinite; }
 @keyframes ctaSheen { 0% { transform: translateX(-200%) skewX(-20deg); } 45%, 100% { transform: translateX(320%) skewX(-20deg); } }
-.cp-ic, .om-ic { animation: iconFloat 4.5s ease-in-out infinite; }
+/* the platform marks inside the chooser bob gently, each on its own offset —
+   the card reads as alive without anything actually moving on the page */
+.cp-marks > *, .om-ic { animation: iconFloat 4.5s ease-in-out infinite; }
 @keyframes iconFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-.choice-panel[data-path="build"] .cp-ic { animation-delay: 0.9s; }
+.cp-marks > *:nth-child(2) { animation-delay: 0.35s; }
+.cp-marks > *:nth-child(3) { animation-delay: 0.7s; }
+.cp-marks > *:nth-child(4) { animation-delay: 1.05s; }
+.choice-panel[data-path="build"] .cp-marks > * { animation-duration: 5.2s; }
 .offer-mini:nth-child(2) .om-ic { animation-delay: 1.1s; }
 
 /* ---- touch feedback: desktop gets hover, mobile gets a real press ---- */
@@ -97,7 +102,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 @media(prefers-reduced-motion: reduce) {
     .fade-up, .scale-in, .slide-in-right, .fade-in, [data-stagger][data-stagger] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
-    .oh-badge, .oh-cta::after, .cp-ic, .om-ic, .hero-cue-track::after, .hero-asset { animation: none !important; }
+    .oh-badge, .oh-cta::after, .cp-marks > *, .om-ic, .hero-cue-track::after, .hero-asset { animation: none !important; }
     .scroll-progress { display: none; }
 }
 
@@ -218,20 +223,19 @@ body.menu-open { overflow: hidden; }
 @keyframes float-path-7 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(50vw, 40vh) rotate(-12deg); } }
 @keyframes float-path-8 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-45vw, -35vh) rotate(14deg); } }
 
-.trust-pill { display: inline-flex; align-items: center; gap: 12px; padding: 10px 24px; border: 1px solid rgba(255,255,255,0.06); border-radius: 100px; background: rgba(255,255,255,0.03); margin-bottom: 40px; position: relative; overflow: hidden; }
-.trust-pill::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); transform: translateX(-200%) skewX(-20deg); animation: shimmer-fast 4s infinite; will-change: transform; }
-@keyframes shimmer-fast { 0% { transform: translateX(-200%) skewX(-20deg); } 20%, 100% { transform: translateX(400%) skewX(-20deg); } }
+.display-hero { font-size: clamp(2.5rem, 6.2vw, 4.8rem); letter-spacing: -0.03em; line-height: 1.03; margin-bottom: 14px; font-weight: 700; }
+.display-hero em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--clr-emerald), #b8ff4d);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.lead-text { font-size: clamp(1rem, 2.2vw, 1.28rem); font-weight: 500; color: var(--clr-muted); margin-bottom: 26px; }
 
-.cyber-core { position: relative; width: 18px; height: 18px; }
-.core-inner { position: absolute; inset: 3px; background: var(--clr-emerald); transform: rotate(45deg); animation: spin 3s linear infinite; box-shadow: 0 0 12px var(--clr-emerald); }
-.core-ring { position: absolute; inset: 0; border: 2px solid rgba(0,255,178,0.4); border-radius: 50%; border-top-color: transparent; animation: spin-reverse 2s linear infinite; }
-@keyframes spin { 100% { transform: rotate(405deg); } }
-@keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
-.pill-text { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #fff; }
-
-.display-massive { font-size: clamp(3.2rem, 8vw, 7.5rem); letter-spacing: -0.02em; line-height: 1.05; margin-bottom: 24px; }
-.display-hero { font-size: clamp(2.7rem, 6.4vw, 5.4rem); letter-spacing: -0.02em; line-height: 1.02; margin-bottom: 18px; display: flex; flex-direction: column; }
-.lead-text { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 500; color: var(--clr-muted); margin-bottom: 30px; }
+/* trust strip under the chooser — the proof that used to sit in a pill above
+   the headline, moved below the fold-critical choice so it can't push it down */
+.hero-trust { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 22px; list-style: none; }
+.hero-trust li { display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); background: rgba(8,9,12,0.72); font-size: 0.76rem; font-weight: 600; color: #c8c8d0; }
+.hero-trust li i { color: var(--clr-emerald); font-size: 0.78rem; }
 
 .action-dock { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 350px; }
 .btn-hyper-connect { position: relative; display: inline-block; padding: 2px; border-radius: 50px; width: 100%; box-shadow: 0 15px 35px rgba(229, 9, 20, 0.25); transition: transform 0.3s; }
@@ -255,54 +259,74 @@ body.menu-open { overflow: hidden; }
 /* ==========================================================================
    HERO ROTATOR
    ========================================================================== */
-.rotator { position: relative; display: inline-block; min-width: 8ch; text-align: left; vertical-align: top; color: var(--clr-emerald); }
-.rotator-word { display: inline-block; }
-.rotator-word.is-current { animation: rotatorIn 0.5s var(--curve-smooth); }
-.rotator-word.is-leaving { animation: rotatorOut 0.35s var(--curve-smooth) forwards; }
-@keyframes rotatorIn { 0% { opacity: 0; transform: translateY(12px); } 100% { opacity: 1; transform: translateY(0); } }
-@keyframes rotatorOut { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-12px); } }
-@media(prefers-reduced-motion: reduce) { .rotator-word.is-current, .rotator-word.is-leaving { animation: none; } }
 
 /* ==========================================================================
    HERO: "WHAT WOULD YOU LIKE TO GET?" SPLIT CHOOSER
    ========================================================================== */
-.hero-ask { width: 100%; max-width: 880px; margin: 6px auto 0; }
-.hero-ask-label { display: flex; align-items: center; justify-content: center; gap: 14px; font-family: var(--font-display); font-weight: 600; font-size: 0.95rem; letter-spacing: 0.02em; color: rgba(255,255,255,0.72); margin-bottom: 20px; }
-.ask-line { display: block; height: 1px; width: clamp(20px, 8vw, 70px); background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35)); }
-.ask-line:last-child { background: linear-gradient(90deg, rgba(255,255,255,0.35), transparent); }
+.hero-ask { width: 100%; max-width: 880px; margin: 0 auto; }
 
-.hero-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.hero-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .choice-panel {
     position: relative; overflow: hidden; text-align: left; cursor: pointer;
-    display: flex; flex-direction: column; gap: 8px;
-    padding: 26px 24px 22px;
-    background: rgba(8,9,12,0.88); border: 1px solid rgba(255,255,255,0.14); border-radius: 24px;
+    display: flex; flex-direction: column; gap: 0;
+    padding: 20px 20px 16px;
+    background: rgba(8,9,12,0.9); border: 1px solid rgba(255,255,255,0.14); border-radius: 22px;
     color: #fff; font-family: var(--font-body);
-    transition: transform 0.35s var(--curve-spring), border-color 0.3s, background 0.3s;
+    transition: transform 0.35s var(--curve-spring), border-color 0.3s, background 0.3s, box-shadow 0.35s;
     -webkit-tap-highlight-color: transparent;
 }
-.choice-panel:hover, .choice-panel:focus-visible { transform: translateY(-5px); border-color: rgba(0,255,178,0.45); background: rgba(16,18,22,0.85); outline: none; }
+.choice-panel:hover, .choice-panel:focus-visible { transform: translateY(-5px); border-color: rgba(0,255,178,0.45); outline: none; }
 /* tint OVER the opaque base — never replace background-color, or the hero
    photo shows straight through the selected panel */
-.choice-panel[aria-pressed="true"] { border-color: var(--clr-emerald); background-image: linear-gradient(rgba(0,255,178,0.11), rgba(0,255,178,0.11)); }
+.choice-panel[aria-pressed="true"] {
+    border-color: var(--clr-emerald);
+    background-image: linear-gradient(rgba(0,255,178,0.1), rgba(0,255,178,0.1));
+    box-shadow: 0 0 0 1px var(--clr-emerald), 0 22px 46px -26px rgba(0,255,178,0.85);
+}
 .cp-glow { position: absolute; inset: -40% 30% 60% -20%; background: radial-gradient(circle, rgba(0,255,178,0.22), transparent 70%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
 .choice-panel:hover .cp-glow, .choice-panel[aria-pressed="true"] .cp-glow { opacity: 1; }
-.cp-ic { position: relative; width: 46px; height: 46px; border-radius: 14px; background: rgba(0,255,178,0.1); color: var(--clr-emerald); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; margin-bottom: 4px; }
-.choice-panel[data-path="build"] .cp-ic { background: rgba(0,168,225,0.12); color: #6be4ff; }
-.cp-title { position: relative; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.15; }
-.cp-sub { position: relative; font-size: 0.92rem; color: var(--clr-muted); line-height: 1.5; }
-.cp-meta { position: relative; font-size: 0.82rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
-.cp-meta b { color: #fff; font-weight: 800; }
-.cp-go { position: relative; display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 800; font-size: 0.9rem; color: var(--clr-emerald); }
+
+/* the Von Restorff marker — one card is visually louder than the other so the
+   decision is pre-made for anyone who doesn't want to think about it */
+.cp-tag {
+    position: absolute; top: 0; right: 0; z-index: 2;
+    padding: 5px 12px; border-bottom-left-radius: 13px;
+    background: linear-gradient(100deg, var(--clr-emerald), #b8ff4d); color: #04120d;
+    font-size: 0.6rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+.cp-marks { position: relative; display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
+.cp-marks img { width: 27px; height: 27px; object-fit: contain; display: block; }
+.cp-marks--glyph { color: #6be4ff; gap: 12px; }
+.cp-marks--glyph svg { width: 26px; height: 26px; display: block; }
+
+.cp-title { position: relative; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
+.cp-sub { position: relative; font-size: 0.9rem; color: var(--clr-muted); line-height: 1.5; margin-top: 5px; }
+
+.cp-foot {
+    position: relative; display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-top: 14px; padding-top: 12px;
+    border-top: 1px dashed rgba(255,255,255,0.14);
+}
+.cp-from { font-size: 0.8rem; color: #c8c8d0; }
+.cp-from b { color: #fff; font-weight: 800; }
+.cp-go { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; font-size: 0.82rem; color: var(--clr-emerald); white-space: nowrap; }
 .choice-panel[data-path="build"] .cp-go { color: #6be4ff; }
 .cp-go i { transition: transform 0.3s; }
 .choice-panel:hover .cp-go i { transform: translateX(5px); }
+
 @media(max-width: 720px) {
-    .hero-choice { grid-template-columns: 1fr; gap: 12px; }
-    .choice-panel { padding: 20px 18px; border-radius: 20px; background: rgba(6,7,10,0.94); }
-    .cp-ic { width: 40px; height: 40px; font-size: 1rem; }
-    .cp-title { font-size: 1.18rem; }
-    .cp-sub { font-size: 0.86rem; }
+    .hero-choice { grid-template-columns: 1fr; gap: 11px; }
+    .choice-panel { padding: 17px 17px 14px; border-radius: 20px; background: rgba(6,7,10,0.95); }
+    .cp-marks { margin-bottom: 11px; }
+    .cp-marks img { width: 25px; height: 25px; }
+    .cp-marks--glyph svg { width: 24px; height: 24px; }
+    .cp-title { font-size: 1.22rem; }
+    .cp-sub { font-size: 0.85rem; }
+    /* keep the whole chooser + trust row inside one phone screen. A 2x2 grid
+       reads as deliberate; a plain wrap leaves one chip stranded on its own row */
+    .hero-trust { display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; margin-top: 15px; gap: 6px; }
+    .hero-trust li { padding: 7px 11px; font-size: 0.72rem; }
 }
 
 /* ==========================================================================
