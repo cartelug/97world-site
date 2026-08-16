@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('gate-open');
     }
 
-    if (gate) {
+    if (gate && P) {
         const grid = gate.querySelector('.region-grid');
         grid.innerHTML = Object.keys(P.REGIONS).map((code) => {
             const r = P.REGIONS[code];
@@ -70,8 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // === 3. THE PRICE BUILDER ==============================================
     // Section 2 is the first step of the order: platform, package, real price.
     // The choice is handed to the order page so nothing has to be picked twice.
+    // P is only present on pages that load pricing.js (home no longer does).
     const builder = {
-        region: P.Region.get() || 'UG',
+        region: (P && P.Region.get()) || 'UG',
         platform: 'ig',
         plan: 0,
 
@@ -132,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    if (document.getElementById('builder')) {
+    if (document.getElementById('builder') && P) {
         builder.render();
 
         document.getElementById('bd-plats').addEventListener('click', (e) => {
@@ -170,20 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // first visit — we genuinely cannot price anything until they answer
         if (!P.Region.get()) openGate();
     }
-
-    // the hero cards just route to the right part of the page now
-    document.querySelectorAll('.choice-panel').forEach((panel) => {
-        panel.addEventListener('click', () => {
-            const target = document.getElementById(panel.dataset.path === 'build' ? 'build' : 'path');
-            if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-        });
-    });
-    document.querySelectorAll('.mm-intent-card').forEach((card) => {
-        card.addEventListener('click', () => {
-            const target = document.getElementById(card.dataset.path === 'build' ? 'build' : 'path');
-            if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 380);
-        });
-    });
 
     // === 5. MOBILE MENU ===
     const burgerBtn = document.getElementById('burgerBtn');
