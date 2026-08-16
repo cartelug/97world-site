@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Order Desk | 97 World</title>
+
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@400,500,700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/assets/order.css">
+
+    <style>
+        /* The desk is a working tool, not a shop — denser, plainer, and it
+           never uses the brand accent for anything that isn't a live figure. */
+        .desk { max-width: 760px; margin: 0 auto; padding: 0 16px 60px; }
+
+        .desk-head { display: flex; align-items: center; gap: 12px; padding: 20px 0 18px; }
+        .desk-head img { width: 30px; height: 30px; }
+        .desk-head h1 { font-size: 1.2rem; letter-spacing: -0.01em; flex: 1; }
+        .desk-bal {
+            font-family: var(--font-display); font-size: 0.95rem; font-weight: 700;
+            padding: 7px 13px; border-radius: 999px;
+            border: 1px solid var(--ord-line); background: var(--ord-surface);
+        }
+        .desk-bal.is-live { border-color: var(--acc); color: var(--acc); }
+
+        .tabs { display: grid; grid-auto-flow: column; gap: 6px; margin-bottom: 20px; }
+        .tab {
+            padding: 11px 8px; border-radius: 11px; border: 1px solid var(--ord-line);
+            background: var(--ord-surface); font-size: 0.8rem; font-weight: 700; color: var(--ord-muted);
+        }
+        .tab[aria-selected="true"] { border-color: var(--acc); color: var(--acc); background: color-mix(in srgb, var(--acc) 10%, transparent); }
+
+        .pane { display: none; }
+        .pane.is-on { display: block; }
+
+        .ord {
+            padding: 15px 16px; margin-bottom: 10px;
+            border: 1px solid var(--ord-line); border-left: 3px solid var(--ord-line);
+            border-radius: 13px; background: var(--ord-surface);
+        }
+        .ord[data-s="pending"] { border-left-color: #F0B440; }
+        .ord[data-s="placed"]  { border-left-color: var(--acc); }
+        .ord[data-s="partial"] { border-left-color: #F0B440; }
+        .ord[data-s="failed"]  { border-left-color: var(--ord-danger); }
+
+        .ord-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+        .ord-ref { font-family: var(--font-display); font-size: 0.82rem; color: var(--ord-dim); }
+        .ord-when { font-size: 0.72rem; color: var(--ord-dim); }
+        .ord b.who { display: block; font-size: 1rem; margin-bottom: 3px; }
+        .ord .what { font-size: 0.86rem; color: #c2c2cb; line-height: 1.5; }
+        .ord .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .ord .meta span {
+            padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--ord-line); font-size: 0.71rem; color: #b0b0ba;
+        }
+        .ord .acts { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .mini {
+            padding: 9px 15px; border-radius: 999px; font-size: 0.8rem; font-weight: 700;
+            border: 1px solid var(--ord-line); background: var(--ord-surface-2); color: #fff;
+        }
+        .mini.go { background: var(--acc); border-color: var(--acc); color: var(--acc-ink); }
+        .mini[disabled] { opacity: 0.45; pointer-events: none; }
+
+        .search { display: flex; gap: 8px; margin-bottom: 14px; }
+        .search input {
+            flex: 1; height: 48px; padding: 0 15px; border-radius: 13px;
+            border: 1px solid var(--ord-line); background: rgba(0,0,0,0.3); color: #fff; font-size: 16px;
+        }
+
+        .svc-row {
+            display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 7px;
+            border: 1px solid var(--ord-line); border-radius: 11px; background: var(--ord-surface);
+        }
+        .svc-row .sid {
+            font-family: var(--font-display); font-weight: 700; font-size: 0.86rem;
+            color: var(--acc); flex: none; min-width: 4.5ch;
+        }
+        .svc-row div { flex: 1; min-width: 0; }
+        .svc-row b { display: block; font-size: 0.84rem; font-weight: 600; line-height: 1.35; }
+        .svc-row small { color: var(--ord-dim); font-size: 0.72rem; }
+        .svc-row .rate { flex: none; font-family: var(--font-display); font-weight: 700; font-size: 0.88rem; }
+
+        .empty { text-align: center; padding: 44px 20px; color: var(--ord-dim); font-size: 0.9rem; }
+        .desk-note {
+            margin-top: 22px; padding: 14px 15px; border-radius: 12px;
+            border: 1px solid var(--ord-line); background: var(--ord-surface);
+            font-size: 0.82rem; color: #b0b0ba; line-height: 1.55;
+        }
+        .desk-note b { color: #fff; }
+    </style>
+</head>
+<body class="order-page" data-accent="bundle">
+
+    <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+    <!-- sign in: the token is the only thing standing between this page and
+         your Fastway balance, so it is never stored anywhere but this device -->
+    <div class="gate" id="authGate" role="dialog" aria-modal="true" aria-labelledby="auth-h">
+        <div class="gate-card">
+            <img src="/IMAGES/logo.png" alt="" class="gate-logo">
+            <h2 id="auth-h">Order desk</h2>
+            <p>Paste your admin token. It stays on this device.</p>
+            <div class="field" style="text-align:left">
+                <div class="field-box">
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="token" placeholder="Admin token" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+            <button type="button" class="wiz-btn" id="signin" style="margin-top:12px">
+                <span class="wb-label">Open the desk</span>
+            </button>
+        </div>
+    </div>
+
+    <main class="desk" id="desk" hidden>
+        <div class="desk-head">
+            <img src="/IMAGES/logo.png" alt="">
+            <h1>Order desk</h1>
+            <span class="desk-bal" id="balance">balance —</span>
+        </div>
+
+        <div class="tabs" role="tablist">
+            <button class="tab" role="tab" aria-selected="true"  data-pane="queue">Queue</button>
+            <button class="tab" role="tab" aria-selected="false" data-pane="find">Find services</button>
+        </div>
+
+        <section class="pane is-on" id="pane-queue" role="tabpanel">
+            <div id="orders"><p class="empty">Loading…</p></div>
+        </section>
+
+        <section class="pane" id="pane-find" role="tabpanel">
+            <div class="search">
+                <input type="search" id="q" placeholder="instagram followers" autocomplete="off">
+                <button class="mini go" id="find">Search</button>
+            </div>
+            <div id="results"><p class="empty">Search Fastway's catalogue. The number on the left is the service ID — send those to Claude to wire a service up.</p></div>
+        </section>
+
+        <p class="desk-note">
+            <b>Nothing here spends money except Place.</b> Orders arrive as pending
+            and sit there until you tap it — so a customer can never trigger a
+            purchase, only ask for one.
+        </p>
+    </main>
+
+    <script src="/assets/order.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // Point this at the Worker once it's deployed.
+        var API = 'https://api.the97.world';
+        var TOKEN_KEY = 'k97_admin_token';
+        var token = '';
+
+        var $ = function (id) { return document.getElementById(id); };
+
+        function api(path, opts) {
+            opts = opts || {};
+            return fetch(API + path, {
+                method: opts.method || 'GET',
+                headers: Object.assign(
+                    { 'X-Admin-Token': token },
+                    opts.body ? { 'Content-Type': 'application/json' } : {}
+                ),
+                body: opts.body ? JSON.stringify(opts.body) : undefined
+            }).then(function (r) {
+                return r.json().then(function (data) {
+                    if (!r.ok) throw new Error(data.error || ('HTTP ' + r.status));
+                    return data;
+                });
+            });
+        }
+
+        function money(n) { return typeof n === 'number' ? n.toFixed(2) : n; }
+
+        function when(iso) {
+            var d = new Date(iso);
+            if (isNaN(d)) return '';
+            var mins = Math.round((Date.now() - d) / 60000);
+            if (mins < 1) return 'just now';
+            if (mins < 60) return mins + 'm ago';
+            if (mins < 1440) return Math.round(mins / 60) + 'h ago';
+            return d.toLocaleDateString();
+        }
+
+        /* ------------------------------------------------------------ auth */
+
+        function signIn(t) {
+            token = t;
+            return api('/admin/balance').then(function (bal) {
+                try { localStorage.setItem(TOKEN_KEY, t); } catch (e) {}
+                $('authGate').hidden = true;
+                document.body.classList.remove('is-locked');
+                $('desk').hidden = false;
+                var el = $('balance');
+                el.textContent = (bal.currency || '$') + ' ' + money(bal.balance);
+                el.classList.add('is-live');
+                loadOrders();
+            });
+        }
+
+        $('signin').addEventListener('click', function () {
+            var t = $('token').value.trim();
+            if (!t) return;
+            signIn(t).catch(function (err) {
+                OrderKit.toast(err.message === 'Not authorised'
+                    ? 'That token was not accepted.'
+                    : ('Could not reach the Worker — ' + err.message));
+            });
+        });
+        $('token').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') $('signin').click();
+        });
+
+        /* ---------------------------------------------------------- queue */
+
+        function describe(o) {
+            if (o.bundleId) return 'Bundle · ' + o.bundleId;
+            return (o.quantity ? o.quantity.toLocaleString() + ' × ' : '') + (o.serviceId || 'unknown service');
+        }
+
+        function orderHTML(o) {
+            var placed = (o.fastway || []).filter(function (p) { return p.orderId; });
+            return '<article class="ord" data-s="' + o.status + '">' +
+                '<div class="ord-top"><span class="ord-ref">' + o.ref + '</span>' +
+                '<span class="ord-when">' + when(o.createdAt) + '</span></div>' +
+                '<b class="who">' + o.name + '</b>' +
+                '<p class="what">' + describe(o) + '<br>' + o.link + '</p>' +
+                '<div class="meta">' +
+                    '<span>' + o.phone + '</span>' +
+                    '<span>' + o.region + '</span>' +
+                    (o.payment ? '<span>' + o.payment + '</span>' : '') +
+                    (o.referrer && o.referrer !== 'Direct' ? '<span>ref: ' + o.referrer + '</span>' : '') +
+                    '<span>' + o.status + '</span>' +
+                '</div>' +
+                (placed.length
+                    ? '<div class="meta">' + placed.map(function (p) {
+                        return '<span>#' + p.orderId + ' · ' + p.label + '</span>';
+                      }).join('') + '</div>'
+                    : '') +
+                '<div class="acts">' +
+                    (o.status === 'pending'
+                        ? '<button class="mini go" data-act="place" data-ref="' + o.ref + '">Place on Fastway</button>'
+                        : '<button class="mini" data-act="status" data-ref="' + o.ref + '">Check status</button>') +
+                    '<a class="mini" href="https://wa.me/' + String(o.phone).replace(/\D/g, '') + '">WhatsApp</a>' +
+                '</div>' +
+            '</article>';
+        }
+
+        function loadOrders() {
+            api('/admin/orders').then(function (data) {
+                $('orders').innerHTML = data.orders.length
+                    ? data.orders.map(orderHTML).join('')
+                    : '<p class="empty">No orders yet.</p>';
+            }).catch(function (err) {
+                $('orders').innerHTML = '<p class="empty">' + err.message + '</p>';
+            });
+        }
+
+        $('orders').addEventListener('click', function (e) {
+            var btn = e.target.closest('button[data-act]');
+            if (!btn) return;
+            var ref = btn.dataset.ref;
+
+            if (btn.dataset.act === 'place') {
+                if (!confirm('Place this on Fastway? This spends your balance.')) return;
+                btn.disabled = true;
+                btn.textContent = 'Placing…';
+                api('/admin/place', { method: 'POST', body: { ref: ref } })
+                    .then(function (res) {
+                        OrderKit.toast(res.ok ? 'Placed on Fastway.' : 'Placed with problems — check the order.', res.ok ? 'ok' : 'error');
+                        loadOrders();
+                    })
+                    .catch(function (err) {
+                        OrderKit.toast(err.message);
+                        btn.disabled = false;
+                        btn.textContent = 'Place on Fastway';
+                    });
+            }
+
+            if (btn.dataset.act === 'status') {
+                btn.disabled = true;
+                api('/admin/status', { method: 'POST', body: { ref: ref } })
+                    .then(function (res) {
+                        var lines = Object.keys(res.status || {}).map(function (id) {
+                            var s = res.status[id];
+                            return '#' + id + ': ' + s.status + ' · ' + s.remains + ' left of ' + s.start_count;
+                        });
+                        alert(lines.join('\n') || 'No status returned.');
+                    })
+                    .catch(function (err) { OrderKit.toast(err.message); })
+                    .then(function () { btn.disabled = false; });
+            }
+        });
+
+        /* ------------------------------------------------------ find IDs */
+
+        function search() {
+            var q = $('q').value.trim();
+            $('results').innerHTML = '<p class="empty">Searching…</p>';
+            api('/admin/catalogue?q=' + encodeURIComponent(q)).then(function (data) {
+                if (!data.services.length) {
+                    $('results').innerHTML = '<p class="empty">Nothing matched "' + q + '".</p>';
+                    return;
+                }
+                $('results').innerHTML =
+                    '<p class="empty" style="padding:0 0 12px;text-align:left">' +
+                        data.count + ' of ' + data.total + ' services</p>' +
+                    data.services.slice(0, 120).map(function (s) {
+                        return '<div class="svc-row">' +
+                            '<span class="sid">' + s.service + '</span>' +
+                            '<div><b>' + s.name + '</b><small>' + s.category +
+                                ' · min ' + s.min + ' · max ' + Number(s.max).toLocaleString() + '</small></div>' +
+                            '<span class="rate">$' + s.rate + '</span>' +
+                        '</div>';
+                    }).join('');
+            }).catch(function (err) {
+                $('results').innerHTML = '<p class="empty">' + err.message + '</p>';
+            });
+        }
+
+        $('find').addEventListener('click', search);
+        $('q').addEventListener('keypress', function (e) { if (e.key === 'Enter') search(); });
+
+        /* ----------------------------------------------------------- tabs */
+
+        document.querySelectorAll('.tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('.tab').forEach(function (t) {
+                    t.setAttribute('aria-selected', String(t === tab));
+                });
+                document.querySelectorAll('.pane').forEach(function (p) {
+                    p.classList.toggle('is-on', p.id === 'pane-' + tab.dataset.pane);
+                });
+            });
+        });
+
+        /* ----------------------------------------------------------- boot */
+
+        OrderKit.boot();
+        document.body.classList.add('is-locked');
+
+        var saved = null;
+        try { saved = localStorage.getItem(TOKEN_KEY); } catch (e) {}
+        if (saved) {
+            signIn(saved).catch(function () {
+                try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+            });
+        }
+    })();
+    </script>
+</body>
+</html>

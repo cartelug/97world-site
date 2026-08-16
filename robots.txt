@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://the97.world/sitemap.xml
+
+Disallow: /admin/
