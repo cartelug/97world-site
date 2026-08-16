@@ -46,39 +46,21 @@
      *   all three together ....... $250   (937,500 UGX)
      * ---------------------------------------------------------------------- */
 
-    function socialPlans(likesWord, viewsWord) {
-        var likes = likesWord.toLowerCase();
-        var views = viewsWord.toLowerCase();
+    // A single platform: followers only.
+    function followerPlans() {
         return [
-            {
-                id: 'combo',
-                name: 'Everything',
-                short: 'Everything',
-                note: 'Followers + ' + likes + ' + ' + views,
-                usd: 250,
-                // a real anchor: bought one at a time the three come to $300
-                wasUsd: 300,
-                tag: 'Ultimate value',
-                hero: true,
-                label: 'Everything — 10,000 followers + 10,000 ' + likes + ' + 20,000 ' + views,
-                feats: [
-                    { icon: 'fa-user-plus', text: '10,000 followers', gold: true },
-                    { icon: 'fa-heart', text: '10,000 ' + likes },
-                    { icon: 'fa-eye', text: '20,000 ' + views },
-                    { icon: 'fa-rotate-left', text: '30-day refill' }
-                ]
-            },
             {
                 id: 'f10',
                 name: '10,000 followers',
                 short: '10k followers',
                 usd: 100,
                 tag: 'Best seller',
+                hero: true,
                 label: '10,000 followers',
                 feats: [
-                    { icon: 'fa-user-plus', text: '10,000 followers' },
-                    { icon: 'fa-gauge-simple', text: 'Gradual, natural pace' },
-                    { icon: 'fa-rotate-left', text: '30-day refill' }
+                    { icon: 'fas fa-user-plus', text: '10,000 followers', gold: true },
+                    { icon: 'fas fa-gauge-simple', text: 'Gradual, natural pace' },
+                    { icon: 'fas fa-rotate-left', text: '30-day refill' }
                 ]
             },
             {
@@ -89,36 +71,58 @@
                 tag: 'Starter',
                 label: '3,000 followers',
                 feats: [
-                    { icon: 'fa-user-plus', text: '3,000 followers' },
-                    { icon: 'fa-gauge-simple', text: 'Gradual, natural pace' }
+                    { icon: 'fas fa-user-plus', text: '3,000 followers' },
+                    { icon: 'fas fa-gauge-simple', text: 'Gradual, natural pace' }
                 ]
             }
         ];
     }
 
+    // The bundle: the same 10,000 followers, on all three platforms at once.
+    // $100 each bought separately is $300, so the bundle saves $50.
+    var bundlePlans = [
+        {
+            id: 'all3',
+            name: 'All three platforms',
+            short: 'All 3',
+            note: 'Instagram + TikTok + Facebook',
+            usd: 250,
+            wasUsd: 300,
+            tag: 'Best value',
+            hero: true,
+            label: 'All 3 — 10,000 followers each on Instagram, TikTok and Facebook',
+            feats: [
+                { icon: 'fab fa-instagram', text: '10,000 on Instagram', gold: true },
+                { icon: 'fab fa-tiktok', text: '10,000 on TikTok' },
+                { icon: 'fab fa-facebook-f', text: '10,000 on Facebook' },
+                { icon: 'fas fa-rotate-left', text: '30-day refill' }
+            ]
+        }
+    ];
+
     // YouTube keeps its own ladder. Declared in USD; converting reproduces the
     // original UGX prices exactly (262,500 / 412,500 / 600,000 / ...).
     var youtubePlans = [
         { id: 'yt5', name: 'Domination', short: 'Domination', usd: 400, tag: 'Max impact', hero: true, label: 'Domination Tier',
-          feats: [{ icon: 'fa-users', text: '10k subs', gold: true }, { icon: 'fa-eye', text: '15k views' }, { icon: 'fa-thumbs-up', text: '10k likes' }] },
+          feats: [{ icon: 'fas fa-users', text: '10k subs', gold: true }, { icon: 'fas fa-eye', text: '15k views' }, { icon: 'fas fa-thumbs-up', text: '10k likes' }] },
         { id: 'yt4', name: 'Viral', short: 'Viral', usd: 310, label: 'Viral Tier',
-          feats: [{ icon: 'fa-users', text: '7.5k subs' }, { icon: 'fa-eye', text: '13k views' }, { icon: 'fa-thumbs-up', text: '8k likes' }] },
+          feats: [{ icon: 'fas fa-users', text: '7.5k subs' }, { icon: 'fas fa-eye', text: '13k views' }, { icon: 'fas fa-thumbs-up', text: '8k likes' }] },
         { id: 'yt3', name: 'Authority', short: 'Authority', usd: 230, label: 'Authority Tier',
-          feats: [{ icon: 'fa-users', text: '5.5k subs' }, { icon: 'fa-eye', text: '11k views' }, { icon: 'fa-thumbs-up', text: '6.5k likes' }] },
+          feats: [{ icon: 'fas fa-users', text: '5.5k subs' }, { icon: 'fas fa-eye', text: '11k views' }, { icon: 'fas fa-thumbs-up', text: '6.5k likes' }] },
         { id: 'yt2', name: 'Growth', short: 'Growth', usd: 160, tag: 'Most popular', label: 'Growth Tier',
-          feats: [{ icon: 'fa-users', text: '3.5k subs' }, { icon: 'fa-eye', text: '9k views' }, { icon: 'fa-thumbs-up', text: '5k likes' }] },
+          feats: [{ icon: 'fas fa-users', text: '3.5k subs' }, { icon: 'fas fa-eye', text: '9k views' }, { icon: 'fas fa-thumbs-up', text: '5k likes' }] },
         { id: 'yt1', name: 'Kickstart', short: 'Kickstart', usd: 110, label: 'Kickstart Tier',
-          feats: [{ icon: 'fa-users', text: '2k subs' }, { icon: 'fa-eye', text: '7k views' }, { icon: 'fa-thumbs-up', text: '3.5k likes' }] },
+          feats: [{ icon: 'fas fa-users', text: '2k subs' }, { icon: 'fas fa-eye', text: '7k views' }, { icon: 'fas fa-thumbs-up', text: '3.5k likes' }] },
         { id: 'yt0', name: 'Starter', short: 'Starter', usd: 70, tag: 'Starter', label: 'Starter Tier',
-          feats: [{ icon: 'fa-users', text: '1k subs' }, { icon: 'fa-eye', text: '5k views' }, { icon: 'fa-thumbs-up', text: '2k likes' }] }
+          feats: [{ icon: 'fas fa-users', text: '1k subs' }, { icon: 'fas fa-eye', text: '5k views' }, { icon: 'fas fa-thumbs-up', text: '2k likes' }] }
     ];
 
     var PLATFORMS = {
-        ig: { key: 'ig', name: 'Instagram', logo: '/IMAGES/instagram.png', href: '/instagram-boost/', plans: socialPlans('Likes', 'Reels views') },
-        tt: { key: 'tt', name: 'TikTok',    logo: '/IMAGES/tiktok.png',    href: '/tiktok-boost/',    plans: socialPlans('Likes', 'Video views') },
-        fb: { key: 'fb', name: 'Facebook',  logo: '/IMAGES/facebook.png',  href: '/facebook-boost/',  plans: socialPlans('Page likes', 'Post reactions') },
+        ig: { key: 'ig', name: 'Instagram', logo: '/IMAGES/instagram.png', href: '/instagram-boost/', plans: followerPlans() },
+        tt: { key: 'tt', name: 'TikTok',    logo: '/IMAGES/tiktok.png',    href: '/tiktok-boost/',    plans: followerPlans() },
+        fb: { key: 'fb', name: 'Facebook',  logo: '/IMAGES/facebook.png',  href: '/facebook-boost/',  plans: followerPlans() },
         yt: { key: 'yt', name: 'YouTube',   logo: '/IMAGES/youtube.png',   href: '/youtube-boost/',   plans: youtubePlans },
-        bundle: { key: 'bundle', name: 'Growth Bundle', logo: '/IMAGES/logo.png', href: '/boost-package/', plans: socialPlans('Likes', 'Views') }
+        bundle: { key: 'bundle', name: 'All 3 platforms', logo: '/IMAGES/logo.png', href: '/boost-package/', plans: bundlePlans }
     };
 
     /* ---------------------------------------------------------- helpers --- */

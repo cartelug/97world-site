@@ -669,6 +669,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 .field.has-error .field-err { display: flex; }
 
+.field-hint {
+    display: flex; align-items: flex-start; gap: 8px;
+    margin: -4px 2px 11px;
+    font-size: 0.78rem; color: var(--ord-dim); line-height: 1.45;
+}
+.field-hint i { color: var(--acc); margin-top: 3px; flex: none; }
+
 .select-box { position: relative; }
 .select-box select {
     width: 100%;

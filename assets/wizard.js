@@ -128,7 +128,7 @@
                     '<ul class="pc-feats">' +
                         plan.feats.map(function (f) {
                             return '<li' + (f.gold ? ' class="is-gold"' : '') + '>' +
-                                '<i class="fas ' + f.icon + '"></i>' + f.text + '</li>';
+                                '<i class="' + f.icon + '"></i>' + f.text + '</li>';
                         }).join('') +
                     '</ul>' +
                     '</button>';

@@ -42,7 +42,7 @@ const PAGES = [
         platformName: 'Instagram', logo: '/IMAGES/instagram.png',
         title: 'Instagram Boost', service: 'Instagram Boost',
         headline: 'Grow your <em>Instagram</em>',
-        blurb: 'Real followers, likes and reels views. No password, ever.',
+        blurb: 'Real Instagram followers, delivered gradually. No password, ever.',
         targetLabel: 'Instagram username', targetPlaceholder: 'Your Instagram username',
         targetError: 'We need the username to deliver to',
         icon: 'fab fa-instagram',
@@ -53,7 +53,7 @@ const PAGES = [
         platformName: 'TikTok', logo: '/IMAGES/tiktok.png',
         title: 'TikTok Boost', service: 'TikTok Boost',
         headline: 'Blow up on <em>TikTok</em>',
-        blurb: 'Real followers, likes and video views. No password, ever.',
+        blurb: 'Real TikTok followers, delivered gradually. No password, ever.',
         targetLabel: 'TikTok username', targetPlaceholder: 'Your TikTok username',
         targetError: 'We need the username to deliver to',
         icon: 'fab fa-tiktok',
@@ -64,7 +64,7 @@ const PAGES = [
         platformName: 'Facebook', logo: '/IMAGES/facebook.png',
         title: 'Facebook Boost', service: 'Facebook Boost',
         headline: 'Build a <em>Facebook</em> page people trust',
-        blurb: 'Real followers, page likes and post reactions. No password, ever.',
+        blurb: 'Real Facebook followers, delivered gradually. No password, ever.',
         targetLabel: 'Facebook page', targetPlaceholder: 'Your page name or username',
         targetError: 'We need the page name to deliver to',
         icon: 'fab fa-facebook-f',
@@ -83,15 +83,14 @@ const PAGES = [
     },
     {
         dir: 'boost-package', accent: 'bundle',
-        platformName: 'Growth Bundle', logo: '/IMAGES/logo.png',
-        title: 'Growth Bundle', service: 'Growth Bundle',
-        headline: 'One bundle, <em>any platform</em>',
-        blurb: 'Pick a package, tell us where it lands. Instagram or TikTok.',
+        platformName: 'All 3 platforms', logo: '/IMAGES/logo.png',
+        title: 'All 3 Platforms', service: 'All 3 Platforms',
+        headline: '10,000 followers on <em>all three</em>',
+        blurb: 'Instagram, TikTok and Facebook together — $250 instead of $300.',
         targetLabel: 'Your @handle', targetPlaceholder: 'Your @handle',
-        targetError: 'We need the handle to deliver to',
+        targetError: 'We need your handle to deliver to',
+        targetHint: 'If your handle differs on any platform, tell us on WhatsApp.',
         icon: 'fas fa-at',
-        extraLabel: 'Platform',
-        extraOptions: ['Instagram', 'TikTok', 'Split across both'],
         platform: 'bundle'
     }
 ];
@@ -250,6 +249,8 @@ const html = (p) => `<!DOCTYPE html>
                     </div>
                     <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>${p.targetError}</span></p>
                 </div>
+${p.targetHint ? `                <p class="field-hint"><i class="fas fa-circle-info"></i> ${p.targetHint}</p>
+` : ''}
 ${p.extraOptions ? `
                 <div class="field select-box">
                     <select id="extra-select" aria-label="${p.extraLabel}">

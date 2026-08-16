@@ -85,6 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const planEl = document.getElementById('bd-plans');
             if (!platEl || !planEl) return;
 
+            const all3 = document.getElementById('bd-all3');
+            if (all3) {
+                const on = builder.platform === 'bundle';
+                all3.classList.toggle('is-on', on);
+                all3.setAttribute('aria-pressed', String(on));
+                const bundlePlan = P.plansFor('bundle', builder.region)[0];
+                document.getElementById('bd-all3-price').textContent =
+                    P.money(bundlePlan.price, bundlePlan.currency);
+            }
+
             platEl.innerHTML = ['ig', 'tt', 'fb', 'yt'].map((key) => {
                 const p = P.PLATFORMS[key];
                 const on = builder.platform === key;
@@ -95,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const plans = P.plansFor(builder.platform, builder.region);
             if (builder.plan >= plans.length) builder.plan = 0;
+
+            // the bundle is one fixed package, so there is nothing to pick
+            const step2 = planEl.closest('.bd-step');
+            if (step2) step2.hidden = builder.platform === 'bundle';
 
             planEl.innerHTML = plans.map((plan, i) => {
                 const on = builder.plan === i;
@@ -142,6 +156,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('bd-go').addEventListener('click', () => {
             const plans = P.plansFor(builder.platform, builder.region);
             P.Pending.set(builder.platform, plans[builder.plan].id);
+        });
+
+        document.getElementById('bd-all3').addEventListener('click', () => {
+            builder.platform = 'bundle';
+            builder.plan = 0;
+            builder.render();
+            if (navigator.vibrate) navigator.vibrate(12);
         });
 
         document.getElementById('bd-change').addEventListener('click', openGate);
