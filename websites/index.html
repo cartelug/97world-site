@@ -4,22 +4,25 @@
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <title>Build Your Business | 97 World</title>
-    <meta name="description" content="Websites, business emails and campaign fliers. Standard package $500, $250 starts it.">
+    <meta name="theme-color" content="#050505">
+
+    <title>Websites &amp; Business Email | 97 World</title>
+    <meta name="description" content="A real website, your own domain email, and the design to launch it. $500 for the standard package — $250 starts the work, the balance only on delivery.">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
+    <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" href="/HOME/style.css">
+    <link rel="stylesheet" href="/assets/hub.css">
 </head>
-<body>
+<body data-hub="build">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
@@ -37,8 +40,10 @@
             </a>
             <div class="nav-links">
                 <a href="/" class="nav-item">Home</a>
+                <a href="#package" class="nav-item">The package</a>
+                <a href="#process" class="nav-item">Process</a>
+                <a href="#faq" class="nav-item">FAQ</a>
                 <a href="/growth/" class="nav-item">Grow</a>
-                <a href="#how" class="nav-item">How it works</a>
             </div>
             <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
                 <span></span><span></span><span></span>
@@ -58,24 +63,13 @@
         </div>
 
         <div class="mm-scroll">
-            <p class="mm-label">What would you like to get?</p>
-            <div class="mm-intent">
-                <a href="/growth/" class="mm-intent-card" data-path="grow">
-                    <span class="mm-intent-ic"><i class="fas fa-fire-flame-curved"></i></span>
-                    <b>Grow My Audience</b>
-                    <small>Followers on any platform</small>
-                </a>
-                <a href="#website" class="mm-intent-card" data-path="build">
-                    <span class="mm-intent-ic"><i class="fas fa-cube"></i></span>
-                    <b>Build My Business</b>
-                    <small>Website, systems &amp; design</small>
-                </a>
-            </div>
-
             <nav class="mm-links">
-                <a href="#website" class="mm-link">Website package <i class="fas fa-arrow-right"></i></a>
+                <a href="#package" class="mm-link">Website package <i class="fas fa-arrow-right"></i></a>
                 <a href="#emails" class="mm-link">Business emails <i class="fas fa-arrow-right"></i></a>
                 <a href="#fliers" class="mm-link">Fliers &amp; design <i class="fas fa-arrow-right"></i></a>
+                <a href="#process" class="mm-link">How we build it <i class="fas fa-arrow-right"></i></a>
+                <a href="#faq" class="mm-link">Questions <i class="fas fa-arrow-right"></i></a>
+                <a href="/growth/" class="mm-link">Grow my audience <i class="fas fa-arrow-right"></i></a>
                 <a href="/trust/" class="mm-link">Trust centre <i class="fas fa-arrow-right"></i></a>
             </nav>
         </div>
@@ -90,62 +84,143 @@
 
     <main class="smooth-scroll-wrapper">
 
-        <section class="stage-hero">
-            <div class="container hero-content">
-                <h1 class="display-hero fade-up delay-1">Build your <em>business.</em></h1>
-                <p class="lead-text fade-up delay-2">A real website, a domain email, and the design to launch it. Connect first, pay after.</p>
+        <!-- ==================================================== 1. HERO === -->
+        <header class="hub-hero">
+            <div class="hub-hero-mesh" aria-hidden="true"></div>
+            <div class="hub-hero-grid" aria-hidden="true"></div>
 
-                <ul class="hero-trust fade-up delay-3" data-stagger>
-                    <li><i class="fas fa-lock"></i> No password</li>
-                    <li><i class="fas fa-mobile-screen"></i> Mobile Money</li>
-                    <li><i class="fas fa-users"></i> 2,300+ users</li>
-                </ul>
-            </div>
-
-            <div class="hero-cue" aria-hidden="true">
-                <span class="hero-cue-track"></span>
-                <span>Scroll</span>
-            </div>
-        </section>
-
-        <section class="stage-offers">
             <div class="container">
-                <div class="sec-head fade-up">
-                    <span class="sec-kicker">Build your business</span>
-                    <h2 class="sec-title">What are we <em>building?</em></h2>
-                    <p class="sec-sub">Nothing here is charged until you confirm it on WhatsApp.</p>
+                <span class="hub-eyebrow fade-up delay-1">
+                    <span class="dot"></span> Websites, email &amp; design · Built in Kampala
+                </span>
+
+                <h1 class="fade-up delay-1">Build a business<br>that <em>looks the part.</em></h1>
+
+                <p class="hub-lead fade-up delay-2">
+                    A real website, your own domain email, and the design to launch it.
+                    Half starts the work — the rest only once you've seen it built.
+                </p>
+
+                <div class="hub-cta-row fade-up delay-2">
+                    <a href="#package" class="hub-btn hub-btn--solid">See what's included <i class="fas fa-arrow-right"></i></a>
+                    <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="hub-btn hub-btn--ghost">
+                        <i class="fab fa-whatsapp"></i> Talk it through
+                    </a>
+                </div>
+
+                <div class="hub-stats fade-up delay-3">
+                    <div><b>$500</b><span>Standard package</span></div>
+                    <div><b>$250</b><span>Starts the work</span></div>
+                    <div><b>Free</b><span>Business email included</span></div>
+                    <div><b>2022</b><span>Building since</span></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ================================================= 2. PACKAGE === -->
+        <section id="package" class="hub-sec hub-sec--raised">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">The package</span>
+                    <h2>One price, <em>properly built</em></h2>
+                    <p>No monthly trap and no drip-fed upsells. One number, agreed with you before anything starts.</p>
                 </div>
 
                 <div class="offer-grid">
-                    <article class="offer-card is-hero fade-up" id="website">
+                    <article class="offer-card is-hero has-flag fade-up" id="website">
+                        <span class="oc-flag">Most popular</span>
                         <div class="oc-head">
                             <span class="oc-ic"><i class="fas fa-globe"></i></span>
                             <div class="oc-title">
                                 <h3>Website Package</h3>
-                                <p>Standard package — a real, working website built around your business.</p>
+                                <p>The full build — designed, put together and launched for you, with a business email on your own domain included.</p>
                             </div>
                             <div class="oc-price">
                                 <b>$500</b>
-                                <small>$250 starts it</small>
+                                <small>$250 starts the work</small>
                             </div>
                         </div>
                         <ul class="oc-feats">
-                            <li><i class="fas fa-check"></i> Mobile-friendly design, built for how people actually visit</li>
-                            <li><i class="fas fa-check"></i> WhatsApp and contact details built into every page</li>
-                            <li><i class="fas fa-check"></i> A domain email address included, free</li>
-                            <li><i class="fas fa-hand-holding-dollar"></i> Half starts it, the rest on delivery</li>
+                            <li><i class="fas fa-check"></i> Designed mobile-first — that's where nearly all of your visitors will meet you</li>
+                            <li><i class="fas fa-check"></i> WhatsApp and your number built into every page, so enquiries land where you already answer</li>
+                            <li><i class="fas fa-check"></i> A business email on your own domain, included at no extra cost</li>
+                            <li><i class="fas fa-check"></i> Setup and launch handled on our side — you approve the look, we deal with what's behind it</li>
+                            <li><i class="fas fa-check"></i> Page list and delivery date agreed with you in writing before you pay anything</li>
+                            <li><i class="fas fa-hand-holding-dollar"></i> $250 starts the work, the balance is due on delivery</li>
                         </ul>
                         <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20the%20%24500%20Website%20Package." target="_blank" rel="noopener" class="oc-cta">
                             <i class="fab fa-whatsapp"></i> Order on WhatsApp
                         </a>
                     </article>
+                </div>
+            </div>
+        </section>
 
-                    <article class="offer-card fade-up" id="emails">
+        <!-- ================================================ 3. INCLUDED === -->
+        <section class="hub-sec hub-sec--line">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">What you're paying for</span>
+                    <h2>A site that actually <em>does something</em></h2>
+                    <p>Most business websites are expensive brochures nobody opens. These are the decisions that stop that happening.</p>
+                </div>
+
+                <div class="spec-grid" data-stagger>
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fas fa-mobile-screen-button"></i></div>
+                        <h3>Mobile-first, not mobile-squeezed</h3>
+                        <p>Nearly everyone will meet your business on a phone screen. That's the screen it gets designed on first — not the one it gets crammed onto at the end.</p>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fab fa-whatsapp"></i></div>
+                        <h3>Built to start conversations</h3>
+                        <p>Your WhatsApp and number sit where people look for them, on every page. A website that doesn't get you messaged hasn't done its job.</p>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fas fa-envelope"></i></div>
+                        <h3>Your own domain email</h3>
+                        <p>yourname@yourbusiness.com instead of a free Gmail address. It changes how people read your quotes, and it's included in the package.</p>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fas fa-gauge-high"></i></div>
+                        <h3>Fast on real connections</h3>
+                        <p>Built lean so it opens quickly on the networks and phones your customers actually have — not just on office fibre.</p>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fas fa-screwdriver-wrench"></i></div>
+                        <h3>You never touch the technical part</h3>
+                        <p>You approve how it looks. Everything behind it — the setup, the pieces that have to be configured, getting it live — is handled on our side.</p>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fas fa-file-signature"></i></div>
+                        <h3>Agreed before it starts</h3>
+                        <p>The page list, the look and the delivery date are settled with you upfront on WhatsApp, before any money moves. No surprises in either direction.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================= 4. ADD-ONS === -->
+        <section class="hub-sec hub-sec--line">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">Also available</span>
+                    <h2>The rest of the <em>toolkit</em></h2>
+                    <p>The two things people ask for most often alongside a site.</p>
+                </div>
+
+                <div class="offer-pair" data-stagger>
+                    <article class="offer-card" id="emails">
                         <div class="oc-head">
                             <span class="oc-ic"><i class="fas fa-envelope"></i></span>
                             <div class="oc-title">
                                 <h3>Business Emails</h3>
-                                <p>A proper @yourbusiness.com address instead of a free Gmail.</p>
+                                <p>A proper address on your own domain instead of a free Gmail.</p>
                             </div>
                             <div class="oc-price">
                                 <b>Free</b>
@@ -155,13 +230,14 @@
                         <ul class="oc-feats">
                             <li><i class="fas fa-check"></i> Included automatically with the Website Package</li>
                             <li><i class="fas fa-check"></i> Sends and receives from your own domain</li>
+                            <li><i class="fas fa-check"></i> Already have a site? Message us and we'll sort the email on its own</li>
                         </ul>
-                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20business%20emails%20on%20my%20domain." target="_blank" rel="noopener" class="oc-cta">
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20business%20emails%20on%20my%20domain." target="_blank" rel="noopener" class="oc-cta oc-cta--quiet">
                             <i class="fab fa-whatsapp"></i> Ask on WhatsApp
                         </a>
                     </article>
 
-                    <article class="offer-card fade-up" id="fliers">
+                    <article class="offer-card" id="fliers">
                         <div class="oc-head">
                             <span class="oc-ic"><i class="fas fa-pen-ruler"></i></span>
                             <div class="oc-title">
@@ -173,9 +249,11 @@
                             </div>
                         </div>
                         <ul class="oc-feats">
-                            <li><i class="fas fa-check"></i> Ready to post or print, sized for the platform you need</li>
+                            <li><i class="fas fa-check"></i> Ready to post or print, whichever you need</li>
+                            <li><i class="fas fa-check"></i> Sized correctly for the platform it's going on</li>
+                            <li><i class="fas fa-check"></i> Tell us the offer and the date — we'll handle the rest</li>
                         </ul>
-                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20order%20a%20campaign%20flier." target="_blank" rel="noopener" class="oc-cta">
+                        <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20to%20order%20a%20campaign%20flier." target="_blank" rel="noopener" class="oc-cta oc-cta--quiet">
                             <i class="fab fa-whatsapp"></i> Order on WhatsApp
                         </a>
                     </article>
@@ -183,19 +261,113 @@
             </div>
         </section>
 
-        <section id="how" class="stage-how">
+        <!-- ================================================= 5. PROCESS === -->
+        <section id="process" class="hub-sec hub-sec--line hub-sec--raised">
             <div class="container">
-                <div class="sec-head fade-up">
-                    <span class="sec-kicker">Zero risk</span>
-                    <h2 class="sec-title">How it <em>works</em></h2>
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">How we build it</span>
+                    <h2>From message to <em>live</em></h2>
+                    <p>Five steps, and you approve the important ones.</p>
                 </div>
 
-                <ol class="how-line" data-stagger>
-                    <li><b>01</b><span>Pick a package above</span></li>
-                    <li><b>02</b><span>Send it on WhatsApp — already typed out</span></li>
-                    <li><b>03</b><span>We start, you watch it move</span></li>
-                    <li><b>04</b><span>Pay on MTN or Airtel Money</span></li>
-                </ol>
+                <div class="flow" data-stagger>
+                    <div class="flow-step">
+                        <div class="flow-n">01</div>
+                        <div class="flow-body">
+                            <h3>We talk it through</h3>
+                            <p>Tell us what the business does and who you're trying to reach. We agree the page list, the look and a delivery date — all before any money moves.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-n">02</div>
+                        <div class="flow-body">
+                            <h3>$250 starts the work</h3>
+                            <p>Half up front is what puts your build in the queue. Pay it on MTN or Airtel Money, or in cash at the office, and we begin.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-n">03</div>
+                        <div class="flow-body">
+                            <h3>We build it in the open</h3>
+                            <p>You see it coming together as it happens, not only at the end. Changes are far easier while it's being built — so that's when we ask you for them.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-n">04</div>
+                        <div class="flow-body">
+                            <h3>You review it properly</h3>
+                            <p>Nothing goes live until you've had a proper look on your own phone and said yes to it.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="flow-n">05</div>
+                        <div class="flow-body">
+                            <h3>We launch, you settle</h3>
+                            <p>The site goes live with your domain email set up alongside it. The remaining balance is due once it's up and you can see it working.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== 6. FAQ === -->
+        <section id="faq" class="hub-sec hub-sec--line">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">Straight answers</span>
+                    <h2>Before you <em>ask</em></h2>
+                </div>
+
+                <div class="faq fade-up">
+                    <details class="faq-item">
+                        <summary>What does the $500 actually cover?</summary>
+                        <div class="faq-a">The design, build and launch of your site, plus a business email on your own domain. The exact page list is agreed with you before anything starts, so you know precisely what you're getting for the money.</div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>Can I pay in instalments?</summary>
+                        <div class="faq-a">$250 starts the work and the balance is due on delivery, once the site is built and you've seen it. If you need a different arrangement, ask — it's a conversation, not a form.</div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>How long does it take?</summary>
+                        <div class="faq-a">It depends on how many pages you need and how quickly you get us your content — photos, prices, the text about your business. We agree a delivery date with you upfront, before you pay anything.</div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>What if I already have a domain?</summary>
+                        <div class="faq-a">Bring it — we'll work with what you already have. If you don't have one yet, we'll sort that out together as part of getting you live.</div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>Will I be able to update it myself?</summary>
+                        <div class="faq-a">Tell us what you'll want to change regularly — prices, photos, opening hours — and we'll set it up so you can. Agree it with us before we start and it gets built in from the beginning.</div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>Do you handle the social media side too?</summary>
+                        <div class="faq-a">We do — that's the other half of what we build. See <a href="/growth/">growth packages</a> for followers on Instagram, TikTok, Facebook and YouTube.</div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================== 7. CLOSE === -->
+        <section class="hub-close">
+            <div class="container">
+                <h2>Let's build the <em>real thing.</em></h2>
+                <p>Send us a message and tell us about the business. We'll tell you what it needs — and just as honestly, what it doesn't.</p>
+
+                <div class="hub-cta-row">
+                    <a href="https://wa.me/256762193386?text=Hi%2C%20I%27d%20like%20the%20%24500%20Website%20Package." target="_blank" rel="noopener" class="hub-btn hub-btn--solid">
+                        <i class="fab fa-whatsapp"></i> Order the package
+                    </a>
+                    <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="hub-btn hub-btn--ghost">
+                        Ask a question first <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <p class="hub-close-note">$250 starts the work. Nothing is charged on this website.</p>
             </div>
         </section>
 
@@ -208,6 +380,13 @@
                 <p>The elite digital standard. Connect first, pay after.</p>
             </div>
             <div class="f-links fade-up delay-2">
+                <h4 class="f-head">Build</h4>
+                <a href="#package">Website package</a>
+                <a href="#emails">Business emails</a>
+                <a href="#fliers">Fliers &amp; design</a>
+                <a href="#process">How we build it</a>
+            </div>
+            <div class="f-links fade-up delay-3">
                 <h4 class="f-head">Grow</h4>
                 <a href="/growth/">All growth plans</a>
                 <a href="/instagram-boost/">Instagram Boost</a>
@@ -215,15 +394,10 @@
                 <a href="/facebook-boost/">Facebook Boost</a>
                 <a href="/youtube-boost/">YouTube Boost</a>
             </div>
-            <div class="f-links fade-up delay-3">
-                <h4 class="f-head">Build</h4>
-                <a href="#website">Website packages</a>
-                <a href="#emails">Business emails</a>
-                <a href="#fliers">Fliers &amp; design</a>
-            </div>
             <div class="f-links fade-up delay-4">
                 <h4 class="f-head">Command Center</h4>
                 <a href="https://wa.me/256762193386" target="_blank" rel="noopener">VIP WhatsApp Support</a>
+                <a href="https://www.instagram.com/the97world" target="_blank" rel="noopener">Instagram</a>
                 <a href="/trust/">Trust Centre</a>
                 <a href="/terms-of-service/">Terms of Protocol</a>
                 <a href="/privacy-policy/">Privacy Doctrine</a>

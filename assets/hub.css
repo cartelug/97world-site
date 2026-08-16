@@ -1,0 +1,392 @@
+/**
+ * 97 WORLD — HUB PAGES
+ *
+ * The two pages people actually decide on: /growth/ and /websites/.
+ * They share HOME/style.css for chrome (nav, footer, motion) and add
+ * everything below for the parts that have to carry weight — the offer,
+ * the objections and the close.
+ *
+ * One accent per hub, set on <body data-hub>. Growth is emerald, Build is
+ * azure — the same two colours the home page already uses to tell the
+ * paths apart, so arriving here confirms the choice instead of resetting it.
+ */
+
+body[data-hub="growth"] {
+    --hub: #00FFB2;
+    --hub-2: #b8ff4d;
+    --hub-ink: #04120d;
+    --hub-8: rgba(0, 255, 178, 0.08);
+    --hub-14: rgba(0, 255, 178, 0.14);
+    --hub-35: rgba(0, 255, 178, 0.35);
+}
+
+body[data-hub="build"] {
+    --hub: #6be4ff;
+    --hub-2: #9d8bff;
+    --hub-ink: #041016;
+    --hub-8: rgba(107, 228, 255, 0.08);
+    --hub-14: rgba(107, 228, 255, 0.14);
+    --hub-35: rgba(107, 228, 255, 0.35);
+}
+
+/* the shared heading gradient follows the hub instead of always being emerald */
+body[data-hub] .sec-title em,
+body[data-hub] .display-hero em {
+    background: linear-gradient(100deg, var(--hub), var(--hub-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+/* ==========================================================================
+   HERO
+   A hub hero is not a home hero: it is read by someone who has already
+   chosen. It states what this page is, proves it can be trusted, and gets
+   out of the way — so it is sized to its content, never a forced 100vh.
+   ========================================================================== */
+.hub-hero {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+    min-height: clamp(500px, 74vh, 720px);
+    padding: 140px 0 72px;
+    text-align: center;
+}
+.hub-hero > .container { position: relative; z-index: 3; }
+
+.hub-hero-bg { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center 22%; background-repeat: no-repeat; }
+.hub-hero-bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(2,2,2,0.82) 0%, rgba(2,2,2,0.62) 34%, rgba(2,2,2,0.7) 68%, #020202 100%);
+}
+/* the campaign photo is served at the size the screen can actually use */
+.hub-hero-bg--campaign { background-image: url("/IMAGES/hero-campaign-mobile.jpg"); background-position: top center; }
+@media(min-width: 768px) {
+    .hub-hero-bg--campaign { background-image: url("/IMAGES/hero-campaign.jpg"); background-position: center 20%; }
+}
+/* build has no campaign photo — it gets a quiet mesh instead, which reads
+   more like a studio and less like a promo */
+.hub-hero-mesh {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+        radial-gradient(60% 55% at 18% 12%, rgba(107,228,255,0.14), transparent 70%),
+        radial-gradient(55% 50% at 84% 20%, rgba(157,139,255,0.12), transparent 70%),
+        radial-gradient(70% 60% at 50% 100%, rgba(107,228,255,0.05), transparent 70%);
+}
+.hub-hero-grid {
+    position: absolute; inset: 0; z-index: 1; opacity: 0.5;
+    background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 30%, transparent 100%);
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 30%, transparent 100%);
+}
+
+.hub-eyebrow {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 8px 16px 8px 11px; margin-bottom: 22px;
+    border-radius: 100px; border: 1px solid var(--hub-35);
+    background: rgba(8,9,12,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; color: #dcdce4;
+}
+.hub-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--hub); box-shadow: 0 0 10px var(--hub); flex: none; }
+
+.hub-hero h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); line-height: 1.02; letter-spacing: -0.035em; font-weight: 700; }
+.hub-lead { max-width: 620px; margin: 18px auto 0; font-size: clamp(1rem, 2.1vw, 1.2rem); color: #b4b4be; line-height: 1.6; }
+
+.hub-cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+.hub-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 16px 28px; border-radius: 100px;
+    font-family: var(--font-body); font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: transform 0.3s var(--curve-spring), box-shadow 0.3s, border-color 0.3s, background 0.3s;
+    -webkit-tap-highlight-color: transparent;
+}
+.hub-btn--solid { background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink); box-shadow: 0 18px 40px -20px var(--hub); }
+.hub-btn--solid:hover { transform: translateY(-3px); box-shadow: 0 24px 52px -20px var(--hub); }
+.hub-btn--ghost { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.16); color: #fff; }
+.hub-btn--ghost:hover { transform: translateY(-3px); border-color: var(--hub-35); background: var(--hub-8); }
+.hub-btn:active { transform: scale(0.97); }
+.hub-btn i { transition: transform 0.25s; }
+.hub-btn:hover i { transform: translateX(4px); }
+
+/* ==========================================================================
+   STAT STRIP — the numbers, stated once, directly under the promise
+   ========================================================================== */
+.hub-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    max-width: 860px; margin: 40px auto 0;
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden;
+    background: rgba(255,255,255,0.08);
+}
+.hub-stats div { padding: 20px 12px; background: rgba(6,7,10,0.92); }
+.hub-stats b { display: block; font-family: var(--font-display); font-size: clamp(1.2rem, 3.4vw, 1.7rem); font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+.hub-stats div[data-plus] b::after { content: '+'; color: var(--hub); }
+.hub-stats span { display: block; margin-top: 7px; font-size: 0.7rem; color: var(--clr-muted); line-height: 1.35; }
+
+/* ==========================================================================
+   SECTION SHELL
+   ========================================================================== */
+.hub-sec { position: relative; padding: 96px 0; scroll-margin-top: 88px; }
+.hub-sec--tight { padding: 72px 0; }
+.hub-sec--line { border-top: 1px solid rgba(255,255,255,0.06); }
+.hub-sec--raised { background: linear-gradient(180deg, rgba(255,255,255,0.018), transparent 60%); }
+
+.hub-head { max-width: 680px; margin: 0 auto 44px; text-align: center; }
+.hub-kicker {
+    display: inline-block; margin-bottom: 14px;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hub);
+}
+.hub-head h2 { font-size: clamp(1.9rem, 5.2vw, 2.9rem); line-height: 1.06; letter-spacing: -0.025em; }
+.hub-head h2 em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hub-head p { margin-top: 14px; font-size: 1rem; color: var(--clr-muted); line-height: 1.6; }
+
+/* ==========================================================================
+   SPEC GRID — what you actually get, one claim per tile
+   ========================================================================== */
+.spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.spec {
+    position: relative; overflow: hidden;
+    padding: 26px 24px; border-radius: 20px;
+    background: rgba(8,9,12,0.86); border: 1px solid rgba(255,255,255,0.09);
+    transition: transform 0.35s var(--curve-spring), border-color 0.3s, background 0.3s;
+}
+.spec:hover { transform: translateY(-4px); border-color: var(--hub-35); background: rgba(12,14,18,0.92); }
+.spec-ic {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; margin-bottom: 16px;
+    border-radius: 13px; background: var(--hub-14); color: var(--hub); font-size: 1.05rem;
+}
+.spec h3 { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 7px; }
+.spec p { font-size: 0.88rem; color: var(--clr-muted); line-height: 1.55; }
+
+/* ==========================================================================
+   PLATFORM RAIL — what we grow, and where it goes
+   ========================================================================== */
+.plat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.plat {
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 24px 22px; border-radius: 20px;
+    background: rgba(8,9,12,0.86); border: 1px solid rgba(255,255,255,0.09);
+    color: #fff;
+    transition: transform 0.35s var(--curve-spring), border-color 0.3s, background 0.3s;
+}
+.plat:hover { transform: translateY(-5px); border-color: var(--hub-35); background: rgba(12,14,18,0.94); }
+.plat:active { transform: scale(0.98); }
+.plat-top { display: flex; align-items: center; gap: 12px; }
+.plat-top img { width: 34px; height: 34px; object-fit: contain; flex: none; }
+.plat-top b { font-family: var(--font-display); font-size: 1.12rem; font-weight: 700; }
+.plat p { font-size: 0.85rem; color: var(--clr-muted); line-height: 1.5; flex: 1; }
+.plat-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-top: 13px; border-top: 1px dashed rgba(255,255,255,0.12); }
+.plat-from { font-size: 0.74rem; color: var(--clr-muted); }
+.plat-from b { display: block; margin-top: 2px; font-family: var(--font-display); font-size: 1rem; color: #fff; font-weight: 700; }
+.plat-go { font-size: 0.8rem; font-weight: 700; color: var(--hub); white-space: nowrap; }
+.plat-go i { transition: transform 0.25s; margin-left: 5px; }
+.plat:hover .plat-go i { transform: translateX(4px); }
+
+/* ==========================================================================
+   COMPARISON — the objection nobody says out loud, answered in a table
+   ========================================================================== */
+.cmp { max-width: 820px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; overflow: hidden; }
+.cmp-row { display: grid; grid-template-columns: 1.35fr 1fr 1fr; align-items: stretch; }
+.cmp-row + .cmp-row { border-top: 1px solid rgba(255,255,255,0.07); }
+.cmp-row > * { padding: 16px 18px; display: flex; align-items: center; gap: 9px; font-size: 0.87rem; line-height: 1.4; }
+.cmp-head { background: rgba(255,255,255,0.03); }
+.cmp-head > * { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; color: var(--clr-muted); }
+.cmp-head .cmp-us { color: var(--hub); }
+.cmp-what { color: #d6d6de; font-weight: 600; }
+.cmp-us { background: var(--hub-8); color: #fff; font-weight: 600; }
+.cmp-them { color: #7d7d87; }
+.cmp-us i { color: var(--hub); flex: none; font-size: 0.82rem; }
+.cmp-them i { color: #55555e; flex: none; font-size: 0.82rem; }
+
+/* ==========================================================================
+   PROCESS — numbered, with the line that makes it read as a sequence
+   ========================================================================== */
+.flow { max-width: 760px; margin: 0 auto; display: grid; gap: 0; }
+.flow-step { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding-bottom: 34px; }
+.flow-step:last-child { padding-bottom: 0; }
+.flow-step::before {
+    content: ''; position: absolute; left: 27px; top: 52px; bottom: 6px; width: 2px;
+    background: linear-gradient(to bottom, var(--hub-35), rgba(255,255,255,0.05));
+}
+.flow-step:last-child::before { display: none; }
+.flow-n {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    width: 56px; height: 56px; border-radius: 18px;
+    background: rgba(8,9,12,0.95); border: 1px solid var(--hub-35);
+    font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--hub);
+}
+.flow-body { padding-top: 8px; }
+.flow-body h3 { font-size: 1.12rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 6px; }
+.flow-body p { font-size: 0.9rem; color: var(--clr-muted); line-height: 1.58; }
+
+/* ==========================================================================
+   FAQ — <details>, so it works with no JavaScript at all
+   ========================================================================== */
+.faq { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
+.faq-item {
+    border: 1px solid rgba(255,255,255,0.09); border-radius: 16px;
+    background: rgba(8,9,12,0.82); overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+}
+.faq-item[open] { border-color: var(--hub-35); background: rgba(12,14,18,0.92); }
+.faq-item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 19px 22px; cursor: pointer; list-style: none;
+    font-size: 0.98rem; font-weight: 700; color: #fff;
+    -webkit-tap-highlight-color: transparent;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+    content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+    font-size: 0.76rem; color: var(--hub); flex: none; transition: transform 0.3s;
+}
+.faq-item[open] summary::after { transform: rotate(180deg); }
+.faq-item summary:hover { color: var(--hub); }
+.faq-a { padding: 0 22px 20px; font-size: 0.9rem; color: var(--clr-muted); line-height: 1.65; }
+.faq-a a { color: var(--hub); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ==========================================================================
+   CLOSING BAND
+   ========================================================================== */
+.hub-close { position: relative; overflow: hidden; padding: 84px 0 92px; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); }
+.hub-close::before {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(60% 100% at 50% 100%, var(--hub-8), transparent 72%);
+}
+.hub-close > .container { position: relative; z-index: 2; }
+.hub-close h2 { font-size: clamp(1.8rem, 5vw, 2.7rem); line-height: 1.08; letter-spacing: -0.025em; }
+.hub-close h2 em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hub-close p { max-width: 520px; margin: 15px auto 0; color: var(--clr-muted); font-size: 0.98rem; line-height: 1.6; }
+.hub-close .hub-cta-row { margin-top: 28px; }
+.hub-close-note { margin-top: 20px; font-size: 0.8rem; color: #6a6a73; }
+
+/* ==========================================================================
+   OFFER CARDS — the build hub's packages
+   ========================================================================== */
+.offer-grid { display: grid; gap: 16px; max-width: 940px; margin: 0 auto; }
+.offer-card {
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column; gap: 18px;
+    padding: 32px; border-radius: 24px;
+    background: rgba(8,9,12,0.88); border: 1px solid rgba(255,255,255,0.1);
+    scroll-margin-top: 96px;
+    transition: transform 0.35s var(--curve-spring), border-color 0.3s;
+}
+.offer-card:hover { transform: translateY(-4px); border-color: var(--hub-35); }
+.offer-card.is-hero {
+    border-color: var(--hub);
+    background-image: linear-gradient(150deg, var(--hub-8), transparent 55%);
+    box-shadow: 0 0 0 1px var(--hub), 0 30px 60px -34px var(--hub);
+}
+.oc-flag {
+    position: absolute; top: 0; right: 0; z-index: 2;
+    padding: 7px 16px; border-bottom-left-radius: 15px;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink);
+    font-size: 0.62rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
+}
+/* the badge sits in the corner the price wants — give the content room below it */
+.offer-card.has-flag { padding-top: 48px; }
+.oc-head { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.oc-ic {
+    flex: none; width: 50px; height: 50px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 15px; background: var(--hub-14); color: var(--hub); font-size: 1.2rem;
+}
+.oc-title { flex: 1; min-width: 190px; }
+.oc-title h3 { font-size: 1.45rem; font-weight: 700; letter-spacing: -0.015em; }
+.oc-title p { font-size: 0.92rem; color: var(--clr-muted); margin-top: 6px; line-height: 1.55; }
+.oc-price { flex: none; text-align: right; }
+.oc-price b {
+    display: block; font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; letter-spacing: -0.03em;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.oc-price small { display: block; font-size: 0.74rem; color: var(--clr-muted); margin-top: 3px; }
+
+.oc-feats { list-style: none; display: grid; gap: 11px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 2px; }
+.oc-feats li { display: flex; align-items: flex-start; gap: 11px; font-size: 0.9rem; color: #c8c8d0; line-height: 1.5; }
+.oc-feats li:first-child { padding-top: 16px; }
+.oc-feats i { color: var(--hub); font-size: 0.82rem; margin-top: 4px; flex: none; }
+
+.oc-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 16px 24px; border-radius: 14px;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink);
+    font-weight: 700; font-size: 0.98rem;
+    transition: transform 0.28s var(--curve-spring), box-shadow 0.28s;
+    box-shadow: 0 16px 34px -20px var(--hub);
+}
+.oc-cta:hover { transform: translateY(-2px); box-shadow: 0 22px 44px -20px var(--hub); }
+.oc-cta:active { transform: scale(0.98); }
+.oc-cta--quiet { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.16); color: #fff; box-shadow: none; }
+.oc-cta--quiet:hover { border-color: var(--hub-35); background: var(--hub-8); box-shadow: none; }
+
+.offer-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* ==========================================================================
+   BUILDER FRAME — the configurator gets a stage on the growth hub
+   ========================================================================== */
+.builder-wrap { position: relative; max-width: 620px; margin: 0 auto; }
+.builder-wrap::before {
+    content: ''; position: absolute; inset: -18% -12% -8%; z-index: 0;
+    background: radial-gradient(55% 50% at 50% 40%, var(--hub-8), transparent 72%);
+    pointer-events: none;
+}
+.builder-wrap > * { position: relative; z-index: 1; }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media(max-width: 900px) {
+    .spec-grid { grid-template-columns: repeat(2, 1fr); }
+    .plat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media(max-width: 720px) {
+    .hub-hero { min-height: auto; padding: 122px 0 60px; }
+    .hub-sec { padding: 72px 0; }
+    .hub-sec--tight { padding: 56px 0; }
+    .hub-head { margin-bottom: 32px; }
+    .hub-stats { grid-template-columns: repeat(2, 1fr); margin-top: 32px; }
+    .hub-cta-row { flex-direction: column; }
+    .hub-btn { width: 100%; }
+    .offer-pair { grid-template-columns: 1fr; }
+    .offer-card { padding: 24px; }
+    .offer-card.has-flag { padding-top: 46px; }
+    /* icon and price share the top line, the title spans underneath — one
+       row saved on the screen where rows are scarcest */
+    .oc-head {
+        display: grid; gap: 14px 12px; align-items: center;
+        grid-template-columns: auto 1fr;
+        grid-template-areas: "ic price" "title title";
+    }
+    .oc-ic { grid-area: ic; }
+    .oc-price { grid-area: price; text-align: right; }
+    .oc-title { grid-area: title; min-width: 0; }
+    .oc-price b { font-size: 1.7rem; }
+    .cmp-row { grid-template-columns: 1fr; }
+    .cmp-row > * { padding: 11px 16px; }
+    .cmp-head { display: none; }
+    .cmp-what { background: rgba(255,255,255,0.03); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clr-muted); }
+    .cmp-us::before { content: '97 World'; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--hub); margin-right: 2px; }
+    .cmp-them::before { content: 'Others'; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #55555e; margin-right: 2px; }
+    .flow-step { grid-template-columns: 46px 1fr; gap: 16px; padding-bottom: 28px; }
+    .flow-n { width: 46px; height: 46px; border-radius: 15px; font-size: 0.98rem; }
+    .flow-step::before { left: 22px; top: 42px; }
+}
+@media(max-width: 480px) {
+    .spec-grid { grid-template-columns: 1fr; }
+    .plat-grid { grid-template-columns: 1fr; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+    .spec, .plat, .offer-card, .hub-btn, .oc-cta { transition: none !important; }
+    .spec:hover, .plat:hover, .offer-card:hover, .hub-btn:hover, .oc-cta:hover { transform: none !important; }
+}
