@@ -1,0 +1,17 @@
+name = "the97-orders"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Orders and the cached Fastway catalogue live here.
+# Create with:  npx wrangler kv namespace create ORDERS
+# then paste the returned id below.
+[[kv_namespaces]]
+binding = "ORDERS"
+id = "PASTE_KV_ID_HERE"
+
+# Secrets are NOT set here — they'd end up in git. Set them with:
+#   npx wrangler secret put FASTWAY_KEY
+#   npx wrangler secret put ADMIN_TOKEN
+
+[observability]
+enabled = true
