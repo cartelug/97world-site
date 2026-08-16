@@ -206,13 +206,28 @@
             });
         }
 
+        // Never fail silently — a non-technical person staring at a dead
+        // button with no error is the worst possible failure mode. If the
+        // normal toast can't show for any reason, fall back to alert().
+        function loudError(msg) {
+            try { OrderKit.toast(msg); } catch (e) { alert(msg); }
+        }
+
         $('signin').addEventListener('click', function () {
+            var btn = $('signin');
             var t = $('token').value.trim();
-            if (!t) return;
+            if (!t) { loudError('Paste your admin token first — the box is empty.'); return; }
+
+            btn.disabled = true;
+            btn.querySelector('.wb-label').textContent = 'Connecting…';
+
             signIn(t).catch(function (err) {
-                OrderKit.toast(err.message === 'Not authorised'
-                    ? 'That token was not accepted.'
+                loudError(err.message === 'Not authorised'
+                    ? 'That token was not accepted. Check it matches ADMIN_TOKEN in Cloudflare exactly.'
                     : ('Could not reach the Worker — ' + err.message));
+            }).then(function () {
+                btn.disabled = false;
+                btn.querySelector('.wb-label').textContent = 'Open the desk';
             });
         });
         $('token').addEventListener('keypress', function (e) {
