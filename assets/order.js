@@ -258,26 +258,11 @@
 
         /* ----------------------------------------------------------- motion */
 
+        /* Scroll reveal lives in assets/motion.js now — one engine for the
+           whole site. Kept as a no-op so a page that still calls it, or an
+           older cached script, cannot throw. */
         reveal: function () {
-            document.querySelectorAll('[data-stagger]').forEach(function (group) {
-                Array.prototype.forEach.call(group.children, function (child, i) {
-                    child.style.setProperty('--i', i);
-                });
-            });
-
-            var targets = document.querySelectorAll('.r-up, [data-stagger]');
-            if (reduceMotion || !('IntersectionObserver' in window)) {
-                targets.forEach(function (el) { el.classList.add('is-in'); });
-                return;
-            }
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    if (!entry.isIntersecting) return;
-                    entry.target.classList.add('is-in');
-                    io.unobserve(entry.target); // checkout: reveal once, never re-hide
-                });
-            }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
-            targets.forEach(function (el) { io.observe(el); });
+            if (window.Motion) window.Motion.observe();
         },
 
         stickyNav: function () {

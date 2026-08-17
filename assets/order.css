@@ -1649,3 +1649,72 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 @media(prefers-reduced-motion: reduce) {
     .wa-fab { transition: none; }
 }
+
+/* ==========================================================================
+   MOTION — the wizard's own feedback
+   Shared primitives live in assets/motion.css. These bind them to the
+   checkout, where motion has one job: confirm that the tap registered and
+   show what changed, without ever delaying the next tap.
+   ========================================================================== */
+
+/* Choosing a plan is the page's main act — the card answers immediately and
+   the chosen one settles a touch proud of the rest. */
+.plan-card { transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), border-color 0.25s ease, background 0.25s ease, box-shadow 0.3s ease; }
+.plan-card:active { transform: scale(0.985); }
+.plan-card.is-on { animation: ordPick var(--m-slow, 380ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)); }
+@keyframes ordPick {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--acc) 45%, transparent); }
+    100% { box-shadow: 0 0 0 1px var(--acc), 0 20px 44px -24px color-mix(in srgb, var(--acc) 80%, transparent); }
+}
+
+/* Switching service tab re-prices the grid — the new ladder slides up into
+   place so it reads as a change, not a reload. */
+.svc-tab { transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), border-color 0.2s ease, background 0.2s ease; }
+.svc-tab:active { transform: scale(0.97); }
+.plan-grid { animation: ordGrid var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)); }
+@keyframes ordGrid { from { opacity: 0; transform: translate3d(0, 8px, 0); } }
+
+/* Plan cards cascade rather than landing as one slab. */
+.plan-card { animation: ordCard var(--m-slow, 380ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
+.plan-card:nth-child(1) { animation-delay: 0ms; }
+.plan-card:nth-child(2) { animation-delay: 45ms; }
+.plan-card:nth-child(3) { animation-delay: 90ms; }
+.plan-card:nth-child(4) { animation-delay: 135ms; }
+.plan-card:nth-child(5) { animation-delay: 180ms; }
+.plan-card:nth-child(6) { animation-delay: 225ms; }
+.plan-card:nth-child(n+7) { animation-delay: 270ms; }
+@keyframes ordCard { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
+
+/* Claiming a gift ticks over. */
+.gift { transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), border-color 0.25s ease, background 0.25s ease; }
+.gift:active { transform: scale(0.985); }
+.gift.is-open .gift-state { animation: ordClaim var(--m-slow, 380ms) cubic-bezier(0.34, 1.4, 0.64, 1); }
+@keyframes ordClaim { from { opacity: 0; transform: scale(0.7); } }
+
+/* Buttons and the progress track. */
+.wiz-btn, .btn-wa, .btn-ghost { transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), opacity 0.2s ease, background 0.25s ease; }
+.wiz-btn:active:not(:disabled), .btn-wa:active, .btn-ghost:active { transform: scale(0.98); }
+.wiz-track li { transition: color var(--m-base, 260ms) ease, border-color var(--m-base, 260ms) ease; }
+
+/* The review sheet's rows arrive in order, so the total is read last. */
+.sheet[aria-hidden="false"] .sum-row { animation: ordSum var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
+.sum-row:nth-child(1) { animation-delay: 20ms; }
+.sum-row:nth-child(2) { animation-delay: 55ms; }
+.sum-row:nth-child(3) { animation-delay: 90ms; }
+.sum-row:nth-child(4) { animation-delay: 125ms; }
+.sum-row:nth-child(n+5) { animation-delay: 160ms; }
+@keyframes ordSum { from { opacity: 0; transform: translate3d(0, 7px, 0); } }
+
+/* A field that failed validation shakes once — short, and only once. */
+.field.has-error .field-box { animation: ordShake 320ms ease-in-out; }
+@keyframes ordShake {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-4px); }
+    75%      { transform: translateX(4px); }
+}
+
+@media(prefers-reduced-motion: reduce) {
+    .plan-card, .svc-tab, .gift, .wiz-btn, .btn-wa, .btn-ghost { transition: none !important; transform: none !important; }
+    .plan-card, .plan-grid, .gift.is-open .gift-state,
+    .sheet[aria-hidden="false"] .sum-row, .field.has-error .field-box { animation: none !important; }
+}

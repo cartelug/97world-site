@@ -1,0 +1,131 @@
+/**
+ * 97 WORLD — MOTION
+ *
+ * One motion vocabulary for every surface: the dark marketing pages, the
+ * order wizard, and the light /growth/ product page. Before this there were
+ * three separate reveal implementations that had drifted to different
+ * timings, so the same gesture felt different depending which page you were
+ * on.
+ *
+ * Rules this file holds itself to:
+ *   - Motion communicates state. It does not decorate.
+ *   - 160–420ms, natural easing. Nothing bounces for its own sake.
+ *   - Only opacity, transform and filter animate — never a property that
+ *     forces layout, so scrolling stays on the compositor.
+ *   - `will-change` is switched on by motion.js only while a transition is
+ *     actually running, never parked on an element for the session.
+ *   - Everything collapses to nothing under prefers-reduced-motion.
+ */
+
+:root {
+    --m-quick: 160ms;
+    --m-base: 260ms;
+    --m-slow: 380ms;
+    --m-reveal: 480ms;
+
+    /* decelerating — things arrive, they don't overshoot */
+    --m-out: cubic-bezier(0.16, 1, 0.3, 1);
+    /* a little life on press/pop, kept well short of a bounce */
+    --m-pop: cubic-bezier(0.34, 1.4, 0.64, 1);
+    --m-inout: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --m-stagger: 70ms;
+}
+
+/* ============================================ REVEAL PRIMITIVES === */
+
+.m-up, .m-fade, .m-scale, .m-left, .m-right {
+    opacity: 0;
+    transition: opacity var(--m-reveal) var(--m-out), transform var(--m-reveal) var(--m-out);
+    transition-delay: calc(var(--i, 0) * var(--m-stagger));
+}
+.m-up    { transform: translate3d(0, 22px, 0); }
+.m-scale { transform: scale(0.965); }
+.m-left  { transform: translate3d(-24px, 0, 0); }
+.m-right { transform: translate3d(24px, 0, 0); }
+
+.m-up.is-in, .m-fade.is-in, .m-scale.is-in, .m-left.is-in, .m-right.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* children of a stagger group animate as one wave */
+[data-stagger] > * {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition: opacity var(--m-reveal) var(--m-out), transform var(--m-reveal) var(--m-out);
+    transition-delay: calc(var(--i, 0) * var(--m-stagger));
+}
+[data-stagger].is-in > * { opacity: 1; transform: none; }
+
+/* pinned only while something is actually moving */
+.m-busy { will-change: opacity, transform; }
+
+/* ================================================ TOUCH FEEL === */
+
+/* Anything tappable should answer immediately. Scale only — no shadow or
+   colour change on press, which would read as a state change rather than
+   an acknowledgement. */
+.m-press { transition: transform var(--m-quick) var(--m-out); }
+.m-press:active { transform: scale(0.975); }
+
+/* Cards that are targets rather than buttons lift instead of compress. */
+.m-lift { transition: transform var(--m-base) var(--m-out), box-shadow var(--m-base) var(--m-out); }
+@media (hover: hover) {
+    .m-lift:hover { transform: translateY(-3px); }
+}
+
+/* An arrow that leans toward where it's taking you. */
+.m-arrow i, .m-arrow .m-arrow-ic { transition: transform var(--m-base) var(--m-out); }
+@media (hover: hover) {
+    .m-arrow:hover i, .m-arrow:hover .m-arrow-ic { transform: translateX(4px); }
+}
+
+/* ============================================ VALUE CHANGES === */
+
+/* When a figure changes, the figure moves — not the bar around it. */
+.m-roll { display: inline-block; transition: opacity var(--m-quick) var(--m-out), transform var(--m-quick) var(--m-out); }
+.m-roll.is-swap { opacity: 0; transform: translateY(-7px); }
+
+/* Content replaced in place (a tab switch, a re-rendered step). */
+.m-swap { animation: mSwap var(--m-base) var(--m-out); }
+@keyframes mSwap {
+    from { opacity: 0; transform: translate3d(0, 9px, 0); }
+}
+
+/* A one-shot confirmation on something that just became true. */
+.m-pop-in { animation: mPop var(--m-slow) var(--m-pop); }
+@keyframes mPop {
+    from { opacity: 0; transform: scale(0.6); }
+}
+
+/* Draws attention to a block whose meaning just changed (a price that
+   dropped, a mode that unlocked). Runs once, then gets out of the way. */
+.m-flash { animation: mFlash 900ms var(--m-out); }
+@keyframes mFlash {
+    0%   { box-shadow: 0 0 0 0 var(--m-flash-tint, rgba(0, 168, 115, 0.34)); }
+    100% { box-shadow: 0 0 0 14px rgba(0, 0, 0, 0); }
+}
+
+/* ================================================= ENTRANCE === */
+
+/* First paint: the page settles rather than snapping in. Applied to body
+   by motion.js so it can never leave content invisible if JS fails. */
+.m-enter { animation: mEnter var(--m-slow) var(--m-out); }
+@keyframes mEnter {
+    from { opacity: 0; }
+}
+
+/* ================================================ REDUCED === */
+
+@media (prefers-reduced-motion: reduce) {
+    .m-up, .m-fade, .m-scale, .m-left, .m-right,
+    [data-stagger] > * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .m-press:active, .m-lift:hover { transform: none !important; }
+    .m-swap, .m-pop-in, .m-flash, .m-enter { animation: none !important; }
+    .m-roll.is-swap { opacity: 1; transform: none; }
+}

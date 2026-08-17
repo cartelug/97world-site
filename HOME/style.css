@@ -33,33 +33,30 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 /* ==========================================================================
    MASTER ANIMATION CLASSES (Scroll & Open Effects)
    ========================================================================== */
-/* Bidirectional reveal system. Everything animates on transform+opacity
-   only (compositor-friendly); `will-change` is applied by JS just for the
-   duration of a transition instead of being pinned on every element. */
-.fade-up        { opacity: 0; transform: translate3d(0, 42px, 0); transition: opacity 0.9s var(--curve-smooth), transform 0.9s var(--curve-smooth); }
-.scale-in       { opacity: 0; transform: scale(0.9); transition: opacity 0.9s var(--curve-smooth), transform 0.9s var(--curve-smooth); }
-.slide-in-right { opacity: 0; transform: translate3d(52px, 0, 0); transition: opacity 0.9s var(--curve-smooth), transform 0.9s var(--curve-smooth); }
-.fade-in        { opacity: 0; transition: opacity 0.9s ease-in-out; }
+/* Reveal system. Everything animates on transform+opacity only
+   (compositor-friendly); `will-change` is applied by assets/motion.js just
+   for the duration of a transition instead of being pinned on every element.
+
+   Reveal is one-shot. It used to re-hide on the way out, which meant
+   scrolling back up dismantled the page behind you — and it disagreed with
+   the order pages and /growth/, which have always revealed once. Timings
+   match assets/motion.css so the same gesture feels the same everywhere. */
+.fade-up        { opacity: 0; transform: translate3d(0, 22px, 0); transition: opacity 0.48s var(--curve-smooth), transform 0.48s var(--curve-smooth); }
+.scale-in       { opacity: 0; transform: scale(0.965); transition: opacity 0.48s var(--curve-smooth), transform 0.48s var(--curve-smooth); }
+.slide-in-right { opacity: 0; transform: translate3d(26px, 0, 0); transition: opacity 0.48s var(--curve-smooth), transform 0.48s var(--curve-smooth); }
+.fade-in        { opacity: 0; transition: opacity 0.48s ease-in-out; }
 
 .is-visible { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-
-/* leaving the viewport — a shorter, gentler exit so scrolling back up
-   never feels like the page is fighting you */
-.fade-up.is-out        { opacity: 0; transform: translate3d(0, -26px, 0); transition-duration: 0.45s; transition-delay: 0s; }
-.scale-in.is-out       { opacity: 0; transform: scale(0.95); transition-duration: 0.45s; transition-delay: 0s; }
-.slide-in-right.is-out { opacity: 0; transform: translate3d(30px, 0, 0); transition-duration: 0.45s; transition-delay: 0s; }
-.fade-in.is-out        { opacity: 0; transition-duration: 0.45s; transition-delay: 0s; }
 .anim-busy { will-change: opacity, transform; }
 
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-.delay-4 { transition-delay: 0.4s; }
+.delay-1 { transition-delay: 0.07s; }
+.delay-2 { transition-delay: 0.14s; }
+.delay-3 { transition-delay: 0.21s; }
+.delay-4 { transition-delay: 0.28s; }
 
 /* ---- staggered groups: children cascade instead of arriving as a slab ---- */
-[data-stagger][data-stagger] > * { opacity: 0; transform: translate3d(0, 30px, 0); transition: opacity 0.72s var(--curve-smooth), transform 0.72s var(--curve-spring); transition-delay: calc(var(--i, 0) * 95ms); }
+[data-stagger][data-stagger] > * { opacity: 0; transform: translate3d(0, 18px, 0); transition: opacity 0.48s var(--curve-smooth), transform 0.48s var(--curve-smooth); transition-delay: calc(var(--i, 0) * 70ms); }
 [data-stagger][data-stagger].is-visible > * { opacity: 1; transform: translate3d(0, 0, 0); }
-[data-stagger][data-stagger].is-out > * { opacity: 0; transform: translate3d(0, -18px, 0); transition-duration: 0.4s; transition-delay: 0s; }
 
 /* ---- scroll progress rail ---- */
 .scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 1200; pointer-events: none; background: rgba(255,255,255,0.05); }
@@ -97,10 +94,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 @media(max-width: 720px) {
     /* shorter travel on small screens so motion reads as snappy, not laggy */
-    .fade-up { transform: translate3d(0, 26px, 0); }
-    [data-stagger][data-stagger] > * { transform: translate3d(0, 20px, 0); transition-delay: calc(var(--i, 0) * 65ms); }
-    .fade-up.is-out { transform: translate3d(0, -16px, 0); }
-    [data-stagger][data-stagger].is-out > * { transform: translate3d(0, -12px, 0); }
+    .fade-up { transform: translate3d(0, 16px, 0); }
+    [data-stagger][data-stagger] > * { transform: translate3d(0, 14px, 0); transition-delay: calc(var(--i, 0) * 55ms); }
 }
 
 @media(prefers-reduced-motion: reduce) {

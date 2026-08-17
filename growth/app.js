@@ -53,6 +53,9 @@
         submitted: false
     };
 
+    // last combo rate rendered, so we only celebrate an actual improvement
+    var lastRate = 0;
+
     function meta(key) { return P.PLAT_META[key] || { name: key }; }
 
     function mark(key, cls) {
@@ -431,7 +434,17 @@
         } else {
             saveRow.hidden = true;
         }
-        $('priceTotal').textContent = P.money(q.total, q.currency);
+        rollTo($('priceTotal'), P.money(q.total, q.currency));
+
+        // Crossing into a better combo rate is the moment worth marking, and
+        // the price is where the reward actually lands — so the price card
+        // gets the one-shot ring rather than the whole page getting confetti.
+        if (q.comboRate !== lastRate) {
+            if (q.comboRate > lastRate && window.Motion) {
+                window.Motion.flash(sec.querySelector('.price-card'));
+            }
+            lastRate = q.comboRate;
+        }
     }
 
     function renderDock() {
@@ -457,13 +470,8 @@
 
     /** Animate the figure, never the bar around it. */
     function rollTo(el, text) {
-        if (!el || el.textContent === text) { if (el) el.textContent = text; return; }
-        if (reduceMotion) { el.textContent = text; return; }
-        el.classList.add('is-swap');
-        window.setTimeout(function () {
-            el.textContent = text;
-            el.classList.remove('is-swap');
-        }, 140);
+        if (window.Motion) window.Motion.roll(el, text);
+        else if (el) el.textContent = text;
     }
 
     /* ------------------------------------------------------ interactions --- */
@@ -838,17 +846,8 @@
     }
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    /* reveal-on-scroll, cheap and one-shot */
-    if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (entries) {
-            entries.forEach(function (en) {
-                if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); }
-            });
-        }, { rootMargin: '0px 0px -8% 0px' });
-        document.querySelectorAll('.r-up').forEach(function (el) { io.observe(el); });
-    } else {
-        document.querySelectorAll('.r-up').forEach(function (el) { el.classList.add('is-in'); });
-    }
+    /* Scroll reveal comes from assets/motion.js — the shared engine also
+       picks up the nodes this file renders at runtime. */
 
     /* --------------------------------------------------------- region ----- */
 

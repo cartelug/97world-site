@@ -665,3 +665,66 @@ body.order-page .wa-fab { bottom: calc(var(--dock-h, 92px) + env(safe-area-inset
     .wa-fab { transition: opacity 0.2s linear; transform: none !important; }
     .wa-fab.is-visible { transform: none !important; }
 }
+
+/* ==========================================================================
+   MOTION — hover and press life on the dark pages
+   Shared primitives live in assets/motion.css; these bind them to the
+   components this stylesheet owns, so the markup does not have to carry
+   utility classes on every card.
+   ========================================================================== */
+
+/* Cards lift toward the pointer. Touch devices skip this entirely — a hover
+   state that sticks after a tap reads as a selection that never happened. */
+@media (hover: hover) {
+    .offer-card, .spec, .flow-step, .pop-card, .check {
+        transition: transform var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)),
+                    border-color var(--m-base, 260ms) ease,
+                    box-shadow var(--m-base, 260ms) ease;
+    }
+    .offer-card:hover, .spec:hover, .flow-step:hover, .check:hover {
+        transform: translateY(-3px);
+        border-color: var(--hub-35);
+    }
+    /* the nav underline grows from the left rather than fading in */
+    .nav-item { position: relative; }
+    .nav-item::after {
+        content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 1.5px;
+        background: var(--hub, #00FFB2); border-radius: 2px;
+        transform: scaleX(0); transform-origin: left;
+        transition: transform var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1));
+    }
+    .nav-item:hover::after { transform: scaleX(1); }
+}
+
+/* Everything tappable acknowledges the tap immediately. */
+.hub-btn:active, .oc-cta:active, .mm-link:active, .faq-item summary:active { transform: scale(0.98); }
+.oc-cta, .mm-link { transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), background var(--m-base, 260ms) ease, border-color var(--m-base, 260ms) ease; }
+
+/* FAQ rows open with the chevron, not after it. */
+.faq-item summary i, .faq-item summary::after { transition: transform var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)); }
+.faq-item[open] summary i { transform: rotate(180deg); }
+.faq-item[open] .faq-a { animation: hubFaq var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)); }
+@keyframes hubFaq { from { opacity: 0; transform: translate3d(0, -6px, 0); } }
+
+/* The proof rail's screenshots settle in sequence as the rail scrolls in. */
+.proof-rail.is-visible img, .proof-rail.is-in img { animation: hubProof var(--m-reveal, 480ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
+.proof-rail img:nth-child(1) { animation-delay: 0ms; }
+.proof-rail img:nth-child(2) { animation-delay: 60ms; }
+.proof-rail img:nth-child(3) { animation-delay: 120ms; }
+.proof-rail img:nth-child(4) { animation-delay: 180ms; }
+.proof-rail img:nth-child(5) { animation-delay: 240ms; }
+@keyframes hubProof { from { opacity: 0; transform: translate3d(0, 14px, 0); } }
+
+/* The trust strip's items tick in left to right on first paint. */
+.trust-strip li { animation: hubTrust var(--m-slow, 380ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
+.trust-strip li:nth-child(1) { animation-delay: 60ms; }
+.trust-strip li:nth-child(2) { animation-delay: 130ms; }
+.trust-strip li:nth-child(3) { animation-delay: 200ms; }
+.trust-strip li:nth-child(4) { animation-delay: 270ms; }
+@keyframes hubTrust { from { opacity: 0; transform: translate3d(-8px, 0, 0); } }
+
+@media(prefers-reduced-motion: reduce) {
+    .offer-card, .spec, .flow-step, .check, .nav-item::after,
+    .hub-btn, .oc-cta, .mm-link { transition: none !important; transform: none !important; }
+    .faq-item[open] .faq-a, .proof-rail img, .trust-strip li { animation: none !important; }
+}

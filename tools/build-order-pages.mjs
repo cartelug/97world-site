@@ -349,6 +349,7 @@ const html = (p) => `<!DOCTYPE html>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <link rel="stylesheet" href="/assets/motion.css">
     <link rel="stylesheet" href="/assets/order.css">
 </head>
 <body class="order-page" data-accent="${p.accent}">
@@ -568,6 +569,7 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
     </a>
 
     <script src="/assets/pricing.js"></script>
+    <script src="/assets/motion.js" defer></script>
     <script src="/assets/order.js"></script>
     <script src="/assets/wizard.js"></script>
     <script src="script.js"></script>

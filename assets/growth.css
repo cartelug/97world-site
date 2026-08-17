@@ -603,7 +603,54 @@ a { color: inherit; text-decoration: none; }
 .swap-in { animation: gSwap var(--g-mid) var(--g-ease); }
 @keyframes gSwap { from { opacity: 0; transform: translateY(10px); } }
 
+/* ---- a step that has just become answerable arrives, it doesn't appear --- */
+.g-sec[id]:not([hidden]) > .g-sec-head,
+#goalWrap, #packGrid, #qtyRow, #mixList, #acctList { animation: gStep var(--g-mid) var(--g-ease); }
+@keyframes gStep { from { opacity: 0; transform: translate3d(0, 8px, 0); } }
+
+/* ---- combo unlock: the pips fill left to right, then the card settles --- */
+.combo-pip.is-on { animation: gPip 320ms var(--g-ease) backwards; }
+.combo-pip:nth-child(1).is-on { animation-delay: 0ms; }
+.combo-pip:nth-child(2).is-on { animation-delay: 60ms; }
+.combo-pip:nth-child(3).is-on { animation-delay: 120ms; }
+@keyframes gPip { from { transform: scaleX(0); transform-origin: left; } }
+
+.combo-state { animation: gState 340ms var(--g-ease); }
+@keyframes gState { from { opacity: 0; transform: translate3d(0, 6px, 0); } }
+
+/* the reward is the price change, so that is what gets the one-shot ring */
+.combo-card.is-on { animation: gUnlock 720ms var(--g-ease); }
+@keyframes gUnlock {
+    0%   { box-shadow: 0 0 0 0 rgba(0, 135, 95, 0.28); }
+    100% { box-shadow: var(--g-shadow-up); }
+}
+
+/* ---- the saving line slides in under the price it belongs to --- */
+.price-row.is-save:not([hidden]) { animation: gSave 300ms var(--g-ease); }
+@keyframes gSave { from { opacity: 0; transform: translate3d(0, -5px, 0); } }
+
+/* ---- selection feedback: compress on press, tick pops after --- */
+.plat-tile, .goal-chip, .goal-card, .qty-chip, .pack-card, .pop-item, .strip-chip, .g-btn, .mix-row {
+    -webkit-tap-highlight-color: transparent;
+}
+.pop-item:active, .pack-card:active, .goal-card:active { transform: scale(0.99); }
+
+/* ---- search results land as a short cascade --- */
+.g-results .g-result { animation: gStep var(--g-mid) var(--g-ease) backwards; }
+.g-results .g-result:nth-child(1) { animation-delay: 0ms; }
+.g-results .g-result:nth-child(2) { animation-delay: 40ms; }
+.g-results .g-result:nth-child(3) { animation-delay: 80ms; }
+.g-results .g-result:nth-child(4) { animation-delay: 120ms; }
+.g-results .g-result:nth-child(5) { animation-delay: 160ms; }
+.g-results .g-result:nth-child(6) { animation-delay: 200ms; }
+
+/* ---- the dock's figure rolls; the dock itself stays put --- */
+.g-dock.is-on .g-dock-price { animation: none; }
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     .r-up { opacity: 1; transform: none; }
+    .combo-pip.is-on, .combo-state, .combo-card.is-on,
+    .price-row.is-save:not([hidden]), .g-results .g-result,
+    #goalWrap, #packGrid, #qtyRow, #mixList, #acctList { animation: none !important; }
 }
