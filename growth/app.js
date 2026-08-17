@@ -824,6 +824,160 @@
         }
     });
 
+    /* ------------------------------------------------------ quick order --- */
+
+    /**
+     * The panel-shaped shortcut: category, service, link, quantity, charge.
+     *
+     * It is a second *entrance*, not a second checkout — submitting writes
+     * into the same S the guided flow uses and opens the same review sheet,
+     * so there is exactly one order pipeline, one WhatsApp message and one
+     * Sheets row no matter which way somebody came in.
+     *
+     * Quantity is a select of real tiers rather than a free number box: the
+     * price list is tiered, so a typed 7,500 has no price we could quote
+     * without inventing one.
+     */
+    var QO = {
+        el: {},
+
+        init: function () {
+            QO.el.cat = $('qoCat');
+            QO.el.svc = $('qoSvc');
+            QO.el.qty = $('qoQty');
+            QO.el.link = $('qoLink');
+            QO.el.charge = $('qoCharge');
+            if (!QO.el.cat) return;
+
+            var all = P.GROWTH_PRIMARY.concat(P.GROWTH_MORE);
+            QO.el.cat.innerHTML = all.map(function (key) {
+                return '<option value="' + key + '">' + meta(key).name + '</option>';
+            }).join('');
+
+            QO.el.cat.addEventListener('change', function () { QO.fillServices(); });
+            QO.el.svc.addEventListener('change', function () { QO.fillQtys(); });
+            QO.el.qty.addEventListener('change', function () { QO.paint(); });
+            QO.el.link.addEventListener('input', function () {
+                $('qoLinkErr').hidden = true;
+                $('qoLinkField').classList.remove('is-bad');
+            });
+            $('qoSubmit').addEventListener('click', QO.submit);
+
+            QO.fillServices();
+        },
+
+        fillServices: function () {
+            var key = QO.el.cat.value;
+            // only services with a real ladder can be quoted here
+            var ids = (P.PLATFORMS[key].services || []).filter(function (id) {
+                var s = P.SERVICES_BY_ID[id];
+                return s && s.sizes && s.sizes.length;
+            });
+            QO.el.svc.innerHTML = ids.map(function (id) {
+                return '<option value="' + id + '">' + P.SERVICES_BY_ID[id].short + '</option>';
+            }).join('');
+
+            var hint = P.ACCOUNT_HINTS[key] || { placeholder: 'Profile link' };
+            QO.el.link.placeholder = hint.placeholder;
+            QO.fillQtys();
+        },
+
+        fillQtys: function () {
+            var id = QO.el.svc.value;
+            var cur = P.Region.data(S.region).currency;
+            QO.el.qty.innerHTML = P.qtysFor(id).map(function (n) {
+                var usd = P.tierUsd(id, n);
+                return '<option value="' + n + '">' + n.toLocaleString() + ' — ' +
+                    P.money(P.localPrice(usd, cur), cur) + '</option>';
+            }).join('');
+            QO.paint();
+        },
+
+        /** The single line this panel is describing, or null. */
+        line: function () {
+            var key = QO.el.cat.value;
+            var id = QO.el.svc.value;
+            var n = Number(QO.el.qty.value);
+            if (!key || !id || !n) return null;
+            return { platform: key, serviceId: id, qty: n };
+        },
+
+        paint: function () {
+            var l = QO.line();
+            if (!l) { rollTo(QO.el.charge, '—'); return; }
+            var q = P.quote([l], S.region, 1);
+            rollTo(QO.el.charge, P.money(q.total, q.currency));
+        },
+
+        submit: function () {
+            var l = QO.line();
+            if (!l) return;
+
+            var v = QO.el.link.value.trim();
+            if (!v) {
+                $('qoLinkField').classList.add('is-bad');
+                $('qoLinkErr').hidden = false;
+                $('qoLinkErr').textContent = 'Add your ' + meta(l.platform).name +
+                    ' username or link so we know where to deliver.';
+                return;
+            }
+
+            // hand the whole thing to the shared state, then the shared review
+            S.platforms = [l.platform];
+            S.goal = l.serviceId;
+            S.mix = {};
+            S.mix[l.platform] = [{ serviceId: l.serviceId, qty: l.qty }];
+            S.accounts[l.platform] = v;
+            S.errors = {};
+
+            if (!validate()) {
+                var msg = S.errors[l.platform];
+                if (msg) {
+                    $('qoLinkField').classList.add('is-bad');
+                    $('qoLinkErr').hidden = false;
+                    $('qoLinkErr').textContent = msg;
+                }
+                return;
+            }
+
+            // deliberately no render() — the guided DOM is hidden in this
+            // mode, and re-rendering it here would un-hide its sections
+            // behind the panel. Switching back to Guided renders it fresh.
+            openReview();
+        }
+    };
+
+    /* Mode switch. Guided stays the default — the panel is the shortcut for
+       someone who already knows what they are buying. */
+    var GUIDED_SECTIONS = ['comboSec', 'platSec', 'goalSec', 'packSec', 'qtySec', 'mixSec', 'acctSec', 'priceSec'];
+
+    function setMode(mode) {
+        var quick = mode === 'quick';
+        document.querySelectorAll('.mode-tab').forEach(function (t) {
+            var on = t.dataset.mode === mode;
+            t.classList.toggle('is-on', on);
+            t.setAttribute('aria-pressed', String(on));
+        });
+        $('quickPanel').hidden = !quick;
+        GUIDED_SECTIONS.forEach(function (id) {
+            var el = $(id);
+            if (!el) return;
+            if (quick) { el.dataset.modeHidden = '1'; el.hidden = true; }
+            else if (el.dataset.modeHidden) { delete el.dataset.modeHidden; el.hidden = false; }
+        });
+        // the panel carries its own CTA, so the dock would be a second one
+        $('gDock').classList.toggle('is-off', quick);
+        if (!quick) render();
+        else QO.paint();
+        if (window.Motion) window.Motion.swap(quick ? $('quickPanel') : $('platSec'));
+    }
+
+    document.querySelectorAll('.mode-tab').forEach(function (t) {
+        t.addEventListener('click', function () { setMode(t.dataset.mode); haptic(); });
+    });
+
+    QO.init();
+
     /* -------------------------------------------------------- scroll fx --- */
 
     var header = $('gHeader');

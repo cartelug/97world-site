@@ -47,10 +47,64 @@
     <section class="g-wrap g-open">
         <h1>Choose where you want to grow.</h1>
         <p>Pick one platform — or select 3+ and save.</p>
+        <div class="mode-tabs" style="margin-top:16px" role="tablist" aria-label="Ordering mode">
+            <button type="button" class="mode-tab is-on" data-mode="guided" aria-pressed="true">Guided</button>
+            <button type="button" class="mode-tab" data-mode="quick" aria-pressed="false">Quick order</button>
+        </div>
+    </section>
+
+    <!-- ============================================= QUICK ORDER === -->
+    <!-- The panel shape people already know. Same pricing source and same
+         checkout as the guided flow — only the way you get there differs. -->
+    <section class="g-wrap g-sec" id="quickPanel" hidden>
+        <div class="qo-card">
+            <div class="qo-field">
+                <label for="qoCat">Category</label>
+                <div class="qo-select">
+                    <select id="qoCat"></select>
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="qo-field">
+                <label for="qoSvc">Service</label>
+                <div class="qo-select">
+                    <select id="qoSvc"></select>
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="qo-field" id="qoLinkField">
+                <label for="qoLink">Link</label>
+                <div class="acct-box">
+                    <i class="fas fa-link" aria-hidden="true"></i>
+                    <input type="text" id="qoLink" autocomplete="off" spellcheck="false" autocapitalize="none">
+                </div>
+                <p class="acct-err" id="qoLinkErr" hidden></p>
+            </div>
+
+            <div class="qo-field">
+                <label for="qoQty">Quantity</label>
+                <div class="qo-select">
+                    <select id="qoQty"></select>
+                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                </div>
+            </div>
+
+            <div class="qo-charge">
+                <span>Charge</span>
+                <b><span class="g-roll" id="qoCharge">—</span></b>
+            </div>
+
+            <button type="button" class="g-btn g-btn--wide" id="qoSubmit">
+                Continue <i class="fas fa-arrow-right"></i>
+            </button>
+            <p class="qo-note"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
+        </div>
     </section>
 
     <!-- ============================================== 03 COMBO CARD === -->
-    <section class="g-wrap">
+    <section class="g-wrap" id="comboSec">
         <div class="combo-card" id="comboCard">
             <div class="combo-top">
                 <div>

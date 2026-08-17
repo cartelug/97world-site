@@ -450,6 +450,8 @@ a { color: inherit; text-decoration: none; }
     .g-dock { backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5); }
 }
 .g-dock.is-on { transform: translateY(0); }
+/* quick order carries its own submit — one CTA on screen, not two */
+.g-dock.is-off { transform: translateY(110%) !important; }
 .g-dock-in { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
 @media (min-width: 1024px) { .g-dock-in { max-width: 1080px; } }
 .g-dock-copy { flex: 1; min-width: 0; }
@@ -653,4 +655,81 @@ a { color: inherit; text-decoration: none; }
     .combo-pip.is-on, .combo-state, .combo-card.is-on,
     .price-row.is-save:not([hidden]), .g-results .g-result,
     #goalWrap, #packGrid, #qtyRow, #mixList, #acctList { animation: none !important; }
+}
+
+/* ==========================================================================
+   QUICK ORDER — the panel-style form
+   The shape people already know from an SMM panel: category, service, link,
+   quantity, charge, submit. It exists for the person who arrives knowing
+   exactly what they want and does not need to be walked anywhere.
+
+   Two departures from a stock panel, both deliberate:
+   - the dropdowns carry plain names, never provider IDs or "Max 10K / Non
+     Drop API" strings, because those describe our supplier, not the thing
+     the customer is buying;
+   - quantity is a select of the tiers we actually sell, not a free number
+     box, because our price list is tiered — a typed 7,500 has no real price
+     and we will not derive one.
+   ========================================================================== */
+
+.mode-tabs {
+    display: inline-flex; gap: 3px; padding: 3px;
+    border-radius: 100px; background: rgba(16, 16, 20, 0.06);
+}
+.mode-tab {
+    padding: 9px 18px; border-radius: 100px;
+    font-size: 0.86rem; font-weight: 700; color: var(--g-muted);
+    transition: background var(--g-mid) var(--g-ease), color var(--g-mid) var(--g-ease),
+                box-shadow var(--g-mid) var(--g-ease);
+}
+.mode-tab.is-on { background: var(--g-surface); color: var(--g-ink); box-shadow: var(--g-shadow); }
+.mode-tab:active { transform: scale(0.97); }
+
+.qo-card {
+    padding: 18px; border-radius: var(--g-r-lg);
+    border: 1px solid var(--g-line); background: var(--g-surface);
+    box-shadow: var(--g-shadow);
+    animation: gStep var(--g-mid) var(--g-ease);
+}
+.qo-field + .qo-field { margin-top: 13px; }
+.qo-field > label {
+    display: block; margin-bottom: 6px;
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em; color: var(--g-ink-2);
+}
+
+/* a native select on purpose — it opens the OS picker, which is the fastest
+   and most familiar control on a phone */
+.qo-select { position: relative; }
+.qo-select select {
+    width: 100%; height: 48px; padding: 0 38px 0 14px;
+    border-radius: var(--g-r-sm); border: 1px solid var(--g-line-2);
+    background: var(--g-surface); color: var(--g-ink);
+    font-size: 0.92rem; font-weight: 600;
+    appearance: none; -webkit-appearance: none; outline: none;
+    transition: border-color var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease);
+}
+.qo-select select:focus { border-color: var(--g-acc-line); box-shadow: 0 0 0 3px var(--g-acc-soft); }
+.qo-select select:disabled { opacity: 0.5; }
+.qo-select i {
+    position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+    font-size: 0.72rem; color: var(--g-muted); pointer-events: none;
+    transition: transform var(--g-fast) var(--g-ease);
+}
+
+.qo-charge {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--g-line);
+}
+.qo-charge span { font-size: 0.9rem; font-weight: 700; }
+.qo-charge b {
+    font-family: var(--g-font-d); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em;
+    color: var(--g-acc);
+}
+.qo-note { margin-top: 10px; font-size: 0.79rem; color: var(--g-muted); }
+.qo-card .g-btn { margin-top: 14px; }
+
+@media(prefers-reduced-motion: reduce) {
+    .qo-card { animation: none !important; }
+    .mode-tab, .qo-select select { transition: none !important; }
+    .mode-tab:active { transform: none !important; }
 }
