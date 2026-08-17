@@ -384,9 +384,23 @@ body[data-hub] .display-hero em {
     .flow-n { width: 46px; height: 46px; border-radius: 15px; font-size: 0.98rem; }
     .flow-step::before { left: 22px; top: 42px; }
 }
-@media(max-width: 480px) {
-    .spec-grid { grid-template-columns: 1fr; }
-    .plat-grid { grid-template-columns: 1fr; }
+@media(max-width: 560px) {
+    .spec-grid, .plat-grid { grid-template-columns: repeat(2, 1fr); gap: 9px; }
+    .spec { padding: 16px 14px; }
+    .spec-ic { width: 32px; height: 32px; margin-bottom: 10px; border-radius: 9px; font-size: 0.82rem; }
+    .spec h3 { font-size: 0.88rem; line-height: 1.3; margin-bottom: 5px; }
+    .spec p { font-size: 0.78rem; line-height: 1.5; }
+    .plat { padding: 15px 13px; gap: 9px; }
+    .plat-top img { width: 26px; height: 26px; }
+    .plat-top b { font-size: 0.96rem; }
+    .plat p { font-size: 0.78rem; line-height: 1.45; }
+    .plat-foot { padding-top: 10px; }
+    .plat-from { font-size: 0.66rem; }
+    .plat-from b { font-size: 0.86rem; }
+    .plat-go { font-size: 0.72rem; }
+}
+@media(max-width: 340px) {
+    .spec-grid, .plat-grid { grid-template-columns: 1fr; }
 }
 
 @media(prefers-reduced-motion: reduce) {
@@ -706,4 +720,133 @@ body.is-focusing .pick-wide .pick-save {
 @media(prefers-reduced-motion: reduce) {
     .pick-tab, .pick-wide, .deal { transition: none !important; }
     .deal:hover { transform: none !important; }
+}
+
+/* ==========================================================================
+   SERVICE SEARCH
+   The picker handles the four things most people come for. This reaches the
+   rest of the catalogue without putting all twenty-odd on screen by default —
+   type, and the picker steps aside for the matches.
+   ========================================================================== */
+.svc-search {
+    position: relative; display: flex; align-items: center;
+    margin-bottom: 16px; border-radius: 14px;
+    background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.1);
+    transition: border-color 0.25s, background 0.25s;
+}
+.svc-search:focus-within { border-color: var(--hub); background: rgba(255,255,255,0.06); }
+.svc-search > i { position: absolute; left: 15px; color: #6a6a73; font-size: 0.86rem; pointer-events: none; }
+.svc-search:focus-within > i { color: var(--hub); }
+.svc-search input {
+    flex: 1; min-width: 0; padding: 14px 14px 14px 40px;
+    background: none; border: none; outline: none;
+    color: #fff; font-family: var(--font-body); font-size: 0.94rem;
+    -webkit-appearance: none; appearance: none;
+}
+.svc-search input::placeholder { color: #6a6a73; }
+.svc-search input::-webkit-search-cancel-button { display: none; }
+.svc-search button {
+    flex: none; width: 38px; height: 38px; margin-right: 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: none; cursor: pointer;
+    color: #8a8a93; font-size: 0.88rem;
+    -webkit-tap-highlight-color: transparent;
+}
+.svc-search button:hover { color: #fff; }
+
+.svc-results { display: grid; gap: 8px; }
+.svc-count {
+    font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em;
+    text-transform: uppercase; color: #6a6a73; margin-bottom: 2px;
+}
+.svc {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 15px; border-radius: 14px; color: #fff; min-width: 0;
+    background: rgba(8,9,12,0.86); border: 1px solid rgba(255,255,255,0.09);
+    transition: border-color 0.22s, background 0.22s, transform 0.22s var(--curve-spring);
+    -webkit-tap-highlight-color: transparent;
+}
+.svc:hover { border-color: var(--hub-35); background: rgba(12,14,18,0.94); transform: translateY(-2px); }
+.svc:active { transform: scale(0.985); }
+.svc-mark { flex: none; display: flex; }
+.svc-mark img { width: 26px; height: 26px; object-fit: contain; }
+.svc-ic {
+    width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; background: var(--hub-14); color: var(--hub); font-size: 0.82rem;
+}
+.svc-copy { flex: 1; min-width: 0; }
+.svc-copy b { display: block; font-size: 0.9rem; font-weight: 700; line-height: 1.25; }
+.svc-copy small { display: block; margin-top: 2px; font-size: 0.72rem; color: var(--clr-muted); }
+.svc-end { flex: none; text-align: right; max-width: 42%; }
+.svc-money {
+    display: block; font-family: var(--font-display);
+    font-size: 0.88rem; font-weight: 700; white-space: nowrap; color: var(--hub);
+}
+.svc.is-quote .svc-go { color: var(--hub); }
+.svc-go { display: block; margin-top: 3px; font-size: 0.68rem; font-weight: 700; color: #8a8a93; white-space: nowrap; }
+.svc-go i { font-size: 0.6rem; transition: transform 0.22s; }
+.svc:hover .svc-go { color: #fff; }
+.svc:hover .svc-go i { transform: translateX(3px); }
+
+.svc-empty { padding: 22px 6px; text-align: center; font-size: 0.88rem; color: var(--clr-muted); line-height: 1.6; }
+.svc-empty a { color: var(--hub); text-decoration: underline; text-underline-offset: 3px; }
+
+@media(max-width: 380px) {
+    .svc { padding: 12px 13px; gap: 10px; }
+    .svc-copy b { font-size: 0.86rem; }
+    .svc-end { max-width: 40%; }
+}
+
+/* ==========================================================================
+   DENSITY PASS
+   The page was built desktop-comfortable and then shrunk. These bring the
+   vertical rhythm in so more of the offer is reachable per screen — the
+   difference between one scroll and three on the phones people actually use.
+   ========================================================================== */
+@media(max-width: 720px) {
+    .hub-hero { min-height: auto; padding: 104px 0 44px; }
+    .hub-hero h1 { font-size: clamp(2rem, 8.4vw, 2.7rem); }
+    .hub-lead { font-size: 0.95rem; margin-top: 14px; }
+    .hub-eyebrow { margin-bottom: 16px; padding: 6px 13px 6px 9px; font-size: 0.68rem; }
+    .hub-cta-row { margin-top: 22px; gap: 9px; }
+    .hub-btn { padding: 14px 22px; font-size: 0.94rem; }
+
+    .hub-sec { padding: 52px 0; }
+    .hub-sec--tight { padding: 40px 0; }
+    .hub-head { margin-bottom: 26px; }
+    .hub-head h2 { font-size: clamp(1.65rem, 6.6vw, 2.1rem); }
+    .hub-head p { font-size: 0.92rem; margin-top: 11px; }
+    .hub-kicker { margin-bottom: 10px; font-size: 0.65rem; }
+
+    .hub-stats { margin-top: 26px; border-radius: 16px; }
+    .hub-stats div { padding: 15px 10px; }
+    .hub-stats span { font-size: 0.66rem; margin-top: 5px; }
+
+    .pick-grid { gap: 7px; }
+    .deal-list { gap: 17px; margin-top: 22px; }
+    .deal { padding: 17px; gap: 13px; border-radius: 16px; }
+    .deal-head b { font-size: 1.18rem; }
+    .deal-head small { font-size: 0.8rem; }
+    .deal-money b { font-size: 1.16rem; }
+
+    .spec { padding: 20px 18px; border-radius: 16px; }
+    .spec-ic { width: 38px; height: 38px; margin-bottom: 12px; border-radius: 11px; font-size: 0.94rem; }
+    .spec h3 { font-size: 1rem; }
+    .spec p { font-size: 0.85rem; }
+
+    .plat { padding: 18px 17px; gap: 10px; border-radius: 16px; }
+    .flow-step { padding-bottom: 22px; }
+    .flow-body h3 { font-size: 1.02rem; }
+    .flow-body p { font-size: 0.86rem; }
+
+    .faq-item summary { padding: 15px 17px; font-size: 0.92rem; }
+    .faq-a { padding: 0 17px 16px; font-size: 0.86rem; }
+
+    .hub-close { padding: 54px 0 60px; }
+    .hub-close h2 { font-size: clamp(1.6rem, 6.4vw, 2rem); }
+    .hub-close p { font-size: 0.92rem; margin-top: 12px; }
+
+    .offer-card { padding: 20px; border-radius: 18px; }
+    .oc-title h3 { font-size: 1.24rem; }
+    .oc-feats li { font-size: 0.86rem; }
 }

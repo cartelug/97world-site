@@ -146,6 +146,20 @@
                 </div>
 
                 <div class="picker fade-up" id="builder">
+                    <div class="svc-search">
+                        <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                        <input type="search" id="svcSearch" autocomplete="off" spellcheck="false"
+                               placeholder="Search — likes, views, Telegram…"
+                               aria-label="Search all services" aria-controls="svc-results">
+                        <button type="button" id="svcClear" aria-label="Clear search" hidden>
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- filled while searching; the picker below hides behind it -->
+                    <div class="svc-results" id="svc-results" role="region" aria-live="polite" hidden></div>
+
+                    <div id="pickBody">
                     <span class="pick-label">Choose one</span>
                     <div class="pick-grid" id="bd-tabs" role="group" aria-label="Platform"></div>
 
@@ -166,6 +180,7 @@
                     </a>
 
                     <div class="deal-list" id="bd-list"></div>
+                    </div><!-- /pickBody -->
 
                     <p class="pick-note">Prices for <b id="bd-region">Uganda</b>. <button type="button" id="bd-change">Change</button></p>
                 </div>

@@ -170,6 +170,95 @@ document.addEventListener('DOMContentLoaded', () => {
             if (card) P.Pending.set(builder.platform, card.dataset.plan);
         });
 
+        // === SERVICE SEARCH ================================================
+        // The picker covers the four things most people want. This covers the
+        // other twenty-odd without putting them all on screen by default.
+        // A service with no agreed price is still listed and still orderable —
+        // it just goes to WhatsApp for a quote rather than showing a number we
+        // would be inventing.
+        const search = document.getElementById('svcSearch');
+        const results = document.getElementById('svc-results');
+        const pickBody = document.getElementById('pickBody');
+        const clearBtn = document.getElementById('svcClear');
+
+        if (search && results && pickBody) {
+            const WA = 'https://wa.me/256762193386?text=';
+
+            const card = (s) => {
+                const meta = P.PLAT_META[s.platform];
+                const mark = meta.logo
+                    ? `<img src="${meta.logo}" alt="">`
+                    : `<span class="svc-ic"><i class="${meta.icon}"></i></span>`;
+
+                // priced services link to their order page; the rest ask
+                const priced = s.sizes && s.sizes[0] && s.sizes[0].usd != null;
+                let money, href, cta;
+
+                if (priced) {
+                    const currency = P.Region.data(builder.region).currency;
+                    const top = s.sizes[s.sizes.length - 1];
+                    const from = s.sizes.length > 1 || top.qty === null;
+                    money = (from ? 'From ' : '') + P.money(P.localPrice(top.usd, currency), currency);
+                    href = s.href;
+                    cta = 'Order';
+                } else {
+                    // "Price on request" next to an "Ask" button says the same
+                    // thing twice and squeezes the name into three lines — the
+                    // action alone carries it
+                    money = '';
+                    href = WA + encodeURIComponent(`Hi, I'd like a price for ${s.name}.`);
+                    cta = 'Get a price';
+                }
+
+                return `<a class="svc${priced ? '' : ' is-quote'}" href="${href}"${priced ? '' : ' target="_blank" rel="noopener"'}>
+                    <span class="svc-mark">${mark}</span>
+                    <span class="svc-copy">
+                        <b>${s.name}</b>
+                        <small>${meta.name} · ${s.unit}</small>
+                    </span>
+                    <span class="svc-end">
+                        ${money ? `<span class="svc-money">${money}</span>` : ''}
+                        <span class="svc-go">${cta} <i class="fas fa-arrow-right"></i></span>
+                    </span>
+                </a>`;
+            };
+
+            const run = () => {
+                const q = search.value.trim();
+                clearBtn.hidden = !q;
+
+                if (!q) {
+                    results.hidden = true;
+                    results.innerHTML = '';
+                    pickBody.hidden = false;
+                    return;
+                }
+
+                pickBody.hidden = true;
+                results.hidden = false;
+
+                const hits = P.searchServices(q);
+                if (!hits.length) {
+                    results.innerHTML = `<p class="svc-empty">
+                        Nothing matches “${q.replace(/</g, '&lt;')}”.
+                        <a href="${WA + encodeURIComponent('Hi, do you sell: ' + q + '?')}" target="_blank" rel="noopener">Ask us — we may still do it</a>.
+                    </p>`;
+                    return;
+                }
+                results.innerHTML =
+                    `<p class="svc-count">${hits.length} service${hits.length > 1 ? 's' : ''}</p>` +
+                    hits.map(card).join('');
+            };
+
+            search.addEventListener('input', run);
+            search.addEventListener('search', run);
+            clearBtn.addEventListener('click', () => {
+                search.value = '';
+                run();
+                search.focus();
+            });
+        }
+
         const change = document.getElementById('bd-change');
         if (change) change.addEventListener('click', openGate);
 

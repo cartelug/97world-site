@@ -125,6 +125,120 @@
         bundle: { key: 'bundle', name: 'All 3 platforms', logo: '/IMAGES/logo.png', href: '/boost-package/', plans: bundlePlans }
     };
 
+    /* ------------------------------------------------------- the catalogue ---
+     * Everything we can sell, in one searchable list.
+     *
+     * `usd` is only ever set where a retail price has actually been agreed.
+     * Where it is null the service is real and orderable, but the price is
+     * quoted on WhatsApp — we do not have a wholesale rate for it yet, and a
+     * made-up number here would be a number someone gets charged.
+     *
+     * When the supplier rates land, filling in `usd` is the only change needed:
+     * the listing, the search and the ordering already work.
+     * -------------------------------------------------------------------- */
+
+    var PLAT_META = {
+        instagram: { name: 'Instagram', logo: '/IMAGES/instagram.png' },
+        tiktok:    { name: 'TikTok',    logo: '/IMAGES/tiktok.png' },
+        facebook:  { name: 'Facebook',  logo: '/IMAGES/facebook.png' },
+        youtube:   { name: 'YouTube',   logo: '/IMAGES/youtube.png' },
+        x:         { name: 'X',         logo: '/IMAGES/x.png' },
+        whatsapp:  { name: 'WhatsApp',  icon: 'fab fa-whatsapp' },
+        telegram:  { name: 'Telegram',  icon: 'fab fa-telegram' }
+    };
+
+    function svc(id, platform, name, unit, sizes, href, keywords) {
+        return {
+            id: id, platform: platform, name: name, unit: unit,
+            sizes: sizes || null,      // [{ qty, usd, tag }] — usd null = quote
+            href: href || null,        // an order page, or null for WhatsApp
+            keywords: keywords || ''
+        };
+    }
+
+    var SERVICES = [
+        /* --------------------------------------------------------- priced --- */
+        svc('ig_followers', 'instagram', 'Instagram followers', 'followers',
+            [{ qty: 10000, usd: 100, tag: 'Best seller' }, { qty: 3000, usd: 35 }],
+            '/instagram-boost/', 'ig insta gram follow subs audience'),
+        svc('tt_followers', 'tiktok', 'TikTok followers', 'followers',
+            [{ qty: 10000, usd: 100, tag: 'Best seller' }, { qty: 3000, usd: 35 }],
+            '/tiktok-boost/', 'tik tok follow audience'),
+        svc('fb_followers', 'facebook', 'Facebook page followers', 'followers',
+            [{ qty: 10000, usd: 100, tag: 'Best seller' }, { qty: 3000, usd: 35 }],
+            '/facebook-boost/', 'fb face book page follow'),
+        svc('yt_package', 'youtube', 'YouTube growth package', 'subs, views & likes',
+            [{ qty: null, usd: 70, tag: 'From' }],
+            '/youtube-boost/', 'yt you tube subscribers views likes watch channel'),
+
+        /* ------------------------------------------------- quoted on request --- */
+        svc('ig_likes', 'instagram', 'Instagram post likes', 'likes', null, null, 'ig heart engagement'),
+        svc('ig_reels', 'instagram', 'Instagram reels views', 'views', null, null, 'ig reel video plays'),
+        svc('ig_story', 'instagram', 'Instagram story views', 'views', null, null, 'ig stories'),
+        svc('ig_comments', 'instagram', 'Instagram comments', 'comments', null, null, 'ig reply engagement'),
+        svc('ig_saves', 'instagram', 'Instagram saves', 'saves', null, null, 'ig bookmark'),
+
+        svc('tt_likes', 'tiktok', 'TikTok likes', 'likes', null, null, 'tik tok heart'),
+        svc('tt_views', 'tiktok', 'TikTok video views', 'views', null, null, 'tik tok plays'),
+        svc('tt_shares', 'tiktok', 'TikTok shares', 'shares', null, null, 'tik tok repost'),
+        svc('tt_live', 'tiktok', 'TikTok live views', 'viewers', null, null, 'tik tok stream live'),
+
+        svc('fb_likes', 'facebook', 'Facebook page likes', 'likes', null, null, 'fb face book'),
+        svc('fb_reactions', 'facebook', 'Facebook post reactions', 'reactions', null, null, 'fb emoji love'),
+        svc('fb_views', 'facebook', 'Facebook video views', 'views', null, null, 'fb watch plays'),
+        svc('fb_group', 'facebook', 'Facebook group members', 'members', null, null, 'fb join community'),
+
+        svc('yt_views', 'youtube', 'YouTube views', 'views', null, null, 'yt you tube plays'),
+        svc('yt_hours', 'youtube', 'YouTube watch hours', 'hours', null, null, 'yt monetisation 4000 partner'),
+        svc('yt_likes', 'youtube', 'YouTube likes', 'likes', null, null, 'yt thumbs'),
+        svc('yt_comments', 'youtube', 'YouTube comments', 'comments', null, null, 'yt reply'),
+
+        svc('wa_channel', 'whatsapp', 'WhatsApp channel followers', 'followers', null, null, 'whats app status broadcast'),
+        svc('wa_react', 'whatsapp', 'WhatsApp channel reactions', 'reactions', null, null, 'whats app emoji'),
+
+        svc('tg_members', 'telegram', 'Telegram channel members', 'members', null, null, 'tg join group'),
+        svc('tg_views', 'telegram', 'Telegram post views', 'views', null, null, 'tg plays'),
+
+        svc('x_followers', 'x', 'X followers', 'followers', null, null, 'twitter tweet follow'),
+        svc('x_likes', 'x', 'X likes', 'likes', null, null, 'twitter tweet heart')
+    ];
+
+    /**
+     * Free-text search, ranked. Every word must match somewhere, but a hit in
+     * the service's own name counts for far more than one in its keywords —
+     * otherwise searching "likes" surfaces a followers package that merely
+     * mentions likes, ahead of the likes service itself.
+     */
+    function searchServices(query) {
+        var q = String(query || '').trim().toLowerCase();
+        if (!q) return [];
+        var words = q.split(/\s+/);
+
+        var scored = [];
+        for (var i = 0; i < SERVICES.length; i++) {
+            var s = SERVICES[i];
+            var name = s.name.toLowerCase();
+            var rest = (s.unit + ' ' + PLAT_META[s.platform].name + ' ' + s.keywords).toLowerCase();
+
+            var score = 0, matchedAll = true;
+            for (var w = 0; w < words.length; w++) {
+                var word = words[w];
+                if (name.indexOf(word) !== -1) score += 10;
+                else if (rest.indexOf(word) !== -1) score += 1;
+                else { matchedAll = false; break; }
+            }
+            if (!matchedAll) continue;
+
+            if (name.indexOf(q) !== -1) score += 15;          // whole phrase in the name
+            if (name.indexOf(q) === 0) score += 10;           // and at the front of it
+            if (s.sizes && s.sizes[0] && s.sizes[0].usd != null) score += 2;  // priced edges it
+            scored.push({ s: s, score: score, order: i });
+        }
+
+        scored.sort(function (a, b) { return b.score - a.score || a.order - b.order; });
+        return scored.map(function (x) { return x.s; });
+    }
+
     /* ---------------------------------------------------------- helpers --- */
 
     function localPrice(usd, currency) {
@@ -196,6 +310,9 @@
         UGX_PER_USD: UGX_PER_USD,
         REGIONS: REGIONS,
         PLATFORMS: PLATFORMS,
+        PLAT_META: PLAT_META,
+        SERVICES: SERVICES,
+        searchServices: searchServices,
         localPrice: localPrice,
         money: money,
         plansFor: plansFor,
