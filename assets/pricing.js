@@ -147,61 +147,76 @@
         telegram:  { name: 'Telegram',  icon: 'fab fa-telegram' }
     };
 
-    function svc(id, platform, name, unit, sizes, href, keywords) {
+    // The 4 platforms shown up front in the growth builder's step 1, and the
+    // rest revealed behind "More platforms" — these are the only 7 platforms
+    // we actually sell; nothing here should ever list a platform we don't.
+    var PLATFORMS_PRIMARY = ['instagram', 'tiktok', 'youtube', 'facebook'];
+    var PLATFORMS_SECONDARY = ['telegram', 'x', 'whatsapp'];
+
+    function svc(id, platform, name, short, unit, sizes, href, keywords, popular) {
         return {
-            id: id, platform: platform, name: name, unit: unit,
-            sizes: sizes || null,      // [{ qty, usd, tag }] — usd null = quote
-            href: href || null,        // an order page, or null for WhatsApp
-            keywords: keywords || ''
+            id: id, platform: platform, name: name,
+            short: short,               // compact label for step-2 buttons, e.g. "Reels views"
+            unit: unit,
+            sizes: sizes || null,       // [{ qty, usd, tag }] — usd null = quote
+            href: href || null,         // an order page, or null for WhatsApp
+            keywords: keywords || '',
+            popular: !!popular          // shown before "More" is tapped in step 2
         };
     }
 
     var SERVICES = [
         /* --------------------------------------------------------- priced --- */
-        svc('ig_followers', 'instagram', 'Instagram followers', 'followers',
+        svc('ig_followers', 'instagram', 'Instagram followers', 'Followers', 'followers',
             [{ qty: 10000, usd: 100, tag: 'Best seller' }, { qty: 3000, usd: 35 }],
-            '/instagram-boost/', 'ig insta gram follow subs audience'),
-        svc('tt_followers', 'tiktok', 'TikTok followers', 'followers',
+            '/instagram-boost/', 'ig insta gram follow subs audience', true),
+        svc('tt_followers', 'tiktok', 'TikTok followers', 'Followers', 'followers',
             [{ qty: 10000, usd: 100, tag: 'Best seller' }, { qty: 3000, usd: 35 }],
-            '/tiktok-boost/', 'tik tok follow audience'),
-        svc('fb_followers', 'facebook', 'Facebook page followers', 'followers',
+            '/tiktok-boost/', 'tik tok follow audience', true),
+        svc('fb_followers', 'facebook', 'Facebook page followers', 'Followers', 'followers',
             [{ qty: 10000, usd: 100, tag: 'Best seller' }, { qty: 3000, usd: 35 }],
-            '/facebook-boost/', 'fb face book page follow'),
-        svc('yt_package', 'youtube', 'YouTube growth package', 'subs, views & likes',
+            '/facebook-boost/', 'fb face book page follow', true),
+        svc('yt_package', 'youtube', 'YouTube growth package', 'Growth package', 'subs, views & likes',
             [{ qty: null, usd: 70, tag: 'From' }],
-            '/youtube-boost/', 'yt you tube subscribers views likes watch channel'),
+            '/youtube-boost/', 'yt you tube subscribers views likes watch channel', true),
 
         /* ------------------------------------------------- quoted on request --- */
-        svc('ig_likes', 'instagram', 'Instagram post likes', 'likes', null, null, 'ig heart engagement'),
-        svc('ig_reels', 'instagram', 'Instagram reels views', 'views', null, null, 'ig reel video plays'),
-        svc('ig_story', 'instagram', 'Instagram story views', 'views', null, null, 'ig stories'),
-        svc('ig_comments', 'instagram', 'Instagram comments', 'comments', null, null, 'ig reply engagement'),
-        svc('ig_saves', 'instagram', 'Instagram saves', 'saves', null, null, 'ig bookmark'),
+        svc('ig_likes', 'instagram', 'Instagram post likes', 'Likes', 'likes', null, null, 'ig heart engagement', true),
+        svc('ig_reels', 'instagram', 'Instagram reels views', 'Reels views', 'views', null, null, 'ig reel video plays', true),
+        svc('ig_story', 'instagram', 'Instagram story views', 'Story views', 'views', null, null, 'ig stories'),
+        svc('ig_comments', 'instagram', 'Instagram comments', 'Comments', 'comments', null, null, 'ig reply engagement'),
+        svc('ig_saves', 'instagram', 'Instagram saves', 'Saves', 'saves', null, null, 'ig bookmark'),
 
-        svc('tt_likes', 'tiktok', 'TikTok likes', 'likes', null, null, 'tik tok heart'),
-        svc('tt_views', 'tiktok', 'TikTok video views', 'views', null, null, 'tik tok plays'),
-        svc('tt_shares', 'tiktok', 'TikTok shares', 'shares', null, null, 'tik tok repost'),
-        svc('tt_live', 'tiktok', 'TikTok live views', 'viewers', null, null, 'tik tok stream live'),
+        svc('tt_likes', 'tiktok', 'TikTok likes', 'Likes', 'likes', null, null, 'tik tok heart', true),
+        svc('tt_views', 'tiktok', 'TikTok video views', 'Views', 'views', null, null, 'tik tok plays', true),
+        svc('tt_shares', 'tiktok', 'TikTok shares', 'Shares', 'shares', null, null, 'tik tok repost'),
+        svc('tt_live', 'tiktok', 'TikTok live views', 'Live viewers', 'viewers', null, null, 'tik tok stream live'),
 
-        svc('fb_likes', 'facebook', 'Facebook page likes', 'likes', null, null, 'fb face book'),
-        svc('fb_reactions', 'facebook', 'Facebook post reactions', 'reactions', null, null, 'fb emoji love'),
-        svc('fb_views', 'facebook', 'Facebook video views', 'views', null, null, 'fb watch plays'),
-        svc('fb_group', 'facebook', 'Facebook group members', 'members', null, null, 'fb join community'),
+        svc('fb_likes', 'facebook', 'Facebook page likes', 'Likes', 'likes', null, null, 'fb face book', true),
+        svc('fb_views', 'facebook', 'Facebook video views', 'Views', 'views', null, null, 'fb watch plays', true),
+        svc('fb_reactions', 'facebook', 'Facebook post reactions', 'Reactions', 'reactions', null, null, 'fb emoji love'),
+        svc('fb_group', 'facebook', 'Facebook group members', 'Group members', 'members', null, null, 'fb join community'),
 
-        svc('yt_views', 'youtube', 'YouTube views', 'views', null, null, 'yt you tube plays'),
-        svc('yt_hours', 'youtube', 'YouTube watch hours', 'hours', null, null, 'yt monetisation 4000 partner'),
-        svc('yt_likes', 'youtube', 'YouTube likes', 'likes', null, null, 'yt thumbs'),
-        svc('yt_comments', 'youtube', 'YouTube comments', 'comments', null, null, 'yt reply'),
+        svc('yt_views', 'youtube', 'YouTube views', 'Views', 'views', null, null, 'yt you tube plays', true),
+        svc('yt_hours', 'youtube', 'YouTube watch hours', 'Watch hours', 'hours', null, null, 'yt monetisation 4000 partner', true),
+        svc('yt_likes', 'youtube', 'YouTube likes', 'Likes', 'likes', null, null, 'yt thumbs'),
+        svc('yt_comments', 'youtube', 'YouTube comments', 'Comments', 'comments', null, null, 'yt reply'),
 
-        svc('wa_channel', 'whatsapp', 'WhatsApp channel followers', 'followers', null, null, 'whats app status broadcast'),
-        svc('wa_react', 'whatsapp', 'WhatsApp channel reactions', 'reactions', null, null, 'whats app emoji'),
+        svc('wa_channel', 'whatsapp', 'WhatsApp channel followers', 'Channel followers', 'followers', null, null, 'whats app status broadcast', true),
+        svc('wa_react', 'whatsapp', 'WhatsApp channel reactions', 'Reactions', 'reactions', null, null, 'whats app emoji', true),
 
-        svc('tg_members', 'telegram', 'Telegram channel members', 'members', null, null, 'tg join group'),
-        svc('tg_views', 'telegram', 'Telegram post views', 'views', null, null, 'tg plays'),
+        svc('tg_members', 'telegram', 'Telegram channel members', 'Channel members', 'members', null, null, 'tg join group', true),
+        svc('tg_views', 'telegram', 'Telegram post views', 'Post views', 'views', null, null, 'tg plays', true),
 
-        svc('x_followers', 'x', 'X followers', 'followers', null, null, 'twitter tweet follow'),
-        svc('x_likes', 'x', 'X likes', 'likes', null, null, 'twitter tweet heart')
+        svc('x_followers', 'x', 'X followers', 'Followers', 'followers', null, null, 'twitter tweet follow', true),
+        svc('x_likes', 'x', 'X likes', 'Likes', 'likes', null, null, 'twitter tweet heart', true)
     ];
+
+    /** All services for one platform, popular ones first. */
+    function servicesFor(platformKey) {
+        return SERVICES.filter(function (s) { return s.platform === platformKey; })
+            .sort(function (a, b) { return (b.popular ? 1 : 0) - (a.popular ? 1 : 0); });
+    }
 
     /**
      * Free-text search, ranked. Every word must match somewhere, but a hit in
@@ -311,7 +326,10 @@
         REGIONS: REGIONS,
         PLATFORMS: PLATFORMS,
         PLAT_META: PLAT_META,
+        PLATFORMS_PRIMARY: PLATFORMS_PRIMARY,
+        PLATFORMS_SECONDARY: PLATFORMS_SECONDARY,
         SERVICES: SERVICES,
+        servicesFor: servicesFor,
         searchServices: searchServices,
         localPrice: localPrice,
         money: money,

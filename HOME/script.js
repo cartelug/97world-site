@@ -63,201 +63,308 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!btn) return;
             P.Region.set(btn.dataset.region);
             closeGate();
-            builder.setRegion(btn.dataset.region);
+            if (typeof gb !== 'undefined') { gb.region = btn.dataset.region; gb.render(); }
+            if (typeof paintPkgCards === 'function') paintPkgCards();
         });
     }
 
-    // === 3. THE PICKER =====================================================
-    // Two taps: what am I growing, then which package. Deliberately NOT a
-    // platform x size grid — that made "All 3" look like a platform while it
-    // carried its own price, so three prices competed on screen at once and
-    // choosing the bundle silently deleted the step below it.
+    // === 3. THE GROWTH BUILDER =============================================
+    // Three decisions, one card: platform, then service, then quantity. Each
+    // step only appears once the one before it is answered — the 27-service
+    // catalogue never has to be shown at once, and at any moment there is
+    // exactly one thing on screen to decide.
     //
-    // Now every card is one whole offer: what you get, where, what it costs,
-    // and tapping it goes straight to that order page with the package
-    // already chosen. Nothing to assemble, nothing to confirm twice.
-    // P is only present on pages that load pricing.js.
-    const KEYS = ['ig', 'tt', 'fb', 'yt'];
+    // Pricing honesty rule, load-bearing throughout this block: only 4
+    // services (Instagram/TikTok/Facebook followers, the YouTube package)
+    // have a real, agreed retail price. Selecting any of the other 23 routes
+    // to a WhatsApp quote request with the choice attached — never a number
+    // we invented. Whether a service is priced is decided once, by id, and
+    // that decision drives everything downstream (quantity step, summary,
+    // which trust lines are honest to show, and where "Continue" goes).
+    const PRICED_IDS = ['ig_followers', 'tt_followers', 'fb_followers', 'yt_package'];
+    const PLAT_KEY_FOR = { instagram: 'ig', tiktok: 'tt', facebook: 'fb', youtube: 'yt' };
+    const GENERIC_QTYS = [1000, 5000, 10000];
+    const WA_NUMBER = '256762193386';
 
-    const builder = {
-        region: (P && P.Region.get()) || 'UG',
-        platform: 'ig',
-
-        setRegion(code) {
-            builder.region = code;
-            builder.render();
-        },
-
-        /* The line under a package name — what you're actually getting.
-         * The bundle never renders here; it has its own page. */
-        subtitle(plan, key) {
-            if (key === 'yt') return plan.feats.map((f) => f.text).join(' · ');
-            return 'on ' + P.PLATFORMS[key].name;
-        },
-
+    // === 3a. STICKY MOBILE CTA (state object) =============================
+    // Defined before gb below because gb.render() calls growSticky.render() —
+    // moving it first avoids a temporal-dead-zone error on first render.
+    const growSticky = {
         render() {
-            const tabsEl = document.getElementById('bd-tabs');
-            const listEl = document.getElementById('bd-list');
-            if (!tabsEl || !listEl) return;
+            const bar = document.getElementById('growSticky');
+            if (!bar) return;
+            const before = document.getElementById('stickyBefore');
+            const after = document.getElementById('stickyAfter');
 
-            tabsEl.innerHTML = KEYS.map((key) => {
-                const p = P.PLATFORMS[key];
-                const on = builder.platform === key;
-                return `<button type="button" class="pick-tab${on ? ' is-on' : ''}"
-                    data-plat="${key}" aria-pressed="${on}">
-                    <img src="${p.logo}" alt=""><span>${p.name}</span>
-                </button>`;
-            }).join('');
-
-            const key = builder.platform;
-            const plans = P.plansFor(key, builder.region);
-            const href = P.PLATFORMS[key].href;
-
-            listEl.innerHTML = plans.map((plan) => `
-                <a href="${href}" class="deal${plan.hero ? ' is-hero' : ''}" data-plan="${plan.id}">
-                    ${plan.tag ? `<span class="deal-tag">${plan.tag}</span>` : ''}
-                    <span class="deal-head">
-                        <b>${plan.name}</b>
-                        <small>${builder.subtitle(plan, key)}</small>
-                    </span>
-                    <span class="deal-foot">
-                        <span class="deal-money">
-                            <b>${P.money(plan.price, plan.currency)}</b>
-                            ${plan.was ? `<s>${P.money(plan.was, plan.currency)}</s>` : ''}
-                        </span>
-                        <span class="deal-go">Choose <i class="fas fa-arrow-right"></i></span>
-                    </span>
-                </a>`).join('');
-
-            const regionEl = document.getElementById('bd-region');
-            if (regionEl) regionEl.textContent = P.Region.data(builder.region).name;
+            if (!gb.qty) {
+                before.hidden = false; after.hidden = true;
+                return;
+            }
+            before.hidden = true; after.hidden = false;
+            const plat = P.PLAT_META[gb.platform].name;
+            document.getElementById('stickyWhat').textContent = `${plat} · ${gb.service.short}`;
+            const priceLine = document.getElementById('stickyPrice');
+            const cta = document.getElementById('stickyCta');
+            if (gb.isPriced()) {
+                const deposit = Math.round(gb.qty.price * 0.3);
+                priceLine.textContent = `${P.money(deposit, gb.qty.currency)} to start`;
+                cta.href = gb.pricedHref();
+                cta.target = '_self';
+                cta.removeAttribute('rel');
+            } else {
+                priceLine.textContent = 'Price on request';
+                cta.href = gb.waHref(true);
+                cta.target = '_blank';
+                cta.rel = 'noopener';
+            }
         }
     };
 
-    if (document.getElementById('builder') && P) {
-        builder.render();
+    const gb = {
+        region: (P && P.Region.get()) || 'UG',
+        platform: null,
+        service: null,   // a SERVICES entry
+        qty: null,       // a plan object (priced) or { label, custom } (unpriced)
+        platformOpen: false,
+        serviceOpen: false,
 
-        document.getElementById('bd-tabs').addEventListener('click', (e) => {
-            const btn = e.target.closest('.pick-tab');
+        isPriced() { return gb.service && PRICED_IDS.indexOf(gb.service.id) !== -1; },
+
+        reset(fromStep) {
+            if (fromStep === 'platform') { gb.platform = null; gb.service = null; gb.qty = null; }
+            if (fromStep === 'service') { gb.service = null; gb.qty = null; }
+            if (fromStep === 'qty') { gb.qty = null; }
+        },
+
+        /* The real priced plans for the selected service — the existing
+         * per-platform ladder for followers/the YouTube package, unchanged. */
+        pricedPlans() {
+            const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
+            return P.plansFor(key, gb.region);
+        },
+
+        pricedHref() {
+            const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
+            return P.PLATFORMS[key].href;
+        },
+
+        waHref(withQty) {
+            const plat = P.PLAT_META[gb.platform].name;
+            const svc = gb.service.short.toLowerCase();
+            const qtyPart = withQty && gb.qty && !gb.qty.custom ? ` — ${gb.qty.label}` : '';
+            const msg = `Hi 97 World, I'd like ${plat} ${svc}${qtyPart}. Please send me a price.`;
+            return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+        },
+
+        platformTile(key, on) {
+            const meta = P.PLAT_META[key];
+            const mark = meta.logo ? `<img src="${meta.logo}" alt="">` : `<i class="${meta.icon}"></i>`;
+            return `<button type="button" class="gb-tile${on ? ' is-on' : ''}" data-platform="${key}" aria-pressed="${on}">
+                ${mark}<span>${meta.name}</span>
+            </button>`;
+        },
+
+        serviceChip(svc, on) {
+            return `<button type="button" class="gb-chip${on ? ' is-on' : ''}" data-service="${svc.id}" aria-pressed="${on}">
+                ${svc.short}
+            </button>`;
+        },
+
+        render() {
+            const root = document.getElementById('growBuilder');
+            if (!root) return;
+
+            // ---- step 1: platform -------------------------------------------------
+            const doneP = document.getElementById('stepPlatformDone');
+            const openP = document.getElementById('stepPlatformOpen');
+            if (gb.platform) {
+                doneP.hidden = false; openP.hidden = true;
+                doneP.querySelector('.gb-done-val').textContent = P.PLAT_META[gb.platform].name;
+            } else {
+                doneP.hidden = true; openP.hidden = false;
+                document.getElementById('platformPrimary').innerHTML =
+                    P.PLATFORMS_PRIMARY.map((k) => gb.platformTile(k, false)).join('');
+                const moreWrap = document.getElementById('platformSecondary');
+                moreWrap.hidden = !gb.platformOpen;
+                moreWrap.innerHTML = P.PLATFORMS_SECONDARY.map((k) => gb.platformTile(k, false)).join('');
+                document.getElementById('platformMoreBtn').setAttribute('aria-expanded', String(gb.platformOpen));
+            }
+
+            // ---- step 2: service ---------------------------------------------------
+            const stepService = document.getElementById('stepService');
+            if (!gb.platform) { stepService.hidden = true; }
+            else {
+                stepService.hidden = false;
+                const doneS = document.getElementById('stepServiceDone');
+                const openS = document.getElementById('stepServiceOpen');
+                if (gb.service) {
+                    doneS.hidden = false; openS.hidden = true;
+                    doneS.querySelector('.gb-done-val').textContent = gb.service.short;
+                } else {
+                    doneS.hidden = true; openS.hidden = false;
+                    const all = P.servicesFor(gb.platform);
+                    const popular = all.filter((s) => s.popular);
+                    const rest = all.filter((s) => !s.popular);
+                    document.getElementById('servicePopular').innerHTML =
+                        popular.map((s) => gb.serviceChip(s, false)).join('');
+                    const moreBtn = document.getElementById('serviceMoreBtn');
+                    moreBtn.hidden = rest.length === 0;
+                    const moreWrap = document.getElementById('serviceMore');
+                    moreWrap.hidden = !gb.serviceOpen;
+                    moreWrap.innerHTML = rest.map((s) => gb.serviceChip(s, false)).join('');
+                    moreBtn.setAttribute('aria-expanded', String(gb.serviceOpen));
+                }
+            }
+
+            // ---- step 3: quantity ---------------------------------------------------
+            const stepQty = document.getElementById('stepQty');
+            if (!gb.service) { stepQty.hidden = true; }
+            else {
+                stepQty.hidden = false;
+                const qtyGrid = document.getElementById('qtyGrid');
+                if (gb.isPriced()) {
+                    const plans = gb.pricedPlans();
+                    qtyGrid.innerHTML = plans.map((plan) => {
+                        const on = gb.qty && gb.qty.id === plan.id;
+                        return `<button type="button" class="gb-qty${on ? ' is-on' : ''}" data-plan="${plan.id}" aria-pressed="${on}">
+                            <b>${plan.name}</b>
+                            <span>${P.money(plan.price, plan.currency)}</span>
+                        </button>`;
+                    }).join('');
+                } else {
+                    qtyGrid.innerHTML = GENERIC_QTYS.map((n) => {
+                        const label = n >= 1000 ? (n / 1000) + 'K' : String(n);
+                        const on = gb.qty && gb.qty.n === n;
+                        return `<button type="button" class="gb-qty" data-qty="${n}" data-label="${label}" aria-pressed="${on ? 'true' : 'false'}">
+                            <b>${label}</b>
+                        </button>`;
+                    }).join('') + `<button type="button" class="gb-qty" data-qty="custom" aria-pressed="${gb.qty && gb.qty.custom ? 'true' : 'false'}">
+                        <b>Custom</b>
+                    </button>`;
+                }
+            }
+
+            // ---- summary --------------------------------------------------------
+            const summary = document.getElementById('bSummary');
+            if (!gb.qty) { summary.hidden = true; }
+            else {
+                summary.hidden = false;
+                const plat = P.PLAT_META[gb.platform].name;
+                document.getElementById('sumWhat').textContent = `${plat} · ${gb.service.short}`;
+                document.getElementById('sumQty').textContent = gb.qty.label;
+
+                const priceEl = document.getElementById('sumPrice');
+                const depositEl = document.getElementById('sumDeposit');
+                const trustEl = document.getElementById('sumTrust');
+                const ctaEl = document.getElementById('sumCta');
+
+                if (gb.isPriced()) {
+                    priceEl.textContent = P.money(gb.qty.price, gb.qty.currency);
+                    const deposit = Math.round(gb.qty.price * 0.3);
+                    depositEl.hidden = false;
+                    depositEl.innerHTML = `<b>${P.money(deposit, gb.qty.currency)}</b> to start<br><span>Balance due once delivery is running</span>`;
+                    trustEl.innerHTML = `
+                        <li><i class="fas fa-check"></i> No password needed</li>
+                        <li><i class="fas fa-check"></i> Gradual delivery</li>
+                        <li><i class="fas fa-check"></i> 30-day refill</li>`;
+                    ctaEl.textContent = 'Continue to order';
+                    ctaEl.href = gb.pricedHref();
+                    ctaEl.target = '_self';
+                    ctaEl.removeAttribute('rel');
+                } else {
+                    priceEl.textContent = 'Price on request';
+                    depositEl.hidden = true;
+                    depositEl.innerHTML = '';
+                    trustEl.innerHTML = `
+                        <li><i class="fas fa-check"></i> No password needed</li>
+                        <li><i class="fas fa-circle-info"></i> Delivery &amp; refill terms confirmed on WhatsApp</li>`;
+                    ctaEl.textContent = 'Get a price on WhatsApp';
+                    ctaEl.href = gb.waHref(true);
+                    ctaEl.target = '_blank';
+                    ctaEl.rel = 'noopener';
+                }
+            }
+
+            const regionEl = document.getElementById('bRegion');
+            if (regionEl) regionEl.textContent = P.Region.data(gb.region).name;
+
+            growSticky.render();
+        }
+    };
+
+    if (document.getElementById('growBuilder') && P) {
+        gb.render();
+
+        document.getElementById('platformPrimary').addEventListener('click', (e) => {
+            const btn = e.target.closest('.gb-tile');
             if (!btn) return;
-            builder.platform = btn.dataset.plat;
-            builder.render();
+            gb.platform = btn.dataset.platform;
+            gb.platformOpen = false;
+            gb.render();
+            if (navigator.vibrate) navigator.vibrate(10);
+        });
+        document.getElementById('platformMoreBtn').addEventListener('click', () => {
+            gb.platformOpen = !gb.platformOpen;
+            gb.render();
+        });
+        document.getElementById('platformSecondary').addEventListener('click', (e) => {
+            const btn = e.target.closest('.gb-tile');
+            if (!btn) return;
+            gb.platform = btn.dataset.platform;
+            gb.platformOpen = false;
+            gb.render();
             if (navigator.vibrate) navigator.vibrate(10);
         });
 
-        // The bundle is a whole page, not a filter. Tapping it drops everything
-        // else away and leaves only the choice lit, then follows the link — the
-        // dim IS the transition, so the next page doesn't arrive out of nowhere.
-        const wide = document.getElementById('bd-all3');
-        const veil = document.getElementById('focusVeil');
-        if (wide && veil && !reduceMotion) {
-            wide.addEventListener('click', (e) => {
-                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-                e.preventDefault();
-                document.body.classList.add('is-focusing');
-                if (navigator.vibrate) navigator.vibrate(14);
-                const go = () => { window.location.href = wide.getAttribute('href'); };
-                veil.addEventListener('transitionend', go, { once: true });
-                // never strand them if the transition never fires
-                setTimeout(go, 600);
-            });
-        }
-
-        // the card itself is the call to action — hand the choice to the order
-        // page so step 1 there arrives already done
-        document.getElementById('bd-list').addEventListener('click', (e) => {
-            const card = e.target.closest('.deal');
-            if (card) P.Pending.set(builder.platform, card.dataset.plan);
+        const pickService = (id) => {
+            gb.service = P.SERVICES.filter((s) => s.id === id)[0] || null;
+            gb.serviceOpen = false;
+            gb.render();
+            if (navigator.vibrate) navigator.vibrate(10);
+        };
+        document.getElementById('servicePopular').addEventListener('click', (e) => {
+            const btn = e.target.closest('.gb-chip');
+            if (btn) pickService(btn.dataset.service);
+        });
+        document.getElementById('serviceMoreBtn').addEventListener('click', () => {
+            gb.serviceOpen = !gb.serviceOpen;
+            gb.render();
+        });
+        document.getElementById('serviceMore').addEventListener('click', (e) => {
+            const btn = e.target.closest('.gb-chip');
+            if (btn) pickService(btn.dataset.service);
         });
 
-        // === SERVICE SEARCH ================================================
-        // The picker covers the four things most people want. This covers the
-        // other twenty-odd without putting them all on screen by default.
-        // A service with no agreed price is still listed and still orderable —
-        // it just goes to WhatsApp for a quote rather than showing a number we
-        // would be inventing.
-        const search = document.getElementById('svcSearch');
-        const results = document.getElementById('svc-results');
-        const pickBody = document.getElementById('pickBody');
-        const clearBtn = document.getElementById('svcClear');
+        document.getElementById('qtyGrid').addEventListener('click', (e) => {
+            const btn = e.target.closest('.gb-qty');
+            if (!btn) return;
+            if (gb.isPriced()) {
+                const plan = gb.pricedPlans().filter((p) => p.id === btn.dataset.plan)[0];
+                if (plan) gb.qty = plan;
+            } else if (btn.dataset.qty === 'custom') {
+                gb.qty = { label: 'a custom amount', custom: true };
+            } else {
+                gb.qty = { n: Number(btn.dataset.qty), label: btn.dataset.label };
+            }
+            gb.render();
+            if (navigator.vibrate) navigator.vibrate(10);
+        });
 
-        if (search && results && pickBody) {
-            const WA = 'https://wa.me/256762193386?text=';
+        // handing a priced choice to the order page so step 1 there arrives done
+        document.getElementById('sumCta').addEventListener('click', () => {
+            if (gb.isPriced()) {
+                const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
+                P.Pending.set(key, gb.qty.id);
+            }
+        });
 
-            const card = (s) => {
-                const meta = P.PLAT_META[s.platform];
-                const mark = meta.logo
-                    ? `<img src="${meta.logo}" alt="">`
-                    : `<span class="svc-ic"><i class="${meta.icon}"></i></span>`;
-
-                // priced services link to their order page; the rest ask
-                const priced = s.sizes && s.sizes[0] && s.sizes[0].usd != null;
-                let money, href, cta;
-
-                if (priced) {
-                    const currency = P.Region.data(builder.region).currency;
-                    const top = s.sizes[s.sizes.length - 1];
-                    const from = s.sizes.length > 1 || top.qty === null;
-                    money = (from ? 'From ' : '') + P.money(P.localPrice(top.usd, currency), currency);
-                    href = s.href;
-                    cta = 'Order';
-                } else {
-                    // "Price on request" next to an "Ask" button says the same
-                    // thing twice and squeezes the name into three lines — the
-                    // action alone carries it
-                    money = '';
-                    href = WA + encodeURIComponent(`Hi, I'd like a price for ${s.name}.`);
-                    cta = 'Get a price';
-                }
-
-                return `<a class="svc${priced ? '' : ' is-quote'}" href="${href}"${priced ? '' : ' target="_blank" rel="noopener"'}>
-                    <span class="svc-mark">${mark}</span>
-                    <span class="svc-copy">
-                        <b>${s.name}</b>
-                        <small>${meta.name} · ${s.unit}</small>
-                    </span>
-                    <span class="svc-end">
-                        ${money ? `<span class="svc-money">${money}</span>` : ''}
-                        <span class="svc-go">${cta} <i class="fas fa-arrow-right"></i></span>
-                    </span>
-                </a>`;
-            };
-
-            const run = () => {
-                const q = search.value.trim();
-                clearBtn.hidden = !q;
-
-                if (!q) {
-                    results.hidden = true;
-                    results.innerHTML = '';
-                    pickBody.hidden = false;
-                    return;
-                }
-
-                pickBody.hidden = true;
-                results.hidden = false;
-
-                const hits = P.searchServices(q);
-                if (!hits.length) {
-                    results.innerHTML = `<p class="svc-empty">
-                        Nothing matches “${q.replace(/</g, '&lt;')}”.
-                        <a href="${WA + encodeURIComponent('Hi, do you sell: ' + q + '?')}" target="_blank" rel="noopener">Ask us — we may still do it</a>.
-                    </p>`;
-                    return;
-                }
-                results.innerHTML =
-                    `<p class="svc-count">${hits.length} service${hits.length > 1 ? 's' : ''}</p>` +
-                    hits.map(card).join('');
-            };
-
-            search.addEventListener('input', run);
-            search.addEventListener('search', run);
-            clearBtn.addEventListener('click', () => {
-                search.value = '';
-                run();
-                search.focus();
+        // "Change" on any step clears it and everything after it
+        document.querySelectorAll('[data-reset]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                gb.reset(btn.dataset.reset);
+                gb.render();
             });
-        }
+        });
 
         const change = document.getElementById('bd-change');
         if (change) change.addEventListener('click', openGate);
@@ -266,7 +373,166 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!P.Region.get()) openGate();
     }
 
-    // === 5. MOBILE MENU ===
+
+    if (document.getElementById('growSticky') && P) {
+        document.getElementById('stickyBefore').addEventListener('click', () => {
+            const target = document.getElementById('growBuilder');
+            if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        });
+        document.getElementById('stickyCta').addEventListener('click', () => {
+            if (gb.isPriced()) {
+                const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
+                P.Pending.set(key, gb.qty.id);
+            }
+        });
+    }
+
+    // === 4. SHOP BY GOAL =====================================================
+    // A shortcut layer over the same real builder — a goal never invents a
+    // product, it just opens the builder to the platform/service that answers
+    // it. "Grow multiple platforms" points at the one real bundle instead of
+    // the single-platform builder, and "I manage client accounts" routes to
+    // the reseller banner rather than into the retail funnel, per the
+    // standing rule that reseller traffic stays out of that funnel.
+    document.querySelectorAll('.goal-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const jumpTo = btn.dataset.goalTarget; // 'bundle' | 'reseller' | absent = builder
+            if (jumpTo) {
+                const el = document.getElementById(jumpTo);
+                if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+                return;
+            }
+            if (!document.getElementById('growBuilder')) return;
+            const platKey = btn.dataset.goalPlatform;
+            const svcId = btn.dataset.goalService;
+            if (platKey) { gb.platform = platKey; gb.platformOpen = false; }
+            if (svcId) {
+                gb.service = P.SERVICES.filter((s) => s.id === svcId)[0] || null;
+                gb.serviceOpen = false;
+            }
+            gb.render();
+            const target = document.getElementById('growBuilder');
+            if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        });
+    });
+
+    // === 4a. STATIC PACKAGE CARDS ============================================
+    // Popular-package and bundle shortcuts show a real price without
+    // duplicating it as a hardcoded number — each carries data-pkg="key:id"
+    // and reads the same plansFor() data the builder itself uses, so a price
+    // can never say one thing in the shortcut and another in the builder.
+    function paintPkgCards() {
+        if (!P) return;
+        const region = P.Region.get() || 'UG';
+        document.querySelectorAll('[data-pkg]').forEach((el) => {
+            const parts = el.dataset.pkg.split(':');
+            const plans = P.plansFor(parts[0], region);
+            const plan = plans.filter((p) => p.id === parts[1])[0];
+            if (!plan) return;
+            const from = el.textContent.trim().indexOf('From') === 0 ? 'From ' : '';
+            el.textContent = from + P.money(plan.price, plan.currency);
+        });
+        document.querySelectorAll('[data-pkg-was]').forEach((el) => {
+            const parts = el.dataset.pkgWas.split(':');
+            const plans = P.plansFor(parts[0], region);
+            const plan = plans.filter((p) => p.id === parts[1])[0];
+            if (plan && plan.was) el.textContent = P.money(plan.was, plan.currency);
+            else el.hidden = true;
+        });
+    }
+    paintPkgCards();
+
+    // === 5. BROWSE ALL SERVICES — ACCORDION + SEARCH ========================
+    // The full 27-service catalogue lives here, not in the main funnel above.
+    // Accordions group by platform; opening one shows its real categories.
+    // Search sits in this section on purpose, not above the guided builder —
+    // it is the escape hatch for someone who already knows what they want,
+    // not the default way in.
+    document.querySelectorAll('.accordion-head').forEach((head) => {
+        head.addEventListener('click', () => {
+            const item = head.closest('.accordion-item');
+            const open = item.classList.toggle('is-open');
+            head.setAttribute('aria-expanded', String(open));
+        });
+    });
+
+    if (P) {
+        document.querySelectorAll('.accordion-body[data-platform]').forEach((body) => {
+            const key = body.dataset.platform;
+            const services = P.servicesFor(key);
+            body.innerHTML = services.map((s) => browseRow(s)).join('');
+        });
+    }
+
+    function browseRow(s) {
+        const priced = PRICED_IDS.indexOf(s.id) !== -1;
+        const meta = P.PLAT_META[s.platform];
+        let money, href, cta, blank;
+        if (priced) {
+            const currency = P.Region.data((P.Region.get() || 'UG')).currency;
+            const plans = s.id === 'yt_package' ? P.plansFor('yt', P.Region.get() || 'UG') : P.plansFor(PLAT_KEY_FOR[s.platform] || '', P.Region.get() || 'UG');
+            const top = plans[0];
+            money = 'From ' + P.money(top.price, top.currency);
+            href = s.href; cta = 'Order'; blank = false;
+        } else {
+            money = '';
+            href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(`Hi 97 World, I'd like a price for ${meta.name} ${s.short.toLowerCase()}.`)}`;
+            cta = 'Get a price'; blank = true;
+        }
+        return `<a class="svc${priced ? '' : ' is-quote'}" href="${href}"${blank ? ' target="_blank" rel="noopener"' : ''}>
+            <span class="svc-copy"><b>${s.short}</b><small>${s.unit}</small></span>
+            <span class="svc-end">
+                ${money ? `<span class="svc-money">${money}</span>` : ''}
+                <span class="svc-go">${cta} <i class="fas fa-arrow-right"></i></span>
+            </span>
+        </a>`;
+    }
+
+    const search = document.getElementById('svcSearch');
+    const results = document.getElementById('svc-results');
+    const browseAll = document.getElementById('browseAll');
+    const clearBtn = document.getElementById('svcClear');
+
+    if (search && results && browseAll && P) {
+        const WA = `https://wa.me/${WA_NUMBER}?text=`;
+
+        const run = () => {
+            const q = search.value.trim();
+            clearBtn.hidden = !q;
+
+            if (!q) {
+                results.hidden = true;
+                results.innerHTML = '';
+                browseAll.hidden = false;
+                return;
+            }
+
+            browseAll.hidden = true;
+            results.hidden = false;
+
+            const hits = P.searchServices(q);
+            if (!hits.length) {
+                results.innerHTML = `<p class="svc-empty">
+                    Nothing matches “${q.replace(/</g, '&lt;')}”.
+                    <a href="${WA + encodeURIComponent('Hi, do you sell: ' + q + '?')}" target="_blank" rel="noopener">Ask us — we may still do it</a>.
+                </p>`;
+                return;
+            }
+            results.innerHTML =
+                `<p class="svc-count">${hits.length} service${hits.length > 1 ? 's' : ''}</p>` +
+                hits.map(browseRow).join('');
+        };
+
+        search.addEventListener('input', run);
+        search.addEventListener('search', run);
+        clearBtn.addEventListener('click', () => {
+            search.value = '';
+            run();
+            search.focus();
+        });
+    }
+
+    // === 6. MOBILE MENU ===
     const burgerBtn = document.getElementById('burgerBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     const mmClose = document.getElementById('mmClose');
@@ -326,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
     }
 
-    // === 6. ONE BATCHED SCROLL LOOP =========================================
+    // === 7. ONE BATCHED SCROLL LOOP =========================================
     // navbar state + progress rail + hero parallax all read/write inside a
     // single rAF tick, so scrolling never triggers competing layout passes.
     const navbar = document.getElementById('navbar');
@@ -372,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
     onScrollFrame();
 
-    // === 7. COUNTERS ===
+    // === 8. COUNTERS ===
     const runCounters = (parent) => {
         parent.querySelectorAll('.anim-counter').forEach((counter) => {
             const target = +counter.getAttribute('data-target');
@@ -393,7 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // === 8. SCROLL REVEAL — IN *AND* OUT ===================================
+    // === 9. SCROLL REVEAL — IN *AND* OUT ===================================
     // number every stagger child so CSS can cascade them
     document.querySelectorAll('[data-stagger]').forEach((group) => {
         Array.prototype.forEach.call(group.children, (child, i) => {

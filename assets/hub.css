@@ -13,6 +13,12 @@
  * Neutral pages (home, trust, legal, 404) take the house emerald.
  */
 
+/* components below set their own display (flex/grid) on classes that JS also
+   toggles via the hidden attribute — without this, a same-specificity class
+   rule can beat the browser's default [hidden]{display:none} and leave a
+   "hidden" element rendered. */
+[hidden] { display: none !important; }
+
 body[data-hub="growth"],
 body[data-hub="house"] {
     --hub: #00FFB2;
@@ -542,187 +548,6 @@ body[data-hub] .display-hero em {
 }
 
 /* ==========================================================================
-   THE PICKER
-   Replaces the old two-step platform x size builder. That grid put "All 3"
-   inside the platform step while it carried its own price, so three prices
-   competed at once and the bundle looked permanently selected because it was
-   tinted with the same colour that means "chosen".
-   Here the bundle is a peer control with identical states, and each package
-   below is one complete offer you tap once.
-   ========================================================================== */
-.picker { max-width: 560px; margin: 0 auto; }
-
-.pick-label {
-    display: block; margin-bottom: 11px;
-    font-size: 0.68rem; font-weight: 800; letter-spacing: 0.16em;
-    text-transform: uppercase; color: #6a6a73;
-}
-
-.pick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.pick-tab {
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    padding: 15px 4px; border-radius: 16px; cursor: pointer;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09);
-    font-family: var(--font-body);
-    transition: transform 0.25s var(--curve-spring), border-color 0.25s, background 0.25s;
-    -webkit-tap-highlight-color: transparent;
-}
-.pick-tab img { width: 30px; height: 30px; object-fit: contain; }
-.pick-tab span { font-size: 0.7rem; font-weight: 700; color: #b9b9c2; }
-.pick-tab:active { transform: scale(0.96); }
-.pick-tab.is-on {
-    border-color: var(--hub); background: var(--hub-14);
-    box-shadow: 0 0 0 1px var(--hub), 0 14px 30px -18px var(--hub);
-}
-.pick-tab.is-on span { color: #fff; }
-
-/* ------------------------------------------------------------ the bundle --
-   Not a filter — a doorway to its own page. On tap the veil below raises and
-   everything else drops away, leaving only this lit, so the page change reads
-   as a consequence of the choice rather than a jump. */
-.focus-veil {
-    position: fixed; inset: 0; z-index: 900;
-    background: #020202; opacity: 0; pointer-events: none;
-    transition: opacity 0.34s ease;
-}
-body.is-focusing .focus-veil { opacity: 0.94; }
-body.is-focusing { overflow: hidden; }
-
-/* .container carries z-index:2, which makes it a stacking context — a z-index
-   on the row inside it can never climb past the veil on its own. So the
-   container is promoted above the veil, and everything in it except the chosen
-   row is faded instead. Net effect: the page goes dark, the bundle stays lit. */
-body.is-focusing #path > .container { z-index: 950; }
-body.is-focusing #path > .container > *:not(.picker),
-body.is-focusing .picker > *:not(.pick-wide) {
-    opacity: 0.06;
-    transition: opacity 0.34s ease;
-}
-body.is-focusing .pick-wide {
-    position: relative; z-index: 951;
-    border-color: var(--hub); background: var(--hub-14);
-    transform: scale(1.04);
-    box-shadow: 0 0 0 1px var(--hub), 0 30px 70px -20px var(--hub);
-}
-body.is-focusing .pick-wide .pick-save {
-    background: linear-gradient(100deg, var(--hub), var(--hub-2));
-    border-color: transparent; color: var(--hub-ink);
-}
-
-.pick-wide {
-    display: flex; align-items: center; gap: 13px; width: 100%;
-    margin-top: 9px; padding: 15px 17px; border-radius: 16px; cursor: pointer;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.09);
-    font-family: var(--font-body); text-align: left;
-    transition: transform 0.25s var(--curve-spring), border-color 0.25s, background 0.25s;
-    -webkit-tap-highlight-color: transparent;
-}
-.pick-wide:active { transform: scale(0.985); }
-.pick-wide:hover { border-color: var(--hub-35); background: var(--hub-8); }
-.pick-marks { display: flex; flex: none; }
-.pick-marks img {
-    width: 27px; height: 27px; object-fit: contain;
-    border-radius: 50%; background: #0a0b0e; padding: 1px;
-}
-.pick-marks img + img { margin-left: -9px; }
-.pick-wide-copy { flex: 1; min-width: 0; }
-.pick-wide-copy b { display: block; font-size: 0.92rem; font-weight: 700; color: #e8e8ee; }
-.pick-wide-arrow { flex: none; color: var(--hub); font-size: 0.85rem; }
-.pick-wide-copy small { display: block; margin-top: 2px; font-size: 0.72rem; color: var(--clr-muted); }
-.pick-save {
-    flex: none; padding: 5px 11px; border-radius: 100px;
-    background: transparent; border: 1px solid var(--hub-35); color: var(--hub);
-    font-size: 0.62rem; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase;
-    transition: background 0.25s, color 0.25s, border-color 0.25s;
-}
-
-
-/* ------------------------------------------------------------- the offers --
-   One card = one whole thing you can buy. The card is the button. */
-.deal-list { display: grid; gap: 20px; margin-top: 26px; }
-.deal {
-    /* min-width:0 — a grid item defaults to min-width:auto, and the price row
-       below has nowrap children, so without this the card refuses to shrink
-       below its min-content width and silently overflows the column (the body's
-       overflow-x:hidden then clips it, which hides the bug rather than fixing it) */
-    position: relative; min-width: 0;
-    display: flex; flex-direction: column; gap: 15px;
-    padding: 20px; border-radius: 18px; color: #fff;
-    background: rgba(8,9,12,0.9); border: 1px solid rgba(255,255,255,0.1);
-    transition: transform 0.28s var(--curve-spring), border-color 0.28s, background 0.28s;
-    -webkit-tap-highlight-color: transparent;
-}
-.deal:hover { transform: translateY(-3px); border-color: var(--hub-35); background: rgba(12,14,18,0.95); }
-.deal:active { transform: scale(0.985); }
-.deal.is-hero {
-    border-color: var(--hub);
-    background-image: linear-gradient(150deg, var(--hub-8), transparent 60%);
-    box-shadow: 0 0 0 1px var(--hub), 0 26px 52px -32px var(--hub);
-}
-.deal-tag {
-    position: absolute; top: 0; right: 16px; transform: translateY(-50%);
-    padding: 5px 12px; border-radius: 100px;
-    background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink);
-    font-size: 0.6rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase;
-}
-.deal-head b {
-    display: block; font-family: var(--font-display);
-    font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
-}
-.deal-head small { display: block; margin-top: 5px; font-size: 0.84rem; color: var(--clr-muted); line-height: 1.45; }
-.deal-foot {
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-    gap: 12px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.13);
-}
-.deal-money { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 9px; min-width: 0; }
-.deal-money b {
-    font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.025em;
-    white-space: nowrap;
-}
-.deal.is-hero .deal-money b {
-    background: linear-gradient(100deg, var(--hub), var(--hub-2));
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-.deal-money s { font-size: 0.8rem; color: #6a6a73; white-space: nowrap; }
-.deal-go {
-    flex: none; display: inline-flex; align-items: center; gap: 7px;
-    padding: 9px 15px; border-radius: 100px;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
-    font-size: 0.8rem; font-weight: 700; white-space: nowrap;
-}
-.deal.is-hero .deal-go {
-    background: linear-gradient(100deg, var(--hub), var(--hub-2));
-    border-color: transparent; color: var(--hub-ink);
-}
-.deal-go i { transition: transform 0.25s; }
-.deal:hover .deal-go i { transform: translateX(3px); }
-
-.pick-note { margin-top: 16px; text-align: center; font-size: 0.78rem; color: #6a6a73; }
-.pick-note b { color: #b9b9c2; font-weight: 700; }
-.pick-note button {
-    background: none; border: none; padding: 0 0 0 4px; cursor: pointer;
-    color: var(--hub); font: inherit; font-weight: 700;
-    text-decoration: underline; text-underline-offset: 3px;
-}
-
-@media(max-width: 520px) {
-    .deal-foot { flex-direction: column; align-items: stretch; gap: 14px; }
-    .deal-go { justify-content: center; padding: 14px 18px; font-size: 0.88rem; }
-}
-@media(max-width: 420px) {
-    .pick-tab { padding: 13px 3px; gap: 7px; }
-    .pick-tab img { width: 26px; height: 26px; }
-    .pick-tab span { font-size: 0.63rem; }
-    .deal { padding: 18px; }
-    .deal-head b { font-size: 1.22rem; }
-    .deal-money b { font-size: 1.16rem; }
-}
-@media(prefers-reduced-motion: reduce) {
-    .pick-tab, .pick-wide, .deal { transition: none !important; }
-    .deal:hover { transform: none !important; }
-}
-
-/* ==========================================================================
    SERVICE SEARCH
    The picker handles the four things most people come for. This reaches the
    rest of the catalogue without putting all twenty-odd on screen by default —
@@ -911,4 +736,297 @@ body.order-page .wa-fab { bottom: calc(var(--dock-h, 92px) + env(safe-area-inset
 @media(prefers-reduced-motion: reduce) {
     .wa-fab { transition: opacity 0.2s linear; transform: none !important; }
     .wa-fab.is-visible { transform: none !important; }
+}
+
+/* ==========================================================================
+   GROWTH HERO + BUILDER — the whole first screen
+   A fintech-checkout hero, not a cinematic one: short, no campaign photo, no
+   500-720px min-height. On desktop it sits beside the live builder in a two
+   column grid (same markup order — the grid just collapses to one column on
+   mobile, so the builder naturally falls below the copy with no reordering).
+   ========================================================================== */
+.growth-hero {
+    position: relative;
+    padding: 108px 0 48px;
+    background: var(--clr-bg);
+}
+.growth-grid {
+    display: grid; gap: 32px;
+    max-width: 1240px; margin: 0 auto; padding: 0 24px;
+}
+@media(min-width: 1024px) {
+    .growth-hero { padding: 128px 0 64px; }
+    .growth-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 56px; align-items: start; }
+}
+
+.growth-copy { text-align: center; }
+@media(min-width: 1024px) { .growth-copy { text-align: left; padding-top: 28px; position: sticky; top: 120px; } }
+
+.growth-copy h1 {
+    font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.08; letter-spacing: -0.02em; font-weight: 800;
+}
+.growth-copy h1 em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.growth-sub { margin-top: 14px; font-size: 1rem; color: var(--clr-muted); line-height: 1.6; max-width: 460px; }
+@media(min-width: 1024px) { .growth-sub { margin-left: 0; margin-right: 0; } }
+.growth-copy .growth-sub { margin-left: auto; margin-right: auto; }
+@media(min-width: 1024px) { .growth-copy .growth-sub { margin-left: 0; margin-right: 0; } }
+
+.growth-trustline { margin-top: 14px; font-size: 0.86rem; color: #8a8a93; }
+.growth-trustline i { color: var(--hub); margin-right: 5px; }
+
+.growth-cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; justify-content: center; }
+@media(min-width: 1024px) { .growth-cta-row { justify-content: flex-start; } }
+
+/* ==========================================================================
+   BUILDER CARD — one card, three steps, then a summary
+   ========================================================================== */
+.builder-card {
+    background: var(--clr-surface); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px; padding: 22px;
+    box-shadow: 0 20px 50px -30px rgba(0,0,0,0.6);
+}
+.builder-card-head { margin-bottom: 18px; }
+.builder-card-head h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; }
+.builder-card-head p { margin-top: 3px; font-size: 0.82rem; color: var(--clr-muted); }
+
+.gb-step + .gb-step { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.07); }
+.gb-step-label {
+    display: block; margin-bottom: 10px;
+    font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #6a6a73;
+}
+
+/* the collapsed row a finished step becomes — one line, a value, a way back */
+.gb-done { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.gb-done-val { font-size: 0.95rem; font-weight: 700; color: #fff; }
+.gb-done button {
+    background: none; border: none; padding: 4px 2px; cursor: pointer;
+    color: var(--hub); font: inherit; font-size: 0.78rem; font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+}
+
+.gb-tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.gb-tile {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    padding: 14px 4px; border-radius: 14px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    color: #b9b9c2; font-family: var(--font-body);
+    transition: border-color 0.2s, background 0.2s, transform 0.2s var(--curve-spring);
+    -webkit-tap-highlight-color: transparent;
+}
+.gb-tile img { width: 26px; height: 26px; object-fit: contain; }
+.gb-tile i { font-size: 1.15rem; }
+.gb-tile span { font-size: 0.68rem; font-weight: 700; }
+.gb-tile:active { transform: scale(0.96); }
+.gb-tile.is-on { border-color: var(--hub); background: var(--hub-8); color: #fff; }
+
+.gb-more-btn {
+    display: block; margin-top: 10px; padding: 4px 2px;
+    background: none; border: none; cursor: pointer;
+    color: var(--hub); font: inherit; font-size: 0.8rem; font-weight: 700;
+    text-align: center;
+}
+.gb-more-list { margin-top: 8px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+.gb-chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.gb-chip {
+    padding: 10px 15px; border-radius: 100px; cursor: pointer;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    color: #d2d2da; font: inherit; font-size: 0.84rem; font-weight: 600;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+.gb-chip.is-on { border-color: var(--hub); background: var(--hub-8); color: #fff; }
+
+.gb-qty-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gb-qty {
+    padding: 13px 6px; border-radius: 14px; cursor: pointer; text-align: center;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+    color: #fff; font-family: var(--font-body);
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+.gb-qty b { display: block; font-family: var(--font-display); font-size: 0.96rem; font-weight: 700; }
+.gb-qty span { display: block; margin-top: 3px; font-size: 0.72rem; color: var(--hub); font-weight: 700; }
+.gb-qty.is-on { border-color: var(--hub); background: var(--hub-8); }
+.gb-qty[aria-pressed="true"] { border-color: var(--hub); background: var(--hub-8); }
+
+/* ------------------------------------------------------------- summary --- */
+.gb-summary {
+    margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.09);
+}
+.gb-sum-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.gb-sum-row + .gb-sum-row { margin-top: 6px; }
+.gb-sum-what { font-size: 0.95rem; font-weight: 700; color: #fff; }
+.gb-sum-qty { font-size: 0.85rem; color: var(--clr-muted); }
+.gb-sum-price {
+    margin-top: 12px; font-family: var(--font-display); font-size: 1.55rem; font-weight: 700;
+    letter-spacing: -0.02em; color: var(--hub);
+}
+.gb-sum-deposit {
+    margin-top: 8px; padding: 10px 13px; border-radius: 12px;
+    background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.14);
+    font-size: 0.86rem; color: #d2d2da;
+}
+.gb-sum-deposit b { color: var(--hub); font-family: var(--font-display); }
+.gb-sum-deposit span { display: block; margin-top: 2px; font-size: 0.72rem; color: #8a8a93; }
+.gb-sum-trust { list-style: none; margin-top: 12px; display: grid; gap: 6px; }
+.gb-sum-trust li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: #b9b9c2; }
+.gb-sum-trust i { color: var(--hub); font-size: 0.74rem; margin-top: 2px; flex: none; }
+.gb-sum-cta {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    width: 100%; margin-top: 14px; padding: 16px 20px; border-radius: 14px;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink);
+    font-size: 1rem; font-weight: 800; text-align: center;
+    box-shadow: 0 16px 34px -20px var(--hub);
+    transition: transform 0.25s var(--curve-spring);
+}
+.gb-sum-cta:hover { transform: translateY(-2px); }
+.gb-sum-cta:active { transform: scale(0.98); }
+
+.gb-region-note { margin-top: 14px; text-align: center; font-size: 0.76rem; color: #6a6a73; }
+.gb-region-note b { color: #b9b9c2; font-weight: 700; }
+.gb-region-note button {
+    background: none; border: none; padding: 0 0 0 4px; cursor: pointer;
+    color: var(--hub); font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px;
+}
+
+@media(prefers-reduced-motion: reduce) {
+    .gb-tile, .gb-qty, .gb-sum-cta { transition: none !important; }
+    .gb-tile:active, .gb-sum-cta:hover, .gb-sum-cta:active { transform: none !important; }
+}
+
+/* ==========================================================================
+   STICKY MOBILE CTA — updates with the builder, hidden on desktop
+   ========================================================================== */
+.grow-sticky {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 480;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(6,7,10,0.94); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.sticky-before, .sticky-after { display: flex; align-items: center; gap: 12px; }
+.sticky-before {
+    justify-content: center; padding: 12px; border-radius: 12px; cursor: pointer;
+    background: var(--hub-14); border: 1px solid var(--hub-35);
+    color: var(--hub); font: inherit; font-size: 0.92rem; font-weight: 700; width: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+.sticky-what-wrap { flex: 1; min-width: 0; }
+.sticky-what-wrap b { display: block; font-size: 0.84rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-what-wrap span { display: block; margin-top: 1px; font-size: 0.74rem; color: var(--hub); font-weight: 700; }
+.sticky-after a.gb-sum-cta { flex: none; width: auto; margin-top: 0; padding: 12px 20px; font-size: 0.88rem; }
+
+@media(min-width: 1024px) { .grow-sticky { display: none; } }
+
+/* the standing circular WhatsApp fab needs to clear this bar on mobile */
+body[data-hub="growth"] .wa-fab { bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 14px); }
+@media(min-width: 1024px) { body[data-hub="growth"] .wa-fab { bottom: 18px; } }
+
+/* ==========================================================================
+   POPULAR PACKAGES + BUNDLE — small real cards, never invented ones
+   ========================================================================== */
+.pop-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, 1fr); }
+.pop-card {
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 18px; border-radius: 18px; color: #fff;
+    background: var(--clr-surface); border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.22s, transform 0.22s var(--curve-spring);
+}
+.pop-card:hover { border-color: var(--hub-35); transform: translateY(-3px); }
+.pop-card img { width: 28px; height: 28px; object-fit: contain; }
+.pop-card b { font-size: 0.95rem; font-weight: 700; }
+.pop-card .pop-price { margin-top: auto; font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--hub); }
+.pop-card .pop-go { font-size: 0.78rem; font-weight: 700; color: #8a8a93; }
+
+.bundle-card {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 18px;
+    padding: 24px; border-radius: 20px; color: #fff;
+    background: linear-gradient(150deg, var(--hub-8), transparent 60%);
+    border: 1px solid var(--hub);
+    box-shadow: 0 20px 46px -30px var(--hub);
+}
+.bundle-marks { display: flex; flex: none; }
+.bundle-marks img { width: 30px; height: 30px; object-fit: contain; border-radius: 50%; background: #0a0b0e; padding: 2px; }
+.bundle-marks img + img { margin-left: -10px; }
+.bundle-copy { flex: 1; min-width: 200px; }
+.bundle-copy b { display: block; font-size: 1.1rem; font-weight: 700; }
+.bundle-copy p { margin-top: 4px; font-size: 0.86rem; color: var(--clr-muted); }
+.bundle-price { flex: none; text-align: right; }
+.bundle-price b { display: block; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--hub); }
+.bundle-price s { font-size: 0.8rem; color: #6a6a73; }
+.bundle-cta {
+    flex: none; display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 20px; border-radius: 100px;
+    background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink);
+    font-weight: 700; font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   SHOP BY GOAL
+   ========================================================================== */
+.goal-grid { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
+.goal-btn {
+    display: flex; align-items: center; gap: 12px; text-align: left;
+    padding: 15px; border-radius: 16px; cursor: pointer;
+    background: var(--clr-surface); border: 1px solid rgba(255,255,255,0.08);
+    color: #fff; font: inherit;
+    transition: border-color 0.22s, transform 0.22s var(--curve-spring);
+    -webkit-tap-highlight-color: transparent;
+}
+.goal-btn:hover { border-color: var(--hub-35); transform: translateY(-2px); }
+.goal-btn:active { transform: scale(0.98); }
+.goal-btn i { color: var(--hub); font-size: 1rem; flex: none; }
+.goal-btn span { font-size: 0.86rem; font-weight: 600; line-height: 1.3; }
+
+/* ==========================================================================
+   ACCORDION — browse all services, grouped by platform not dumped flat
+   ========================================================================== */
+.accordion { display: grid; gap: 8px; }
+.accordion-item {
+    border-radius: 16px; overflow: hidden;
+    background: var(--clr-surface); border: 1px solid rgba(255,255,255,0.08);
+}
+.accordion-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    width: 100%; padding: 15px 17px; cursor: pointer;
+    background: none; border: none; color: #fff; font: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+.accordion-head-left { display: flex; align-items: center; gap: 11px; }
+.accordion-head img { width: 24px; height: 24px; object-fit: contain; }
+.accordion-head i.gb-plat-ic { color: var(--hub); font-size: 1rem; }
+.accordion-head b { font-size: 0.92rem; font-weight: 700; }
+.accordion-head .accordion-chevron { color: #6a6a73; font-size: 0.8rem; transition: transform 0.25s; }
+.accordion-item.is-open .accordion-chevron { transform: rotate(180deg); }
+.accordion-body {
+    display: grid; gap: 6px; padding: 0 12px 12px;
+    max-height: 0; overflow: hidden;
+}
+.accordion-item.is-open .accordion-body { max-height: 900px; }
+
+/* ==========================================================================
+   RESELLER BANNER
+   ========================================================================== */
+.reseller-banner {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 14px; padding: 18px 22px; border-radius: 16px;
+    background: rgba(255,255,255,0.025); border: 1px dashed rgba(255,255,255,0.14);
+}
+.reseller-banner p { font-size: 0.88rem; color: var(--clr-muted); }
+.reseller-banner p b { display: block; color: #fff; font-size: 0.94rem; margin-bottom: 2px; }
+.reseller-banner a { flex: none; font-size: 0.86rem; font-weight: 700; color: var(--hub); white-space: nowrap; }
+
+@media(max-width: 560px) {
+    .gb-tile-grid { gap: 6px; }
+    .gb-tile { padding: 12px 3px; }
+    .gb-tile span { font-size: 0.62rem; }
+    .gb-qty-grid { grid-template-columns: repeat(2, 1fr); }
+    .pop-grid { grid-template-columns: 1fr 1fr; }
+    .goal-grid { grid-template-columns: 1fr; }
+    .bundle-card { padding: 20px; }
+    .bundle-price { text-align: left; }
 }
