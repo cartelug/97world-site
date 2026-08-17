@@ -1,50 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="obsidian-theme">
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+
     <title>Privacy Policy | 97 World</title>
-    
+    <meta name="description" content="What 97 World collects, why, who it goes to, and what we will never ask you for.">
+    <meta name="robots" content="index, follow">
+
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
-    
+
+    <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-    
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <link rel="stylesheet" href="privacy.css">
+
+    <link rel="stylesheet" href="/HOME/style.css">
+    <link rel="stylesheet" href="/assets/hub.css">
 </head>
-<body>
+<body data-hub="house">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
   <div class="k97pl-bar"><i></i></div>
 </div>
 
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
 
-    <div class="legal-container">
-        <a href="../index.html" class="back-btn">
-            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Back to Home
-        </a>
+    <nav class="precision-nav fade-up" id="navbar">
+        <div class="container nav-grid">
+            <a href="/" class="brand-monolith">
+                <img src="/IMAGES/logo.png" alt="97 World" class="brand-icon">
+                <span class="brand-text">WORLD</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="/growth/" class="nav-item">Grow</a>
+                <a href="/websites/" class="nav-item">Build</a>
+                <a href="/trust/" class="nav-item">Trust</a>
+            </div>
+            <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
 
-        <h1>Privacy Policy</h1>
-        <p>Last Updated: October 2023</p>
-
-        <h2>1. Information We Collect</h2>
-        <p>At 97 World, we collect minimal information necessary to provide our social media growth services. This includes your name, phone number (for WhatsApp communication), the profile/handle you want boosted, and payment details required to process your order.</p>
-
-        <h2>2. How We Use Your Data</h2>
-        <p>We use your information strictly to deliver your requested service, provide customer support, and communicate regarding order updates or technical issues. We do not sell your personal data to third parties.</p>
-
-        <h2>3. Data Security</h2>
-        <p>We implement industry-standard security measures to protect your information. All transactions and account credentials shared via WhatsApp are treated with strict confidentiality.</p>
-
-        <h2>4. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact our VIP Support team via WhatsApp.</p>
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+        <div class="mm-head">
+            <a href="/" class="mm-brand">
+                <img src="/IMAGES/logo.png" alt="" class="mm-logo">
+                <span>WORLD</span>
+            </a>
+            <button type="button" class="mm-close" id="mmClose" aria-label="Close menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+        <div class="mm-scroll">
+            <nav class="mm-links">
+                <a href="/" class="mm-link">Home <i class="fas fa-arrow-right"></i></a>
+                <a href="/growth/" class="mm-link">Grow my audience <i class="fas fa-arrow-right"></i></a>
+                <a href="/websites/" class="mm-link">Build my business <i class="fas fa-arrow-right"></i></a>
+                <a href="/trust/" class="mm-link">Trust centre <i class="fas fa-arrow-right"></i></a>
+                <a href="/terms-of-service/" class="mm-link">Terms of service <i class="fas fa-arrow-right"></i></a>
+            </nav>
+        </div>
+        <div class="mm-foot">
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="mm-wa">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+            <a href="tel:+256762193386" class="mm-call"><i class="fas fa-phone"></i> Call us</a>
+        </div>
     </div>
 
-<script src="/assets/preloader.js" defer></script>
+    <main class="smooth-scroll-wrapper">
+
+        <header class="doc-hero">
+            <div class="container">
+                <h1 class="fade-up delay-1">Privacy <em>Policy</em></h1>
+                <p class="fade-up delay-2">What we collect, why we have it, who else sees it — and the one thing we will never ask you for.</p>
+                <span class="doc-meta fade-up delay-2">Last updated: August 2026</span>
+            </div>
+        </header>
+
+        <div class="container">
+            <nav class="doc-toc fade-up" aria-label="Contents">
+                <h2>Contents</h2>
+                <ol>
+                    <li><a href="#never">What we never ask for</a></li>
+                    <li><a href="#collect">What we collect</a></li>
+                    <li><a href="#why">Why we collect it</a></li>
+                    <li><a href="#share">Who else sees it</a></li>
+                    <li><a href="#site">What this website stores</a></li>
+                    <li><a href="#keep">How long we keep it</a></li>
+                    <li><a href="#rights">Your rights</a></li>
+                    <li><a href="#security">Keeping it safe</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ol>
+            </nav>
+
+            <article class="doc fade-up">
+
+                <section id="never">
+                    <h2><span class="n">01</span> What we never ask for</h2>
+                    <div class="doc-callout">
+                        <i class="fas fa-key"></i>
+                        <p>
+                            <b>We never ask for your password. Not for any service, not at any point.</b>
+                            Everything we deliver works from your public handle, page or video link. If anyone
+                            claiming to be 97 World asks you for a login, a one-time code, or access to your
+                            account — it is not us. Stop, and tell us on WhatsApp.
+                        </p>
+                    </div>
+                    <p>We also never ask for your Mobile Money PIN. A genuine payment request is confirmed on your own phone by you, and nobody at 97 World needs to know that number.</p>
+                </section>
+
+                <section id="collect">
+                    <h2><span class="n">02</span> What we collect</h2>
+                    <p>The least we need to deliver your order:</p>
+                    <ul>
+                        <li><b>Your name</b> — so we know who we're talking to.</li>
+                        <li><b>Your WhatsApp number</b> — this is how orders are confirmed and how we reach you.</li>
+                        <li><b>The public handle, page or link</b> you want the order delivered to.</li>
+                        <li><b>Your order details</b> — the package, the price, the currency, and the region you selected.</li>
+                        <li><b>A payment reference</b> — the confirmation of a Mobile Money transfer. We do not hold your Mobile Money account credentials or any card details.</li>
+                        <li><b>Whether someone referred you</b>, if you tell us.</li>
+                        <li><b>For website work</b> — the content you send us to build with: text, photos, logos and business details.</li>
+                    </ul>
+                </section>
+
+                <section id="why">
+                    <h2><span class="n">03</span> Why we collect it</h2>
+                    <p>To deliver what you ordered, to reach you about it, and to keep a record of the order so the 30-day refill can be honoured if you need it. That's the whole list.</p>
+                    <p>We don't build advertising profiles, and we don't run behavioural tracking on this website.</p>
+                </section>
+
+                <section id="share">
+                    <h2><span class="n">04</span> Who else sees it</h2>
+                    <p>Being straight with you about this matters more than sounding impressive:</p>
+                    <ul>
+                        <li><b>Our delivery partners.</b> Growth orders are fulfilled through supplier networks. They receive the public handle and the quantity — the information needed to deliver. They don't receive your name or your phone number.</li>
+                        <li><b>Payment providers.</b> MTN and Airtel process the transfer itself and hold their own records of it under their own policies.</li>
+                        <li><b>Our order records.</b> Confirmed orders are stored in our own systems so we can track delivery and honour the refill.</li>
+                    </ul>
+                    <p><b>We do not sell your personal information to anybody, for any reason.</b> We don't pass your number to marketers, and we don't add you to anything you didn't ask to join.</p>
+                    <p>We may disclose information where the law requires it.</p>
+                </section>
+
+                <section id="site">
+                    <h2><span class="n">05</span> What this website stores</h2>
+                    <p>This site runs no advertising trackers and sets no advertising cookies. It stores two things in your own browser, and both stay on your device:</p>
+                    <ul>
+                        <li><b>Your region</b> — so prices show in the right currency and you're not asked again on every page.</li>
+                        <li><b>A package you selected</b> — carried from the price builder to the order page so you don't have to pick it twice. This one clears when you close the tab.</li>
+                    </ul>
+                    <p>Clearing your browser data removes both. Nothing about them is sent to us until you choose to send an order.</p>
+                </section>
+
+                <section id="keep">
+                    <h2><span class="n">06</span> How long we keep it</h2>
+                    <p>Order records are kept while your order is active and for a reasonable period afterwards — long enough to honour the 30-day refill and to answer questions about what was delivered.</p>
+                    <p>WhatsApp conversations stay in the app the same way any chat does, on both your phone and ours. You can delete your side at any time.</p>
+                </section>
+
+                <section id="rights">
+                    <h2><span class="n">07</span> Your rights</h2>
+                    <p>Message us and you can:</p>
+                    <ul>
+                        <li>Ask what information we hold about you.</li>
+                        <li>Ask us to correct anything that's wrong.</li>
+                        <li>Ask us to delete your details, once any active order is finished and the refill window has passed.</li>
+                    </ul>
+                    <p>You don't need a reason and there's no charge for asking.</p>
+                </section>
+
+                <section id="security">
+                    <h2><span class="n">08</span> Keeping it safe</h2>
+                    <p>We keep what we hold to a minimum, which is the most effective protection there is — information we never collected can't be leaked. Access to order records is limited to the people who need it to deliver your work.</p>
+                    <p>No system is perfectly secure, and we won't claim otherwise. What we can tell you is that we hold no passwords, no PINs and no card numbers, so those cannot be lost from us.</p>
+                </section>
+
+                <section id="contact">
+                    <h2><span class="n">09</span> Contact</h2>
+                    <p>Any question about your information goes to the same place as everything else:</p>
+                    <ul>
+                        <li>WhatsApp: <a href="https://wa.me/256762193386" target="_blank" rel="noopener">+256 762 193 386</a></li>
+                        <li>Phone: <a href="tel:+256762193386">+256 762 193 386</a></li>
+                    </ul>
+                    <p>See also our <a href="/terms-of-service/">Terms of Service</a> and the <a href="/trust/">Trust Centre</a>.</p>
+                </section>
+
+            </article>
+        </div>
+
+    </main>
+
+    <footer class="obsidian-footer">
+        <div class="container footer-matrix">
+            <div class="f-brand fade-up delay-1">
+                <img src="/IMAGES/logo.png" alt="97 World" loading="lazy">
+                <p>The elite digital standard. Connect first, pay after.</p>
+            </div>
+            <div class="f-links fade-up delay-2">
+                <h4 class="f-head">Grow</h4>
+                <a href="/growth/">All growth plans</a>
+                <a href="/instagram-boost/">Instagram Boost</a>
+                <a href="/tiktok-boost/">TikTok Boost</a>
+                <a href="/facebook-boost/">Facebook Boost</a>
+                <a href="/youtube-boost/">YouTube Boost</a>
+            </div>
+            <div class="f-links fade-up delay-3">
+                <h4 class="f-head">Build</h4>
+                <a href="/websites/">Website packages</a>
+                <a href="/websites/#emails">Business emails</a>
+                <a href="/websites/#fliers">Fliers &amp; design</a>
+            </div>
+            <div class="f-links fade-up delay-4">
+                <h4 class="f-head">Command Center</h4>
+                <a href="https://wa.me/256762193386" target="_blank" rel="noopener">VIP WhatsApp Support</a>
+                <a href="/trust/">Trust Centre</a>
+                <a href="/terms-of-service/">Terms of Protocol</a>
+                <a href="/privacy-policy/">Privacy Doctrine</a>
+            </div>
+        </div>
+        <div class="footer-bottom fade-up delay-4">
+            <div class="sys-op">
+                <span class="pulse-dot"></span> 2026 97 World. System Operational.
+            </div>
+        </div>
+    </footer>
+
+    <script src="/HOME/script.js" defer></script>
+    <script src="/assets/preloader.js" defer></script>
 </body>
 </html>

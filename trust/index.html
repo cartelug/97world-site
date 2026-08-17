@@ -1,142 +1,276 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="obsidian-theme">
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trust Verification - 97 World</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+
+    <title>Trust Centre | 97 World</title>
+    <meta name="description" content="How to check whether any seller asking you to pay first is real — including us. No password, 30% starts it, 30-day refill, and customers you can talk to directly.">
+
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
+    <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <link rel="stylesheet" href="../HOME/style.css?v=7.0"> 
-    <link rel="stylesheet" href="style.css?v=7.0">   
+
+    <link rel="stylesheet" href="/HOME/style.css">
+    <link rel="stylesheet" href="/assets/hub.css">
 </head>
-<body>
+<body data-hub="house">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
   <div class="k97pl-bar"><i></i></div>
 </div>
 
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
+    <div class="cursor-spotlight" id="spotlight"></div>
 
-    <div class="nebula-bg">
-        <div class="gradient-orb orb-1"></div>
-        <div class="gradient-orb orb-2"></div>
-        <div class="noise-texture"></div>
-    </div>
-
-    <nav class="navbar">
-        <div class="container nav-content">
-            <a href="../index.html" class="logo-wrapper">
-                <img src="/IMAGES/logo.png" alt="97 World" class="brand-logo">
+    <nav class="precision-nav fade-up" id="navbar">
+        <div class="container nav-grid">
+            <a href="/" class="brand-monolith">
+                <img src="/IMAGES/logo.png" alt="97 World" class="brand-icon">
+                <span class="brand-text">WORLD</span>
             </a>
-            
-            <div class="nav-links desktop-only">
-                <a href="../index.html#services" class="nav-item">Catalog</a>
-                <a href="#" class="nav-item active">Trust Center</a>
-                <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="nav-item">Support</a>
+            <div class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="/growth/" class="nav-item">Grow</a>
+                <a href="/websites/" class="nav-item">Build</a>
+                <a href="#proof" class="nav-item">Proof</a>
             </div>
-
-            <div class="nav-actions">
-                <a href="../index.html#services" class="action-btn">Order Now</a>
-            </div>
+            <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
-    <main class="trust-main">
-        
-        <section class="interactive-hero container">
-            <div class="status-badge"><i class="fas fa-lock"></i> VERIFIED SERVICE</div>
-            <h1 class="mega-title">Let's Talk About <span class="text-alert">Scams.</span></h1>
-            <p class="hero-desc">We know you are careful with your money. You should be. Here is the truth.</p>
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+        <div class="mm-head">
+            <a href="/" class="mm-brand">
+                <img src="/IMAGES/logo.png" alt="" class="mm-logo">
+                <span>WORLD</span>
+            </a>
+            <button type="button" class="mm-close" id="mmClose" aria-label="Close menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
 
-            <div class="truth-wizard">
-                
-                <div class="truth-card active" id="card-1">
-                    <div class="icon-ring"><i class="fas fa-user-shield"></i></div>
-                    <h3>"Is this real or a scam?"</h3>
-                    <p>It's the first question everyone asks. The internet is full of fakes, so being careful is smart.</p>
-                    <button class="btn glass-btn" onclick="nextCard(2)">See Proof <i class="fas fa-arrow-right"></i></button>
+        <div class="mm-scroll">
+            <nav class="mm-links">
+                <a href="#checks" class="mm-link">How to check us <i class="fas fa-arrow-right"></i></a>
+                <a href="#proof" class="mm-link">Client proof <i class="fas fa-arrow-right"></i></a>
+                <a href="#ask" class="mm-link">Talk to our customers <i class="fas fa-arrow-right"></i></a>
+                <a href="/growth/" class="mm-link">Grow my audience <i class="fas fa-arrow-right"></i></a>
+                <a href="/websites/" class="mm-link">Build my business <i class="fas fa-arrow-right"></i></a>
+            </nav>
+        </div>
+
+        <div class="mm-foot">
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="mm-wa">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+            <a href="tel:+256762193386" class="mm-call"><i class="fas fa-phone"></i> Call us</a>
+        </div>
+    </div>
+
+    <main class="smooth-scroll-wrapper">
+
+        <header class="doc-hero">
+            <div class="container">
+                <span class="hub-eyebrow fade-up delay-1">
+                    <span class="dot"></span> Trust Centre
+                </span>
+                <h1 class="fade-up delay-1">Let's talk about <em>scams.</em></h1>
+                <p class="fade-up delay-2">
+                    You're right to be careful with money online. So here is how to check whether
+                    anyone asking you to pay first is real — us included. Use it on us. Then use it
+                    on the next person who quotes you a price.
+                </p>
+            </div>
+        </header>
+
+        <!-- ============================================== THE CHECKLIST === -->
+        <section id="checks" class="hub-sec hub-sec--tight">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">Five questions</span>
+                    <h2>How to check <em>any seller</em></h2>
+                    <p>None of these require you to trust us. They're just the questions that separate a business from a disappearing act.</p>
                 </div>
 
-                <div class="truth-card" id="card-2">
-                    <div class="icon-ring"><i class="fas fa-ban"></i></div>
-                    <h3>Scammers Hide. We Don't.</h3>
-                    <p>Scammers block you after payment. We have a public WhatsApp group with members you can chat with daily.</p>
-                    <button class="btn glass-btn" onclick="nextCard(3)">Okay, that's good <i class="fas fa-arrow-right"></i></button>
-                </div>
+                <div class="check-list" data-stagger>
+                    <article class="check">
+                        <div class="check-ic"><i class="fas fa-location-dot"></i></div>
+                        <div>
+                            <h3>1. Can you find them away from the internet?</h3>
+                            <p>A real business has somewhere to be and a number a person picks up. <b>We're in Kampala, and the number on this site is answered by a person, not a bot.</b> Call it before you pay anything — that's what it's for.</p>
+                        </div>
+                    </article>
 
-                <div class="truth-card" id="card-3">
-                    <div class="icon-ring"><i class="fas fa-check-circle"></i></div>
-                    <h3>The "Connect First" Promise</h3>
-                    <p>We are so confident, we can connect your account <b>before</b> you fully commit. If it doesn't work, we don't want your money.</p>
-                    <button class="btn primary-glow" onclick="revealProof()">I Understand. Show Me Proof. <i class="fas fa-eye"></i></button>
-                </div>
+                    <article class="check">
+                        <div class="check-ic"><i class="fas fa-key"></i></div>
+                        <div>
+                            <h3>2. Do they ask for your password?</h3>
+                            <p>Nobody needs your login to add followers to a public account. Anyone who asks is either careless with your security or planning to take the account. <b>We deliver to your public handle or link, and we will never ask you for a password.</b></p>
+                        </div>
+                    </article>
 
+                    <article class="check">
+                        <div class="check-ic"><i class="fas fa-comments"></i></div>
+                        <div>
+                            <h3>3. Can you talk to their customers?</h3>
+                            <p>Not the reviews printed on their own website — anyone can type those. Actual customers, in a place where they can say what they like. <b>Ours are in the VIP group below, and they'll tell you the truth whether it flatters us or not.</b></p>
+                        </div>
+                    </article>
+
+                    <article class="check">
+                        <div class="check-ic"><i class="fas fa-hand-holding-dollar"></i></div>
+                        <div>
+                            <h3>4. Do they want all the money upfront?</h3>
+                            <p>Paying in full before you've seen anything is where most of the money that disappears, disappears. <b>We start your order on 30%, and the balance is only due once delivery is visibly running on your account.</b></p>
+                        </div>
+                    </article>
+
+                    <article class="check">
+                        <div class="check-ic"><i class="fas fa-rotate-left"></i></div>
+                        <div>
+                            <h3>5. What happens when something goes wrong?</h3>
+                            <p>Ask this <em>before</em> you pay, not after. If the answer is vague, that's your answer. <b>Ours: every order carries a 30-day refill — anything that drops off inside 30 days gets topped back up, free.</b></p>
+                        </div>
+                    </article>
+                </div>
             </div>
         </section>
 
-        <section id="proof-vault" class="proof-section container hidden-section">
-            <div class="section-header">
-                <h2>Verified <span class="highlight">Transactions</span></h2>
-                <p>Real screenshots from real 97 World users.</p>
-            </div>
-
-            <div class="carousel-container">
-                <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
-                
-                <div class="carousel-track" id="track">
-                    <div class="slide"><img src="../IMAGES/trust1.png" alt="Client Proof 1"></div>
-                    <div class="slide"><img src="../IMAGES/trust2.png" alt="Client Proof 2"></div>
-                    <div class="slide"><img src="../IMAGES/trust3.png" alt="Client Proof 3"></div>
-                    <div class="slide"><img src="../IMAGES/trust4.png" alt="Client Proof 4"></div>
-                    <div class="slide"><img src="../IMAGES/trust5.png" alt="Client Proof 5"></div>
-                    <div class="slide"><img src="../IMAGES/boost1.png" alt="Boost Proof 1"></div>
+        <!-- =================================================== THE PROOF === -->
+        <section id="proof" class="hub-sec hub-sec--line hub-sec--raised">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">Receipts</span>
+                    <h2>Real orders, real <em>screenshots</em></h2>
+                    <p>Conversations and deliveries from actual 97 World customers. Swipe through them.</p>
                 </div>
 
-                <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
-                <div class="swipe-hint"><i class="fas fa-hand-pointer"></i> Swipe to inspect</div>
-            </div>
+                <div class="proof-rail fade-up">
+                    <figure class="proof-shot"><img src="/IMAGES/trust1.png" alt="Screenshot of a completed 97 World order" loading="lazy"></figure>
+                    <figure class="proof-shot"><img src="/IMAGES/trust2.png" alt="Screenshot of a client conversation" loading="lazy"></figure>
+                    <figure class="proof-shot"><img src="/IMAGES/trust3.png" alt="Screenshot of a delivered growth order" loading="lazy"></figure>
+                    <figure class="proof-shot"><img src="/IMAGES/trust4.png" alt="Screenshot of a client payment confirmation" loading="lazy"></figure>
+                    <figure class="proof-shot"><img src="/IMAGES/trust5.png" alt="Screenshot of a completed delivery" loading="lazy"></figure>
+                </div>
+                <p class="rail-hint"><i class="fas fa-hand-pointer"></i> Swipe to see more</p>
 
-            <div class="metrics-row">
-                <div class="metric">
-                    <h3>2,100+</h3>
-                    <p>Active Users</p>
-                </div>
-                <div class="metric">
-                    <h3>4.9/5</h3>
-                    <p>User Rating</p>
-                </div>
-                <div class="metric">
-                    <h3>100%</h3>
-                    <p>Refund Rate</p>
+                <div class="hub-stats fade-up" style="margin-top:38px">
+                    <div data-plus><b class="anim-counter" data-target="2000">2,000</b><span>Active clients</span></div>
+                    <div data-plus><b class="anim-counter" data-target="10000">10,000</b><span>Payments processed</span></div>
+                    <div><b>2022</b><span>Serving East Africa since</span></div>
+                    <div><b>30 days</b><span>Refill cover</span></div>
                 </div>
             </div>
         </section>
 
-        <section id="final-cta" class="container hidden-section">
-            <div class="close-card">
-                <h2>You Have Seen The Truth.</h2>
-                <p>Now you have two choices: Continue paying full price, or join 97 World.</p>
-                
-                <div class="hero-buttons">
-                    <a href="../boost-package/" class="btn primary-glow"><i class="fas fa-bolt"></i> Get Boost</a>
+        <!-- ============================================== ASK SOMEONE ELSE === -->
+        <section id="ask" class="hub-sec hub-sec--line">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">Don't take our word</span>
+                    <h2>Ask someone who <em>isn't us</em></h2>
+                    <p>The two places our customers actually are. Nobody there is obliged to be nice about us.</p>
                 </div>
-                
-                <div class="support-link">
-                    <a href="https://wa.me/256762193386">Still unsure? Chat on WhatsApp <i class="fab fa-whatsapp"></i></a>
+
+                <div class="spec-grid" data-stagger style="max-width:760px;margin:0 auto">
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fab fa-facebook"></i></div>
+                        <h3>The VIP group</h3>
+                        <p>An open Facebook group of people who've ordered. Post a question in it before you buy anything from us — that's genuinely the fastest way to find out what we're like.</p>
+                        <a href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener" class="oc-cta oc-cta--quiet" style="margin-top:16px">
+                            Open the group <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fab fa-instagram"></i></div>
+                        <h3>Our Instagram</h3>
+                        <p>Where the work gets posted as it happens. Check the comments and the tagged posts — those are the ones we don't control.</p>
+                        <a href="https://www.instagram.com/the97world" target="_blank" rel="noopener" class="oc-cta oc-cta--quiet" style="margin-top:16px">
+                            @the97world <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
+
+                    <article class="spec">
+                        <div class="spec-ic"><i class="fas fa-phone"></i></div>
+                        <h3>Just call us</h3>
+                        <p>The oldest test there is. A number that rings and a person who answers your questions without pushing you to pay is most of what you're checking for.</p>
+                        <a href="tel:+256762193386" class="oc-cta oc-cta--quiet" style="margin-top:16px">
+                            +256 762 193 386 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </article>
                 </div>
+            </div>
+        </section>
+
+        <!-- ====================================================== CLOSE === -->
+        <section class="hub-close">
+            <div class="container">
+                <h2>Checked us out? <em>Good.</em></h2>
+                <p>That's exactly how it should work. When you're ready, everything starts with a message — and nothing is charged until we've agreed it with you.</p>
+
+                <div class="hub-cta-row">
+                    <a href="/growth/" class="hub-btn hub-btn--solid">Grow my audience <i class="fas fa-arrow-right"></i></a>
+                    <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="hub-btn hub-btn--ghost">
+                        <i class="fab fa-whatsapp"></i> Ask a question
+                    </a>
+                </div>
+
+                <p class="hub-close-note">Still not sure? Message us and say so. We'd rather answer questions than take an order someone regrets.</p>
             </div>
         </section>
 
     </main>
 
-    <script src="script.js"></script>
-<script src="/assets/preloader.js" defer></script>
+    <footer class="obsidian-footer">
+        <div class="container footer-matrix">
+            <div class="f-brand fade-up delay-1">
+                <img src="/IMAGES/logo.png" alt="97 World" loading="lazy">
+                <p>The elite digital standard. Connect first, pay after.</p>
+            </div>
+            <div class="f-links fade-up delay-2">
+                <h4 class="f-head">Grow</h4>
+                <a href="/growth/">All growth plans</a>
+                <a href="/instagram-boost/">Instagram Boost</a>
+                <a href="/tiktok-boost/">TikTok Boost</a>
+                <a href="/facebook-boost/">Facebook Boost</a>
+                <a href="/youtube-boost/">YouTube Boost</a>
+            </div>
+            <div class="f-links fade-up delay-3">
+                <h4 class="f-head">Build</h4>
+                <a href="/websites/">Website packages</a>
+                <a href="/websites/#emails">Business emails</a>
+                <a href="/websites/#fliers">Fliers &amp; design</a>
+            </div>
+            <div class="f-links fade-up delay-4">
+                <h4 class="f-head">Command Center</h4>
+                <a href="https://wa.me/256762193386" target="_blank" rel="noopener">VIP WhatsApp Support</a>
+                <a href="https://www.instagram.com/the97world" target="_blank" rel="noopener">Instagram</a>
+                <a href="/trust/">Trust Centre</a>
+                <a href="/terms-of-service/">Terms of Protocol</a>
+                <a href="/privacy-policy/">Privacy Doctrine</a>
+            </div>
+        </div>
+        <div class="footer-bottom fade-up delay-4">
+            <div class="sys-op">
+                <span class="pulse-dot"></span> 2026 97 World. System Operational.
+            </div>
+        </div>
+    </footer>
+
+    <script src="/HOME/script.js" defer></script>
+    <script src="/assets/preloader.js" defer></script>
 </body>
 </html>

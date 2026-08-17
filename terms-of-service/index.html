@@ -1,50 +1,266 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="obsidian-theme">
 <head>
 <link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#050505">
+
     <title>Terms of Service | 97 World</title>
-    
+    <meta name="description" content="How ordering, payment, delivery and the 30-day refill actually work at 97 World.">
+    <meta name="robots" content="index, follow">
+
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
-    
+
+    <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-    
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <link rel="stylesheet" href="terms.css">
+
+    <link rel="stylesheet" href="/HOME/style.css">
+    <link rel="stylesheet" href="/assets/hub.css">
 </head>
-<body>
+<body data-hub="house">
 <div id="k97pl" aria-hidden="true">
   <img src="/IMAGES/logo.png" alt="">
   <div class="k97pl-word">97 WORLD</div>
   <div class="k97pl-bar"><i></i></div>
 </div>
 
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
 
-    <div class="legal-container">
-        <a href="../index.html" class="back-btn">
-            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Back to Home
-        </a>
+    <nav class="precision-nav fade-up" id="navbar">
+        <div class="container nav-grid">
+            <a href="/" class="brand-monolith">
+                <img src="/IMAGES/logo.png" alt="97 World" class="brand-icon">
+                <span class="brand-text">WORLD</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-item">Home</a>
+                <a href="/growth/" class="nav-item">Grow</a>
+                <a href="/websites/" class="nav-item">Build</a>
+                <a href="/trust/" class="nav-item">Trust</a>
+            </div>
+            <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
 
-        <h1>Terms of Service</h1>
-        <p>Last Updated: October 2023</p>
-
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing and using 97 World services, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to abide by these terms, please do not use our services.</p>
-
-        <h2>2. Service Provision</h2>
-        <p>97 World provides social media growth services (Instagram, Facebook, TikTok and YouTube followers, likes and views). We guarantee delivery of the purchased package within the stated timeframe. "Connect First Guarantee" applies to new clients where applicable.</p>
-
-        <h2>3. Payments and Refunds</h2>
-        <p>All payments must be completed via the approved methods (Mobile Money or Cash) after your order is confirmed. Refunds are evaluated on a case-by-case basis and primarily issued if we fail to deliver the promised package.</p>
-
-        <h2>4. Order Accuracy</h2>
-        <p>You are responsible for providing a correct, public profile/handle and package selection at checkout. Delivery to an incorrect handle due to information you provided is not eligible for a refund. Making a profile private during an active delivery may pause or void the order.</p>
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+        <div class="mm-head">
+            <a href="/" class="mm-brand">
+                <img src="/IMAGES/logo.png" alt="" class="mm-logo">
+                <span>WORLD</span>
+            </a>
+            <button type="button" class="mm-close" id="mmClose" aria-label="Close menu">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
+        <div class="mm-scroll">
+            <nav class="mm-links">
+                <a href="/" class="mm-link">Home <i class="fas fa-arrow-right"></i></a>
+                <a href="/growth/" class="mm-link">Grow my audience <i class="fas fa-arrow-right"></i></a>
+                <a href="/websites/" class="mm-link">Build my business <i class="fas fa-arrow-right"></i></a>
+                <a href="/trust/" class="mm-link">Trust centre <i class="fas fa-arrow-right"></i></a>
+                <a href="/privacy-policy/" class="mm-link">Privacy policy <i class="fas fa-arrow-right"></i></a>
+            </nav>
+        </div>
+        <div class="mm-foot">
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="mm-wa">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+            <a href="tel:+256762193386" class="mm-call"><i class="fas fa-phone"></i> Call us</a>
+        </div>
     </div>
 
-<script src="/assets/preloader.js" defer></script>
+    <main class="smooth-scroll-wrapper">
+
+        <header class="doc-hero">
+            <div class="container">
+                <h1 class="fade-up delay-1">Terms of <em>Service</em></h1>
+                <p class="fade-up delay-2">Plain language, because terms nobody reads protect nobody. This is how ordering, paying and delivery actually work.</p>
+                <span class="doc-meta fade-up delay-2">Last updated: August 2026</span>
+            </div>
+        </header>
+
+        <div class="container">
+            <nav class="doc-toc fade-up" aria-label="Contents">
+                <h2>Contents</h2>
+                <ol>
+                    <li><a href="#who">Who you're dealing with</a></li>
+                    <li><a href="#services">What we sell</a></li>
+                    <li><a href="#ordering">Ordering and confirmation</a></li>
+                    <li><a href="#prices">Prices and currency</a></li>
+                    <li><a href="#payment">Payment terms</a></li>
+                    <li><a href="#delivery">Delivery</a></li>
+                    <li><a href="#refill">The 30-day refill</a></li>
+                    <li><a href="#your-side">What we need from you</a></li>
+                    <li><a href="#refunds">Cancellations and refunds</a></li>
+                    <li><a href="#limits">What we don't control</a></li>
+                    <li><a href="#acceptable">Acceptable use</a></li>
+                    <li><a href="#web">Website and design work</a></li>
+                    <li><a href="#changes">Changes to these terms</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ol>
+            </nav>
+
+            <article class="doc fade-up">
+
+                <section id="who">
+                    <h2><span class="n">01</span> Who you're dealing with</h2>
+                    <p>97 World is a digital services business based in Kampala, Uganda, serving customers in Uganda, South Sudan and DR Congo. You can reach a person on WhatsApp or by phone on <b>+256 762 193 386</b>.</p>
+                    <p>By placing an order with us — on this website, on WhatsApp, or in person — you're agreeing to what's set out below.</p>
+                </section>
+
+                <section id="services">
+                    <h2><span class="n">02</span> What we sell</h2>
+                    <p>Two things:</p>
+                    <ul>
+                        <li><b>Social growth</b> — followers on Instagram, TikTok and Facebook, and subscriber, view and like packages for YouTube.</li>
+                        <li><b>Business builds</b> — websites, business email on your own domain, and graphic design work such as campaign fliers.</li>
+                    </ul>
+                    <p>We only sell what we can actually deliver. If a service isn't listed with a price, we haven't committed to a price for it — ask us and we'll tell you honestly whether we can do it.</p>
+                </section>
+
+                <section id="ordering">
+                    <h2><span class="n">03</span> Ordering and confirmation</h2>
+                    <p><b>Nothing on this website charges you.</b> The order pages collect your choice and open WhatsApp with the details written out. No card is taken and no payment is processed on this site.</p>
+                    <p>An order only exists once we've confirmed it with you on WhatsApp — the handle, the package, the price and when we'll start. Until that exchange happens, nothing is owed by either of us.</p>
+                </section>
+
+                <section id="prices">
+                    <h2><span class="n">04</span> Prices and currency</h2>
+                    <p>Prices show in Ugandan Shillings or US Dollars depending on the region you select. Both refer to the same package — the shilling figure is converted from the dollar price at the rate published on this site.</p>
+                    <p>The price we confirm with you on WhatsApp is the price for that order. If our rates change afterwards, it doesn't change an order we've already agreed.</p>
+                </section>
+
+                <section id="payment">
+                    <h2><span class="n">05</span> Payment terms</h2>
+                    <p>We take payment by <b>MTN Mobile Money, Airtel Money, or cash</b> at our office in Kampala.</p>
+                    <ul>
+                        <li><b>Growth orders:</b> 30% starts the order. The balance is due once delivery is visibly running on your account.</li>
+                        <li><b>Website packages:</b> $250 starts the work. The balance is due on delivery, once the site is built and you've reviewed it.</li>
+                    </ul>
+                    <p>We don't ask for full payment before you can see something happening. That's deliberate, and it applies to every order.</p>
+                </section>
+
+                <section id="delivery">
+                    <h2><span class="n">06</span> Delivery</h2>
+                    <p><b>Growth orders</b> usually begin moving within 1 to 6 hours of being confirmed. Larger packages are then delivered gradually over the following days rather than all at once — this is intentional, and we won't rush it on request.</p>
+                    <p><b>Website and design work</b> runs to a delivery date we agree with you before the deposit is paid. That date depends on the size of the build and on how quickly you get us your content, so we set it together rather than quoting a standard turnaround.</p>
+                </section>
+
+                <section id="refill">
+                    <h2><span class="n">07</span> The 30-day refill</h2>
+                    <div class="doc-callout">
+                        <i class="fas fa-rotate-left"></i>
+                        <p>
+                            <b>Every growth order is covered for 30 days.</b>
+                            If any part of a delivered order drops off within 30 days of delivery completing, message us and we top it back up at no charge.
+                        </p>
+                    </div>
+                    <p>The refill covers natural drop-off after we deliver. It doesn't cover losses caused by the platform removing your account, by you changing or deleting the account, or by growth you bought somewhere else.</p>
+                </section>
+
+                <section id="your-side">
+                    <h2><span class="n">08</span> What we need from you</h2>
+                    <ul>
+                        <li><b>A correct, public handle or link.</b> Delivery to a handle you gave us incorrectly can't be refunded — we have no way to pull it back.</li>
+                        <li><b>Keep the account public while we deliver.</b> Setting a profile to private mid-delivery will pause or break the order.</li>
+                        <li><b>Never send us a password.</b> We do not ask for logins and we do not want them. If anyone contacts you claiming to be us and asks for one, they aren't us — tell us immediately.</li>
+                    </ul>
+                </section>
+
+                <section id="refunds">
+                    <h2><span class="n">09</span> Cancellations and refunds</h2>
+                    <p>Before we start, you can cancel an order and get your deposit back, in full. Just tell us.</p>
+                    <p>Once delivery has started, the deposit covers work already under way and isn't refundable — but if we fail to deliver what we agreed, we will either complete it or refund the difference. That's the commitment: you don't pay for something you didn't get.</p>
+                    <p>Refunds are returned by the same method you paid.</p>
+                </section>
+
+                <section id="limits">
+                    <h2><span class="n">10</span> What we don't control</h2>
+                    <p>Instagram, TikTok, Facebook and YouTube are independent companies. They change their rules and their systems without telling anyone, and those changes can affect delivery speed or availability.</p>
+                    <p>We're not affiliated with, endorsed by, or acting on behalf of any of them. We can't guarantee engagement, sales, reach, monetisation, or any specific business outcome from growing an audience — what we guarantee is the delivery of the package you ordered, and the refill that backs it.</p>
+                </section>
+
+                <section id="acceptable">
+                    <h2><span class="n">11</span> Acceptable use</h2>
+                    <p>We won't accept orders for accounts or content that promote violence, hatred, harassment of a person, sexual content involving minors, fraud, or anything illegal under Ugandan law. We'll refund a deposit and cancel the order if we find out afterwards.</p>
+                    <p>You confirm that the account you're ordering for is yours, or that you have permission from whoever owns it.</p>
+                </section>
+
+                <section id="web">
+                    <h2><span class="n">12</span> Website and design work</h2>
+                    <ul>
+                        <li><b>Scope is agreed before payment.</b> The page list, the look and the delivery date get settled with you in writing on WhatsApp before the deposit.</li>
+                        <li><b>Content comes from you.</b> Text, photos, prices and logos are yours to supply. Delays in getting them to us move the delivery date.</li>
+                        <li><b>Your content stays yours.</b> Anything you give us — your logo, your photos, your copy — remains your property.</li>
+                        <li><b>Domains:</b> if you already have one we'll work with it. If you don't, we'll arrange it with you as part of the build and tell you what it costs before we do.</li>
+                    </ul>
+                </section>
+
+                <section id="changes">
+                    <h2><span class="n">13</span> Changes to these terms</h2>
+                    <p>We may update this page as the business changes. The date at the top tells you when it last changed. Any order already confirmed runs on the terms that applied when we confirmed it, not on a later version.</p>
+                </section>
+
+                <section id="contact">
+                    <h2><span class="n">14</span> Contact</h2>
+                    <p>Questions about any of this? Ask before you order, not after — that's what the number is for.</p>
+                    <ul>
+                        <li>WhatsApp: <a href="https://wa.me/256762193386" target="_blank" rel="noopener">+256 762 193 386</a></li>
+                        <li>Phone: <a href="tel:+256762193386">+256 762 193 386</a></li>
+                        <li>Instagram: <a href="https://www.instagram.com/the97world" target="_blank" rel="noopener">@the97world</a></li>
+                    </ul>
+                    <p>See also our <a href="/privacy-policy/">Privacy Policy</a> and the <a href="/trust/">Trust Centre</a>.</p>
+                </section>
+
+            </article>
+        </div>
+
+    </main>
+
+    <footer class="obsidian-footer">
+        <div class="container footer-matrix">
+            <div class="f-brand fade-up delay-1">
+                <img src="/IMAGES/logo.png" alt="97 World" loading="lazy">
+                <p>The elite digital standard. Connect first, pay after.</p>
+            </div>
+            <div class="f-links fade-up delay-2">
+                <h4 class="f-head">Grow</h4>
+                <a href="/growth/">All growth plans</a>
+                <a href="/instagram-boost/">Instagram Boost</a>
+                <a href="/tiktok-boost/">TikTok Boost</a>
+                <a href="/facebook-boost/">Facebook Boost</a>
+                <a href="/youtube-boost/">YouTube Boost</a>
+            </div>
+            <div class="f-links fade-up delay-3">
+                <h4 class="f-head">Build</h4>
+                <a href="/websites/">Website packages</a>
+                <a href="/websites/#emails">Business emails</a>
+                <a href="/websites/#fliers">Fliers &amp; design</a>
+            </div>
+            <div class="f-links fade-up delay-4">
+                <h4 class="f-head">Command Center</h4>
+                <a href="https://wa.me/256762193386" target="_blank" rel="noopener">VIP WhatsApp Support</a>
+                <a href="/trust/">Trust Centre</a>
+                <a href="/terms-of-service/">Terms of Protocol</a>
+                <a href="/privacy-policy/">Privacy Doctrine</a>
+            </div>
+        </div>
+        <div class="footer-bottom fade-up delay-4">
+            <div class="sys-op">
+                <span class="pulse-dot"></span> 2026 97 World. System Operational.
+            </div>
+        </div>
+    </footer>
+
+    <script src="/HOME/script.js" defer></script>
+    <script src="/assets/preloader.js" defer></script>
 </body>
 </html>

@@ -1437,3 +1437,40 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
     .r-up, [data-stagger] > * { opacity: 1; transform: none; }
     .sheet-card { transform: none; }
 }
+
+/* --------------------------------------------------------------------------
+   REASSURANCE STRIP
+   Sits directly under the wizard. The moment someone hesitates on a checkout
+   is exactly when they want to check the seller is real — so the trust page
+   and a human are one tap away, rather than something to go hunting for.
+   -------------------------------------------------------------------------- */
+.ord-assure {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 9px;
+    margin-top: 26px;
+}
+.ord-assure a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 100px;
+    border: 1px solid var(--ord-line);
+    background: var(--ord-surface);
+    color: var(--ord-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.25s, color 0.25s, background 0.25s, transform 0.25s var(--spring);
+    -webkit-tap-highlight-color: transparent;
+}
+.ord-assure a:hover { border-color: var(--acc); color: #fff; background: var(--ord-surface-2); transform: translateY(-2px); }
+.ord-assure a:active { transform: scale(0.97); }
+.ord-assure i { color: var(--acc); font-size: 0.86rem; }
+.ord-assure a.is-wa i { color: var(--ord-wa); }
+
+@media(max-width: 420px) {
+    .ord-assure a { flex: 1 1 100%; justify-content: center; }
+}
