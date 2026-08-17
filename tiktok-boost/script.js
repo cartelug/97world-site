@@ -9,15 +9,29 @@
 OrderWizard.start({
     "sheetUrl": "https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec",
     "whatsapp": "256762193386",
-    "platform": "tt",
+    "platform": "tiktok",
     "service": "TikTok Boost",
     "targetLabel": "TikTok username",
     "targetError": "We need the username to deliver to",
+    "services": [
+        {
+            "id": "tt_followers",
+            "label": "Followers"
+        },
+        {
+            "id": "tt_likes",
+            "label": "Likes"
+        },
+        {
+            "id": "tt_views",
+            "label": "Views"
+        }
+    ],
     "gifts": [
         {
             "icon": "fa-rotate-left",
-            "title": "30-day refill guarantee",
-            "sub": "Anything that drops off inside 30 days, we top back up. Free."
+            "title": "Refill protection",
+            "sub": "If your service includes refill cover and something drops within 30 days, we top it back up. Free."
         },
         {
             "icon": "fa-comments",

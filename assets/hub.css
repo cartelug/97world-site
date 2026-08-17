@@ -949,6 +949,13 @@ body[data-hub="growth"] .wa-fab { bottom: calc(64px + env(safe-area-inset-bottom
     border: 1px solid var(--hub);
     box-shadow: 0 20px 46px -30px var(--hub);
 }
+/* several bundles stacked read as a menu, not one hero offer — the heavy
+   glow border stays only on the single-bundle case */
+.bundle-grid { display: grid; gap: 12px; }
+.bundle-grid .bundle-card {
+    border-color: rgba(255,255,255,0.1); box-shadow: none;
+    background: var(--clr-surface);
+}
 .bundle-marks { display: flex; flex: none; }
 .bundle-marks img { width: 30px; height: 30px; object-fit: contain; border-radius: 50%; background: #0a0b0e; padding: 2px; }
 .bundle-marks img + img { margin-left: -10px; }

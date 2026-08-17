@@ -81,8 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // we invented. Whether a service is priced is decided once, by id, and
     // that decision drives everything downstream (quantity step, summary,
     // which trust lines are honest to show, and where "Continue" goes).
-    const PRICED_IDS = ['ig_followers', 'tt_followers', 'fb_followers', 'yt_package'];
-    const PLAT_KEY_FOR = { instagram: 'ig', tiktok: 'tt', facebook: 'fb', youtube: 'yt' };
     const GENERIC_QTYS = [1000, 5000, 10000];
     const WA_NUMBER = '256762193386';
 
@@ -128,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         platformOpen: false,
         serviceOpen: false,
 
-        isPriced() { return gb.service && PRICED_IDS.indexOf(gb.service.id) !== -1; },
+        isPriced() { return !!(gb.service && gb.service.sizes && gb.service.sizes.length); },
 
         reset(fromStep) {
             if (fromStep === 'platform') { gb.platform = null; gb.service = null; gb.qty = null; }
@@ -136,16 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (fromStep === 'qty') { gb.qty = null; }
         },
 
-        /* The real priced plans for the selected service — the existing
-         * per-platform ladder for followers/the YouTube package, unchanged. */
+        /* The real priced tiers for the selected service, from the one
+         * source of truth in pricing.js. */
         pricedPlans() {
-            const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
-            return P.plansFor(key, gb.region);
+            return P.plansFor(gb.platform, gb.region, gb.service.id);
         },
 
         pricedHref() {
-            const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
-            return P.PLATFORMS[key].href;
+            return P.PLATFORMS[gb.platform].href;
         },
 
         waHref(withQty) {
@@ -352,10 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // handing a priced choice to the order page so step 1 there arrives done
         document.getElementById('sumCta').addEventListener('click', () => {
-            if (gb.isPriced()) {
-                const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
-                P.Pending.set(key, gb.qty.id);
-            }
+            if (gb.isPriced()) P.Pending.set(gb.platform, gb.service.id, gb.qty.id);
         });
 
         // "Change" on any step clears it and everything after it
@@ -380,10 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (target) target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
         });
         document.getElementById('stickyCta').addEventListener('click', () => {
-            if (gb.isPriced()) {
-                const key = gb.service.id === 'yt_package' ? 'yt' : PLAT_KEY_FOR[gb.platform];
-                P.Pending.set(key, gb.qty.id);
-            }
+            if (gb.isPriced()) P.Pending.set(gb.platform, gb.service.id, gb.qty.id);
         });
     }
 
@@ -425,8 +415,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!P) return;
         const region = P.Region.get() || 'UG';
         document.querySelectorAll('[data-pkg]').forEach((el) => {
+            // "platform:planId" for bundles/website, "platform:planId:serviceId" for a service tier
             const parts = el.dataset.pkg.split(':');
-            const plans = P.plansFor(parts[0], region);
+            const plans = P.plansFor(parts[0], region, parts[2]);
             const plan = plans.filter((p) => p.id === parts[1])[0];
             if (!plan) return;
             const from = el.textContent.trim().indexOf('From') === 0 ? 'From ' : '';
@@ -434,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         document.querySelectorAll('[data-pkg-was]').forEach((el) => {
             const parts = el.dataset.pkgWas.split(':');
-            const plans = P.plansFor(parts[0], region);
+            const plans = P.plansFor(parts[0], region, parts[2]);
             const plan = plans.filter((p) => p.id === parts[1])[0];
             if (plan && plan.was) el.textContent = P.money(plan.was, plan.currency);
             else el.hidden = true;
@@ -465,12 +456,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function browseRow(s) {
-        const priced = PRICED_IDS.indexOf(s.id) !== -1;
+        const priced = !!(s.sizes && s.sizes.length);
         const meta = P.PLAT_META[s.platform];
         let money, href, cta, blank;
         if (priced) {
-            const currency = P.Region.data((P.Region.get() || 'UG')).currency;
-            const plans = s.id === 'yt_package' ? P.plansFor('yt', P.Region.get() || 'UG') : P.plansFor(PLAT_KEY_FOR[s.platform] || '', P.Region.get() || 'UG');
+            const plans = P.plansFor(s.platform, P.Region.get() || 'UG', s.id);
             const top = plans[0];
             money = 'From ' + P.money(top.price, top.currency);
             href = s.href; cta = 'Order'; blank = false;

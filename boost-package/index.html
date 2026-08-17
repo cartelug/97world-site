@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="theme-color" content="#050505">
 
-    <title>All 3 Platforms | 97 World</title>
-    <meta name="description" content="Instagram, TikTok and Facebook together — $250 instead of $300.">
+    <title>Growth Bundles | 97 World</title>
+    <meta name="description" content="Eight real bundles across platforms — pick the one that fits.">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
@@ -55,61 +55,22 @@
     <main class="ord-shell">
 
         <header class="bs-hero">
-            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> The complete package</span>
-            <h1 class="bs-title r-up">30,000 followers.<br>Three platforms.<br><em>One price.</em></h1>
-            <p class="bs-sub r-up">10,000 on Instagram, 10,000 on TikTok and 10,000 on Facebook — delivered together, covered by the same 30-day refill.</p>
+            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> 8 real bundles</span>
+            <h1 class="bs-title r-up">More reach.<br><em>One order.</em></h1>
+            <p class="bs-sub r-up">Eight curated compositions across Instagram, TikTok, Facebook, YouTube, Spotify, Audiomack and LinkedIn — each priced against buying the parts separately. Pick the one that matches what you're building, below.</p>
 
             <div class="bs-marks r-up" aria-hidden="true">
                 <img src="/IMAGES/instagram.png" alt="">
                 <img src="/IMAGES/tiktok.png" alt="">
                 <img src="/IMAGES/facebook.png" alt="">
+                <img src="/IMAGES/youtube.png" alt="">
+                <img src="/IMAGES/spotify.png" alt="">
             </div>
         </header>
 
-        <!-- the value stack: the whole argument in one table -->
-        <section class="bs-stack r-up" id="bundle-stack" aria-label="What the package includes">
-            <span class="bs-stack-head">What you're getting</span>
-
-            <div class="bs-row">
-                <img src="/IMAGES/instagram.png" alt="">
-                <span class="bs-what"><b>Instagram</b><small>10,000 followers</small></span>
-                <span class="bs-amt" data-usd="100">—</span>
-            </div>
-            <div class="bs-row">
-                <img src="/IMAGES/tiktok.png" alt="">
-                <span class="bs-what"><b>TikTok</b><small>10,000 followers</small></span>
-                <span class="bs-amt" data-usd="100">—</span>
-            </div>
-            <div class="bs-row">
-                <img src="/IMAGES/facebook.png" alt="">
-                <span class="bs-what"><b>Facebook</b><small>10,000 followers</small></span>
-                <span class="bs-amt" data-usd="100">—</span>
-            </div>
-
-            <div class="bs-sep"></div>
-
-            <div class="bs-row bs-sum">
-                <span class="bs-what"><b>Bought separately</b></span>
-                <span class="bs-amt bs-strike" data-usd="300">—</span>
-            </div>
-            <div class="bs-row bs-final">
-                <span class="bs-what"><b>The package</b></span>
-                <span class="bs-amt" data-usd="250">—</span>
-            </div>
-
-            <div class="bs-save">
-                <i class="fas fa-tag"></i> You save <b data-usd="50">—</b>
-            </div>
-
-            <a href="#wizardCard" class="bs-cta">
-                <span>Order the package</span>
-                <i class="fas fa-arrow-down"></i>
-            </a>
-        </section>
-
-        <!-- why three beats one -->
+        <!-- why a bundle beats ordering pieces separately -->
         <section class="bs-why r-up">
-            <h2>One platform looks lucky.<br><em>Three looks like a business.</em></h2>
+            <h2>One platform looks lucky.<br><em>A few looks like a business.</em></h2>
             <div class="bs-why-grid">
                 <div class="bs-why-card">
                     <i class="fas fa-magnifying-glass"></i>
@@ -119,12 +80,12 @@
                 <div class="bs-why-card">
                     <i class="fas fa-arrow-trend-up"></i>
                     <b>The same handle, growing everywhere</b>
-                    <p>Consistent numbers across three platforms read as a real operation. One spike on one app reads as something you bought.</p>
+                    <p>Consistent numbers across platforms read as a real operation. One spike on one app reads as something you bought.</p>
                 </div>
                 <div class="bs-why-card">
                     <i class="fas fa-piggy-bank"></i>
-                    <b>It costs less than doing it twice</b>
-                    <p>Ordering the three separately is <span data-usd="300">—</span>. Together they're <span data-usd="250">—</span>, delivered on one timeline instead of three.</p>
+                    <b>One order, one timeline</b>
+                    <p>Each bundle below is priced against buying its parts one at a time — see the struck-out price on the card. Delivered together instead of three separate orders.</p>
                 </div>
             </div>
         </section>
@@ -133,7 +94,7 @@
         <section class="bs-terms r-up">
             <div><i class="fas fa-lock"></i><span>No password, ever</span></div>
             <div><i class="fas fa-gauge-simple"></i><span>Delivered gradually</span></div>
-            <div><i class="fas fa-rotate-left"></i><span>30-day refill on all three</span></div>
+            <div><i class="fas fa-rotate-left"></i><span>Refill where the parts include it</span></div>
             <div><i class="fas fa-hand-holding-dollar"></i><span>30% starts it</span></div>
         </section>
 
@@ -152,6 +113,7 @@
                     <h2>Choose your <em>package</em></h2>
                     <p>Best value first. Everything is delivered together.</p>
                 </div>
+                <div class="svc-tabs" id="svcTabs" role="tablist" hidden></div>
                 <div class="plan-grid" id="plan-grid" role="group"></div>
                 <button type="button" class="wiz-btn" id="btn-step-1" data-go="2" disabled>
                     <span class="wb-label">Choose a package</span>
@@ -300,7 +262,7 @@
         </div>
     </div>
 
-    <a href="https://wa.me/256762193386?text=Hi%2C%20I%20have%20a%20question%20about%20All%203%20Platforms." target="_blank" rel="noopener" class="wa-fab" aria-label="Chat on WhatsApp">
+    <a href="https://wa.me/256762193386?text=Hi%2C%20I%20have%20a%20question%20about%20Growth%20Bundle." target="_blank" rel="noopener" class="wa-fab" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 

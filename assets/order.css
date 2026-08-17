@@ -36,6 +36,15 @@
 [data-accent="facebook"]  { --acc: #4d94ff; --acc-2: #00d9ff; --acc-ink: #04101f; }
 [data-accent="youtube"]   { --acc: #ff4d5e; --acc-2: #ff9d4d; --acc-ink: #1a0507; }
 [data-accent="bundle"]    { --acc: #00FFB2; --acc-2: #b8ff4d; --acc-ink: #04120d; }
+[data-accent="x"]         { --acc: #cfd6dd; --acc-2: #ffffff; --acc-ink: #0a0a0a; }
+[data-accent="telegram"]  { --acc: #29b6f6; --acc-2: #6be4ff; --acc-ink: #041016; }
+[data-accent="whatsapp"]  { --acc: #25D366; --acc-2: #7dffb0; --acc-ink: #04140a; }
+[data-accent="linkedin"]  { --acc: #2d8de0; --acc-2: #6be4ff; --acc-ink: #04101f; }
+[data-accent="spotify"]   { --acc: #1DB954; --acc-2: #b8ff4d; --acc-ink: #041a0d; }
+[data-accent="audiomack"] { --acc: #FFA200; --acc-2: #ffd24d; --acc-ink: #1a1004; }
+[data-accent="soundcloud"]{ --acc: #FF5500; --acc-2: #ff9d4d; --acc-ink: #1a0704; }
+[data-accent="webtraffic"]{ --acc: #6be4ff; --acc-2: #9d8bff; --acc-ink: #04101f; }
+[data-accent="website"]   { --acc: #6be4ff; --acc-2: #9d8bff; --acc-ink: #04101f; }
 
 /* --------------------------------------------------------------- base ---- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -970,6 +979,19 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 .wiz-head p { color: var(--ord-muted); font-size: 0.9rem; }
 
+/* ---- service tabs: only rendered when a platform sells more than one
+   priced service — switches which real tier ladder the plan grid shows ---- */
+.svc-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.svc-tab {
+    padding: 10px 15px; border-radius: 100px; cursor: pointer;
+    background: var(--ord-surface-2); border: 1px solid var(--ord-line);
+    color: var(--ord-text); font: inherit; font-size: 0.84rem; font-weight: 600;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+.svc-tab.is-on { border-color: var(--acc); background: color-mix(in srgb, var(--acc) 10%, transparent); color: #fff; }
+.svc-tabs[hidden] { display: none; }
+
 /* ---- plan cards: best value first, anchored against a struck-out price ---- */
 .plan-grid { display: grid; gap: 12px; margin-bottom: 22px; }
 
@@ -995,15 +1017,16 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 
 .pc-top {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 12px;
+    gap: 4px 12px;
     margin-bottom: 15px;
 }
-.pc-name { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
+.pc-name { flex: 1 1 140px; min-width: 0; font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
 .pc-note { display: block; font-family: var(--font-body); font-size: 0.76rem; font-weight: 600; color: var(--ord-muted); margin-top: 3px; }
 
-.pc-price { text-align: right; white-space: nowrap; }
+.pc-price { flex: none; text-align: right; white-space: nowrap; }
 .pc-old { display: block; font-size: 0.78rem; color: var(--ord-dim); text-decoration: line-through; }
 .pc-new { font-family: var(--font-display); font-size: 1.42rem; font-weight: 700; letter-spacing: -0.02em; }
 .pc-cur { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ord-dim); margin-left: 3px; }

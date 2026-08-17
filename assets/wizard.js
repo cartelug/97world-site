@@ -26,6 +26,7 @@
         state: {
             region: null,
             step: 1,
+            service: null,
             plan: -1,
             gifts: 0,
             referred: false,
@@ -86,8 +87,12 @@
             Wizard.state.plan = -1;
             var pending = P.Pending.take(Wizard.cfg.platform);
             if (pending) {
+                if (pending.serviceId && Wizard.cfg.services) {
+                    var has = Wizard.cfg.services.some(function (s) { return s.id === pending.serviceId; });
+                    if (has) { Wizard.state.service = pending.serviceId; Wizard.renderServiceTabs(); }
+                }
                 Wizard.plans().forEach(function (plan, i) {
-                    if (plan.id === pending) Wizard.state.plan = i;
+                    if (plan.id === pending.planId) Wizard.state.plan = i;
                 });
             }
             // one package means there is nothing to choose — asking for a tap
@@ -120,11 +125,30 @@
 
         region: function () { return REGIONS[Wizard.state.region]; },
 
+        /* ------------------------------------------------------- services */
+
+        /** The service tabs above the plan grid — only rendered when a
+         * platform sells more than one priced service. Selecting a tab
+         * re-prices the plan grid for that service. */
+        renderServiceTabs: function () {
+            var wrap = Wizard.$('svcTabs');
+            if (!wrap) return;
+            var services = Wizard.cfg.services || [];
+            if (services.length < 2) { wrap.hidden = true; return; }
+            wrap.hidden = false;
+            if (!Wizard.state.service) Wizard.state.service = services[0].id;
+            wrap.innerHTML = services.map(function (s) {
+                var on = Wizard.state.service === s.id;
+                return '<button type="button" class="svc-tab' + (on ? ' is-on' : '') + '"' +
+                    ' data-service="' + s.id + '" aria-pressed="' + on + '">' + s.label + '</button>';
+            }).join('');
+        },
+
         /* ---------------------------------------------------------- plans */
 
-        /** Plans for this platform, priced for the active region. */
+        /** Plans for this platform's selected service, priced for the active region. */
         plans: function () {
-            return P.plansFor(Wizard.cfg.platform, Wizard.state.region);
+            return P.plansFor(Wizard.cfg.platform, Wizard.state.region, Wizard.state.service);
         },
 
         renderPlans: function () {
@@ -367,6 +391,7 @@
 
             Wizard.renderGifts();
             Wizard.renderProof();
+            Wizard.renderServiceTabs();
             Wizard.openGate();
 
             // the home page (or an earlier order) already told us where they are
@@ -389,6 +414,20 @@
                 Wizard.syncPlanBtn();
                 OrderKit.haptic(14);
             });
+
+            var svcTabs = Wizard.$('svcTabs');
+            if (svcTabs) {
+                svcTabs.addEventListener('click', function (e) {
+                    var tab = e.target.closest('.svc-tab');
+                    if (!tab || tab.dataset.service === Wizard.state.service) return;
+                    Wizard.state.service = tab.dataset.service;
+                    Wizard.state.plan = -1;
+                    Wizard.renderServiceTabs();
+                    Wizard.renderPlans();
+                    Wizard.syncPlanBtn();
+                    OrderKit.haptic(14);
+                });
+            }
 
             Wizard.$('gift-list').addEventListener('click', function (e) {
                 var gift = e.target.closest('.gift');

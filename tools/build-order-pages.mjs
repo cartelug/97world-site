@@ -22,10 +22,19 @@ const WHATSAPP = '256762193386';
  * key ('ig', 'tt', 'fb', 'yt', 'bundle'); the wizard looks up the rest.
  * -------------------------------------------------------------------------- */
 
-/* Gifts and proof are identical everywhere — same promises, same wording. */
+/* Gifts and proof are identical everywhere — same promises, same wording.
+ * The refill line stays conditional in wording ("where it applies") because
+ * not every service on every page is refill-eligible — only followers,
+ * subscribers and members can actually drop after delivery; likes, views,
+ * plays and traffic can't "drop" the same way, so we never promise a
+ * blanket 30-day refill again. */
 const GIFTS = [
-    { icon: 'fa-rotate-left', title: '30-day refill guarantee', sub: 'Anything that drops off inside 30 days, we top back up. Free.' },
+    { icon: 'fa-rotate-left', title: 'Refill protection', sub: 'If your service includes refill cover and something drops within 30 days, we top it back up. Free.' },
     { icon: 'fa-comments', title: 'Free profile review', sub: "We'll tell you what's holding your page back, on WhatsApp." }
+];
+const WEBSITE_GIFTS = [
+    { icon: 'fa-calendar-check', title: 'Free page-list planning call', sub: "We'll map out exactly what your site needs before anything starts." },
+    { icon: 'fa-globe', title: 'Free domain name check', sub: "We'll check what's available for your business and advise, no charge." }
 ];
 
 const PROOF = [
@@ -42,51 +51,203 @@ const PAGES = [
         platformName: 'Instagram', logo: '/IMAGES/instagram.png',
         title: 'Instagram Boost', service: 'Instagram Boost',
         headline: 'Grow your <em>Instagram</em>',
-        blurb: 'Real Instagram followers, delivered gradually. No password, ever.',
+        blurb: 'Real Instagram followers, likes and views, delivered gradually. No password, ever.',
         targetLabel: 'Instagram username', targetPlaceholder: 'Your Instagram username',
         targetError: 'We need the username to deliver to',
         icon: 'fab fa-instagram',
-        platform: 'ig'
+        platform: 'instagram',
+        services: [
+            { id: 'ig_followers', label: 'Followers' },
+            { id: 'ig_likes', label: 'Likes' },
+            { id: 'ig_reels', label: 'Reel views' },
+            { id: 'ig_story', label: 'Story views' }
+        ]
     },
     {
         dir: 'tiktok-boost', accent: 'tiktok',
         platformName: 'TikTok', logo: '/IMAGES/tiktok.png',
         title: 'TikTok Boost', service: 'TikTok Boost',
         headline: 'Blow up on <em>TikTok</em>',
-        blurb: 'Real TikTok followers, delivered gradually. No password, ever.',
+        blurb: 'Real TikTok followers, likes and views, delivered gradually. No password, ever.',
         targetLabel: 'TikTok username', targetPlaceholder: 'Your TikTok username',
         targetError: 'We need the username to deliver to',
         icon: 'fab fa-tiktok',
-        platform: 'tt'
+        platform: 'tiktok',
+        services: [
+            { id: 'tt_followers', label: 'Followers' },
+            { id: 'tt_likes', label: 'Likes' },
+            { id: 'tt_views', label: 'Views' }
+        ]
     },
     {
         dir: 'facebook-boost', accent: 'facebook',
         platformName: 'Facebook', logo: '/IMAGES/facebook.png',
         title: 'Facebook Boost', service: 'Facebook Boost',
         headline: 'Build a <em>Facebook</em> page people trust',
-        blurb: 'Real Facebook followers, delivered gradually. No password, ever.',
+        blurb: 'Real Facebook followers, likes and views, delivered gradually. No password, ever.',
         targetLabel: 'Facebook page', targetPlaceholder: 'Your page name or username',
         targetError: 'We need the page name to deliver to',
         icon: 'fab fa-facebook-f',
-        platform: 'fb'
+        platform: 'facebook',
+        services: [
+            { id: 'fb_followers', label: 'Followers' },
+            { id: 'fb_likes', label: 'Page likes' },
+            { id: 'fb_reactions', label: 'Post reactions' },
+            { id: 'fb_views', label: 'Views' }
+        ]
     },
     {
         dir: 'youtube-boost', accent: 'youtube',
         platformName: 'YouTube', logo: '/IMAGES/youtube.png',
         title: 'YouTube Boost', service: 'YouTube Boost',
         headline: 'Get your channel <em>watched</em>',
-        blurb: 'Subscribers, views and likes delivered together. No password, ever.',
+        blurb: 'Subscribers, views, likes and watch time. No password, ever.',
         targetLabel: 'YouTube channel', targetPlaceholder: 'Your channel name or link',
         targetError: 'We need the channel to deliver to',
         icon: 'fab fa-youtube',
-        platform: 'yt'
+        platform: 'youtube',
+        services: [
+            { id: 'yt_subs', label: 'Subscribers' },
+            { id: 'yt_views', label: 'Views' },
+            { id: 'yt_likes', label: 'Likes' },
+            { id: 'yt_hours', label: 'Watch time' }
+        ]
+    },
+    {
+        dir: 'x-boost', accent: 'x',
+        platformName: 'X', logoIcon: 'fab fa-x-twitter',
+        title: 'X Boost', service: 'X Boost',
+        headline: 'Grow your <em>audience on X</em>',
+        blurb: 'Real followers, likes, reposts and impressions. No password, ever.',
+        targetLabel: 'X username', targetPlaceholder: 'Your X (Twitter) username',
+        targetError: 'We need the username to deliver to',
+        icon: 'fab fa-x-twitter',
+        platform: 'x',
+        services: [
+            { id: 'x_followers', label: 'Followers' },
+            { id: 'x_likes', label: 'Likes' },
+            { id: 'x_reposts', label: 'Reposts' },
+            { id: 'x_impressions', label: 'Impressions' }
+        ]
+    },
+    {
+        dir: 'telegram-boost', accent: 'telegram',
+        platformName: 'Telegram', logoIcon: 'fab fa-telegram',
+        title: 'Telegram Boost', service: 'Telegram Boost',
+        headline: 'Fill your <em>Telegram</em>',
+        blurb: 'Real members, premium members and post reactions. No password, ever.',
+        targetLabel: 'Telegram channel or group', targetPlaceholder: 'Your channel or group link',
+        targetError: 'We need the link to deliver to',
+        icon: 'fab fa-telegram',
+        platform: 'telegram',
+        services: [
+            { id: 'tg_members', label: 'Members' },
+            { id: 'tg_premium', label: 'Premium members' },
+            { id: 'tg_reactions', label: 'Post reactions' }
+        ]
+    },
+    {
+        dir: 'whatsapp-boost', accent: 'whatsapp',
+        platformName: 'WhatsApp', logoIcon: 'fab fa-whatsapp',
+        title: 'WhatsApp Boost', service: 'WhatsApp Boost',
+        headline: 'Grow your <em>WhatsApp</em> channel',
+        blurb: 'Real channel members, group members and post reactions. No password, ever.',
+        targetLabel: 'WhatsApp channel or group', targetPlaceholder: 'Your channel or group link',
+        targetError: 'We need the link to deliver to',
+        icon: 'fab fa-whatsapp',
+        platform: 'whatsapp',
+        services: [
+            { id: 'wa_channel', label: 'Channel members' },
+            { id: 'wa_group', label: 'Group members' },
+            { id: 'wa_react', label: 'Post reactions' }
+        ]
+    },
+    {
+        dir: 'linkedin-boost', accent: 'linkedin',
+        platformName: 'LinkedIn', logoIcon: 'fab fa-linkedin',
+        title: 'LinkedIn Boost', service: 'LinkedIn Boost',
+        headline: 'Look established on <em>LinkedIn</em>',
+        blurb: 'Real profile followers, company page followers and post likes. No password, ever.',
+        targetLabel: 'LinkedIn profile or page', targetPlaceholder: 'Your profile or company page link',
+        targetError: 'We need the link to deliver to',
+        icon: 'fab fa-linkedin',
+        platform: 'linkedin',
+        services: [
+            { id: 'li_profile', label: 'Profile followers' },
+            { id: 'li_company', label: 'Company followers' },
+            { id: 'li_postlikes', label: 'Post likes' }
+        ]
+    },
+    {
+        dir: 'spotify-boost', accent: 'spotify',
+        platformName: 'Spotify', logo: '/IMAGES/spotify.png',
+        title: 'Spotify Boost', service: 'Spotify Boost',
+        headline: 'Get heard on <em>Spotify</em>',
+        blurb: 'Real followers, plays and monthly listeners. No password, ever.',
+        targetLabel: 'Spotify artist or track link', targetPlaceholder: 'Your Spotify artist or track link',
+        targetError: 'We need the link to deliver to',
+        icon: 'fab fa-spotify',
+        platform: 'spotify',
+        services: [
+            { id: 'sp_followers', label: 'Followers' },
+            { id: 'sp_plays', label: 'Plays' },
+            { id: 'sp_listeners', label: 'Monthly listeners' }
+        ]
+    },
+    {
+        dir: 'audiomack-boost', accent: 'audiomack',
+        platformName: 'Audiomack', logoIcon: 'fas fa-music',
+        title: 'Audiomack Boost', service: 'Audiomack Boost',
+        headline: 'Grow on <em>Audiomack</em>',
+        blurb: 'Real followers, plays and likes/re-ups. No password, ever.',
+        targetLabel: 'Audiomack profile link', targetPlaceholder: 'Your Audiomack profile link',
+        targetError: 'We need the link to deliver to',
+        icon: 'fas fa-music',
+        platform: 'audiomack',
+        services: [
+            { id: 'am_followers', label: 'Followers' },
+            { id: 'am_plays', label: 'Plays' },
+            { id: 'am_likes', label: 'Likes / re-ups' }
+        ]
+    },
+    {
+        dir: 'soundcloud-boost', accent: 'soundcloud',
+        platformName: 'SoundCloud', logoIcon: 'fab fa-soundcloud',
+        title: 'SoundCloud Boost', service: 'SoundCloud Boost',
+        headline: 'Get played on <em>SoundCloud</em>',
+        blurb: 'Real followers, plays and likes. No password, ever.',
+        targetLabel: 'SoundCloud profile link', targetPlaceholder: 'Your SoundCloud profile link',
+        targetError: 'We need the link to deliver to',
+        icon: 'fab fa-soundcloud',
+        platform: 'soundcloud',
+        services: [
+            { id: 'sc_followers', label: 'Followers' },
+            { id: 'sc_plays', label: 'Plays' },
+            { id: 'sc_likes', label: 'Likes' }
+        ]
+    },
+    {
+        dir: 'website-traffic', accent: 'webtraffic',
+        platformName: 'Website Traffic', logoIcon: 'fas fa-globe',
+        title: 'Website Traffic', service: 'Website Traffic',
+        headline: 'Send <em>real visits</em> to your site',
+        blurb: 'Standard worldwide, premium-social or geo-targeted traffic. No password, ever.',
+        targetLabel: 'Website URL', targetPlaceholder: 'https://yourwebsite.com',
+        targetError: 'We need your website URL',
+        icon: 'fas fa-globe',
+        platform: 'webtraffic',
+        services: [
+            { id: 'wt_standard', label: 'Standard worldwide' },
+            { id: 'wt_premium', label: 'Premium social' },
+            { id: 'wt_geo', label: 'Geo-targeted premium' }
+        ]
     },
     {
         dir: 'boost-package', accent: 'bundle',
-        platformName: 'All 3 platforms', logo: '/IMAGES/logo.png',
-        title: 'All 3 Platforms', service: 'All 3 Platforms',
-        headline: '10,000 followers on <em>all three</em>',
-        blurb: 'Instagram, TikTok and Facebook together — $250 instead of $300.',
+        platformName: 'Bundles', logo: '/IMAGES/logo.png',
+        title: 'Growth Bundles', service: 'Growth Bundle',
+        headline: 'More reach, <em>one order</em>',
+        blurb: 'Eight real bundles across platforms — pick the one that fits.',
         targetLabel: 'Your @handle', targetPlaceholder: 'Your @handle',
         targetError: 'We need your handle to deliver to',
         targetHint: 'If your handle differs on any platform, tell us on WhatsApp.',
@@ -95,6 +256,19 @@ const PAGES = [
         // this one is reached from a row that gives nothing away, so it carries
         // the full pitch instead of the standard order-page header
         sell: true
+    },
+    {
+        dir: 'website-order', accent: 'website',
+        platformName: 'Website Package', logoIcon: 'fas fa-globe',
+        title: 'Website Package', service: 'Website Package',
+        headline: 'Order your <em>website</em>',
+        blurb: 'One price, properly built — designed, launched and live, with a business email included.',
+        targetLabel: 'Business or domain name', targetPlaceholder: 'Your business name or preferred domain',
+        targetHint: "Don't have a domain yet? Tell us on WhatsApp and we'll help you pick one.",
+        targetError: 'We need your business or domain name',
+        icon: 'fas fa-building',
+        platform: 'website',
+        gifts: WEBSITE_GIFTS
     }
 ];
 
@@ -109,61 +283,22 @@ const PAGES = [
  * source of truth next to pricing.js and guarantee they drift.
  * -------------------------------------------------------------------------- */
 const BUNDLE_SELL = `        <header class="bs-hero">
-            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> The complete package</span>
-            <h1 class="bs-title r-up">30,000 followers.<br>Three platforms.<br><em>One price.</em></h1>
-            <p class="bs-sub r-up">10,000 on Instagram, 10,000 on TikTok and 10,000 on Facebook — delivered together, covered by the same 30-day refill.</p>
+            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> 8 real bundles</span>
+            <h1 class="bs-title r-up">More reach.<br><em>One order.</em></h1>
+            <p class="bs-sub r-up">Eight curated compositions across Instagram, TikTok, Facebook, YouTube, Spotify, Audiomack and LinkedIn — each priced against buying the parts separately. Pick the one that matches what you're building, below.</p>
 
             <div class="bs-marks r-up" aria-hidden="true">
                 <img src="/IMAGES/instagram.png" alt="">
                 <img src="/IMAGES/tiktok.png" alt="">
                 <img src="/IMAGES/facebook.png" alt="">
+                <img src="/IMAGES/youtube.png" alt="">
+                <img src="/IMAGES/spotify.png" alt="">
             </div>
         </header>
 
-        <!-- the value stack: the whole argument in one table -->
-        <section class="bs-stack r-up" id="bundle-stack" aria-label="What the package includes">
-            <span class="bs-stack-head">What you're getting</span>
-
-            <div class="bs-row">
-                <img src="/IMAGES/instagram.png" alt="">
-                <span class="bs-what"><b>Instagram</b><small>10,000 followers</small></span>
-                <span class="bs-amt" data-usd="100">—</span>
-            </div>
-            <div class="bs-row">
-                <img src="/IMAGES/tiktok.png" alt="">
-                <span class="bs-what"><b>TikTok</b><small>10,000 followers</small></span>
-                <span class="bs-amt" data-usd="100">—</span>
-            </div>
-            <div class="bs-row">
-                <img src="/IMAGES/facebook.png" alt="">
-                <span class="bs-what"><b>Facebook</b><small>10,000 followers</small></span>
-                <span class="bs-amt" data-usd="100">—</span>
-            </div>
-
-            <div class="bs-sep"></div>
-
-            <div class="bs-row bs-sum">
-                <span class="bs-what"><b>Bought separately</b></span>
-                <span class="bs-amt bs-strike" data-usd="300">—</span>
-            </div>
-            <div class="bs-row bs-final">
-                <span class="bs-what"><b>The package</b></span>
-                <span class="bs-amt" data-usd="250">—</span>
-            </div>
-
-            <div class="bs-save">
-                <i class="fas fa-tag"></i> You save <b data-usd="50">—</b>
-            </div>
-
-            <a href="#wizardCard" class="bs-cta">
-                <span>Order the package</span>
-                <i class="fas fa-arrow-down"></i>
-            </a>
-        </section>
-
-        <!-- why three beats one -->
+        <!-- why a bundle beats ordering pieces separately -->
         <section class="bs-why r-up">
-            <h2>One platform looks lucky.<br><em>Three looks like a business.</em></h2>
+            <h2>One platform looks lucky.<br><em>A few looks like a business.</em></h2>
             <div class="bs-why-grid">
                 <div class="bs-why-card">
                     <i class="fas fa-magnifying-glass"></i>
@@ -173,12 +308,12 @@ const BUNDLE_SELL = `        <header class="bs-hero">
                 <div class="bs-why-card">
                     <i class="fas fa-arrow-trend-up"></i>
                     <b>The same handle, growing everywhere</b>
-                    <p>Consistent numbers across three platforms read as a real operation. One spike on one app reads as something you bought.</p>
+                    <p>Consistent numbers across platforms read as a real operation. One spike on one app reads as something you bought.</p>
                 </div>
                 <div class="bs-why-card">
                     <i class="fas fa-piggy-bank"></i>
-                    <b>It costs less than doing it twice</b>
-                    <p>Ordering the three separately is <span data-usd="300">—</span>. Together they're <span data-usd="250">—</span>, delivered on one timeline instead of three.</p>
+                    <b>One order, one timeline</b>
+                    <p>Each bundle below is priced against buying its parts one at a time — see the struck-out price on the card. Delivered together instead of three separate orders.</p>
                 </div>
             </div>
         </section>
@@ -187,7 +322,7 @@ const BUNDLE_SELL = `        <header class="bs-hero">
         <section class="bs-terms r-up">
             <div><i class="fas fa-lock"></i><span>No password, ever</span></div>
             <div><i class="fas fa-gauge-simple"></i><span>Delivered gradually</span></div>
-            <div><i class="fas fa-rotate-left"></i><span>30-day refill on all three</span></div>
+            <div><i class="fas fa-rotate-left"></i><span>Refill where the parts include it</span></div>
             <div><i class="fas fa-hand-holding-dollar"></i><span>30% starts it</span></div>
         </section>
 `;
@@ -252,7 +387,7 @@ const html = (p) => `<!DOCTYPE html>
 
 ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
             <span class="ord-plat r-up">
-                <img src="${p.logo}" alt="">
+                ${p.logo ? `<img src="${p.logo}" alt="">` : `<i class="${p.logoIcon}"></i>`}
                 ${p.platformName}
             </span>
             <h1 class="ord-title r-up">${p.headline}</h1>
@@ -273,6 +408,7 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                     <h2>Choose your <em>package</em></h2>
                     <p>Best value first. Everything is delivered together.</p>
                 </div>
+                <div class="svc-tabs" id="svcTabs" role="tablist" hidden></div>
                 <div class="plan-grid" id="plan-grid" role="group"></div>
                 <button type="button" class="wiz-btn" id="btn-step-1" data-go="2" disabled>
                     <span class="wb-label">Choose a package</span>
@@ -456,7 +592,8 @@ OrderWizard.start(${JSON.stringify({
     targetLabel: p.targetLabel,
     targetError: p.targetError,
     ...(p.extraLabel ? { extraLabel: p.extraLabel } : {}),
-    gifts: GIFTS,
+    ...(p.services ? { services: p.services } : {}),
+    gifts: p.gifts || GIFTS,
     proof: PROOF
 }, null, 4)});
 `;
