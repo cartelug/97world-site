@@ -281,6 +281,176 @@
         webtraffic: { key: 'webtraffic', name: 'Website traffic', href: '/website-traffic/',  services: ['wt_standard', 'wt_premium', 'wt_geo'] }
     };
 
+    /* ------------------------------------------------------------- combo ---
+     * The growth builder sells across platforms, not just within one. Two
+     * roles per platform are enough to express "followers" and "engagement"
+     * across a mixed selection; both point at real services with real
+     * ladders, so a combo is only ever the sum of things we actually sell.
+     *
+     * Website traffic has no follower-equivalent, so it is not combo-eligible
+     * — it stays orderable on its own.
+     * -------------------------------------------------------------------- */
+
+    var PLATFORM_ROLES = {
+        instagram:  { followers: 'ig_followers', engagement: 'ig_likes',      views: 'ig_reels' },
+        tiktok:     { followers: 'tt_followers', engagement: 'tt_likes',      views: 'tt_views' },
+        facebook:   { followers: 'fb_followers', engagement: 'fb_reactions',  views: 'fb_views' },
+        youtube:    { followers: 'yt_subs',      engagement: 'yt_likes',      views: 'yt_views' },
+        x:          { followers: 'x_followers',  engagement: 'x_likes',       views: 'x_impressions' },
+        telegram:   { followers: 'tg_members',   engagement: 'tg_reactions',  views: null },
+        whatsapp:   { followers: 'wa_channel',   engagement: 'wa_react',      views: null },
+        linkedin:   { followers: 'li_profile',   engagement: 'li_postlikes',  views: null },
+        spotify:    { followers: 'sp_followers', engagement: 'sp_plays',      views: null },
+        audiomack:  { followers: 'am_followers', engagement: 'am_plays',      views: null },
+        soundcloud: { followers: 'sc_followers', engagement: 'sc_plays',      views: null },
+        webtraffic: { followers: null,           engagement: 'wt_standard',   views: null }
+    };
+
+    /* Order the growth builder shows platforms in: seven up front, the rest
+     * behind "More". */
+    var GROWTH_PRIMARY = ['instagram', 'tiktok', 'facebook', 'youtube', 'x', 'telegram', 'spotify'];
+    var GROWTH_MORE = ['whatsapp', 'linkedin', 'audiomack', 'soundcloud', 'webtraffic'];
+
+    /** A platform can join a combo only if it has both roles priced. */
+    function comboEligible(key) {
+        var r = PLATFORM_ROLES[key];
+        return !!(r && r.followers && r.engagement);
+    }
+
+    /* Combo is a pricing mode, not a product: pick 3+ platforms and the whole
+     * order comes down by a set rate. The rate is applied to the real sum of
+     * the real parts, so the saving shown is always the saving given. */
+    var COMBO_TIERS = [
+        { min: 5, rate: 0.15 },
+        { min: 4, rate: 0.125 },
+        { min: 3, rate: 0.10 }
+    ];
+
+    /** Discount rate for n selected platforms. 0 below the combo threshold. */
+    function comboRate(n) {
+        for (var i = 0; i < COMBO_TIERS.length; i++) {
+            if (n >= COMBO_TIERS[i].min) return COMBO_TIERS[i].rate;
+        }
+        return 0;
+    }
+
+    /** "10", "12.5", "15" — never rounded to a rate we don't actually give. */
+    function ratePct(rate) {
+        return String(Math.round(rate * 1000) / 10);
+    }
+
+    /** The next combo tier up, or null if already at the best rate. */
+    function nextComboTier(n) {
+        var best = null;
+        for (var i = 0; i < COMBO_TIERS.length; i++) {
+            var t = COMBO_TIERS[i];
+            if (t.min > n && (!best || t.min < best.min)) best = t;
+        }
+        return best;
+    }
+
+    /** Quantities a service actually sells, smallest first. */
+    function qtysFor(serviceId) {
+        var s = SERVICES_BY_ID[serviceId];
+        if (!s || !s.sizes) return [];
+        return s.sizes.map(function (t) { return t.qty; }).sort(function (a, b) { return a - b; });
+    }
+
+    /** USD for an exact quantity of a service, or null if that tier isn't sold. */
+    function tierUsd(serviceId, qty) {
+        var s = SERVICES_BY_ID[serviceId];
+        if (!s || !s.sizes) return null;
+        for (var i = 0; i < s.sizes.length; i++) {
+            if (s.sizes[i].qty === qty) return s.sizes[i].usd;
+        }
+        return null;
+    }
+
+    /**
+     * Price a whole order.
+     *
+     * lines: [{ platform, serviceId, qty }]
+     * Returns null-priced lines untouched rather than guessing — a line whose
+     * tier we don't sell can't be silently rounded to one we do.
+     */
+    function quote(lines, regionCode, platformCount) {
+        var currency = REGIONS[regionCode] ? REGIONS[regionCode].currency : 'UGX';
+        var priced = [];
+        var subtotalUsd = 0;
+        var complete = lines.length > 0;
+
+        for (var i = 0; i < lines.length; i++) {
+            var l = lines[i];
+            var usd = tierUsd(l.serviceId, l.qty);
+            if (usd == null) { complete = false; }
+            else { subtotalUsd += usd; }
+            priced.push({
+                platform: l.platform,
+                serviceId: l.serviceId,
+                service: SERVICES_BY_ID[l.serviceId] || null,
+                qty: l.qty,
+                usd: usd,
+                price: usd == null ? null : localPrice(usd, currency)
+            });
+        }
+
+        var n = platformCount == null ? countPlatforms(lines) : platformCount;
+        var rate = comboRate(n);
+
+        // Discount is taken in the currency being shown, then the total is
+        // derived from it — so subtotal − saving always equals the total on
+        // screen, with no fractional shillings anywhere.
+        var subtotal = localPrice(subtotalUsd, currency);
+        var discount = roundMoney(subtotal * rate, currency);
+        var total = subtotal - discount;
+
+        return {
+            lines: priced,
+            complete: complete,
+            currency: currency,
+            platformCount: n,
+            comboRate: rate,
+            comboPct: ratePct(rate),
+            isCombo: rate > 0,
+            subtotal: subtotal,
+            discount: discount,
+            total: total,
+            subtotalUsd: subtotalUsd,
+            totalQty: lines.reduce(function (sum, l) { return sum + (l.qty || 0); }, 0)
+        };
+    }
+
+    /** Shillings have no useful subunit; dollars stop at cents. */
+    function roundMoney(amount, currency) {
+        if (currency === 'UGX') return Math.round(amount / 50) * 50;
+        return Math.round(amount * 100) / 100;
+    }
+
+    function countPlatforms(lines) {
+        var seen = {};
+        var n = 0;
+        for (var i = 0; i < lines.length; i++) {
+            if (!seen[lines[i].platform]) { seen[lines[i].platform] = true; n++; }
+        }
+        return n;
+    }
+
+    /* What to ask for so we can deliver, per platform. Never a password. */
+    var ACCOUNT_HINTS = {
+        instagram:  { label: 'Instagram', placeholder: '@username or profile link' },
+        tiktok:     { label: 'TikTok', placeholder: '@username or profile link' },
+        facebook:   { label: 'Facebook', placeholder: 'Page name or profile link' },
+        youtube:    { label: 'YouTube', placeholder: 'Channel name or link' },
+        x:          { label: 'X', placeholder: '@username or profile link' },
+        telegram:   { label: 'Telegram', placeholder: 'Channel or group link' },
+        whatsapp:   { label: 'WhatsApp', placeholder: 'Channel or group link' },
+        linkedin:   { label: 'LinkedIn', placeholder: 'Profile or company page link' },
+        spotify:    { label: 'Spotify', placeholder: 'Artist or track link' },
+        audiomack:  { label: 'Audiomack', placeholder: 'Profile link' },
+        soundcloud: { label: 'SoundCloud', placeholder: 'Profile link' },
+        webtraffic: { label: 'Website', placeholder: 'https://yoursite.com' }
+    };
+
     /* The $500 website package — one fixed plan, not a quantity ladder, so it
      * lives outside SERVICES. The wizard auto-skips step 1's tap-to-confirm
      * when there's exactly one plan, same as it always has. */
@@ -550,6 +720,19 @@
         SERVICES: SERVICES,
         SERVICES_BY_ID: SERVICES_BY_ID,
         BUNDLES: bundlePlans,
+        PLATFORM_ROLES: PLATFORM_ROLES,
+        GROWTH_PRIMARY: GROWTH_PRIMARY,
+        GROWTH_MORE: GROWTH_MORE,
+        COMBO_TIERS: COMBO_TIERS,
+        ACCOUNT_HINTS: ACCOUNT_HINTS,
+        comboEligible: comboEligible,
+        comboRate: comboRate,
+        ratePct: ratePct,
+        roundMoney: roundMoney,
+        nextComboTier: nextComboTier,
+        qtysFor: qtysFor,
+        tierUsd: tierUsd,
+        quote: quote,
         servicesFor: servicesFor,
         searchServices: searchServices,
         localPrice: localPrice,

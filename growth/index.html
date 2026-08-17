@@ -1,661 +1,395 @@
 <!DOCTYPE html>
-<html lang="en" class="obsidian-theme">
+<html lang="en" dir="ltr">
 <head>
-<link rel="stylesheet" href="/assets/preloader.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <meta name="theme-color" content="#050505">
+    <meta name="theme-color" content="#F6F7F5">
 
-    <title>Grow Your Socials | 97 World</title>
-    <meta name="description" content="Followers, likes, views and more across Instagram, TikTok, YouTube, Facebook and beyond. Choose what you need, see the price, order in under a minute.">
+    <title>97 Growth — choose where you want to grow</title>
+    <meta name="description" content="Followers, likes, views and plays across Instagram, TikTok, YouTube, Facebook, X, Telegram, Spotify and more. Pick one platform — or 3+ and save. Exact price before you order.">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
     <link rel="preconnect" href="https://api.fontshare.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
-
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <link rel="stylesheet" href="/HOME/style.css">
-    <link rel="stylesheet" href="/assets/hub.css">
+    <link rel="stylesheet" href="/assets/growth.css">
 </head>
-<body data-hub="growth">
-<div id="k97pl" aria-hidden="true">
-  <img src="/IMAGES/logo.png" alt="">
-  <div class="k97pl-word">97 WORLD</div>
-  <div class="k97pl-bar"><i></i></div>
-</div>
+<body class="growth">
 
-    <!-- region gate: we cannot show a price until we know where they are -->
-    <div class="gate" id="regionGate" role="dialog" aria-modal="true" aria-labelledby="gate-h" hidden>
-        <div class="gate-card">
-            <img src="/IMAGES/logo.png" alt="" class="gate-logo">
-            <h2 id="gate-h">Where are you?</h2>
-            <p>So every price on this page is one you can actually pay.</p>
-            <div class="region-grid"></div>
-        </div>
-    </div>
-
-    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
-    <div class="cursor-spotlight" id="spotlight"></div>
-
-    <nav class="precision-nav fade-up" id="navbar">
-        <div class="container nav-grid">
-            <a href="/" class="brand-monolith">
-                <img src="/IMAGES/logo.png" alt="97 World" class="brand-icon">
-                <span class="brand-text">WORLD</span>
-            </a>
-            <div class="nav-links">
-                <a href="#builder" class="nav-item">Services</a>
-                <a href="#how" class="nav-item">How it works</a>
-                <a href="#faq" class="nav-item">FAQ</a>
-                <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="nav-item" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            </div>
-            <button type="button" class="burger-btn" id="burgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-                <span></span><span></span><span></span>
+<!-- ==================================================== 01 HEADER === -->
+<header class="g-header" id="gHeader">
+    <div class="g-wrap g-header-in">
+        <a href="/" class="g-brand">
+            <img src="/IMAGES/logo.png" alt="">
+            <span>97 Growth</span>
+        </a>
+        <div class="g-head-right">
+            <a href="/track/" class="g-track-btn">Track order</a>
+            <button type="button" class="g-menu-btn" id="menuBtn" aria-label="Menu">
+                <i class="fas fa-bars"></i>
             </button>
         </div>
-    </nav>
-    <div class="trust-strip">
-        <div class="container">
-            <ul>
-                <li><i class="fas fa-lock"></i> No password</li>
-                <li><i class="fas fa-rotate-left"></i> 30-day refill where applicable</li>
-                <li><i class="fas fa-location-dot"></i> Kampala-based</li>
-                <li><i class="fas fa-mobile-screen"></i> MTN &amp; Airtel Money</li>
-            </ul>
-        </div>
     </div>
+</header>
 
-    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
-        <div class="mm-head">
-            <a href="/" class="mm-brand">
-                <img src="/IMAGES/logo.png" alt="" class="mm-logo">
-                <span>WORLD</span>
-            </a>
-            <button type="button" class="mm-close" id="mmClose" aria-label="Close menu">
+<!-- sticky compact platform switcher, appears once the grid scrolls away -->
+<div class="plat-strip" id="platStrip" aria-label="Selected platforms">
+    <div class="plat-strip-in" id="platStripIn"></div>
+</div>
+
+<main>
+
+    <!-- ========================================= 02 MAIN STATEMENT === -->
+    <section class="g-wrap g-open">
+        <h1>Choose where you want to grow.</h1>
+        <p>Pick one platform — or select 3+ and save.</p>
+    </section>
+
+    <!-- ============================================== 03 COMBO CARD === -->
+    <section class="g-wrap">
+        <div class="combo-card" id="comboCard">
+            <div class="combo-top">
+                <div>
+                    <div class="combo-name">97 Combo</div>
+                    <div class="combo-sub">Choose 3+ platforms and unlock a better price.</div>
+                </div>
+                <span class="combo-flag" id="comboFlag">Best value</span>
+            </div>
+            <div class="combo-meter" id="comboMeter" aria-hidden="true"></div>
+            <div class="combo-state" id="comboState" hidden></div>
+        </div>
+    </section>
+
+    <!-- ========================================= 04 PLATFORM SELECT === -->
+    <section class="g-wrap g-sec" id="platSec">
+        <div class="plat-grid" id="platGrid" role="group" aria-label="Platforms"></div>
+        <p class="plat-nudge" id="platNudge" hidden></p>
+
+        <!-- ================================================ 05 SEARCH === -->
+        <div class="g-search">
+            <i class="fas fa-magnifying-glass g-search-ic" aria-hidden="true"></i>
+            <input type="search" id="gSearch" autocomplete="off" spellcheck="false"
+                   placeholder="Search followers, likes, views, plays…" aria-label="Search services">
+            <button type="button" class="g-search-clear" id="gSearchClear" aria-label="Clear search" hidden>
                 <i class="fas fa-xmark"></i>
             </button>
         </div>
+        <div class="g-results" id="gResults" role="region" aria-live="polite" hidden></div>
+    </section>
 
-        <div class="mm-scroll">
-            <nav class="mm-links">
-                <a href="#builder" class="mm-link">Choose a service <i class="fas fa-arrow-right"></i></a>
-                <a href="#all-services" class="mm-link">Browse all services <i class="fas fa-arrow-right"></i></a>
-                <a href="#how" class="mm-link">How it works <i class="fas fa-arrow-right"></i></a>
-                <a href="#faq" class="mm-link">Questions <i class="fas fa-arrow-right"></i></a>
-                <a href="/business/" class="mm-link">Build my business <i class="fas fa-arrow-right"></i></a>
-                <a href="/trust/" class="mm-link">Trust centre <i class="fas fa-arrow-right"></i></a>
-            </nav>
+    <!-- ============================================ 06 GOAL SELECTOR === -->
+    <section class="g-wrap g-sec" id="goalSec" hidden>
+        <div class="g-sec-head"><h2 id="goalHead">What do you want to grow?</h2></div>
+        <div class="goal-row" id="goalWrap"></div>
+    </section>
+
+    <!-- ======================================= 07 RECOMMENDED PACKS === -->
+    <section class="g-wrap g-sec" id="packSec" hidden>
+        <div class="g-sec-head">
+            <h2>Recommended</h2>
+            <p>The three most-ordered sizes. Choose another amount below if you'd rather.</p>
         </div>
+        <div class="pack-grid" id="packGrid"></div>
+    </section>
 
-        <div class="mm-foot">
-            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="mm-wa">
-                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-            </a>
-            <a href="tel:+256762193386" class="mm-call"><i class="fas fa-phone"></i> Call us</a>
+    <!-- ============================================== 08 QUANTITY === -->
+    <section class="g-wrap g-sec" id="qtySec" hidden>
+        <div class="g-sec-head"><h2>How much?</h2></div>
+        <div class="qty-row" id="qtyRow"></div>
+        <div class="stepper" id="qtyStepper">
+            <button type="button" id="qtyMinus" aria-label="Less"><i class="fas fa-minus"></i></button>
+            <input type="text" id="qtyInput" inputmode="numeric" aria-label="Amount">
+            <button type="button" id="qtyPlus" aria-label="More"><i class="fas fa-plus"></i></button>
         </div>
-    </div>
+        <p class="qty-note" id="qtyNote"></p>
+    </section>
 
-    <main class="smooth-scroll-wrapper">
+    <!-- ============================================ 09 CUSTOM MIX === -->
+    <section class="g-wrap g-sec" id="mixSec" hidden>
+        <div class="g-sec-head">
+            <h2>Your combo</h2>
+            <p>Set each platform separately. It stays one order and one price.</p>
+        </div>
+        <div class="mix-list" id="mixList"></div>
+    </section>
 
-        <!-- ============================================ HERO + BUILDER === -->
-        <section class="growth-hero" id="builder">
-            <div class="growth-grid">
+    <!-- ============================================ 10 ACCOUNTS === -->
+    <section class="g-wrap g-sec" id="acctSec" hidden>
+        <div class="g-sec-head">
+            <h2>Where should we deliver?</h2>
+        </div>
+        <div class="acct-list" id="acctList"></div>
+        <p class="acct-note"><i class="fas fa-lock"></i> No password required — a public username or link is all we need.</p>
+    </section>
 
-                <div class="growth-copy fade-up delay-1">
-                    <h1>Grow your socials.<br>Without <em>the stress.</em></h1>
-                    <p class="growth-sub">Followers, views, likes, subscribers and more — across the platforms you already use.</p>
-                    <p class="growth-trustline"><i class="fas fa-shield-halved"></i>No password required. Clear pricing. Local support.</p>
-                    <div class="growth-cta-row">
-                        <a href="#builder-card" class="hub-btn hub-btn--solid">Choose what you need <i class="fas fa-arrow-right"></i></a>
-                        <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="hub-btn hub-btn--ghost">
-                            <i class="fab fa-whatsapp"></i> Ask on WhatsApp
-                        </a>
-                    </div>
-                </div>
-
-                <!-- ==================================== ORDER BUILDER === -->
-                <div class="builder-card fade-up delay-2" id="growBuilder">
-                    <div class="builder-card-head">
-                        <h2>What do you want to grow?</h2>
-                        <p>Three taps to a real price. Nothing charged here.</p>
-                    </div>
-
-                    <!-- step 1: platform ------------------------------------------------ -->
-                    <div class="gb-step" id="stepPlatform">
-                        <span class="gb-step-label">1 — Platform</span>
-
-                        <div class="gb-done" id="stepPlatformDone" hidden>
-                            <span class="gb-done-val"></span>
-                            <button type="button" data-reset="platform">Change</button>
-                        </div>
-
-                        <div id="stepPlatformOpen">
-                            <div class="gb-tile-grid" id="platformPrimary" role="group" aria-label="Platform"></div>
-                            <button type="button" class="gb-more-btn" id="platformMoreBtn" aria-expanded="false">More platforms</button>
-                            <div class="gb-more-list" id="platformSecondary" hidden></div>
-                        </div>
-                    </div>
-
-                    <!-- step 2: service -------------------------------------------------- -->
-                    <div class="gb-step" id="stepService" hidden>
-                        <span class="gb-step-label">2 — Service</span>
-
-                        <div class="gb-done" id="stepServiceDone" hidden>
-                            <span class="gb-done-val"></span>
-                            <button type="button" data-reset="service">Change</button>
-                        </div>
-
-                        <div id="stepServiceOpen">
-                            <div class="gb-chip-grid" id="servicePopular" role="group" aria-label="Service"></div>
-                            <button type="button" class="gb-more-btn" id="serviceMoreBtn" aria-expanded="false" hidden>More</button>
-                            <div class="gb-chip-grid gb-more-list" id="serviceMore" hidden></div>
-                        </div>
-                    </div>
-
-                    <!-- step 3: quantity ------------------------------------------------- -->
-                    <div class="gb-step" id="stepQty" hidden>
-                        <span class="gb-step-label">3 — Quantity</span>
-                        <div class="gb-qty-grid" id="qtyGrid" role="group" aria-label="Quantity"></div>
-                    </div>
-
-                    <!-- summary ------------------------------------------------------------ -->
-                    <div class="gb-summary" id="bSummary" hidden>
-                        <div class="gb-sum-row"><span class="gb-sum-what" id="sumWhat"></span></div>
-                        <div class="gb-sum-row"><span class="gb-sum-qty" id="sumQty"></span></div>
-                        <div class="gb-sum-price" id="sumPrice"></div>
-                        <div class="gb-sum-deposit" id="sumDeposit" hidden></div>
-                        <ul class="gb-sum-trust" id="sumTrust"></ul>
-                        <a href="#" class="gb-sum-cta" id="sumCta">Continue to order <i class="fas fa-arrow-right"></i></a>
-                    </div>
-
-                    <p class="gb-region-note">Prices for <b id="bRegion">Uganda</b>. <button type="button" id="bd-change">Change</button></p>
-                </div>
-                <span id="builder-card"></span>
+    <!-- =============================================== 11 PRICE === -->
+    <section class="g-wrap g-sec" id="priceSec" hidden>
+        <div class="price-card">
+            <div class="price-row"><span>Regular price</span><b id="priceSub">—</b></div>
+            <div class="price-row is-save" id="priceSaveRow" hidden>
+                <span id="priceSaveLabel">Combo saving</span><b id="priceSave">—</b>
             </div>
-        </section>
+            <div class="price-sep"></div>
+            <div class="price-total"><span>You pay</span><b id="priceTotal">—</b></div>
+        </div>
+    </section>
 
-        <!-- ============================================== TRUST BENEFITS === -->
-        <section class="hub-sec hub-sec--line hub-sec--tight">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Why people order through 97</span>
-                    <h2>Built to be <em>trusted</em></h2>
-                </div>
+    <!-- ============================================= 12 POPULAR === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head"><h2>Popular right now</h2></div>
+        <div class="pop-row">
+            <button type="button" class="pop-item" data-pop="ig_followers:10000">
+                <img src="/IMAGES/instagram.png" alt="">
+                <b>Instagram<br>10K followers</b>
+                <span class="pop-amt" data-pop-price="ig_followers:10000">—</span>
+                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
+            </button>
+            <button type="button" class="pop-item" data-pop="tt_views:50000">
+                <img src="/IMAGES/tiktok.png" alt="">
+                <b>TikTok<br>50K views</b>
+                <span class="pop-amt" data-pop-price="tt_views:50000">—</span>
+                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
+            </button>
+            <button type="button" class="pop-item" data-pop="fb_followers:5000">
+                <img src="/IMAGES/facebook.png" alt="">
+                <b>Facebook<br>5K followers</b>
+                <span class="pop-amt" data-pop-price="fb_followers:5000">—</span>
+                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
+            </button>
+            <button type="button" class="pop-item" data-pop="yt_views:10000">
+                <img src="/IMAGES/youtube.png" alt="">
+                <b>YouTube<br>10K views</b>
+                <span class="pop-amt" data-pop-price="yt_views:10000">—</span>
+                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
+            </button>
+        </div>
+    </section>
 
-                <div class="spec-grid" data-stagger>
-                    <article class="spec">
-                        <div class="spec-ic"><i class="fas fa-lock"></i></div>
-                        <h3>No password</h3>
-                        <p>We only need your public username or content link. Your login stays yours, always.</p>
-                    </article>
-                    <article class="spec">
-                        <div class="spec-ic"><i class="fas fa-circle-info"></i></div>
-                        <h3>Clear delivery</h3>
-                        <p>What to expect and when it starts is explained before you pay a shilling — not after.</p>
-                    </article>
-                    <article class="spec">
-                        <div class="spec-ic"><i class="fas fa-rotate-left"></i></div>
-                        <h3>Refill protection</h3>
-                        <p>Eligible services carry clearly stated refill cover. We say up front which ones do.</p>
-                    </article>
-                    <article class="spec">
-                        <div class="spec-ic"><i class="fas fa-location-dot"></i></div>
-                        <h3>Local support</h3>
-                        <p>Speak directly with the 97 team on WhatsApp whenever you need to.</p>
-                    </article>
-                </div>
+    <!-- ========================================= 13 COMBO PROMO === -->
+    <section class="g-wrap g-sec">
+        <div class="promo r-up">
+            <h2>Grow in more than one place?</h2>
+            <p>Choose 3+ platforms and unlock Combo pricing — 10% off at three, up to 15% at five.</p>
+            <div class="promo-marks" aria-hidden="true">
+                <img src="/IMAGES/instagram.png" alt="">
+                <img src="/IMAGES/tiktok.png" alt="">
+                <img src="/IMAGES/facebook.png" alt="">
+                <img src="/IMAGES/youtube.png" alt="">
+                <img src="/IMAGES/spotify.png" alt="">
             </div>
-        </section>
+            <a href="#platSec" class="g-btn">Build a Combo</a>
+        </div>
+    </section>
 
-        <!-- ================================================ REAL PROOF === -->
-        <section class="hub-sec hub-sec--line">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Real proof</span>
-                    <h2>Recent customer <em>results</em></h2>
-                    <p>Actual screenshots from actual orders — swipe through them.</p>
-                </div>
+    <!-- =============================================== 14 TRUST === -->
+    <section class="g-wrap g-sec">
+        <div class="trust-row r-up">
+            <div class="trust-item"><i class="fas fa-lock"></i> No password</div>
+            <div class="trust-item"><i class="fas fa-list-check"></i> Order tracking</div>
+            <div class="trust-item"><i class="fas fa-location-dot"></i> Local support</div>
+            <div class="trust-item"><i class="fas fa-rotate-left"></i> Refill options</div>
+        </div>
+    </section>
 
-                <div class="proof-rail fade-up">
-                    <figure class="proof-shot"><img src="/IMAGES/trust1.png" alt="Screenshot of a completed 97 World order" loading="lazy"></figure>
-                    <figure class="proof-shot"><img src="/IMAGES/trust2.png" alt="Screenshot of a client conversation" loading="lazy"></figure>
-                    <figure class="proof-shot"><img src="/IMAGES/trust3.png" alt="Screenshot of a delivered growth order" loading="lazy"></figure>
-                    <figure class="proof-shot"><img src="/IMAGES/trust4.png" alt="Screenshot of a client payment confirmation" loading="lazy"></figure>
-                    <figure class="proof-shot"><img src="/IMAGES/trust5.png" alt="Screenshot of a completed delivery" loading="lazy"></figure>
-                </div>
-                <p class="rail-hint"><i class="fas fa-hand-pointer"></i> Swipe to see more</p>
+    <!-- =============================================== 15 PROOF === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head">
+            <h2>Recent customer results</h2>
+            <p>Screenshots from real orders, shared with permission.</p>
+        </div>
+        <div class="proof-rail r-up">
+            <img src="/IMAGES/trust1.png" alt="Customer result" loading="lazy">
+            <img src="/IMAGES/trust2.png" alt="Customer result" loading="lazy">
+            <img src="/IMAGES/trust3.png" alt="Customer result" loading="lazy">
+            <img src="/IMAGES/trust4.png" alt="Customer result" loading="lazy">
+            <img src="/IMAGES/trust5.png" alt="Customer result" loading="lazy">
+        </div>
+    </section>
+
+    <!-- ======================================== 16 HOW IT WORKS === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head"><h2>How it works</h2></div>
+        <div class="steps r-up">
+            <div class="step">
+                <div class="step-n">Step 1</div>
+                <b>Choose</b>
+                <p>Pick your platforms and amounts. The exact price is on screen before anything else happens.</p>
             </div>
-        </section>
-
-        <!-- ============================================== HOW IT WORKS === -->
-        <section id="how" class="hub-sec hub-sec--line hub-sec--raised">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Ordering takes a minute</span>
-                    <h2>How it <em>works</em></h2>
-                </div>
-
-                <div class="flow" data-stagger>
-                    <div class="flow-step">
-                        <div class="flow-n">01</div>
-                        <div class="flow-body">
-                            <h3>Choose</h3>
-                            <p>Pick your platform, service and quantity above.</p>
-                        </div>
-                    </div>
-                    <div class="flow-step">
-                        <div class="flow-n">02</div>
-                        <div class="flow-body">
-                            <h3>Confirm</h3>
-                            <p>Review your price and send your account link.</p>
-                        </div>
-                    </div>
-                    <div class="flow-step">
-                        <div class="flow-n">03</div>
-                        <div class="flow-body">
-                            <h3>Start</h3>
-                            <p>Make the required starting payment.</p>
-                        </div>
-                    </div>
-                    <div class="flow-step">
-                        <div class="flow-n">04</div>
-                        <div class="flow-body">
-                            <h3>Delivery</h3>
-                            <p>Your order begins processing.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="step">
+                <div class="step-n">Step 2</div>
+                <b>Pay</b>
+                <p>Confirm on WhatsApp and pay by MTN or Airtel Money, or cash at our Kampala office.</p>
             </div>
-        </section>
-
-        <!-- ============================================ POPULAR PACKAGES === -->
-        <section class="hub-sec hub-sec--line">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Popular right now</span>
-                    <h2>Straight to a <em>real price</em></h2>
-                </div>
-
-                <div class="pop-grid fade-up">
-                    <a href="/instagram-boost/" class="pop-card">
-                        <img src="/IMAGES/instagram.png" alt="">
-                        <b>Instagram · 10K Followers</b>
-                        <span class="pop-price" data-pkg="instagram:10000:ig_followers">—</span>
-                        <span class="pop-go">Order <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                    <a href="/tiktok-boost/" class="pop-card">
-                        <img src="/IMAGES/tiktok.png" alt="">
-                        <b>TikTok · 10K Followers</b>
-                        <span class="pop-price" data-pkg="tiktok:10000:tt_followers">—</span>
-                        <span class="pop-go">Order <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                    <a href="/facebook-boost/" class="pop-card">
-                        <img src="/IMAGES/facebook.png" alt="">
-                        <b>Facebook · 10K Followers</b>
-                        <span class="pop-price" data-pkg="facebook:10000:fb_followers">—</span>
-                        <span class="pop-go">Order <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                    <a href="/youtube-boost/" class="pop-card">
-                        <img src="/IMAGES/youtube.png" alt="">
-                        <b>YouTube · 2,500 Subscribers</b>
-                        <span class="pop-price" data-pkg="youtube:2500:yt_subs">—</span>
-                        <span class="pop-go">Order <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                </div>
-                <p style="text-align:center;margin-top:16px">
-                    <a href="#all-services" style="color:var(--hub);font-size:0.86rem;font-weight:700;text-decoration:underline;text-underline-offset:3px">View all services →</a>
-                </p>
-            </div>
-        </section>
-
-        <!-- ===================================================== BUNDLE === -->
-        <section id="bundle" class="hub-sec hub-sec--line hub-sec--raised">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Grow across more than one platform</span>
-                    <h2>Real <em>bundles</em>, priced against the parts</h2>
-                </div>
-
-                <div class="bundle-grid fade-up">
-                    <a href="/boost-package/" class="bundle-card">
-                        <span class="bundle-marks">
-                            <img src="/IMAGES/instagram.png" alt="">
-                            <img src="/IMAGES/tiktok.png" alt="">
-                            <img src="/IMAGES/facebook.png" alt="">
-                        </span>
-                        <span class="bundle-copy">
-                            <b>Multi-Platform Growth</b>
-                            <p>5,000 followers + 50,000 views on Instagram, TikTok &amp; Facebook</p>
-                        </span>
-                        <span class="bundle-price">
-                            <b data-pkg="bundle:multi-platform">—</b>
-                            <s data-pkg-was="bundle:multi-platform">—</s>
-                        </span>
-                        <span class="bundle-cta">See it <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                    <a href="/boost-package/" class="bundle-card">
-                        <span class="bundle-marks">
-                            <img src="/IMAGES/spotify.png" alt="">
-                        </span>
-                        <span class="bundle-copy">
-                            <b>Artist Launch</b>
-                            <p>Spotify &amp; Audiomack plays and followers, together</p>
-                        </span>
-                        <span class="bundle-price">
-                            <b data-pkg="bundle:artist-launch">—</b>
-                            <s data-pkg-was="bundle:artist-launch">—</s>
-                        </span>
-                        <span class="bundle-cta">See it <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                    <a href="/boost-package/" class="bundle-card">
-                        <span class="bundle-marks">
-                            <img src="/IMAGES/youtube.png" alt="">
-                        </span>
-                        <span class="bundle-copy">
-                            <b>YouTube Growth</b>
-                            <p>2,500 subscribers + 50,000 views + 10,000 likes</p>
-                        </span>
-                        <span class="bundle-price">
-                            <b data-pkg="bundle:youtube-growth">—</b>
-                            <s data-pkg-was="bundle:youtube-growth">—</s>
-                        </span>
-                        <span class="bundle-cta">See it <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                    <a href="/boost-package/" class="bundle-card">
-                        <span class="bundle-marks">
-                            <i class="fab fa-linkedin" style="font-size:26px;color:#2d8de0"></i>
-                        </span>
-                        <span class="bundle-copy">
-                            <b>Business Visibility</b>
-                            <p>5,000 LinkedIn followers + 50,000 premium website visits</p>
-                        </span>
-                        <span class="bundle-price">
-                            <b data-pkg="bundle:business-visibility">—</b>
-                            <s data-pkg-was="bundle:business-visibility">—</s>
-                        </span>
-                        <span class="bundle-cta">See it <i class="fas fa-arrow-right"></i></span>
-                    </a>
-                </div>
-                <p style="text-align:center;margin-top:16px">
-                    <a href="/boost-package/" style="color:var(--hub);font-size:0.86rem;font-weight:700;text-decoration:underline;text-underline-offset:3px">See all 8 bundles, including Creator Starter &amp; Pro →</a>
-                </p>
-            </div>
-        </section>
-
-        <!-- ============================================== SHOP BY GOAL === -->
-        <section class="hub-sec hub-sec--line">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Not sure where to start?</span>
-                    <h2>What are you trying to <em>achieve?</em></h2>
-                </div>
-
-                <div class="goal-grid fade-up">
-                    <button type="button" class="goal-btn" data-goal-platform="instagram" data-goal-service="ig_followers">
-                        <i class="fas fa-user-plus"></i><span>Build my follower count</span>
-                    </button>
-                    <button type="button" class="goal-btn" data-goal-platform="tiktok" data-goal-service="tt_views">
-                        <i class="fas fa-eye"></i><span>Get more video views</span>
-                    </button>
-                    <button type="button" class="goal-btn" data-goal-platform="instagram" data-goal-service="ig_likes">
-                        <i class="fas fa-heart"></i><span>Boost a new post</span>
-                    </button>
-                    <button type="button" class="goal-btn" data-goal-platform="spotify" data-goal-service="sp_plays">
-                        <i class="fab fa-spotify"></i><span>Grow my music</span>
-                    </button>
-                    <button type="button" class="goal-btn" data-goal-platform="webtraffic" data-goal-service="wt_standard">
-                        <i class="fas fa-globe"></i><span>Get more website visitors</span>
-                    </button>
-                    <button type="button" class="goal-btn" data-goal-target="bundle">
-                        <i class="fas fa-layer-group"></i><span>Grow multiple platforms</span>
-                    </button>
-                    <button type="button" class="goal-btn" data-goal-target="reseller">
-                        <i class="fas fa-users-gear"></i><span>I manage client accounts</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================== BROWSE ALL SERVICES === -->
-        <section id="all-services" class="hub-sec hub-sec--line hub-sec--raised">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">The full catalogue</span>
-                    <h2>Browse all <em>services</em></h2>
-                    <p>Grouped by platform. Nearly everything has a fixed price — the handful without one get a quote on WhatsApp.</p>
-                </div>
-
-                <div class="svc-search fade-up">
-                    <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
-                    <input type="search" id="svcSearch" autocomplete="off" spellcheck="false"
-                           placeholder="Search — likes, views, Telegram…"
-                           aria-label="Search all services" aria-controls="svc-results">
-                    <button type="button" id="svcClear" aria-label="Clear search" hidden>
-                        <i class="fas fa-xmark"></i>
-                    </button>
-                </div>
-
-                <div class="svc-results" id="svc-results" role="region" aria-live="polite" hidden></div>
-
-                <div class="accordion fade-up" id="browseAll">
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><img src="/IMAGES/instagram.png" alt=""><b>Instagram</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="instagram"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><img src="/IMAGES/tiktok.png" alt=""><b>TikTok</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="tiktok"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><img src="/IMAGES/youtube.png" alt=""><b>YouTube</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="youtube"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><img src="/IMAGES/facebook.png" alt=""><b>Facebook</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="facebook"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><i class="fab fa-telegram gb-plat-ic"></i><b>Telegram</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="telegram"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><img src="/IMAGES/x.png" alt=""><b>X</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="x"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><i class="fab fa-whatsapp gb-plat-ic"></i><b>WhatsApp</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="whatsapp"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><i class="fab fa-linkedin gb-plat-ic"></i><b>LinkedIn</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="linkedin"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><img src="/IMAGES/spotify.png" alt=""><b>Spotify</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="spotify"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><i class="fas fa-music gb-plat-ic"></i><b>Audiomack</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="audiomack"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><i class="fab fa-soundcloud gb-plat-ic"></i><b>SoundCloud</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="soundcloud"></div>
-                    </div>
-                    <div class="accordion-item">
-                        <button type="button" class="accordion-head" aria-expanded="false">
-                            <span class="accordion-head-left"><i class="fas fa-globe gb-plat-ic"></i><b>Website traffic</b></span>
-                            <i class="fas fa-chevron-down accordion-chevron"></i>
-                        </button>
-                        <div class="accordion-body" data-platform="webtraffic"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================== RESELLER === -->
-        <section class="hub-sec hub-sec--tight">
-            <div class="container">
-                <div class="reseller-banner fade-up" id="reseller">
-                    <p><b>Manage multiple accounts?</b>Bulk ordering and reseller options are available.</p>
-                    <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%27d%20like%20to%20ask%20about%20bulk%20or%20reseller%20ordering." target="_blank" rel="noopener">Explore reseller services <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================== FAQ === -->
-        <section id="faq" class="hub-sec hub-sec--line">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Straight answers</span>
-                    <h2>Before you <em>ask</em></h2>
-                </div>
-
-                <div class="faq fade-up">
-                    <details class="faq-item">
-                        <summary>Do you need my password?</summary>
-                        <div class="faq-a">No. Everything is delivered to your public username or content link. We will never ask for your login.</div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary>When does delivery start?</summary>
-                        <div class="faq-a">Most orders begin moving within 1 to 6 hours of being confirmed, then continue gradually rather than landing all at once.</div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary>What does refill mean?</summary>
-                        <div class="faq-a">For eligible services, if the delivered amount drops within 30 days, we top it back up at no cost. We say clearly which services this applies to before you order.</div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary>What happens if followers drop?</summary>
-                        <div class="faq-a">For a refill-eligible service, message us within the 30-day window and we replace what was lost, free. For a quote-only service, the exact refill terms are confirmed when we send you the price.</div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary>How do I pay?</summary>
-                        <div class="faq-a">MTN Mobile Money, Airtel Money, or cash at our office in Kampala. Where a deposit applies, it starts the order and the balance is due once delivery is visibly running.</div>
-                    </details>
-
-                    <details class="faq-item">
-                        <summary>Can I order outside Uganda?</summary>
-                        <div class="faq-a">Yes — we also serve South Sudan and DR Congo. Prices show in UGX or USD depending on your region, changeable any time with the <b>Change</b> link near the price.</div>
-                    </details>
-                </div>
-            </div>
-        </section>
-
-        <!-- =================================================== CLOSE === -->
-        <section class="hub-close">
-            <div class="container">
-                <h2>Ready to <em>grow?</em></h2>
-                <p>Choose your platform and see your price instantly.</p>
-
-                <div class="hub-cta-row">
-                    <a href="#builder" class="hub-btn hub-btn--solid">Start my order <i class="fas fa-arrow-right"></i></a>
-                    <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="hub-btn hub-btn--ghost">
-                        <i class="fab fa-whatsapp"></i> Ask us on WhatsApp
-                    </a>
-                </div>
-
-                <p class="hub-close-note">No password required.</p>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="obsidian-footer">
-        <div class="container footer-matrix">
-            <div class="f-brand fade-up delay-1">
-                <img src="/IMAGES/logo.png" alt="97 World" loading="lazy">
-                <p>The elite digital standard. Connect first, pay after.</p>
-            </div>
-            <div class="f-links fade-up delay-2">
-                <h4 class="f-head">Grow</h4>
-                <a href="/instagram-boost/">Instagram Boost</a>
-                <a href="/tiktok-boost/">TikTok Boost</a>
-                <a href="/facebook-boost/">Facebook Boost</a>
-                <a href="/youtube-boost/">YouTube Boost</a>
-                <a href="/boost-package/">All 3 Platforms</a>
-            </div>
-            <div class="f-links fade-up delay-3">
-                <h4 class="f-head">Build</h4>
-                <a href="/business/">Website packages</a>
-                <a href="/business/#emails">Business emails</a>
-                <a href="/business/#fliers">Fliers &amp; design</a>
-            </div>
-            <div class="f-links fade-up delay-4">
-                <h4 class="f-head">Command Center</h4>
-                <a href="https://wa.me/256762193386" target="_blank" rel="noopener">VIP WhatsApp Support</a>
-                <a href="https://www.instagram.com/the97world" target="_blank" rel="noopener">Instagram</a>
-                <a href="/trust/">Trust Centre</a>
-                <a href="/terms-of-service/">Terms of Protocol</a>
-                <a href="/privacy-policy/">Privacy Doctrine</a>
+            <div class="step">
+                <div class="step-n">Step 3</div>
+                <b>Track</b>
+                <p>Delivery starts within 1–6 hours and arrives gradually. Check progress any time.</p>
             </div>
         </div>
-        <div class="footer-bottom fade-up delay-4">
-            <div class="sys-op">
-                <span class="pulse-dot"></span> 2026 97 World. System Operational.
-            </div>
+    </section>
+
+    <!-- ================================================= 17 FAQ === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head"><h2>Questions</h2></div>
+        <div class="g-faq r-up">
+            <details>
+                <summary>Do you need my password?</summary>
+                <div class="faq-a">No. Everything is delivered to a public username or link. We will never ask for your login.</div>
+            </details>
+            <details>
+                <summary>How does Combo pricing work?</summary>
+                <div class="faq-a">It is a pricing mode, not a different product. Select three platforms and the whole order comes down 10%, four platforms 12.5%, five or more 15%. The saving is taken off the real total of what you picked — there is no inflated "before" price.</div>
+            </details>
+            <details>
+                <summary>When does delivery start?</summary>
+                <div class="faq-a">Most orders begin moving within 1 to 6 hours of being confirmed, then continue gradually rather than landing all at once.</div>
+            </details>
+            <details>
+                <summary>What does refill cover?</summary>
+                <div class="faq-a">Where a service includes refill, anything that drops within 30 days is topped back up free. It applies to followers, subscribers and members — things that can actually drop. One-off metrics like views and plays cannot drop, so they are not covered.</div>
+            </details>
+            <details>
+                <summary>How do I pay?</summary>
+                <div class="faq-a">MTN Mobile Money, Airtel Money, or cash at our office in Kampala. You confirm the order on WhatsApp first and we take payment there — nothing is charged on this page.</div>
+            </details>
+            <details>
+                <summary>Can I order from outside Uganda?</summary>
+                <div class="faq-a">Yes — we also serve South Sudan and DR Congo, priced in USD. Switch currency from the button in the header.</div>
+            </details>
         </div>
+    </section>
+
+    <!-- ============================================== 18 FOOTER === -->
+    <footer class="g-wrap g-footer">
+        <div class="g-foot-links">
+            <a href="/">97 World</a>
+            <a href="/business/">Business &amp; websites</a>
+            <a href="/trust/">Trust centre</a>
+            <a href="/track/">Track order</a>
+            <a href="/terms-of-service/">Terms</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+        <p class="g-foot-note">97 World · Kampala, Uganda. Promotional engagement services — not a guarantee of organic customers, sales or platform ranking.</p>
     </footer>
 
-    <!-- sticky mobile CTA — mirrors the builder's state -->
-    <div class="grow-sticky" id="growSticky">
-        <button type="button" class="sticky-before" id="stickyBefore">Choose a service <i class="fas fa-arrow-right"></i></button>
-        <div class="sticky-after" id="stickyAfter" hidden>
-            <div class="sticky-what-wrap">
-                <b id="stickyWhat"></b>
-                <span id="stickyPrice"></span>
-            </div>
-            <a href="#" class="gb-sum-cta" id="stickyCta">Continue <i class="fas fa-arrow-right"></i></a>
+</main>
+
+<!-- ======================================== STICKY ORDER DOCK === -->
+<div class="g-dock" id="gDock">
+    <p class="dock-missing" id="dockMissing" hidden></p>
+    <div class="g-dock-in">
+        <div class="g-dock-copy">
+            <div class="g-dock-price"><span class="g-roll" id="dockPrice">—</span></div>
+            <div class="g-dock-meta" id="dockMeta"></div>
+        </div>
+        <button type="button" class="g-btn" id="dockCta">Continue <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<!-- ================================================ SHEETS === -->
+
+<div class="sheet" id="moreSheet" role="dialog" aria-modal="true" aria-label="More platforms">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>More platforms</h2>
+            <button type="button" class="sheet-close" data-close="moreSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="plat-grid" id="moreGrid"></div>
+    </div>
+</div>
+
+<div class="sheet" id="mixSheet" role="dialog" aria-modal="true" aria-label="Edit platform">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2 id="mixSheetTitle">Edit</h2>
+            <button type="button" class="sheet-close" data-close="mixSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div id="mixSheetBody"></div>
+        <button type="button" class="g-btn g-btn--wide" style="margin-top:18px" data-close="mixSheet">Done</button>
+    </div>
+</div>
+
+<div class="sheet" id="regionSheet" role="dialog" aria-modal="true" aria-label="Currency">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>Where are you ordering from?</h2>
+            <button type="button" class="sheet-close" data-close="regionSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="goal-cards" id="regionGrid"></div>
+    </div>
+</div>
+
+<div class="sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>97 World</h2>
+            <button type="button" class="sheet-close" data-close="menuSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="goal-cards">
+            <button type="button" class="goal-card" id="regionBtn">
+                <span class="goal-card-copy"><b>Currency &amp; region</b><small>Currently <span id="regionLabel">UGX</span> — tap to change</small></span>
+            </button>
+            <a href="/" class="goal-card"><span class="goal-card-copy"><b>Home</b><small>Everything 97 World does</small></span></a>
+            <a href="/business/" class="goal-card"><span class="goal-card-copy"><b>Business &amp; websites</b><small>Websites, business email and design</small></span></a>
+            <a href="/track/" class="goal-card"><span class="goal-card-copy"><b>Track an order</b><small>Check where your delivery has reached</small></span></a>
+            <a href="/trust/" class="goal-card"><span class="goal-card-copy"><b>Trust centre</b><small>Who we are and how we work</small></span></a>
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="goal-card"><span class="goal-card-copy"><b>WhatsApp us</b><small>Questions before you order</small></span></a>
         </div>
     </div>
+</div>
 
-    <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%20have%20a%20question%20about%20growing%20my%20socials." target="_blank" rel="noopener" class="wa-fab" id="waFab" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+<div class="sheet" id="revSheet" role="dialog" aria-modal="true" aria-label="Review your order">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>Your order</h2>
+            <button type="button" class="sheet-close" data-close="revSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
 
-    <script src="/HOME/script.js" defer></script>
-    <script src="/assets/pricing.js"></script>
-<script src="/assets/preloader.js" defer></script>
+        <div class="rev-list" id="revList"></div>
+
+        <div class="price-card" style="margin-top:14px">
+            <div class="price-row"><span>Regular price</span><b id="revSub">—</b></div>
+            <div class="price-row is-save" id="revSaveRow" hidden><span>Combo saving</span><b id="revSave">—</b></div>
+            <div class="price-sep"></div>
+            <div class="price-total"><span>Total</span><b id="revTotal">—</b></div>
+        </div>
+
+        <div class="acct-list" style="margin-top:16px">
+            <div class="acct-field">
+                <label for="revName">Your name</label>
+                <div class="acct-box"><i class="fas fa-user"></i>
+                    <input type="text" id="revName" placeholder="Full name" autocomplete="name">
+                </div>
+            </div>
+            <div class="acct-field">
+                <label for="revPhone">WhatsApp number</label>
+                <div class="acct-box"><i class="fab fa-whatsapp"></i>
+                    <input type="tel" id="revPhone" placeholder="+256 700 000 000" autocomplete="tel" inputmode="tel">
+                </div>
+            </div>
+        </div>
+        <p class="acct-err" id="revErr" hidden></p>
+
+        <p class="acct-note"><i class="fas fa-shield-halved"></i> Nothing is charged here. You confirm on WhatsApp and pay by MTN, Airtel Money or cash.</p>
+
+        <button type="button" class="g-btn g-btn--wide" id="revSend" style="margin-top:14px">
+            <i class="fab fa-whatsapp"></i> Confirm on WhatsApp
+        </button>
+        <button type="button" class="g-btn g-btn--ghost g-btn--wide" style="margin-top:8px" data-close="revSheet">Go back and edit</button>
+    </div>
+</div>
+
+<script src="/assets/pricing.js"></script>
+<script src="/assets/order.js"></script>
+<script src="/growth/app.js" defer></script>
 </body>
 </html>

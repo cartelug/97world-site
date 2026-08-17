@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F6F7F5">
+
+    <title>Track your order | 97 Growth</title>
+    <meta name="description" content="Check where your 97 World order has reached — payment, acceptance and delivery status.">
+    <meta name="robots" content="noindex">
+
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/assets/growth.css">
+</head>
+<body class="growth" style="padding-bottom:40px">
+
+<header class="g-header" id="gHeader">
+    <div class="g-wrap g-header-in">
+        <a href="/growth/" class="g-brand">
+            <img src="/IMAGES/logo.png" alt="">
+            <span>97 Growth</span>
+        </a>
+        <div class="g-head-right">
+            <a href="/growth/" class="g-track-btn">New order</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="g-wrap g-open">
+        <h1>Track your order.</h1>
+        <p>Enter the order number we sent you on WhatsApp.</p>
+    </section>
+
+    <section class="g-wrap g-sec">
+        <div class="acct-list">
+            <div class="acct-field" id="refField">
+                <label for="refInput">Order number</label>
+                <div class="acct-box">
+                    <i class="fas fa-hashtag"></i>
+                    <input type="text" id="refInput" placeholder="e.g. K97-ABC123" autocomplete="off"
+                           spellcheck="false" autocapitalize="characters">
+                </div>
+                <p class="acct-err" id="refErr" hidden></p>
+            </div>
+        </div>
+        <button type="button" class="g-btn g-btn--wide" id="refGo" style="margin-top:14px">
+            Check status <i class="fas fa-arrow-right"></i>
+        </button>
+    </section>
+
+    <!-- Statuses are the honest set. We do not show a delivered/total figure,
+         because nothing on our side reports a live per-order count yet — a
+         made-up progress bar would be worse than no progress bar. -->
+    <section class="g-wrap g-sec" id="resultSec" hidden>
+        <div class="price-card">
+            <div class="price-row"><span>Order</span><b id="resRef">—</b></div>
+            <div class="price-sep"></div>
+            <div class="steps" style="grid-template-columns:1fr;gap:8px">
+                <div class="step" id="stPay"><div class="step-n">Payment</div><b>Waiting on confirmation</b>
+                    <p>We mark this confirmed once your deposit lands.</p></div>
+                <div class="step" id="stAccept"><div class="step-n">Order accepted</div><b>Queued</b>
+                    <p>Accepted orders are sent to delivery in the order they arrive.</p></div>
+                <div class="step" id="stDeliver"><div class="step-n">Delivery</div><b>Not started</b>
+                    <p>Delivery begins 1–6 hours after acceptance and arrives gradually.</p></div>
+            </div>
+        </div>
+
+        <p class="acct-note" style="margin-top:14px">
+            <i class="fas fa-circle-info"></i>
+            <span id="resNote">For the live position of this order, message us — we reply with the exact status.</span>
+        </p>
+
+        <a class="g-btn g-btn--wide" id="resWa" style="margin-top:12px" target="_blank" rel="noopener">
+            <i class="fab fa-whatsapp"></i> Ask about this order
+        </a>
+    </section>
+
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head">
+            <h2>Can't find your number?</h2>
+            <p>It's in the WhatsApp thread where you confirmed the order. If you can't find it, message us with the account you ordered for and we'll look it up.</p>
+        </div>
+        <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%27d%20like%20to%20check%20on%20my%20order."
+           target="_blank" rel="noopener" class="g-btn g-btn--ghost g-btn--wide">
+            <i class="fab fa-whatsapp"></i> Message support
+        </a>
+    </section>
+
+    <footer class="g-wrap g-footer">
+        <div class="g-foot-links">
+            <a href="/">97 World</a>
+            <a href="/growth/">Growth</a>
+            <a href="/business/">Business &amp; websites</a>
+            <a href="/trust/">Trust centre</a>
+            <a href="/terms-of-service/">Terms</a>
+            <a href="/privacy-policy/">Privacy</a>
+        </div>
+        <p class="g-foot-note">97 World · Kampala, Uganda.</p>
+    </footer>
+</main>
+
+<script>
+(function () {
+    'use strict';
+    var WA = '256762193386';
+    var input = document.getElementById('refInput');
+    var err = document.getElementById('refErr');
+    var field = document.getElementById('refField');
+    var out = document.getElementById('resultSec');
+
+    function check() {
+        var ref = input.value.trim().toUpperCase();
+        if (ref.length < 4) {
+            field.classList.add('is-bad');
+            err.hidden = false;
+            err.textContent = 'Enter the order number from your WhatsApp confirmation.';
+            return;
+        }
+        field.classList.remove('is-bad');
+        err.hidden = true;
+
+        document.getElementById('resRef').textContent = ref;
+        document.getElementById('resWa').href = 'https://wa.me/' + WA + '?text=' +
+            encodeURIComponent('Hi 97 World, please give me the status of order ' + ref + '.');
+        out.hidden = false;
+        out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.getElementById('refGo').addEventListener('click', check);
+    input.addEventListener('keypress', function (e) { if (e.key === 'Enter') check(); });
+
+    var pre = new URLSearchParams(window.location.search).get('ref');
+    if (pre) { input.value = pre; check(); }
+
+    window.addEventListener('scroll', function () {
+        document.getElementById('gHeader').classList.toggle('is-stuck', window.scrollY > 12);
+    }, { passive: true });
+})();
+</script>
+</body>
+</html>
