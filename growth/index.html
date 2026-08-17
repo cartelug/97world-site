@@ -44,6 +44,8 @@
 
     <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
     <div class="cursor-spotlight" id="spotlight"></div>
+    <!-- everything drops away behind the bundle on its way to /boost-package/ -->
+    <div class="focus-veil" id="focusVeil" aria-hidden="true"></div>
 
     <nav class="precision-nav fade-up" id="navbar">
         <div class="container nav-grid">
@@ -147,7 +149,10 @@
                     <span class="pick-label">Choose one</span>
                     <div class="pick-grid" id="bd-tabs" role="group" aria-label="Platform"></div>
 
-                    <button type="button" class="pick-wide" id="bd-all3" aria-pressed="false">
+                    <!-- not a filter: the bundle is its own page, so this is a
+                         doorway. Tapping it dims the page down and takes them
+                         somewhere the package gets sold properly. -->
+                    <a href="/boost-package/" class="pick-wide" id="bd-all3">
                         <span class="pick-marks">
                             <img src="/IMAGES/instagram.png" alt="">
                             <img src="/IMAGES/tiktok.png" alt="">
@@ -158,7 +163,7 @@
                             <small>Instagram, TikTok &amp; Facebook together</small>
                         </span>
                         <span class="pick-save">Save $50</span>
-                    </button>
+                    </a>
 
                     <div class="deal-list" id="bd-list"></div>
 

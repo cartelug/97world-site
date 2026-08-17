@@ -91,9 +91,106 @@ const PAGES = [
         targetError: 'We need your handle to deliver to',
         targetHint: 'If your handle differs on any platform, tell us on WhatsApp.',
         icon: 'fas fa-at',
-        platform: 'bundle'
+        platform: 'bundle',
+        // this one is reached from a row that gives nothing away, so it carries
+        // the full pitch instead of the standard order-page header
+        sell: true
     }
 ];
+
+/* ------------------------------------------------------- the bundle pitch ---
+ * Only /boost-package/ gets this. Every other order page is reached from a card
+ * that already sold the package; the bundle is reached from a single row on
+ * /growth/ that deliberately says nothing about size or price, so the whole
+ * argument has to happen here instead.
+ *
+ * Money figures carry data-usd and are filled in at runtime by wizard.js, in
+ * whichever currency the visitor chose — hardcoding them would put a second
+ * source of truth next to pricing.js and guarantee they drift.
+ * -------------------------------------------------------------------------- */
+const BUNDLE_SELL = `        <header class="bs-hero">
+            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> The complete package</span>
+            <h1 class="bs-title r-up">30,000 followers.<br>Three platforms.<br><em>One price.</em></h1>
+            <p class="bs-sub r-up">10,000 on Instagram, 10,000 on TikTok and 10,000 on Facebook — delivered together, covered by the same 30-day refill.</p>
+
+            <div class="bs-marks r-up" aria-hidden="true">
+                <img src="/IMAGES/instagram.png" alt="">
+                <img src="/IMAGES/tiktok.png" alt="">
+                <img src="/IMAGES/facebook.png" alt="">
+            </div>
+        </header>
+
+        <!-- the value stack: the whole argument in one table -->
+        <section class="bs-stack r-up" id="bundle-stack" aria-label="What the package includes">
+            <span class="bs-stack-head">What you're getting</span>
+
+            <div class="bs-row">
+                <img src="/IMAGES/instagram.png" alt="">
+                <span class="bs-what"><b>Instagram</b><small>10,000 followers</small></span>
+                <span class="bs-amt" data-usd="100">—</span>
+            </div>
+            <div class="bs-row">
+                <img src="/IMAGES/tiktok.png" alt="">
+                <span class="bs-what"><b>TikTok</b><small>10,000 followers</small></span>
+                <span class="bs-amt" data-usd="100">—</span>
+            </div>
+            <div class="bs-row">
+                <img src="/IMAGES/facebook.png" alt="">
+                <span class="bs-what"><b>Facebook</b><small>10,000 followers</small></span>
+                <span class="bs-amt" data-usd="100">—</span>
+            </div>
+
+            <div class="bs-sep"></div>
+
+            <div class="bs-row bs-sum">
+                <span class="bs-what"><b>Bought separately</b></span>
+                <span class="bs-amt bs-strike" data-usd="300">—</span>
+            </div>
+            <div class="bs-row bs-final">
+                <span class="bs-what"><b>The package</b></span>
+                <span class="bs-amt" data-usd="250">—</span>
+            </div>
+
+            <div class="bs-save">
+                <i class="fas fa-tag"></i> You save <b data-usd="50">—</b>
+            </div>
+
+            <a href="#wizardCard" class="bs-cta">
+                <span>Order the package</span>
+                <i class="fas fa-arrow-down"></i>
+            </a>
+        </section>
+
+        <!-- why three beats one -->
+        <section class="bs-why r-up">
+            <h2>One platform looks lucky.<br><em>Three looks like a business.</em></h2>
+            <div class="bs-why-grid">
+                <div class="bs-why-card">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <b>People check more than one place</b>
+                    <p>Someone deciding whether to trust you rarely stops at the first profile. A strong Instagram and an empty TikTok answers the question the wrong way.</p>
+                </div>
+                <div class="bs-why-card">
+                    <i class="fas fa-arrow-trend-up"></i>
+                    <b>The same handle, growing everywhere</b>
+                    <p>Consistent numbers across three platforms read as a real operation. One spike on one app reads as something you bought.</p>
+                </div>
+                <div class="bs-why-card">
+                    <i class="fas fa-piggy-bank"></i>
+                    <b>It costs less than doing it twice</b>
+                    <p>Ordering the three separately is <span data-usd="300">—</span>. Together they're <span data-usd="250">—</span>, delivered on one timeline instead of three.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- the same promises as everywhere else, restated where the money is -->
+        <section class="bs-terms r-up">
+            <div><i class="fas fa-lock"></i><span>No password, ever</span></div>
+            <div><i class="fas fa-gauge-simple"></i><span>Delivered gradually</span></div>
+            <div><i class="fas fa-rotate-left"></i><span>30-day refill on all three</span></div>
+            <div><i class="fas fa-hand-holding-dollar"></i><span>30% starts it</span></div>
+        </section>
+`;
 
 /* -------------------------------------------------------------- template --- */
 
@@ -153,14 +250,14 @@ const html = (p) => `<!DOCTYPE html>
 
     <main class="ord-shell">
 
-        <header class="ord-hero">
+${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
             <span class="ord-plat r-up">
                 <img src="${p.logo}" alt="">
                 ${p.platformName}
             </span>
             <h1 class="ord-title r-up">${p.headline}</h1>
             <p class="ord-sub r-up">${p.blurb}</p>
-        </header>
+        </header>`}
 
         <div class="ord-card" id="wizardCard">
             <ol class="wiz-track">

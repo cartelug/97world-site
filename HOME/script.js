@@ -88,17 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
             builder.render();
         },
 
-        /* Every card leads with the quantity, because that is what people are
-         * actually comparing. The bundle's stored name ("All three platforms")
-         * describes the deal rather than the size, so it gets restated here to
-         * match the others instead of being the odd one out. */
-        headline(plan, key) {
-            if (key === 'bundle') return '10,000 followers each';
-            return plan.name;
-        },
-
+        /* The line under a package name — what you're actually getting.
+         * The bundle never renders here; it has its own page. */
         subtitle(plan, key) {
-            if (key === 'bundle') return 'on Instagram, TikTok &amp; Facebook';
             if (key === 'yt') return plan.feats.map((f) => f.text).join(' · ');
             return 'on ' + P.PLATFORMS[key].name;
         },
@@ -117,16 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </button>`;
             }).join('');
 
-            // the bundle is a peer choice, not a platform — same control, same
-            // selected state, so it can never look pre-selected the way the old
-            // permanently-tinted box did
-            const wide = document.getElementById('bd-all3');
-            if (wide) {
-                const on = builder.platform === 'bundle';
-                wide.classList.toggle('is-on', on);
-                wide.setAttribute('aria-pressed', String(on));
-            }
-
             const key = builder.platform;
             const plans = P.plansFor(key, builder.region);
             const href = P.PLATFORMS[key].href;
@@ -135,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="${href}" class="deal${plan.hero ? ' is-hero' : ''}" data-plan="${plan.id}">
                     ${plan.tag ? `<span class="deal-tag">${plan.tag}</span>` : ''}
                     <span class="deal-head">
-                        <b>${builder.headline(plan, key)}</b>
+                        <b>${plan.name}</b>
                         <small>${builder.subtitle(plan, key)}</small>
                     </span>
                     <span class="deal-foot">
@@ -155,19 +137,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('builder') && P) {
         builder.render();
 
-        const pick = (key) => {
-            builder.platform = key;
-            builder.render();
-            if (navigator.vibrate) navigator.vibrate(10);
-        };
-
         document.getElementById('bd-tabs').addEventListener('click', (e) => {
             const btn = e.target.closest('.pick-tab');
-            if (btn) pick(btn.dataset.plat);
+            if (!btn) return;
+            builder.platform = btn.dataset.plat;
+            builder.render();
+            if (navigator.vibrate) navigator.vibrate(10);
         });
 
+        // The bundle is a whole page, not a filter. Tapping it drops everything
+        // else away and leaves only the choice lit, then follows the link — the
+        // dim IS the transition, so the next page doesn't arrive out of nowhere.
         const wide = document.getElementById('bd-all3');
-        if (wide) wide.addEventListener('click', () => pick('bundle'));
+        const veil = document.getElementById('focusVeil');
+        if (wide && veil && !reduceMotion) {
+            wide.addEventListener('click', (e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                e.preventDefault();
+                document.body.classList.add('is-focusing');
+                if (navigator.vibrate) navigator.vibrate(14);
+                const go = () => { window.location.href = wide.getAttribute('href'); };
+                veil.addEventListener('transitionend', go, { once: true });
+                // never strand them if the transition never fires
+                setTimeout(go, 600);
+            });
+        }
 
         // the card itself is the call to action — hand the choice to the order
         // page so step 1 there arrives already done

@@ -90,12 +90,32 @@
                     if (plan.id === pending) Wizard.state.plan = i;
                 });
             }
+            // one package means there is nothing to choose — asking for a tap
+            // to confirm the only option is a step that buys nobody anything
+            if (Wizard.state.plan === -1 && Wizard.plans().length === 1) {
+                Wizard.state.plan = 0;
+            }
             Wizard.renderPlans();
             Wizard.syncPlanBtn();
+            Wizard.paintMoney();
 
             var gate = Wizard.$('regionGate');
             gate.hidden = true;
             document.body.classList.remove('is-locked');
+        },
+
+        /* Any element carrying data-usd gets the figure in the region's own
+         * currency. The bundle page's value stack uses this so its numbers can
+         * never drift from pricing.js — there is still only one place a price
+         * is defined. No-ops on pages without any. */
+        paintMoney: function () {
+            var currency = (REGIONS[Wizard.state.region] || {}).currency || 'UGX';
+            var nodes = document.querySelectorAll('[data-usd]');
+            for (var i = 0; i < nodes.length; i++) {
+                var usd = Number(nodes[i].getAttribute('data-usd'));
+                if (isNaN(usd)) continue;
+                nodes[i].textContent = P.money(P.localPrice(usd, currency), currency);
+            }
         },
 
         region: function () { return REGIONS[Wizard.state.region]; },
