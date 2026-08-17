@@ -850,3 +850,65 @@ body.is-focusing .pick-wide .pick-save {
     .oc-title h3 { font-size: 1.24rem; }
     .oc-feats li { font-size: 0.86rem; }
 }
+
+/* ==========================================================================
+   TRUST STRIP — under the nav, on arrival
+   Every competitor worth studying puts its trust facts where a first-time
+   visitor sees them in the first second, not three scrolls down. Nothing
+   here is new information — it's the same four facts already stated in the
+   body copy, resurfaced where they can do their job.
+   ========================================================================== */
+.trust-strip {
+    position: relative; z-index: 40;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(5,5,8,0.75);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.trust-strip .container { padding: 9px 24px; }
+.trust-strip ul {
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: 8px 22px;
+    list-style: none;
+}
+.trust-strip li {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.74rem; font-weight: 600; color: #b4b4be;
+    white-space: nowrap;
+}
+.trust-strip li i { color: var(--hub); font-size: 0.72rem; flex: none; }
+
+@media(max-width: 640px) {
+    .trust-strip .container { padding: 8px 0 8px 16px; }
+    .trust-strip ul { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding-right: 16px; -webkit-overflow-scrolling: touch; }
+    .trust-strip ul::-webkit-scrollbar { display: none; }
+    .trust-strip li { font-size: 0.7rem; }
+}
+
+/* ==========================================================================
+   WHATSAPP FAB — one tap, follows you down the page
+   Every competitor reviewed has some version of a persistent contact point;
+   this is the honest version — a direct wa.me link, not a chat-widget
+   simulation and not a fake "agent online" indicator. Hidden until the hero
+   has scrolled past, so it never competes with the hero's own WhatsApp CTA.
+   ========================================================================== */
+.wa-fab {
+    position: fixed; right: 18px; bottom: 18px; z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: #25D366; color: #04120d; font-size: 1.35rem;
+    box-shadow: 0 10px 28px -8px rgba(37,211,102,0.65), 0 2px 8px rgba(0,0,0,0.3);
+    opacity: 0; transform: translateY(14px) scale(0.9); pointer-events: none;
+    transition: opacity 0.3s var(--curve-smooth), transform 0.3s var(--curve-spring);
+}
+.wa-fab.is-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.wa-fab:hover { transform: translateY(-3px) scale(1.05); }
+.wa-fab:active { transform: scale(0.94); }
+
+/* order pages already carry a bottom dock (.ord-dock / .wiz-btn bar) fixed to
+   the safe-area bottom — the fab sits above it instead of overlapping it */
+body.order-page .wa-fab { bottom: calc(var(--dock-h, 92px) + env(safe-area-inset-bottom, 0px) + 16px); }
+
+@media(prefers-reduced-motion: reduce) {
+    .wa-fab { transition: opacity 0.2s linear; transform: none !important; }
+    .wa-fab.is-visible { transform: none !important; }
+}

@@ -1603,3 +1603,26 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
     .bs-cta { transition: none !important; }
     .bs-cta:hover { transform: none !important; }
 }
+
+/* ==========================================================================
+   WHATSAPP FAB
+   Order pages already have .ord-assure (trust + WhatsApp link) directly
+   under the wizard, so this fab is a supplement, not the only way to reach
+   us — a persistent one-tap contact point, same as every hub page carries.
+   Shown immediately: unlike the hub pages, there is no tall hero here for it
+   to compete with, so there is nothing to wait for.
+   -------------------------------------------------------------------------- */
+.wa-fab {
+    position: fixed; right: 18px; z-index: 500;
+    bottom: calc(var(--dock-h) + env(safe-area-inset-bottom, 0px) + 16px);
+    display: flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--ord-wa); color: #04150c; font-size: 1.3rem;
+    box-shadow: 0 10px 26px -8px rgba(37,211,102,0.6), 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.25s var(--spring);
+}
+.wa-fab:hover { transform: translateY(-3px) scale(1.05); }
+.wa-fab:active { transform: scale(0.94); }
+@media(prefers-reduced-motion: reduce) {
+    .wa-fab { transition: none; }
+}

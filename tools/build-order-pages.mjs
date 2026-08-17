@@ -427,6 +427,10 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
         </div>
     </div>
 
+    <a href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi, I have a question about ${p.service}.`)}" target="_blank" rel="noopener" class="wa-fab" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
     <script src="/assets/pricing.js"></script>
     <script src="/assets/order.js"></script>
     <script src="/assets/wizard.js"></script>

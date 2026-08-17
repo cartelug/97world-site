@@ -333,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressFill = document.querySelector('#scrollProgress i');
     const heroContent = document.querySelector('.hero-content');
     const heroCue = document.querySelector('.hero-cue');
+    const waFab = document.getElementById('waFab');
     let scrollRaf = null;
 
     const onScrollFrame = () => {
@@ -357,6 +358,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (heroCue) heroCue.style.opacity = String(Math.max(1 - t * 2, 0));
             }
         }
+
+        // the WhatsApp fab waits until the hero (and its own WhatsApp button)
+        // has scrolled away, so the two never compete for the same tap
+        if (waFab) waFab.classList.toggle('is-visible', y > window.innerHeight * 0.8);
+
         scrollRaf = null;
     };
 
