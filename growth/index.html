@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="theme-color" content="#F6F7F5">
 
-    <title>97 Growth — choose where you want to grow</title>
-    <meta name="description" content="Followers, likes, views and plays across Instagram, TikTok, YouTube, Facebook, X, Telegram, Spotify and more. Pick one platform — or 3+ and save. Exact price before you order.">
+    <title>New Order | 97 Growth</title>
+    <meta name="description" content="Followers, likes, views and plays across Instagram, TikTok, YouTube, Facebook, X, Telegram, Spotify and more. Pick a service, see the exact charge, order in under a minute.">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
@@ -20,7 +20,7 @@
 </head>
 <body class="growth">
 
-<!-- ==================================================== 01 HEADER === -->
+<!-- ==================================================== HEADER === -->
 <header class="g-header" id="gHeader">
     <div class="g-wrap g-header-in">
         <a href="/" class="g-brand">
@@ -28,7 +28,7 @@
             <span>97 Growth</span>
         </a>
         <div class="g-head-right">
-            <a href="/track/" class="g-track-btn">Track order</a>
+            <a href="/track/" class="g-track-btn">Orders</a>
             <button type="button" class="g-menu-btn" id="menuBtn" aria-label="Menu">
                 <i class="fas fa-bars"></i>
             </button>
@@ -36,27 +36,15 @@
     </div>
 </header>
 
-<!-- sticky compact platform switcher, appears once the grid scrolls away -->
-<div class="plat-strip" id="platStrip" aria-label="Selected platforms">
-    <div class="plat-strip-in" id="platStripIn"></div>
-</div>
-
 <main>
 
-    <!-- ========================================= 02 MAIN STATEMENT === -->
+    <!-- ================================================ NEW ORDER === -->
     <section class="g-wrap g-open">
-        <h1>Choose where you want to grow.</h1>
-        <p>Pick one platform — or select 3+ and save.</p>
-        <div class="mode-tabs" style="margin-top:16px" role="tablist" aria-label="Ordering mode">
-            <button type="button" class="mode-tab is-on" data-mode="guided" aria-pressed="true">Guided</button>
-            <button type="button" class="mode-tab" data-mode="quick" aria-pressed="false">Quick order</button>
-        </div>
+        <h1>New order</h1>
+        <p>Pick a service, see the exact charge, and confirm on WhatsApp.</p>
     </section>
 
-    <!-- ============================================= QUICK ORDER === -->
-    <!-- The panel shape people already know. Same pricing source and same
-         checkout as the guided flow — only the way you get there differs. -->
-    <section class="g-wrap g-sec" id="quickPanel" hidden>
+    <section class="g-wrap g-sec" id="orderSec">
         <div class="qo-card">
             <div class="qo-field">
                 <label for="qoCat">Category</label>
@@ -74,6 +62,12 @@
                 </div>
             </div>
 
+            <!-- Service details. Every line here is something we can actually
+                 stand behind — start window, delivery pace, whether refill
+                 applies to this specific service, and the real min/max from
+                 the price list. No supplier jargon, no invented guarantees. -->
+            <div class="qo-desc" id="qoDesc"></div>
+
             <div class="qo-field" id="qoLinkField">
                 <label for="qoLink">Link</label>
                 <div class="acct-box">
@@ -89,6 +83,7 @@
                     <select id="qoQty"></select>
                     <i class="fas fa-chevron-down" aria-hidden="true"></i>
                 </div>
+                <p class="qo-minmax" id="qoMinMax"></p>
             </div>
 
             <div class="qo-charge">
@@ -97,149 +92,23 @@
             </div>
 
             <button type="button" class="g-btn g-btn--wide" id="qoSubmit">
-                Continue <i class="fas fa-arrow-right"></i>
+                Submit <i class="fas fa-arrow-right"></i>
             </button>
             <p class="qo-note"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
         </div>
     </section>
 
-    <!-- ============================================== 03 COMBO CARD === -->
-    <section class="g-wrap" id="comboSec">
-        <div class="combo-card" id="comboCard">
-            <div class="combo-top">
-                <div>
-                    <div class="combo-name">97 Combo</div>
-                    <div class="combo-sub">Choose 3+ platforms and unlock a better price.</div>
-                </div>
-                <span class="combo-flag" id="comboFlag">Best value</span>
-            </div>
-            <div class="combo-meter" id="comboMeter" aria-hidden="true"></div>
-            <div class="combo-state" id="comboState" hidden></div>
-        </div>
-    </section>
-
-    <!-- ========================================= 04 PLATFORM SELECT === -->
-    <section class="g-wrap g-sec" id="platSec">
-        <div class="plat-grid" id="platGrid" role="group" aria-label="Platforms"></div>
-        <p class="plat-nudge" id="platNudge" hidden></p>
-
-        <!-- ================================================ 05 SEARCH === -->
-        <div class="g-search">
-            <i class="fas fa-magnifying-glass g-search-ic" aria-hidden="true"></i>
-            <input type="search" id="gSearch" autocomplete="off" spellcheck="false"
-                   placeholder="Search followers, likes, views, plays…" aria-label="Search services">
-            <button type="button" class="g-search-clear" id="gSearchClear" aria-label="Clear search" hidden>
-                <i class="fas fa-xmark"></i>
-            </button>
-        </div>
-        <div class="g-results" id="gResults" role="region" aria-live="polite" hidden></div>
-    </section>
-
-    <!-- ============================================ 06 GOAL SELECTOR === -->
-    <section class="g-wrap g-sec" id="goalSec" hidden>
-        <div class="g-sec-head"><h2 id="goalHead">What do you want to grow?</h2></div>
-        <div class="goal-row" id="goalWrap"></div>
-    </section>
-
-    <!-- ======================================= 07 RECOMMENDED PACKS === -->
-    <section class="g-wrap g-sec" id="packSec" hidden>
+    <!-- =================================================== COMBOS === -->
+    <section class="g-wrap g-sec" id="combosSec">
         <div class="g-sec-head">
-            <h2>Recommended</h2>
-            <p>The three most-ordered sizes. Choose another amount below if you'd rather.</p>
+            <h2>Combos</h2>
+            <p>Set packages across platforms, priced against buying the parts separately.</p>
         </div>
-        <div class="pack-grid" id="packGrid"></div>
+        <div class="combo-grid" id="comboGrid"></div>
+        <a href="/boost-package/" class="g-link-btn">See all combos <i class="fas fa-arrow-right"></i></a>
     </section>
 
-    <!-- ============================================== 08 QUANTITY === -->
-    <section class="g-wrap g-sec" id="qtySec" hidden>
-        <div class="g-sec-head"><h2>How much?</h2></div>
-        <div class="qty-row" id="qtyRow"></div>
-        <div class="stepper" id="qtyStepper">
-            <button type="button" id="qtyMinus" aria-label="Less"><i class="fas fa-minus"></i></button>
-            <input type="text" id="qtyInput" inputmode="numeric" aria-label="Amount">
-            <button type="button" id="qtyPlus" aria-label="More"><i class="fas fa-plus"></i></button>
-        </div>
-        <p class="qty-note" id="qtyNote"></p>
-    </section>
-
-    <!-- ============================================ 09 CUSTOM MIX === -->
-    <section class="g-wrap g-sec" id="mixSec" hidden>
-        <div class="g-sec-head">
-            <h2>Your combo</h2>
-            <p>Set each platform separately. It stays one order and one price.</p>
-        </div>
-        <div class="mix-list" id="mixList"></div>
-    </section>
-
-    <!-- ============================================ 10 ACCOUNTS === -->
-    <section class="g-wrap g-sec" id="acctSec" hidden>
-        <div class="g-sec-head">
-            <h2>Where should we deliver?</h2>
-        </div>
-        <div class="acct-list" id="acctList"></div>
-        <p class="acct-note"><i class="fas fa-lock"></i> No password required — a public username or link is all we need.</p>
-    </section>
-
-    <!-- =============================================== 11 PRICE === -->
-    <section class="g-wrap g-sec" id="priceSec" hidden>
-        <div class="price-card">
-            <div class="price-row"><span>Regular price</span><b id="priceSub">—</b></div>
-            <div class="price-row is-save" id="priceSaveRow" hidden>
-                <span id="priceSaveLabel">Combo saving</span><b id="priceSave">—</b>
-            </div>
-            <div class="price-sep"></div>
-            <div class="price-total"><span>You pay</span><b id="priceTotal">—</b></div>
-        </div>
-    </section>
-
-    <!-- ============================================= 12 POPULAR === -->
-    <section class="g-wrap g-sec">
-        <div class="g-sec-head"><h2>Popular right now</h2></div>
-        <div class="pop-row">
-            <button type="button" class="pop-item" data-pop="ig_followers:10000">
-                <img src="/IMAGES/instagram.png" alt="">
-                <b>Instagram<br>10K followers</b>
-                <span class="pop-amt" data-pop-price="ig_followers:10000">—</span>
-                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
-            </button>
-            <button type="button" class="pop-item" data-pop="tt_views:50000">
-                <img src="/IMAGES/tiktok.png" alt="">
-                <b>TikTok<br>50K views</b>
-                <span class="pop-amt" data-pop-price="tt_views:50000">—</span>
-                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
-            </button>
-            <button type="button" class="pop-item" data-pop="fb_followers:5000">
-                <img src="/IMAGES/facebook.png" alt="">
-                <b>Facebook<br>5K followers</b>
-                <span class="pop-amt" data-pop-price="fb_followers:5000">—</span>
-                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
-            </button>
-            <button type="button" class="pop-item" data-pop="yt_views:10000">
-                <img src="/IMAGES/youtube.png" alt="">
-                <b>YouTube<br>10K views</b>
-                <span class="pop-amt" data-pop-price="yt_views:10000">—</span>
-                <span class="pop-go">Choose <i class="fas fa-arrow-right"></i></span>
-            </button>
-        </div>
-    </section>
-
-    <!-- ========================================= 13 COMBO PROMO === -->
-    <section class="g-wrap g-sec">
-        <div class="promo r-up">
-            <h2>Grow in more than one place?</h2>
-            <p>Choose 3+ platforms and unlock Combo pricing — 10% off at three, up to 15% at five.</p>
-            <div class="promo-marks" aria-hidden="true">
-                <img src="/IMAGES/instagram.png" alt="">
-                <img src="/IMAGES/tiktok.png" alt="">
-                <img src="/IMAGES/facebook.png" alt="">
-                <img src="/IMAGES/youtube.png" alt="">
-                <img src="/IMAGES/spotify.png" alt="">
-            </div>
-            <a href="#platSec" class="g-btn">Build a Combo</a>
-        </div>
-    </section>
-
-    <!-- =============================================== 14 TRUST === -->
+    <!-- ==================================================== TRUST === -->
     <section class="g-wrap g-sec">
         <div class="trust-row r-up">
             <div class="trust-item"><i class="fas fa-lock"></i> No password</div>
@@ -249,7 +118,7 @@
         </div>
     </section>
 
-    <!-- =============================================== 15 PROOF === -->
+    <!-- ==================================================== PROOF === -->
     <section class="g-wrap g-sec">
         <div class="g-sec-head">
             <h2>Recent customer results</h2>
@@ -264,14 +133,14 @@
         </div>
     </section>
 
-    <!-- ======================================== 16 HOW IT WORKS === -->
+    <!-- =========================================== HOW IT WORKS === -->
     <section class="g-wrap g-sec">
         <div class="g-sec-head"><h2>How it works</h2></div>
         <div class="steps r-up">
             <div class="step">
                 <div class="step-n">Step 1</div>
-                <b>Choose</b>
-                <p>Pick your platforms and amounts. The exact price is on screen before anything else happens.</p>
+                <b>Order</b>
+                <p>Pick the service and amount. The exact charge is on screen before anything else happens.</p>
             </div>
             <div class="step">
                 <div class="step-n">Step 2</div>
@@ -286,7 +155,7 @@
         </div>
     </section>
 
-    <!-- ================================================= 17 FAQ === -->
+    <!-- ====================================================== FAQ === -->
     <section class="g-wrap g-sec">
         <div class="g-sec-head"><h2>Questions</h2></div>
         <div class="g-faq r-up">
@@ -295,8 +164,8 @@
                 <div class="faq-a">No. Everything is delivered to a public username or link. We will never ask for your login.</div>
             </details>
             <details>
-                <summary>How does Combo pricing work?</summary>
-                <div class="faq-a">It is a pricing mode, not a different product. Select three platforms and the whole order comes down 10%, four platforms 12.5%, five or more 15%. The saving is taken off the real total of what you picked — there is no inflated "before" price.</div>
+                <summary>Why are quantities fixed amounts?</summary>
+                <div class="faq-a">Our price list is set in tiers — 500, 1,000, 2,500 and so on — and each tier has its own agreed price. We list the amounts we actually sell rather than guessing a rate for numbers in between. Need something outside the list? Message us and we'll quote it.</div>
             </details>
             <details>
                 <summary>When does delivery start?</summary>
@@ -304,7 +173,7 @@
             </details>
             <details>
                 <summary>What does refill cover?</summary>
-                <div class="faq-a">Where a service includes refill, anything that drops within 30 days is topped back up free. It applies to followers, subscribers and members — things that can actually drop. One-off metrics like views and plays cannot drop, so they are not covered.</div>
+                <div class="faq-a">Where a service includes refill, anything that drops within 30 days is topped back up free. It applies to followers, subscribers and members — things that can actually drop. One-off metrics like views and plays cannot drop, so they are not covered. The form tells you which applies before you order.</div>
             </details>
             <details>
                 <summary>How do I pay?</summary>
@@ -312,12 +181,12 @@
             </details>
             <details>
                 <summary>Can I order from outside Uganda?</summary>
-                <div class="faq-a">Yes — we also serve South Sudan and DR Congo, priced in USD. Switch currency from the button in the header.</div>
+                <div class="faq-a">Yes — we also serve South Sudan and DR Congo, priced in USD. Switch currency from the menu.</div>
             </details>
         </div>
     </section>
 
-    <!-- ============================================== 18 FOOTER === -->
+    <!-- =================================================== FOOTER === -->
     <footer class="g-wrap g-footer">
         <div class="g-foot-links">
             <a href="/">97 World</a>
@@ -333,42 +202,7 @@
 
 </main>
 
-<!-- ======================================== STICKY ORDER DOCK === -->
-<div class="g-dock" id="gDock">
-    <p class="dock-missing" id="dockMissing" hidden></p>
-    <div class="g-dock-in">
-        <div class="g-dock-copy">
-            <div class="g-dock-price"><span class="g-roll" id="dockPrice">—</span></div>
-            <div class="g-dock-meta" id="dockMeta"></div>
-        </div>
-        <button type="button" class="g-btn" id="dockCta">Continue <i class="fas fa-arrow-right"></i></button>
-    </div>
-</div>
-
 <!-- ================================================ SHEETS === -->
-
-<div class="sheet" id="moreSheet" role="dialog" aria-modal="true" aria-label="More platforms">
-    <div class="sheet-card">
-        <div class="sheet-grab"></div>
-        <div class="sheet-head">
-            <h2>More platforms</h2>
-            <button type="button" class="sheet-close" data-close="moreSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
-        </div>
-        <div class="plat-grid" id="moreGrid"></div>
-    </div>
-</div>
-
-<div class="sheet" id="mixSheet" role="dialog" aria-modal="true" aria-label="Edit platform">
-    <div class="sheet-card">
-        <div class="sheet-grab"></div>
-        <div class="sheet-head">
-            <h2 id="mixSheetTitle">Edit</h2>
-            <button type="button" class="sheet-close" data-close="mixSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
-        </div>
-        <div id="mixSheetBody"></div>
-        <button type="button" class="g-btn g-btn--wide" style="margin-top:18px" data-close="mixSheet">Done</button>
-    </div>
-</div>
 
 <div class="sheet" id="regionSheet" role="dialog" aria-modal="true" aria-label="Currency">
     <div class="sheet-card">
@@ -392,10 +226,11 @@
             <button type="button" class="goal-card" id="regionBtn">
                 <span class="goal-card-copy"><b>Currency &amp; region</b><small>Currently <span id="regionLabel">UGX</span> — tap to change</small></span>
             </button>
-            <a href="/" class="goal-card"><span class="goal-card-copy"><b>Home</b><small>Everything 97 World does</small></span></a>
-            <a href="/business/" class="goal-card"><span class="goal-card-copy"><b>Business &amp; websites</b><small>Websites, business email and design</small></span></a>
             <a href="/track/" class="goal-card"><span class="goal-card-copy"><b>Track an order</b><small>Check where your delivery has reached</small></span></a>
+            <a href="/boost-package/" class="goal-card"><span class="goal-card-copy"><b>Combos</b><small>Set packages across platforms</small></span></a>
+            <a href="/business/" class="goal-card"><span class="goal-card-copy"><b>Business &amp; websites</b><small>Websites, business email and design</small></span></a>
             <a href="/trust/" class="goal-card"><span class="goal-card-copy"><b>Trust centre</b><small>Who we are and how we work</small></span></a>
+            <a href="/" class="goal-card"><span class="goal-card-copy"><b>Home</b><small>Everything 97 World does</small></span></a>
             <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="goal-card"><span class="goal-card-copy"><b>WhatsApp us</b><small>Questions before you order</small></span></a>
         </div>
     </div>
@@ -412,9 +247,6 @@
         <div class="rev-list" id="revList"></div>
 
         <div class="price-card" style="margin-top:14px">
-            <div class="price-row"><span>Regular price</span><b id="revSub">—</b></div>
-            <div class="price-row is-save" id="revSaveRow" hidden><span>Combo saving</span><b id="revSave">—</b></div>
-            <div class="price-sep"></div>
             <div class="price-total"><span>Total</span><b id="revTotal">—</b></div>
         </div>
 

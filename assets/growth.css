@@ -44,7 +44,6 @@
     --g-slow: 340ms;
 
     --g-head-h: 58px;
-    --g-dock-h: 76px;
 
     --g-font-d: 'Cabinet Grotesk', 'Satoshi', system-ui, -apple-system, sans-serif;
     --g-font-b: 'Satoshi', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -71,7 +70,7 @@ body.growth {
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    padding-bottom: calc(var(--g-dock-h) + env(safe-area-inset-bottom, 0px) + 12px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
 }
 body.growth.is-locked { overflow: hidden; }
 
@@ -126,39 +125,6 @@ a { color: inherit; text-decoration: none; }
 }
 .g-menu-btn:hover { background: rgba(16,16,20,0.05); }
 
-/* --------------------------------------------- sticky platform strip --- */
-
-.plat-strip {
-    position: sticky; z-index: 55;
-    top: var(--g-head-h);
-    background: rgba(246, 247, 245, 0.94);
-    border-bottom: 1px solid var(--g-line);
-    transform: translateY(-8px); opacity: 0; pointer-events: none;
-    transition: opacity var(--g-mid) var(--g-ease), transform var(--g-mid) var(--g-ease);
-}
-@supports (backdrop-filter: blur(12px)) {
-    .plat-strip { backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4); }
-}
-.plat-strip.is-on { transform: translateY(0); opacity: 1; pointer-events: auto; }
-.g-header.is-stuck + .plat-strip { top: 50px; }
-.plat-strip-in {
-    display: flex; gap: 7px; overflow-x: auto; padding: 9px 18px;
-    scrollbar-width: none; -ms-overflow-style: none;
-    scroll-snap-type: x proximity;
-}
-.plat-strip-in::-webkit-scrollbar { display: none; }
-.strip-chip {
-    flex: none; display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 12px; border-radius: 100px; scroll-snap-align: start;
-    border: 1px solid var(--g-line-2); background: var(--g-surface);
-    font-size: 0.8rem; font-weight: 700; color: var(--g-ink-2);
-    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease), color var(--g-fast) var(--g-ease);
-}
-.strip-chip img { width: 15px; height: 15px; object-fit: contain; }
-.strip-chip i { font-size: 0.85rem; }
-.strip-chip.is-on { border-color: var(--g-acc-line); background: var(--g-acc-soft); color: var(--g-acc); }
-.strip-chip:active { transform: scale(0.97); }
-
 /* ============================================ 02 OPENING STATEMENT === */
 
 /* padding-block only — a `padding` shorthand here would cancel the
@@ -170,41 +136,6 @@ a { color: inherit; text-decoration: none; }
 }
 .g-open p { margin-top: 8px; font-size: 0.96rem; color: var(--g-muted); }
 
-/* =============================================== 03 THE COMBO CARD === */
-
-.combo-card {
-    position: relative; display: block; width: 100%; text-align: left;
-    margin-top: 18px; padding: 18px;
-    border-radius: var(--g-r-lg);
-    border: 1px solid var(--g-line-2); background: var(--g-surface);
-    box-shadow: var(--g-shadow);
-    transition: border-color var(--g-mid) var(--g-ease), background var(--g-mid) var(--g-ease), box-shadow var(--g-mid) var(--g-ease);
-}
-.combo-card.is-on {
-    border-color: var(--g-acc-line);
-    background: linear-gradient(180deg, var(--g-acc-soft), var(--g-surface) 70%);
-    box-shadow: var(--g-shadow-up);
-}
-.combo-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.combo-name { font-family: var(--g-font-d); font-size: 1.12rem; font-weight: 800; letter-spacing: -0.02em; }
-.combo-sub { margin-top: 3px; font-size: 0.87rem; color: var(--g-muted); }
-.combo-flag {
-    flex: none; padding: 4px 10px; border-radius: 100px;
-    background: var(--g-ink); color: #fff;
-    font-size: 0.62rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
-}
-.combo-card.is-on .combo-flag { background: var(--g-acc); }
-.combo-state {
-    display: flex; align-items: center; gap: 7px;
-    margin-top: 12px; font-size: 0.85rem; font-weight: 700; color: var(--g-acc);
-}
-.combo-state i { font-size: 0.8rem; }
-.combo-meter { display: flex; gap: 5px; margin-top: 12px; }
-.combo-pip { flex: 1; height: 4px; border-radius: 100px; background: var(--g-line-2); transition: background var(--g-mid) var(--g-ease); }
-.combo-pip.is-on { background: var(--g-acc); }
-
-/* ============================================ 04 PLATFORM SELECTOR === */
-
 /* the header and the platform strip are both sticky — anything we scroll to
    has to clear them or it lands underneath */
 .g-sec, .g-open, main section { scroll-margin-top: 112px; }
@@ -215,93 +146,6 @@ a { color: inherit; text-decoration: none; }
     font-size: clamp(1.18rem, 5vw, 1.5rem); letter-spacing: -0.02em; line-height: 1.2;
 }
 .g-sec-head p { margin-top: 5px; font-size: 0.88rem; color: var(--g-muted); }
-
-.plat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
-@media (min-width: 600px) { .plat-grid { grid-template-columns: repeat(8, 1fr); } }
-
-.plat-tile {
-    position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px;
-    padding: 14px 4px 11px; border-radius: var(--g-r-sm);
-    border: 1px solid var(--g-line); background: var(--g-surface);
-    color: var(--g-ink-2);
-    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease),
-                transform var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease);
-}
-.plat-tile img { width: 26px; height: 26px; object-fit: contain; }
-.plat-tile i { font-size: 1.35rem; line-height: 26px; }
-.plat-tile span { font-size: 0.68rem; font-weight: 700; letter-spacing: -0.01em; }
-.plat-tile:active { transform: scale(0.96); }
-.plat-tile.is-on {
-    border-color: var(--g-acc-line); background: var(--g-acc-soft); color: var(--g-acc);
-    box-shadow: 0 0 0 1px var(--g-acc-line);
-}
-.plat-check {
-    position: absolute; top: 6px; right: 6px;
-    width: 17px; height: 17px; border-radius: 50%;
-    background: var(--g-acc); color: #fff;
-    display: grid; place-items: center; font-size: 0.55rem;
-    transform: scale(0); opacity: 0;
-    transition: transform var(--g-mid) var(--g-ease), opacity var(--g-fast) var(--g-ease);
-}
-.plat-tile.is-on .plat-check { transform: scale(1); opacity: 1; }
-
-.plat-nudge {
-    margin-top: 12px; padding: 11px 14px; border-radius: var(--g-r-sm);
-    background: var(--g-surface); border: 1px dashed var(--g-line-2);
-    font-size: 0.85rem; color: var(--g-ink-2);
-}
-.plat-nudge b { color: var(--g-acc); font-weight: 700; }
-
-/* ==================================================== 06 SEARCH === */
-
-.g-search { position: relative; margin-top: 16px; }
-.g-search i.g-search-ic {
-    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-    color: var(--g-faint); font-size: 0.9rem; pointer-events: none;
-}
-.g-search input {
-    width: 100%; padding: 14px 42px 14px 40px;
-    border-radius: 100px; border: 1px solid var(--g-line-2); background: var(--g-surface);
-    font-size: 0.92rem; outline: none;
-    transition: border-color var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease);
-}
-.g-search input::placeholder { color: var(--g-faint); }
-.g-search input:focus { border-color: var(--g-acc-line); box-shadow: 0 0 0 3px var(--g-acc-soft); }
-.g-search-clear {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center;
-    color: var(--g-muted); font-size: 0.8rem;
-}
-.g-search-clear:hover { background: rgba(16,16,20,0.06); }
-
-.g-results { margin-top: 12px; display: grid; gap: 8px; }
-.g-result {
-    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
-    padding: 12px 14px; border-radius: var(--g-r-sm);
-    border: 1px solid var(--g-line); background: var(--g-surface);
-    transition: border-color var(--g-fast) var(--g-ease);
-}
-.g-result:hover { border-color: var(--g-line-2); }
-.g-result img { width: 20px; height: 20px; object-fit: contain; flex: none; }
-.g-result i.g-result-ic { width: 20px; text-align: center; flex: none; color: var(--g-ink-2); }
-.g-result-copy { flex: 1; min-width: 0; }
-.g-result-copy b { display: block; font-size: 0.88rem; font-weight: 700; }
-.g-result-copy small { display: block; font-size: 0.75rem; color: var(--g-muted); }
-.g-result-go { flex: none; font-size: 0.78rem; font-weight: 700; color: var(--g-acc); }
-.g-empty { padding: 16px; text-align: center; font-size: 0.87rem; color: var(--g-muted); }
-.g-empty a { color: var(--g-acc); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
-
-/* ======================================= 07/08 GOAL / WHAT SELECTOR === */
-
-.goal-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.goal-chip {
-    padding: 11px 16px; border-radius: 100px;
-    border: 1px solid var(--g-line-2); background: var(--g-surface);
-    font-size: 0.87rem; font-weight: 650; color: var(--g-ink-2);
-    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease), color var(--g-fast) var(--g-ease);
-}
-.goal-chip:active { transform: scale(0.98); }
-.goal-chip.is-on { border-color: var(--g-acc); background: var(--g-acc); color: var(--g-acc-ink); }
 
 .goal-cards { display: grid; gap: 9px; }
 .goal-card {
@@ -323,90 +167,11 @@ a { color: inherit; text-decoration: none; }
 }
 .goal-card.is-on .goal-card-tick { border-color: var(--g-acc); background: var(--g-acc); color: #fff; }
 
-/* ============================================ 09 RECOMMENDED PACKS === */
-
-.pack-grid { display: grid; gap: 10px; }
-@media (min-width: 720px) { .pack-grid { grid-template-columns: repeat(3, 1fr); } }
-
-.pack-card {
-    position: relative; width: 100%; text-align: left;
-    padding: 17px; border-radius: var(--g-r);
-    border: 1px solid var(--g-line); background: var(--g-surface);
-    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease),
-                box-shadow var(--g-fast) var(--g-ease), transform var(--g-fast) var(--g-ease);
-}
-.pack-card:active { transform: scale(0.99); }
-.pack-card.is-on { border-color: var(--g-acc-line); background: var(--g-acc-soft); box-shadow: 0 0 0 1px var(--g-acc-line); }
-.pack-card.has-flag { padding-top: 26px; }
-.pack-flag {
-    position: absolute; top: 0; right: 0;
-    padding: 3px 10px; border-bottom-left-radius: 11px; border-top-right-radius: var(--g-r);
-    background: var(--g-ink); color: #fff;
-    font-size: 0.58rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
-}
-.pack-card.is-on .pack-flag { background: var(--g-acc); }
-.pack-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.pack-name { font-family: var(--g-font-d); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g-muted); }
-.pack-price { font-family: var(--g-font-d); font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; }
-.pack-headline { margin-top: 6px; font-size: 1rem; font-weight: 700; }
-.pack-lines { margin-top: 10px; display: grid; gap: 4px; }
-.pack-line { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--g-ink-2); }
-.pack-line img { width: 15px; height: 15px; object-fit: contain; flex: none; }
-.pack-line i { width: 15px; text-align: center; flex: none; font-size: 0.82rem; }
-
 .g-link-btn {
     display: inline-flex; align-items: center; gap: 7px; margin-top: 14px;
     font-size: 0.86rem; font-weight: 700; color: var(--g-acc);
     text-decoration: underline; text-underline-offset: 4px;
 }
-
-/* ============================================== 10 QUANTITY SELECT === */
-
-.qty-row { display: flex; flex-wrap: wrap; gap: 8px; }
-.qty-chip {
-    min-width: 62px; padding: 11px 14px; border-radius: var(--g-r-sm); text-align: center;
-    border: 1px solid var(--g-line-2); background: var(--g-surface);
-    font-family: var(--g-font-d); font-size: 0.92rem; font-weight: 700;
-    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease), color var(--g-fast) var(--g-ease);
-}
-.qty-chip:active { transform: scale(0.97); }
-.qty-chip.is-on { border-color: var(--g-acc); background: var(--g-acc); color: var(--g-acc-ink); }
-
-.stepper { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
-.stepper button {
-    width: 42px; height: 42px; flex: none; border-radius: var(--g-r-sm);
-    border: 1px solid var(--g-line-2); background: var(--g-surface);
-    font-size: 1rem; color: var(--g-ink);
-    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease);
-}
-.stepper button:hover { border-color: var(--g-ink); }
-.stepper button:disabled { opacity: 0.4; cursor: not-allowed; }
-.stepper input {
-    flex: 1; min-width: 0; height: 42px; padding: 0 14px; text-align: center;
-    border-radius: var(--g-r-sm); border: 1px solid var(--g-line-2); background: var(--g-surface);
-    font-family: var(--g-font-d); font-size: 1rem; font-weight: 700; outline: none;
-}
-.stepper input:focus { border-color: var(--g-acc-line); box-shadow: 0 0 0 3px var(--g-acc-soft); }
-
-.qty-note { margin-top: 9px; font-size: 0.8rem; color: var(--g-muted); }
-
-/* ================================================= 11 CUSTOM COMBO === */
-
-.mix-list { display: grid; gap: 9px; }
-.mix-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 13px 15px; border-radius: var(--g-r);
-    border: 1px solid var(--g-line); background: var(--g-surface);
-}
-.mix-mark { flex: none; width: 26px; height: 26px; display: grid; place-items: center; }
-.mix-mark img { width: 22px; height: 22px; object-fit: contain; }
-.mix-mark i { font-size: 1.05rem; }
-.mix-copy { flex: 1; min-width: 0; }
-.mix-copy b { display: block; font-size: 0.9rem; font-weight: 750; }
-.mix-copy small { display: block; font-size: 0.79rem; color: var(--g-muted); }
-.mix-amt { flex: none; text-align: right; }
-.mix-amt b { display: block; font-family: var(--g-font-d); font-size: 0.95rem; font-weight: 700; }
-.mix-edit { display: block; margin-top: 1px; font-size: 0.74rem; font-weight: 700; color: var(--g-acc); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ============================================== 14 PRICE + 17 ACCT === */
 
@@ -417,8 +182,6 @@ a { color: inherit; text-decoration: none; }
 .price-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 0.88rem; color: var(--g-muted); }
 .price-row + .price-row { margin-top: 7px; }
 .price-row b { font-weight: 650; color: var(--g-ink-2); }
-.price-row.is-save { color: var(--g-acc); }
-.price-row.is-save b { color: var(--g-acc); font-weight: 750; }
 .price-sep { height: 1px; background: var(--g-line); margin: 13px 0; }
 .price-total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .price-total span { font-size: 0.92rem; font-weight: 700; }
@@ -435,28 +198,7 @@ a { color: inherit; text-decoration: none; }
 .acct-err { margin-top: 5px; font-size: 0.79rem; color: var(--g-danger); }
 .acct-note { margin-top: 10px; display: flex; align-items: center; gap: 7px; font-size: 0.8rem; color: var(--g-muted); }
 .acct-note i { color: var(--g-acc); }
-
-/* ============================================ 16 STICKY BOTTOM BAR === */
-
-.g-dock {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
-    background: rgba(255, 255, 255, 0.94);
-    border-top: 1px solid var(--g-line);
-    padding: 10px 18px calc(10px + env(safe-area-inset-bottom, 0px));
-    transform: translateY(110%);
-    transition: transform var(--g-slow) var(--g-ease);
-}
-@supports (backdrop-filter: blur(12px)) {
-    .g-dock { backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5); }
-}
-.g-dock.is-on { transform: translateY(0); }
 /* quick order carries its own submit — one CTA on screen, not two */
-.g-dock.is-off { transform: translateY(110%) !important; }
-.g-dock-in { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
-@media (min-width: 1024px) { .g-dock-in { max-width: 1080px; } }
-.g-dock-copy { flex: 1; min-width: 0; }
-.g-dock-price { font-family: var(--g-font-d); font-size: 1.18rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
-.g-dock-meta { font-size: 0.76rem; color: var(--g-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .g-btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -474,8 +216,6 @@ a { color: inherit; text-decoration: none; }
 .g-btn--dark { background: var(--g-ink); color: #fff; }
 .g-btn--dark:hover { background: #24242c; }
 
-.dock-missing { margin: 0 auto 8px; max-width: 640px; font-size: 0.79rem; color: var(--g-warn); text-align: center; }
-
 /* the number rolls, the bar does not */
 .g-roll { display: inline-block; transition: opacity var(--g-fast) var(--g-ease), transform var(--g-fast) var(--g-ease); }
 .g-roll.is-swap { opacity: 0; transform: translateY(-6px); }
@@ -490,37 +230,7 @@ a { color: inherit; text-decoration: none; }
 .rev-copy b { display: block; font-size: 0.88rem; font-weight: 700; }
 .rev-copy small { display: block; font-size: 0.77rem; color: var(--g-muted); }
 .rev-amt { flex: none; font-family: var(--g-font-d); font-size: 0.9rem; font-weight: 700; }
-
-/* ==================================================== 23 POPULAR === */
-
-.pop-row { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
 @media (min-width: 720px) { .pop-row { grid-template-columns: repeat(4, 1fr); } }
-.pop-item {
-    display: flex; flex-direction: column; gap: 6px; width: 100%; text-align: left;
-    padding: 15px; border-radius: var(--g-r);
-    border: 1px solid var(--g-line); background: var(--g-surface);
-    transition: border-color var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease), transform var(--g-fast) var(--g-ease);
-}
-.pop-item:hover { border-color: var(--g-line-2); box-shadow: var(--g-shadow); }
-.pop-item:active { transform: scale(0.99); }
-.pop-item img { width: 24px; height: 24px; object-fit: contain; }
-.pop-item i.pop-ic { font-size: 1.2rem; }
-.pop-item b { font-size: 0.88rem; font-weight: 750; line-height: 1.25; }
-.pop-item .pop-amt { margin-top: auto; font-family: var(--g-font-d); font-size: 1.02rem; font-weight: 800; color: var(--g-acc); }
-.pop-item .pop-go { font-size: 0.76rem; font-weight: 700; color: var(--g-muted); }
-
-/* ================================================ 24 COMBO PROMO === */
-
-.promo {
-    padding: 24px 20px; border-radius: var(--g-r-lg); text-align: center;
-    background: var(--g-ink); color: #fff;
-}
-.promo h2 { font-family: var(--g-font-d); font-size: clamp(1.25rem, 5.4vw, 1.6rem); font-weight: 800; letter-spacing: -0.02em; }
-.promo p { margin-top: 7px; font-size: 0.9rem; color: rgba(255,255,255,0.68); }
-.promo-marks { display: flex; justify-content: center; gap: 9px; margin: 16px 0 18px; }
-.promo-marks img { width: 28px; height: 28px; object-fit: contain; border-radius: 7px; background: #fff; padding: 3px; }
-.promo .g-btn { background: #fff; color: var(--g-ink); }
-.promo .g-btn:hover { background: #ecece9; }
 
 /* ============================================ 25/26 TRUST + PROOF === */
 
@@ -606,84 +316,22 @@ a { color: inherit; text-decoration: none; }
 @keyframes gSwap { from { opacity: 0; transform: translateY(10px); } }
 
 /* ---- a step that has just become answerable arrives, it doesn't appear --- */
-.g-sec[id]:not([hidden]) > .g-sec-head,
-#goalWrap, #packGrid, #qtyRow, #mixList, #acctList { animation: gStep var(--g-mid) var(--g-ease); }
+/* ---- a step that has just become answerable arrives,it doesn't appear --- */
+.g-sec[id]:not([hidden]) > .g-sec-head { animation: gStep var(--g-mid) var(--g-ease); }
 @keyframes gStep { from { opacity: 0; transform: translate3d(0, 8px, 0); } }
 
 /* ---- combo unlock: the pips fill left to right, then the card settles --- */
-.combo-pip.is-on { animation: gPip 320ms var(--g-ease) backwards; }
-.combo-pip:nth-child(1).is-on { animation-delay: 0ms; }
-.combo-pip:nth-child(2).is-on { animation-delay: 60ms; }
-.combo-pip:nth-child(3).is-on { animation-delay: 120ms; }
-@keyframes gPip { from { transform: scaleX(0); transform-origin: left; } }
-
-.combo-state { animation: gState 340ms var(--g-ease); }
-@keyframes gState { from { opacity: 0; transform: translate3d(0, 6px, 0); } }
-
 /* the reward is the price change, so that is what gets the one-shot ring */
-.combo-card.is-on { animation: gUnlock 720ms var(--g-ease); }
-@keyframes gUnlock {
-    0%   { box-shadow: 0 0 0 0 rgba(0, 135, 95, 0.28); }
-    100% { box-shadow: var(--g-shadow-up); }
-}
-
-/* ---- the saving line slides in under the price it belongs to --- */
-.price-row.is-save:not([hidden]) { animation: gSave 300ms var(--g-ease); }
-@keyframes gSave { from { opacity: 0; transform: translate3d(0, -5px, 0); } }
-
-/* ---- selection feedback: compress on press, tick pops after --- */
-.plat-tile, .goal-chip, .goal-card, .qty-chip, .pack-card, .pop-item, .strip-chip, .g-btn, .mix-row {
+/* ---- selection feedback: an immediate answer to a press --- */
+.goal-card, .g-btn {
     -webkit-tap-highlight-color: transparent;
 }
-.pop-item:active, .pack-card:active, .goal-card:active { transform: scale(0.99); }
-
-/* ---- search results land as a short cascade --- */
-.g-results .g-result { animation: gStep var(--g-mid) var(--g-ease) backwards; }
-.g-results .g-result:nth-child(1) { animation-delay: 0ms; }
-.g-results .g-result:nth-child(2) { animation-delay: 40ms; }
-.g-results .g-result:nth-child(3) { animation-delay: 80ms; }
-.g-results .g-result:nth-child(4) { animation-delay: 120ms; }
-.g-results .g-result:nth-child(5) { animation-delay: 160ms; }
-.g-results .g-result:nth-child(6) { animation-delay: 200ms; }
-
-/* ---- the dock's figure rolls; the dock itself stays put --- */
-.g-dock.is-on .g-dock-price { animation: none; }
+.goal-card:active { transform: scale(0.99); }
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     .r-up { opacity: 1; transform: none; }
-    .combo-pip.is-on, .combo-state, .combo-card.is-on,
-    .price-row.is-save:not([hidden]), .g-results .g-result,
-    #goalWrap, #packGrid, #qtyRow, #mixList, #acctList { animation: none !important; }
 }
-
-/* ==========================================================================
-   QUICK ORDER — the panel-style form
-   The shape people already know from an SMM panel: category, service, link,
-   quantity, charge, submit. It exists for the person who arrives knowing
-   exactly what they want and does not need to be walked anywhere.
-
-   Two departures from a stock panel, both deliberate:
-   - the dropdowns carry plain names, never provider IDs or "Max 10K / Non
-     Drop API" strings, because those describe our supplier, not the thing
-     the customer is buying;
-   - quantity is a select of the tiers we actually sell, not a free number
-     box, because our price list is tiered — a typed 7,500 has no real price
-     and we will not derive one.
-   ========================================================================== */
-
-.mode-tabs {
-    display: inline-flex; gap: 3px; padding: 3px;
-    border-radius: 100px; background: rgba(16, 16, 20, 0.06);
-}
-.mode-tab {
-    padding: 9px 18px; border-radius: 100px;
-    font-size: 0.86rem; font-weight: 700; color: var(--g-muted);
-    transition: background var(--g-mid) var(--g-ease), color var(--g-mid) var(--g-ease),
-                box-shadow var(--g-mid) var(--g-ease);
-}
-.mode-tab.is-on { background: var(--g-surface); color: var(--g-ink); box-shadow: var(--g-shadow); }
-.mode-tab:active { transform: scale(0.97); }
 
 .qo-card {
     padding: 18px; border-radius: var(--g-r-lg);
@@ -730,6 +378,67 @@ a { color: inherit; text-decoration: none; }
 
 @media(prefers-reduced-motion: reduce) {
     .qo-card { animation: none !important; }
-    .mode-tab, .qo-select select { transition: none !important; }
-    .mode-tab:active { transform: none !important; }
+    .qo-select select { transition: none !important; }
+}
+
+/* ==========================================================================
+   SERVICE DETAILS + MIN/MAX
+   The panel's description box. Every row is something we can stand behind:
+   the start window, the delivery pace, and whether refill applies to this
+   specific service — stated per service rather than as a blanket promise.
+   ========================================================================== */
+
+.qo-desc {
+    margin-top: 13px; padding: 13px 15px;
+    border-radius: var(--g-r-sm);
+    background: var(--g-surface-2); border: 1px solid var(--g-line);
+    animation: gStep var(--g-mid) var(--g-ease);
+}
+.qo-desc-row { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; font-size: 0.83rem; }
+.qo-desc-row + .qo-desc-row { margin-top: 6px; }
+.qo-desc-row span { color: var(--g-muted); flex: none; }
+.qo-desc-row b { font-weight: 650; text-align: right; }
+
+.qo-minmax { margin-top: 6px; font-size: 0.78rem; color: var(--g-muted); }
+
+/* ==========================================================================
+   COMBOS — the real named packages from the price list
+   ========================================================================== */
+
+.combo-grid { display: grid; gap: 10px; }
+@media (min-width: 620px) { .combo-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .combo-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.combo-item {
+    position: relative; display: flex; flex-direction: column; gap: 9px;
+    padding: 17px; border-radius: var(--g-r);
+    border: 1px solid var(--g-line); background: var(--g-surface);
+    transition: border-color var(--g-fast) var(--g-ease),
+                box-shadow var(--g-fast) var(--g-ease),
+                transform var(--g-fast) var(--g-ease);
+}
+@media (hover: hover) {
+    .combo-item:hover { border-color: var(--g-acc-line); box-shadow: var(--g-shadow); transform: translateY(-2px); }
+}
+.combo-item:active { transform: scale(0.99); }
+.combo-item.has-tag { padding-top: 26px; }
+.combo-tag {
+    position: absolute; top: 0; right: 0;
+    padding: 3px 10px;
+    border-bottom-left-radius: 11px; border-top-right-radius: var(--g-r);
+    background: var(--g-ink); color: #fff;
+    font-size: 0.58rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
+}
+.combo-item-name { font-family: var(--g-font-d); font-size: 1.02rem; font-weight: 800; letter-spacing: -0.02em; padding-right: 78px; }
+.combo-lines { display: grid; gap: 4px; }
+.combo-line { display: flex; align-items: flex-start; gap: 8px; font-size: 0.81rem; color: var(--g-ink-2); }
+.combo-line i { width: 14px; text-align: center; flex: none; font-size: 0.78rem; color: var(--g-acc); margin-top: 3px; }
+.combo-item-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 4px; }
+.combo-item-price { font-family: var(--g-font-d); font-size: 1.15rem; font-weight: 800; color: var(--g-acc); }
+.combo-item-price s { font-family: var(--g-font-b); font-size: 0.78rem; font-weight: 500; color: var(--g-faint); margin-left: 5px; }
+.combo-item-go { font-size: 0.78rem; font-weight: 700; color: var(--g-muted); white-space: nowrap; }
+
+@media(prefers-reduced-motion: reduce) {
+    .qo-desc { animation: none !important; }
+    .combo-item { transition: none !important; transform: none !important; }
 }
