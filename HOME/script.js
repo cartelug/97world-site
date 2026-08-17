@@ -67,106 +67,117 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === 3. THE PRICE BUILDER ==============================================
-    // Section 2 is the first step of the order: platform, package, real price.
-    // The choice is handed to the order page so nothing has to be picked twice.
-    // P is only present on pages that load pricing.js (home no longer does).
+    // === 3. THE PICKER =====================================================
+    // Two taps: what am I growing, then which package. Deliberately NOT a
+    // platform x size grid — that made "All 3" look like a platform while it
+    // carried its own price, so three prices competed on screen at once and
+    // choosing the bundle silently deleted the step below it.
+    //
+    // Now every card is one whole offer: what you get, where, what it costs,
+    // and tapping it goes straight to that order page with the package
+    // already chosen. Nothing to assemble, nothing to confirm twice.
+    // P is only present on pages that load pricing.js.
+    const KEYS = ['ig', 'tt', 'fb', 'yt'];
+
     const builder = {
         region: (P && P.Region.get()) || 'UG',
         platform: 'ig',
-        plan: 0,
 
         setRegion(code) {
             builder.region = code;
             builder.render();
         },
 
+        /* Every card leads with the quantity, because that is what people are
+         * actually comparing. The bundle's stored name ("All three platforms")
+         * describes the deal rather than the size, so it gets restated here to
+         * match the others instead of being the odd one out. */
+        headline(plan, key) {
+            if (key === 'bundle') return '10,000 followers each';
+            return plan.name;
+        },
+
+        subtitle(plan, key) {
+            if (key === 'bundle') return 'on Instagram, TikTok &amp; Facebook';
+            if (key === 'yt') return plan.feats.map((f) => f.text).join(' · ');
+            return 'on ' + P.PLATFORMS[key].name;
+        },
+
         render() {
-            const platEl = document.getElementById('bd-plats');
-            const planEl = document.getElementById('bd-plans');
-            if (!platEl || !planEl) return;
+            const tabsEl = document.getElementById('bd-tabs');
+            const listEl = document.getElementById('bd-list');
+            if (!tabsEl || !listEl) return;
 
-            const all3 = document.getElementById('bd-all3');
-            if (all3) {
-                const on = builder.platform === 'bundle';
-                all3.classList.toggle('is-on', on);
-                all3.setAttribute('aria-pressed', String(on));
-                const bundlePlan = P.plansFor('bundle', builder.region)[0];
-                document.getElementById('bd-all3-price').textContent =
-                    P.money(bundlePlan.price, bundlePlan.currency);
-            }
-
-            platEl.innerHTML = ['ig', 'tt', 'fb', 'yt'].map((key) => {
+            tabsEl.innerHTML = KEYS.map((key) => {
                 const p = P.PLATFORMS[key];
                 const on = builder.platform === key;
-                return `<button type="button" class="bd-plat${on ? ' is-on' : ''}"
+                return `<button type="button" class="pick-tab${on ? ' is-on' : ''}"
                     data-plat="${key}" aria-pressed="${on}">
-                    <img src="${p.logo}" alt=""><span>${p.name}</span></button>`;
-            }).join('');
-
-            const plans = P.plansFor(builder.platform, builder.region);
-            if (builder.plan >= plans.length) builder.plan = 0;
-
-            // the bundle is one fixed package, so there is nothing to pick
-            const step2 = planEl.closest('.bd-step');
-            if (step2) step2.hidden = builder.platform === 'bundle';
-
-            planEl.innerHTML = plans.map((plan, i) => {
-                const on = builder.plan === i;
-                return `<button type="button" class="bd-plan${on ? ' is-on' : ''}"
-                    data-plan="${i}" aria-pressed="${on}">
-                    ${plan.tag ? `<span class="bd-plan-tag">${plan.tag}</span>` : ''}
-                    <span class="bd-plan-copy">
-                        <b>${plan.name}</b>
-                        ${plan.note ? `<small>${plan.note}</small>` : ''}
-                    </span>
-                    <span class="bd-plan-price">${P.money(plan.price, plan.currency)}</span>
+                    <img src="${p.logo}" alt=""><span>${p.name}</span>
                 </button>`;
             }).join('');
 
-            const chosen = plans[builder.plan];
-            document.getElementById('bd-price').textContent = P.money(chosen.price, chosen.currency);
-            document.getElementById('bd-was').textContent =
-                chosen.was ? P.money(chosen.was, chosen.currency) : '';
-            document.getElementById('bd-go').setAttribute('href', P.PLATFORMS[builder.platform].href);
-            document.getElementById('bd-region').textContent = P.Region.data(builder.region).name;
+            // the bundle is a peer choice, not a platform — same control, same
+            // selected state, so it can never look pre-selected the way the old
+            // permanently-tinted box did
+            const wide = document.getElementById('bd-all3');
+            if (wide) {
+                const on = builder.platform === 'bundle';
+                wide.classList.toggle('is-on', on);
+                wide.setAttribute('aria-pressed', String(on));
+            }
+
+            const key = builder.platform;
+            const plans = P.plansFor(key, builder.region);
+            const href = P.PLATFORMS[key].href;
+
+            listEl.innerHTML = plans.map((plan) => `
+                <a href="${href}" class="deal${plan.hero ? ' is-hero' : ''}" data-plan="${plan.id}">
+                    ${plan.tag ? `<span class="deal-tag">${plan.tag}</span>` : ''}
+                    <span class="deal-head">
+                        <b>${builder.headline(plan, key)}</b>
+                        <small>${builder.subtitle(plan, key)}</small>
+                    </span>
+                    <span class="deal-foot">
+                        <span class="deal-money">
+                            <b>${P.money(plan.price, plan.currency)}</b>
+                            ${plan.was ? `<s>${P.money(plan.was, plan.currency)}</s>` : ''}
+                        </span>
+                        <span class="deal-go">Choose <i class="fas fa-arrow-right"></i></span>
+                    </span>
+                </a>`).join('');
+
+            const regionEl = document.getElementById('bd-region');
+            if (regionEl) regionEl.textContent = P.Region.data(builder.region).name;
         }
     };
 
     if (document.getElementById('builder') && P) {
         builder.render();
 
-        document.getElementById('bd-plats').addEventListener('click', (e) => {
-            const btn = e.target.closest('.bd-plat');
-            if (!btn) return;
-            builder.platform = btn.dataset.plat;
-            builder.plan = 0;
+        const pick = (key) => {
+            builder.platform = key;
             builder.render();
             if (navigator.vibrate) navigator.vibrate(10);
+        };
+
+        document.getElementById('bd-tabs').addEventListener('click', (e) => {
+            const btn = e.target.closest('.pick-tab');
+            if (btn) pick(btn.dataset.plat);
         });
 
-        document.getElementById('bd-plans').addEventListener('click', (e) => {
-            const btn = e.target.closest('.bd-plan');
-            if (!btn) return;
-            builder.plan = Number(btn.dataset.plan);
-            builder.render();
-            if (navigator.vibrate) navigator.vibrate(10);
+        const wide = document.getElementById('bd-all3');
+        if (wide) wide.addEventListener('click', () => pick('bundle'));
+
+        // the card itself is the call to action — hand the choice to the order
+        // page so step 1 there arrives already done
+        document.getElementById('bd-list').addEventListener('click', (e) => {
+            const card = e.target.closest('.deal');
+            if (card) P.Pending.set(builder.platform, card.dataset.plan);
         });
 
-        // carry the built order into the order page so step 1 arrives done
-        document.getElementById('bd-go').addEventListener('click', () => {
-            const plans = P.plansFor(builder.platform, builder.region);
-            P.Pending.set(builder.platform, plans[builder.plan].id);
-        });
-
-        document.getElementById('bd-all3').addEventListener('click', () => {
-            builder.platform = 'bundle';
-            builder.plan = 0;
-            builder.render();
-            if (navigator.vibrate) navigator.vibrate(12);
-        });
-
-        document.getElementById('bd-change').addEventListener('click', openGate);
+        const change = document.getElementById('bd-change');
+        if (change) change.addEventListener('click', openGate);
 
         // first visit — we genuinely cannot price anything until they answer
         if (!P.Region.get()) openGate();

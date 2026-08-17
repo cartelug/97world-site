@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://api.fontshare.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@400,500,700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet">
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -126,55 +126,50 @@
                     </a>
                 </div>
 
-                <div class="hub-stats fade-up delay-3">
+                <ul class="hero-trust fade-up delay-3" data-stagger>
+                    <li><i class="fas fa-lock"></i> No password</li>
+                    <li><i class="fas fa-bolt"></i> Starts in 1–6 hrs</li>
+                    <li><i class="fas fa-rotate-left"></i> 30-day refill</li>
+                </ul>
+            </div>
+        </header>
+
+        <!-- ================================================== 2. PICKER === -->
+        <section id="path" class="hub-sec hub-sec--raised">
+            <div class="container">
+                <div class="hub-head fade-up">
+                    <span class="hub-kicker">Prices</span>
+                    <h2>What are we <em>growing?</em></h2>
+                    <p>Tap what you want. That price is the price — no sign-up, no card, nothing charged on this page.</p>
+                </div>
+
+                <div class="picker fade-up" id="builder">
+                    <span class="pick-label">Choose one</span>
+                    <div class="pick-grid" id="bd-tabs" role="group" aria-label="Platform"></div>
+
+                    <button type="button" class="pick-wide" id="bd-all3" aria-pressed="false">
+                        <span class="pick-marks">
+                            <img src="/IMAGES/instagram.png" alt="">
+                            <img src="/IMAGES/tiktok.png" alt="">
+                            <img src="/IMAGES/facebook.png" alt="">
+                        </span>
+                        <span class="pick-wide-copy">
+                            <b>All 3 platforms</b>
+                            <small>Instagram, TikTok &amp; Facebook together</small>
+                        </span>
+                        <span class="pick-save">Save $50</span>
+                    </button>
+
+                    <div class="deal-list" id="bd-list"></div>
+
+                    <p class="pick-note">Prices for <b id="bd-region">Uganda</b>. <button type="button" id="bd-change">Change</button></p>
+                </div>
+
+                <div class="hub-stats fade-up" style="margin-top:52px">
                     <div data-plus><b class="anim-counter" data-target="2000">2,000</b><span>Active clients</span></div>
                     <div data-plus><b class="anim-counter" data-target="10000">10,000</b><span>Payments processed</span></div>
                     <div><b>1–6 hrs</b><span>To first delivery</span></div>
                     <div><b>30 days</b><span>Refill cover</span></div>
-                </div>
-            </div>
-        </header>
-
-        <!-- ================================================= 2. BUILDER === -->
-        <section id="path" class="hub-sec hub-sec--raised">
-            <div class="container">
-                <div class="hub-head fade-up">
-                    <span class="hub-kicker">Build your order</span>
-                    <h2>What are we <em>growing?</em></h2>
-                    <p>Pick a platform and a size. That price is the price — no sign-up, no card, and nothing is charged on this page.</p>
-                </div>
-
-                <div class="builder-wrap">
-                    <div class="builder fade-up" id="builder">
-                        <div class="bd-step">
-                            <span class="bd-label">1 — Platform</span>
-                            <div class="bd-plats" id="bd-plats" role="group" aria-label="Platform"></div>
-                            <button type="button" class="bd-all3" id="bd-all3" aria-pressed="false">
-                                <span class="bd-all3-copy">
-                                    <b>All three platforms</b>
-                                    <small>10,000 followers each on Instagram, TikTok &amp; Facebook</small>
-                                </span>
-                                <span class="bd-all3-price"><b id="bd-all3-price">$250</b><small>save $50</small></span>
-                            </button>
-                        </div>
-
-                        <div class="bd-step">
-                            <span class="bd-label">2 — Package</span>
-                            <div class="bd-plans" id="bd-plans" role="group" aria-label="Package"></div>
-                        </div>
-
-                        <div class="bd-foot">
-                            <div class="bd-total">
-                                <span class="bd-total-label">Your price</span>
-                                <b id="bd-price">—</b>
-                                <span class="bd-was" id="bd-was"></span>
-                            </div>
-                            <a href="/instagram-boost/" class="bd-go" id="bd-go">
-                                Continue <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                        <p class="bd-note" id="bd-note">Prices for <b id="bd-region">Uganda</b>. <button type="button" id="bd-change">Change</button></p>
-                    </div>
                 </div>
             </div>
         </section>
