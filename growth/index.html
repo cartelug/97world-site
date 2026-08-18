@@ -45,57 +45,65 @@
     </section>
 
     <section class="g-wrap g-sec" id="orderSec">
-        <div class="qo-card">
-            <div class="qo-field">
-                <label for="qoCat">Category</label>
-                <div class="qo-select">
-                    <select id="qoCat"></select>
+        <div class="fw-card">
+
+            <!-- platform tiles: "All" plus the platforms we actually sell.
+                 The + reveals the rest rather than listing anything we don't. -->
+            <div class="fw-plats" id="fwPlats" role="group" aria-label="Filter by platform"></div>
+
+            <div class="fw-search">
+                <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" id="fwSearch" placeholder="Search" autocomplete="off"
+                       spellcheck="false" aria-label="Search services">
+            </div>
+            <div class="fw-results" id="fwResults" role="region" aria-live="polite" hidden></div>
+
+            <div class="fw-field">
+                <label for="fwCat">Category</label>
+                <div class="fw-select">
+                    <select id="fwCat"></select>
                     <i class="fas fa-chevron-down" aria-hidden="true"></i>
                 </div>
             </div>
 
-            <div class="qo-field">
-                <label for="qoSvc">Service</label>
-                <div class="qo-select">
-                    <select id="qoSvc"></select>
+            <div class="fw-field">
+                <label for="fwSvc">Service</label>
+                <div class="fw-select">
+                    <select id="fwSvc"></select>
                     <i class="fas fa-chevron-down" aria-hidden="true"></i>
                 </div>
             </div>
 
-            <!-- Service details. Every line here is something we can actually
-                 stand behind — start window, delivery pace, whether refill
-                 applies to this specific service, and the real min/max from
-                 the price list. No supplier jargon, no invented guarantees. -->
-            <div class="qo-desc" id="qoDesc"></div>
-
-            <div class="qo-field" id="qoLinkField">
-                <label for="qoLink">Link</label>
-                <div class="acct-box">
-                    <i class="fas fa-link" aria-hidden="true"></i>
-                    <input type="text" id="qoLink" autocomplete="off" spellcheck="false" autocapitalize="none">
-                </div>
-                <p class="acct-err" id="qoLinkErr" hidden></p>
+            <div class="fw-field" id="fwLinkField">
+                <label for="fwLink">Link</label>
+                <input type="text" class="fw-input" id="fwLink" autocomplete="off"
+                       spellcheck="false" autocapitalize="none">
+                <p class="fw-err" id="fwLinkErr" hidden></p>
             </div>
 
-            <div class="qo-field">
-                <label for="qoQty">Quantity</label>
-                <div class="qo-select">
-                    <select id="qoQty"></select>
-                    <i class="fas fa-chevron-down" aria-hidden="true"></i>
-                </div>
-                <p class="qo-minmax" id="qoMinMax"></p>
+            <div class="fw-field">
+                <label for="fwQty">Quantity</label>
+                <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off">
+                <p class="fw-minmax" id="fwMinMax"></p>
+                <p class="fw-snap" id="fwSnap" hidden></p>
             </div>
 
-            <div class="qo-charge">
-                <span>Charge</span>
-                <b><span class="g-roll" id="qoCharge">—</span></b>
+            <div class="fw-field">
+                <label for="fwTime">Average time
+                    <i class="fas fa-circle-exclamation"
+                       title="The window we quote for delivery to start. Orders then arrive gradually rather than all at once."></i>
+                </label>
+                <div class="fw-readonly" id="fwTime">1–6 hours</div>
             </div>
 
-            <button type="button" class="g-btn g-btn--wide" id="qoSubmit">
-                Submit <i class="fas fa-arrow-right"></i>
-            </button>
-            <p class="qo-note"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
+            <div class="fw-field">
+                <label for="fwCharge">Charge</label>
+                <div class="fw-readonly is-charge" id="fwCharge"><span class="g-roll" id="fwChargeVal">—</span></div>
+            </div>
+
+            <button type="button" class="fw-submit" id="fwSubmit">Submit</button>
         </div>
+        <p class="qo-note" style="margin-top:12px"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
     </section>
 
     <!-- =================================================== COMBOS === -->

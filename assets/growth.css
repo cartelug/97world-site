@@ -1,32 +1,37 @@
 /**
- * 97 GROWTH — the buying interface
+ * 97 GROWTH — the order panel
  *
- * A standalone light theme. Everything else on 97 World is near-black; this
- * surface is deliberately not, because it is a product rather than a pitch —
- * the ordering interface is the design, and it reads best the way a checkout
- * reads: paper-white, dark type, one accent used only where the user acts.
+ * Laid out to match the SMM panel our customers already order through:
+ * platform tiles, search, category, service, link, quantity, average time,
+ * charge, submit — in that order, on a blush surface with a coral selection
+ * state and a warm CTA.
  *
  * Self-contained on purpose. It shares nothing with hub.css/style.css so the
- * dark tokens can never leak in and half-invert a control.
+ * dark tokens used by the rest of 97 World cannot leak in.
  */
 
 :root {
-    --g-bg: #F6F7F5;
+    --g-bg: #EFE9E8;
     --g-surface: #FFFFFF;
-    --g-surface-2: #FBFBFA;
-    --g-ink: #101014;
-    --g-ink-2: #3F3F47;
-    --g-muted: #71717A;
-    --g-faint: #A1A1AA;
-    --g-line: #E7E7E4;
-    --g-line-2: #D8D8D4;
+    --g-surface-2: #FCF4F3;
+    --g-ink: #131111;
+    --g-ink-2: #3D3838;
+    --g-muted: #7A7070;
+    --g-faint: #A79E9E;
+    --g-line: #F0DFDD;
+    --g-line-2: #E4CFCC;
 
-    /* the house mint, darkened to something legible on paper */
-    --g-acc: #00875F;
-    --g-acc-hi: #00A473;
+    /* coral marks what is selected; the warm gradient is the one CTA */
+    --g-acc: #E0705C;
+    --g-acc-hi: #D25E49;
     --g-acc-ink: #FFFFFF;
-    --g-acc-soft: #E9F7F1;
-    --g-acc-line: #A3DCC7;
+    --g-acc-soft: #FCEEEC;
+    --g-acc-line: #F0C4BC;
+
+    --fw-field: #FBEDEB;
+    --fw-tile: #FDF4F3;
+    --fw-cta-a: #E79433;
+    --fw-cta-b: #D7791C;
 
     --g-warn: #B45309;
     --g-danger: #B91C1C;
@@ -91,7 +96,7 @@ a { color: inherit; text-decoration: none; }
 
 .g-header {
     position: sticky; top: 0; z-index: 60;
-    background: rgba(246, 247, 245, 0.86);
+    background: rgba(239, 233, 232, 0.88);
     border-bottom: 1px solid transparent;
     transition: height var(--g-mid) var(--g-ease),
                 background var(--g-mid) var(--g-ease),
@@ -105,7 +110,7 @@ a { color: inherit; text-decoration: none; }
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     transition: height var(--g-mid) var(--g-ease);
 }
-.g-header.is-stuck { border-bottom-color: var(--g-line); background: rgba(246, 247, 245, 0.94); }
+.g-header.is-stuck { border-bottom-color: var(--g-line); background: rgba(239, 233, 232, 0.96); }
 .g-header.is-stuck .g-header-in { height: 50px; }
 
 .g-brand { display: flex; align-items: center; gap: 9px; font-family: var(--g-font-d); font-weight: 800; font-size: 1.02rem; letter-spacing: -0.02em; white-space: nowrap; }
@@ -333,60 +338,8 @@ a { color: inherit; text-decoration: none; }
     .r-up { opacity: 1; transform: none; }
 }
 
-.qo-card {
-    padding: 18px; border-radius: var(--g-r-lg);
-    border: 1px solid var(--g-line); background: var(--g-surface);
-    box-shadow: var(--g-shadow);
-    animation: gStep var(--g-mid) var(--g-ease);
-}
-.qo-field + .qo-field { margin-top: 13px; }
-.qo-field > label {
-    display: block; margin-bottom: 6px;
-    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.02em; color: var(--g-ink-2);
-}
-
-/* a native select on purpose — it opens the OS picker, which is the fastest
-   and most familiar control on a phone */
-.qo-select { position: relative; }
-.qo-select select {
-    width: 100%; height: 48px; padding: 0 38px 0 14px;
-    border-radius: var(--g-r-sm); border: 1px solid var(--g-line-2);
-    background: var(--g-surface); color: var(--g-ink);
-    font-size: 0.92rem; font-weight: 600;
-    appearance: none; -webkit-appearance: none; outline: none;
-    transition: border-color var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease);
-}
-.qo-select select:focus { border-color: var(--g-acc-line); box-shadow: 0 0 0 3px var(--g-acc-soft); }
-.qo-select select:disabled { opacity: 0.5; }
-.qo-select i {
-    position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-    font-size: 0.72rem; color: var(--g-muted); pointer-events: none;
-    transition: transform var(--g-fast) var(--g-ease);
-}
-
-.qo-charge {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-    margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--g-line);
-}
-.qo-charge span { font-size: 0.9rem; font-weight: 700; }
-.qo-charge b {
-    font-family: var(--g-font-d); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em;
-    color: var(--g-acc);
-}
-.qo-note { margin-top: 10px; font-size: 0.79rem; color: var(--g-muted); }
-.qo-card .g-btn { margin-top: 14px; }
-
 @media(prefers-reduced-motion: reduce) {
-    .qo-card { animation: none !important; }
-    .qo-select select { transition: none !important; }
 }
-
-/* ==========================================================================
-   SERVICE DETAILS + MIN/MAX
-   The panel's description box. Every row is something we can stand behind:
-   the start window, the delivery pace, and whether refill applies to this
-   specific service — stated per service rather than as a blanket promise.
-   ========================================================================== */
 
 .qo-desc {
     margin-top: 13px; padding: 13px 15px;
@@ -441,4 +394,126 @@ a { color: inherit; text-decoration: none; }
 @media(prefers-reduced-motion: reduce) {
     .qo-desc { animation: none !important; }
     .combo-item { transition: none !important; transform: none !important; }
+}
+
+/* ==========================================================================
+   THE ORDER PANEL
+   Matches the panel layout our customers already order through: platform
+   tiles, search, category, service, link, quantity with its min/max, the
+   average start window, the charge, and one submit.
+
+   Where it departs, it departs on purpose:
+   - No service IDs or supplier strings in the Service list. Those describe
+     where we buy, not what is being bought, and ours are not mapped yet —
+     printing one would mean inventing it.
+   - Average time is the honest window we quote everywhere else rather than
+     a to-the-minute figure, because nothing reports per-service timing to
+     us yet.
+   - A typed quantity snaps to the nearest tier the price list actually
+     sells, and says so, since there is no per-1000 rate to multiply.
+   ========================================================================== */
+
+.fw-card {
+    padding: 16px; border-radius: var(--g-r);
+    background: var(--g-surface); border: 1px solid var(--g-line);
+    box-shadow: var(--g-shadow);
+}
+
+/* ---- platform tiles ---- */
+.fw-plats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+.fw-tile {
+    position: relative; display: grid; place-items: center;
+    height: 62px; border-radius: 13px;
+    background: var(--fw-tile); border: 1px solid var(--g-line);
+    color: var(--g-ink-2); font-size: 1.4rem;
+    transition: background var(--g-fast) var(--g-ease),
+                border-color var(--g-fast) var(--g-ease),
+                transform var(--g-fast) var(--g-ease);
+}
+.fw-tile img { width: 27px; height: 27px; object-fit: contain; }
+.fw-tile:active { transform: scale(0.96); }
+.fw-tile.is-on { background: var(--g-acc); border-color: var(--g-acc); color: #fff; }
+.fw-tile.is-on img { filter: brightness(0) invert(1); }
+
+/* ---- search ---- */
+.fw-search { position: relative; margin-top: 14px; }
+.fw-search i {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    color: var(--g-muted); font-size: 0.9rem; pointer-events: none;
+}
+.fw-search input {
+    width: 100%; height: 52px; padding: 0 16px 0 42px;
+    border-radius: var(--g-r-sm); border: 1px solid transparent;
+    background: var(--fw-field); color: var(--g-ink);
+    font-size: 0.95rem; outline: none;
+    transition: border-color var(--g-fast) var(--g-ease);
+}
+.fw-search input::placeholder { color: var(--g-muted); }
+.fw-search input:focus { border-color: var(--g-acc-line); }
+
+.fw-results { margin-top: 8px; display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
+.fw-res {
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+    padding: 11px 13px; border-radius: var(--g-r-sm);
+    background: var(--fw-tile); border: 1px solid var(--g-line);
+    transition: border-color var(--g-fast) var(--g-ease);
+}
+.fw-res:hover { border-color: var(--g-acc-line); }
+.fw-res img { width: 18px; height: 18px; object-fit: contain; flex: none; }
+.fw-res i { width: 18px; text-align: center; flex: none; }
+.fw-res span { flex: 1; min-width: 0; font-size: 0.86rem; font-weight: 600; }
+.fw-res b { flex: none; font-size: 0.82rem; color: var(--g-acc); }
+
+/* ---- fields ---- */
+.fw-field { margin-top: 16px; }
+.fw-field > label {
+    display: block; margin-bottom: 7px;
+    font-size: 1rem; font-weight: 800; letter-spacing: -0.01em; color: var(--g-ink);
+}
+.fw-field > label i { margin-left: 5px; font-size: 0.8rem; color: var(--g-ink); vertical-align: baseline; }
+
+.fw-select { position: relative; }
+.fw-select select,
+.fw-input {
+    width: 100%; height: 56px; padding: 0 16px;
+    border-radius: var(--g-r-sm); border: 1px solid transparent;
+    background: var(--fw-field); color: var(--g-ink);
+    font-size: 0.98rem; font-weight: 600; outline: none;
+    transition: border-color var(--g-fast) var(--g-ease);
+}
+.fw-select select { padding-right: 40px; appearance: none; -webkit-appearance: none; }
+.fw-select select:focus, .fw-input:focus { border-color: var(--g-acc-line); }
+.fw-select i {
+    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 0.7rem; color: var(--g-ink-2); pointer-events: none;
+}
+.fw-field.is-bad .fw-input { border-color: var(--g-danger); }
+.fw-err { margin-top: 6px; font-size: 0.8rem; color: var(--g-danger); }
+
+/* readonly display fields — average time and charge */
+.fw-readonly {
+    display: flex; align-items: center;
+    width: 100%; min-height: 56px; padding: 0 16px;
+    border-radius: var(--g-r-sm); background: var(--fw-field);
+    font-size: 0.98rem; font-weight: 600; color: var(--g-ink-2);
+}
+.fw-readonly.is-charge { font-family: var(--g-font-d); font-size: 1.2rem; font-weight: 800; color: var(--g-ink); }
+
+.fw-minmax { margin-top: 8px; font-size: 0.86rem; color: var(--g-ink-2); }
+.fw-snap { margin-top: 6px; font-size: 0.8rem; color: var(--g-acc); font-weight: 650; }
+
+.fw-submit {
+    width: 100%; height: 58px; margin-top: 20px;
+    border-radius: var(--g-r-sm);
+    background: linear-gradient(180deg, var(--fw-cta-a), var(--fw-cta-b));
+    color: #fff; font-size: 1.08rem; font-weight: 800; letter-spacing: -0.01em;
+    box-shadow: 0 8px 20px -12px var(--fw-cta-b);
+    transition: filter var(--g-fast) var(--g-ease), transform var(--g-fast) var(--g-ease);
+}
+.fw-submit:hover { filter: brightness(1.05); }
+.fw-submit:active { transform: scale(0.99); }
+
+@media(prefers-reduced-motion: reduce) {
+    .fw-tile, .fw-submit, .fw-select select, .fw-input { transition: none !important; }
+    .fw-tile:active, .fw-submit:active { transform: none !important; }
 }

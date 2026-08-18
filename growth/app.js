@@ -1,34 +1,38 @@
 /**
- * 97 GROWTH — new order
+ * 97 GROWTH — the order panel
  *
- * The panel form: category, service, link, quantity, charge, submit. One
- * screen, one order, no guided detour.
+ * Laid out to match the SMM panel our customers already order through:
+ * platform tiles, search, category, service, link, quantity with min/max,
+ * average time, charge, submit.
  *
- * Two things it deliberately does not copy from a stock SMM panel:
+ * Three places it departs from that panel, each because copying it would
+ * mean printing something we do not actually have:
  *
- *   1. No supplier language. The dropdowns say "Instagram" and "Followers",
- *      never a service ID or a "Max 10K / Non Drop API" string — those
- *      describe where we buy, not what the customer is getting.
+ *   1. No service IDs or supplier strings ("5403", "Max: 15K | Real Mix").
+ *      Those name our supplier's catalogue entry, and ours are unmapped —
+ *      any ID shown here would be invented.
  *
- *   2. Quantity is a select of real tiers, not a free number box. A panel
- *      multiplies a per-1000 rate by whatever you type; this price list is
- *      tiered, so that rate would disagree with the customer's own numbers
- *      at every amount in between. We list what we sell and price it exactly.
+ *   2. Average time is the window we quote everywhere else on the site,
+ *      not a to-the-minute figure. Nothing reports per-service timing to us,
+ *      so "3 hours 6 minutes" would be a number we made up.
  *
- * Everything shown comes from assets/pricing.js. Submitting hands off to the
- * same review sheet, WhatsApp message and Sheets row the order pages use.
+ *   3. Quantity takes any number, but settles on the nearest tier the price
+ *      list actually sells and says so. The list is tiered; there is no
+ *      per-1000 rate to multiply an arbitrary amount by.
+ *
+ * Everything priced comes from assets/pricing.js. Submitting hands off to
+ * the same review sheet, WhatsApp message and Sheets row as the order pages.
  */
 (function (window, document) {
     'use strict';
 
     var P = window.K97Pricing;
-    if (!P || !document.getElementById('qoCat')) return;
+    if (!P || !document.getElementById('fwCat')) return;
 
     var WA = '256762193386';
     var SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
 
-    /* Services delivered to one post/track rather than to a profile — used to
-     * tell someone they have pasted the wrong kind of link. */
+    /* Services delivered to one post/track rather than a profile. */
     var POST_LEVEL = {
         ig_likes: 1, ig_reels: 1, ig_story: 1, ig_comments: 1, ig_saves: 1,
         tt_likes: 1, tt_views: 1, tt_shares: 1,
@@ -39,18 +43,22 @@
         li_postlikes: 1, sp_plays: 1, am_plays: 1, am_likes: 1, sc_plays: 1, sc_likes: 1
     };
 
+    /* Tiles up front, the rest behind the + — never a platform we don't sell. */
+    var TILES = ['instagram', 'tiktok', 'facebook', 'youtube', 'spotify', 'telegram', 'x', 'whatsapp', 'linkedin'];
+    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic'];
+
     var $ = function (id) { return document.getElementById(id); };
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var region = P.Region.get() || 'UG';
+    var filter = null;        // selected platform tile, null = All
+    var tilesOpen = false;
 
     function meta(key) { return P.PLAT_META[key] || { name: key }; }
 
-    function mark(key, cls) {
+    function mark(key) {
         var m = meta(key);
-        return m.logo
-            ? '<img src="' + m.logo + '" alt="">'
-            : '<i class="' + m.icon + (cls ? ' ' + cls : '') + '"></i>';
+        return m.logo ? '<img src="' + m.logo + '" alt="">' : '<i class="' + m.icon + '"></i>';
     }
 
     function haptic() { if (navigator.vibrate && !reduceMotion) navigator.vibrate(9); }
@@ -84,111 +92,172 @@
         if (t.classList && t.classList.contains('sheet')) { closeSheet(t.id); return; }
     });
 
-    /* ------------------------------------------------------- the order --- */
+    /* ------------------------------------------------------------- tiles --- */
 
-    var el = {
-        cat: $('qoCat'), svc: $('qoSvc'), qty: $('qoQty'),
-        link: $('qoLink'), charge: $('qoCharge'),
-        desc: $('qoDesc'), minmax: $('qoMinMax')
-    };
+    function renderTiles() {
+        var shown = tilesOpen ? TILES.concat(TILES_MORE) : TILES;
+        var html = '<button type="button" class="fw-tile' + (filter === null ? ' is-on' : '') +
+            '" data-tile="all" aria-label="All platforms"><i class="fas fa-bars"></i></button>';
+
+        html += shown.map(function (key) {
+            return '<button type="button" class="fw-tile' + (filter === key ? ' is-on' : '') +
+                '" data-tile="' + key + '" aria-label="' + meta(key).name + '" aria-pressed="' +
+                (filter === key) + '">' + mark(key) + '</button>';
+        }).join('');
+
+        if (!tilesOpen) {
+            html += '<button type="button" class="fw-tile" data-tile="more" aria-label="More platforms">' +
+                '<i class="fas fa-plus"></i></button>';
+        }
+        $('fwPlats').innerHTML = html;
+    }
+
+    /* ---------------------------------------------------------- the form --- */
 
     function fillCategories() {
-        var all = P.GROWTH_PRIMARY.concat(P.GROWTH_MORE);
-        el.cat.innerHTML = all.map(function (key) {
+        var all = filter ? [filter] : P.GROWTH_PRIMARY.concat(P.GROWTH_MORE);
+        var keep = $('fwCat').value;
+        $('fwCat').innerHTML = all.map(function (key) {
             return '<option value="' + key + '">' + meta(key).name + '</option>';
         }).join('');
+        if (keep && all.indexOf(keep) !== -1) $('fwCat').value = keep;
+        fillServices();
     }
 
     function fillServices() {
-        var key = el.cat.value;
+        var key = $('fwCat').value;
         // only services with a real ladder can be quoted on this form
         var ids = (P.PLATFORMS[key].services || []).filter(function (id) {
             var s = P.SERVICES_BY_ID[id];
             return s && s.sizes && s.sizes.length;
         });
-        el.svc.innerHTML = ids.map(function (id) {
-            return '<option value="' + id + '">' + P.SERVICES_BY_ID[id].short + '</option>';
+        var keep = $('fwSvc').value;
+        $('fwSvc').innerHTML = ids.map(function (id) {
+            var s = P.SERVICES_BY_ID[id];
+            return '<option value="' + id + '">' + meta(key).name + ' ' + s.short + '</option>';
         }).join('');
+        if (keep && ids.indexOf(keep) !== -1) $('fwSvc').value = keep;
 
         var hint = P.ACCOUNT_HINTS[key] || { placeholder: 'Profile link' };
-        el.link.placeholder = hint.placeholder;
-        fillQtys();
+        $('fwLink').placeholder = hint.placeholder;
+        onServiceChange();
     }
 
-    function fillQtys() {
-        var id = el.svc.value;
-        var cur = P.Region.data(region).currency;
-        // Rebuilding the options drops the selection, which would silently
-        // change someone's order when all they did was switch currency —
-        // so keep the chosen amount if this service still sells it.
-        var keep = el.qty.value;
-        var avail = P.qtysFor(id);
+    function onServiceChange() {
+        var id = $('fwSvc').value;
+        var qtys = P.qtysFor(id);
+        $('fwMinMax').textContent = qtys.length
+            ? 'Min: ' + qtys[0].toLocaleString() + ' - Max: ' + qtys[qtys.length - 1].toLocaleString()
+            : '';
 
-        el.qty.innerHTML = avail.map(function (n) {
-            var usd = P.tierUsd(id, n);
-            return '<option value="' + n + '">' + n.toLocaleString() + ' — ' +
-                P.money(P.localPrice(usd, cur), cur) + '</option>';
-        }).join('');
+        var s = P.SERVICES_BY_ID[id];
+        // the honest window, plus whether refill covers this specific service
+        $('fwTime').textContent = '1–6 hours' +
+            (s && s.refillEligible ? ' · 30-day refill' : '');
 
-        if (keep && avail.indexOf(Number(keep)) !== -1) el.qty.value = keep;
-
-        paintDetails();
+        // keep the typed amount if this service sells it, else start clean
+        var typed = Number(String($('fwQty').value).replace(/[^\d]/g, ''));
+        if (!typed || qtys.indexOf(typed) === -1) {
+            $('fwQty').value = '';
+            $('fwSnap').hidden = true;
+        }
         paint();
     }
 
-    /** The service detail box — only claims we can actually stand behind. */
-    function paintDetails() {
-        var s = P.SERVICES_BY_ID[el.svc.value];
-        if (!s) { el.desc.innerHTML = ''; el.minmax.textContent = ''; return; }
+    /** The exact tier this order will be placed at, or null. */
+    function resolved() {
+        var id = $('fwSvc').value;
+        var qtys = P.qtysFor(id);
+        var typed = Number(String($('fwQty').value).replace(/[^\d]/g, ''));
+        if (!id || !typed || !qtys.length) return null;
 
-        var qtys = P.qtysFor(s.id);
-        var rows = [
-            ['Start time', '1–6 hours'],
-            ['Delivery', 'Gradual, natural pace'],
-            ['Refill', s.refillEligible
-                ? '30 days'
-                : 'Not applicable — ' + s.unit + ' cannot drop once delivered']
-        ];
-
-        el.desc.innerHTML = rows.map(function (r) {
-            return '<div class="qo-desc-row"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>';
-        }).join('');
-
-        el.minmax.textContent = qtys.length
-            ? 'Min ' + qtys[0].toLocaleString() + ' · Max ' + qtys[qtys.length - 1].toLocaleString()
-            : '';
-        if (window.Motion) window.Motion.swap(el.desc);
+        var exact = qtys.indexOf(typed) !== -1;
+        var qty = exact ? typed : nearest(qtys, typed);
+        return { platform: $('fwCat').value, serviceId: id, qty: qty, typed: typed, exact: exact };
     }
 
-    /** The single line this form describes, or null. */
-    function line() {
-        var key = el.cat.value;
-        var id = el.svc.value;
-        var n = Number(el.qty.value);
-        if (!key || !id || !n) return null;
-        return { platform: key, serviceId: id, qty: n };
+    function nearest(list, n) {
+        var best = list[0];
+        for (var i = 1; i < list.length; i++) {
+            if (Math.abs(list[i] - n) < Math.abs(best - n)) best = list[i];
+        }
+        return best;
     }
 
     function paint() {
-        var l = line();
-        if (!l) { roll(el.charge, '—'); return; }
-        var q = P.quote([l], region, 1);
-        roll(el.charge, P.money(q.total, q.currency));
+        var r = resolved();
+        var snap = $('fwSnap');
+        if (!r) {
+            roll($('fwChargeVal'), '—');
+            snap.hidden = true;
+            return;
+        }
+        if (r.exact) {
+            snap.hidden = true;
+        } else {
+            snap.hidden = false;
+            snap.textContent = 'We sell this in set amounts — priced at ' +
+                r.qty.toLocaleString() + '.';
+        }
+        var q = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: r.qty }], region, 1);
+        roll($('fwChargeVal'), P.money(q.total, q.currency));
     }
 
-    /** Human-readable checks only — we never claim to have inspected the account. */
-    function validate(l, value) {
+    /* ------------------------------------------------------------ search --- */
+
+    function runSearch() {
+        var v = $('fwSearch').value.trim();
+        var box = $('fwResults');
+        if (!v) { box.hidden = true; box.innerHTML = ''; return; }
+
+        var hits = P.searchServices(v).filter(function (s) { return s.sizes && s.sizes.length; });
+        box.hidden = false;
+        if (!hits.length) {
+            box.innerHTML = '<p class="fw-minmax" style="padding:8px 2px">Nothing matches that. ' +
+                '<a href="https://wa.me/' + WA + '?text=' +
+                encodeURIComponent('Hi 97 World, do you sell: ' + v + '?') +
+                '" target="_blank" rel="noopener" style="color:var(--g-acc);font-weight:700">Ask us</a>.</p>';
+            return;
+        }
+        var cur = P.Region.data(region).currency;
+        box.innerHTML = hits.slice(0, 8).map(function (s) {
+            var from = P.tierUsd(s.id, P.qtysFor(s.id)[0]);
+            return '<button type="button" class="fw-res" data-pick="' + s.id + '">' +
+                mark(s.platform) +
+                '<span>' + meta(s.platform).name + ' ' + s.short + '</span>' +
+                '<b>from ' + P.money(P.localPrice(from, cur), cur) + '</b>' +
+                '</button>';
+        }).join('');
+    }
+
+    function pick(serviceId) {
+        var s = P.SERVICES_BY_ID[serviceId];
+        if (!s) return;
+        filter = null;
+        renderTiles();
+        fillCategories();
+        $('fwCat').value = s.platform;
+        fillServices();
+        $('fwSvc').value = serviceId;
+        onServiceChange();
+        $('fwSearch').value = '';
+        runSearch();
+    }
+
+    /* --------------------------------------------------------- validation --- */
+
+    function linkProblem(r, value) {
         var v = value.trim();
         if (!v) {
-            return 'Add your ' + meta(l.platform).name +
+            return 'Add your ' + meta(r.platform).name +
                 ' username or link so we know where to deliver.';
         }
-        if (l.platform === 'webtraffic' && v.indexOf('.') === -1) {
+        if (r.platform === 'webtraffic' && v.indexOf('.') === -1) {
             return 'That does not look like a website address. Paste the full URL.';
         }
-        if (POST_LEVEL[l.serviceId] && l.platform !== 'webtraffic' &&
+        if (POST_LEVEL[r.serviceId] && r.platform !== 'webtraffic' &&
             v.indexOf('/') === -1 && v.length < 40) {
-            var s = P.SERVICES_BY_ID[l.serviceId];
+            var s = P.SERVICES_BY_ID[r.serviceId];
             return 'This looks like a profile. ' +
                 (s ? s.short + ' go' + (/s$/.test(s.short) ? '' : 'es') : 'This') +
                 ' to one post — paste the link to the post, reel or track instead.';
@@ -196,41 +265,39 @@
         return null;
     }
 
-    function submit() {
-        var l = line();
-        if (!l) return;
-
-        var err = validate(l, el.link.value);
-        if (err) {
-            $('qoLinkField').classList.add('is-bad');
-            $('qoLinkErr').hidden = false;
-            $('qoLinkErr').textContent = err;
-            $('qoLinkField').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-            return;
-        }
-        $('qoLinkField').classList.remove('is-bad');
-        $('qoLinkErr').hidden = true;
-        openReview(l, el.link.value.trim());
-    }
-
     /* ------------------------------------------------------------ review --- */
 
     var pending = null;
 
-    function openReview(l, account) {
-        var q = P.quote([l], region, 1);
+    function submit() {
+        var r = resolved();
+        if (!r) {
+            $('fwQty').focus();
+            return;
+        }
+        var problem = linkProblem(r, $('fwLink').value);
+        if (problem) {
+            $('fwLinkField').classList.add('is-bad');
+            $('fwLinkErr').hidden = false;
+            $('fwLinkErr').textContent = problem;
+            $('fwLinkField').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+            return;
+        }
+        $('fwLinkField').classList.remove('is-bad');
+        $('fwLinkErr').hidden = true;
+
+        var q = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: r.qty }], region, 1);
         var row = q.lines[0];
-        pending = { line: l, account: account, quote: q };
+        pending = { r: r, account: $('fwLink').value.trim(), quote: q };
 
         $('revList').innerHTML =
-            '<div class="rev-row">' + mark(l.platform, 'rev-ic') +
-            '<span class="rev-copy"><b>' + meta(l.platform).name + ' · ' +
+            '<div class="rev-row">' + mark(r.platform) +
+            '<span class="rev-copy"><b>' + meta(r.platform).name + ' ' +
                 (row.service ? row.service.short : '') + '</b>' +
-            '<small>' + l.qty.toLocaleString() + ' ' + (row.service ? row.service.unit : '') +
-                ' — ' + account + '</small></span>' +
+            '<small>' + r.qty.toLocaleString() + ' ' + (row.service ? row.service.unit : '') +
+                ' — ' + pending.account + '</small></span>' +
             '<span class="rev-amt">' + P.money(row.price, q.currency) + '</span>' +
             '</div>';
-
         $('revTotal').textContent = P.money(q.total, q.currency);
         openSheet('revSheet');
     }
@@ -249,15 +316,15 @@
 
         var q = pending.quote;
         var row = q.lines[0];
-        var r = P.Region.data(region);
+        var reg = P.Region.data(region);
         var phone = window.OrderKit
             ? window.OrderKit.phone(phoneRaw)
             : { clean: phoneRaw, sheet: "'" + phoneRaw };
 
-        var message = '*NEW 97 GROWTH ORDER [' + r.name.toUpperCase() + ']*\n\n' +
-            '*Service:* ' + meta(pending.line.platform).name + ' — ' +
+        var message = '*NEW 97 GROWTH ORDER [' + reg.name.toUpperCase() + ']*\n\n' +
+            '*Service:* ' + meta(pending.r.platform).name + ' ' +
                 (row.service ? row.service.short : '') + '\n' +
-            '*Quantity:* ' + pending.line.qty.toLocaleString() + ' ' +
+            '*Quantity:* ' + pending.r.qty.toLocaleString() + ' ' +
                 (row.service ? row.service.unit : '') + '\n' +
             '*Link:* ' + pending.account + '\n' +
             '*Charge:* ' + P.money(q.total, q.currency) + '\n\n' +
@@ -277,10 +344,10 @@
                     ClientName: name,
                     Number: phone.sheet,
                     Service: '97 Growth [' + q.currency + ']',
-                    Package: meta(pending.line.platform).name + ' ' + pending.line.qty + ' ' +
+                    Package: meta(pending.r.platform).name + ' ' + pending.r.qty + ' ' +
                         (row.service ? row.service.short : '') + ' [' + pending.account + ']',
                     Price: String(q.total),
-                    Referrer: 'New order form'
+                    Referrer: 'Order panel'
                 }
             });
         } else {
@@ -290,11 +357,6 @@
 
     /* ------------------------------------------------------------ combos --- */
 
-    /**
-     * The real named packages from the price list. Each is a fixed
-     * composition at a fixed price, so they are shown as products and
-     * ordered on /boost-package/, which already sells all of them.
-     */
     function renderCombos() {
         var grid = $('comboGrid');
         if (!grid) return;
@@ -344,7 +406,7 @@
                 b.classList.toggle('is-on', b.dataset.region === region);
             });
             closeSheet('regionSheet');
-            fillQtys();
+            paint();
             renderCombos();
         });
         $('regionLabel').textContent = P.Region.data(region).currency;
@@ -352,17 +414,34 @@
 
     /* -------------------------------------------------------------- wire --- */
 
-    el.cat.addEventListener('change', function () { fillServices(); haptic(); });
-    el.svc.addEventListener('change', function () { fillQtys(); haptic(); });
-    el.qty.addEventListener('change', function () { paint(); haptic(); });
-    el.link.addEventListener('input', function () {
-        $('qoLinkErr').hidden = true;
-        $('qoLinkField').classList.remove('is-bad');
+    $('fwPlats').addEventListener('click', function (e) {
+        var t = e.target.closest('[data-tile]');
+        if (!t) return;
+        var v = t.dataset.tile;
+        if (v === 'more') { tilesOpen = true; renderTiles(); return; }
+        filter = v === 'all' ? null : v;
+        renderTiles();
+        fillCategories();
+        haptic();
     });
-    el.link.addEventListener('keypress', function (e) {
+
+    $('fwResults').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-pick]');
+        if (b) pick(b.dataset.pick);
+    });
+
+    $('fwCat').addEventListener('change', function () { fillServices(); haptic(); });
+    $('fwSvc').addEventListener('change', function () { onServiceChange(); haptic(); });
+    $('fwQty').addEventListener('input', paint);
+    $('fwSearch').addEventListener('input', runSearch);
+    $('fwLink').addEventListener('input', function () {
+        $('fwLinkErr').hidden = true;
+        $('fwLinkField').classList.remove('is-bad');
+    });
+    $('fwSubmit').addEventListener('click', submit);
+    $('fwQty').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') { e.preventDefault(); submit(); }
     });
-    $('qoSubmit').addEventListener('click', submit);
 
     var header = $('gHeader');
     var ticking = false;
@@ -375,8 +454,8 @@
         });
     }, { passive: true });
 
+    renderTiles();
     fillCategories();
-    fillServices();
     renderCombos();
 
 })(window, document);
