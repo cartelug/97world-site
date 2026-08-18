@@ -472,8 +472,6 @@ a { color: inherit; text-decoration: none; }
 }
 .fw-field > label i { margin-left: 5px; font-size: 0.8rem; color: var(--g-ink); vertical-align: baseline; }
 
-.fw-select { position: relative; }
-.fw-select select,
 .fw-input {
     width: 100%; height: 56px; padding: 0 16px;
     border-radius: var(--g-r-sm); border: 1px solid transparent;
@@ -481,12 +479,7 @@ a { color: inherit; text-decoration: none; }
     font-size: 0.98rem; font-weight: 600; outline: none;
     transition: border-color var(--g-fast) var(--g-ease);
 }
-.fw-select select { padding-right: 40px; appearance: none; -webkit-appearance: none; }
-.fw-select select:focus, .fw-input:focus { border-color: var(--g-acc-line); }
-.fw-select i {
-    position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-    font-size: 0.7rem; color: var(--g-ink-2); pointer-events: none;
-}
+.fw-input:focus { border-color: var(--g-acc-line); }
 .fw-field.is-bad .fw-input { border-color: var(--g-danger); }
 .fw-err { margin-top: 6px; font-size: 0.8rem; color: var(--g-danger); }
 
@@ -514,6 +507,92 @@ a { color: inherit; text-decoration: none; }
 .fw-submit:active { transform: scale(0.99); }
 
 @media(prefers-reduced-motion: reduce) {
-    .fw-tile, .fw-submit, .fw-select select, .fw-input { transition: none !important; }
+    .fw-tile, .fw-submit, .fw-input { transition: none !important; }
     .fw-tile:active, .fw-submit:active { transform: none !important; }
+}
+
+/* ==========================================================================
+   COMBOBOX — the searchable selector
+   A native <select> cannot show an icon, a price, or let you type to filter,
+   and on a long service list that is the difference between finding a thing
+   and scrolling for it. This is the control panels actually use: a button
+   that opens a filtered, keyboard-driven listbox.
+
+   Keyboard: ↑/↓ move, Enter picks, Esc closes and returns focus to the
+   button. The search input carries role=combobox and aria-activedescendant
+   so a screen reader follows the highlight.
+   ========================================================================== */
+
+.fw-combo { position: relative; }
+
+.fw-combo-btn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; height: 56px; padding: 0 16px;
+    border-radius: var(--g-r-sm); border: 1px solid transparent;
+    background: var(--fw-field); color: var(--g-ink);
+    font-size: 0.98rem; font-weight: 600; text-align: left;
+    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease),
+                transform var(--g-fast) var(--g-ease);
+}
+.fw-combo-btn:hover { border-color: var(--g-acc-line); }
+.fw-combo-btn:active { transform: scale(0.99); }
+.fw-combo.is-open .fw-combo-btn { border-color: var(--g-acc); background: var(--g-surface); }
+.fw-combo-val { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.fw-combo-val > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fw-combo-val img { width: 22px; height: 22px; object-fit: contain; flex: none; }
+.fw-combo-val > i { width: 22px; text-align: center; flex: none; font-size: 1.05rem; }
+.fw-combo-meta { flex: none; font-size: 0.84rem; font-weight: 700; color: var(--g-acc); }
+.fw-combo-caret { flex: none; font-size: 0.7rem; color: var(--g-ink-2); transition: transform var(--g-mid) var(--g-ease); }
+.fw-combo.is-open .fw-combo-caret { transform: rotate(180deg); }
+
+.fw-combo-pop {
+    position: absolute; z-index: 40; left: 0; right: 0; top: calc(100% + 6px);
+    border-radius: var(--g-r-sm);
+    background: var(--g-surface); border: 1px solid var(--g-line-2);
+    box-shadow: 0 12px 34px -14px rgba(19, 17, 17, 0.28);
+    overflow: hidden;
+    animation: fwPop var(--g-fast) var(--g-ease);
+}
+@keyframes fwPop { from { opacity: 0; transform: translateY(-6px); } }
+.fw-combo-pop.is-up { top: auto; bottom: calc(100% + 6px); animation-name: fwPopUp; }
+@keyframes fwPopUp { from { opacity: 0; transform: translateY(6px); } }
+
+.fw-combo-search { position: relative; border-bottom: 1px solid var(--g-line); }
+.fw-combo-search i {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 0.82rem; color: var(--g-muted); pointer-events: none;
+}
+.fw-combo-search input {
+    width: 100%; height: 48px; padding: 0 14px 0 38px;
+    border: none; outline: none; background: none;
+    font-size: 0.92rem; color: var(--g-ink);
+}
+.fw-combo-search input::placeholder { color: var(--g-muted); }
+
+.fw-combo-pop:focus, .fw-combo-list:focus { outline: none; }
+.fw-combo-list { list-style: none; max-height: 264px; overflow-y: auto; overscroll-behavior: contain; }
+
+.fw-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; cursor: pointer;
+    font-size: 0.92rem; font-weight: 600;
+    border-left: 3px solid transparent;
+    transition: background var(--g-fast) var(--g-ease);
+}
+.fw-opt img { width: 20px; height: 20px; object-fit: contain; flex: none; }
+.fw-opt > i:first-child { width: 20px; text-align: center; flex: none; }
+.fw-opt-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fw-opt-meta { flex: none; font-size: 0.82rem; font-weight: 700; color: var(--g-muted); }
+.fw-opt.is-active { background: var(--fw-tile); border-left-color: var(--g-acc-line); }
+.fw-opt.is-sel { background: var(--g-acc-soft); border-left-color: var(--g-acc); }
+.fw-opt.is-sel .fw-opt-meta { color: var(--g-acc); }
+.fw-opt-tick { flex: none; font-size: 0.72rem; color: var(--g-acc); opacity: 0; }
+.fw-opt.is-sel .fw-opt-tick { opacity: 1; }
+
+.fw-combo-empty { padding: 18px 14px; text-align: center; font-size: 0.86rem; color: var(--g-muted); }
+
+@media(prefers-reduced-motion: reduce) {
+    .fw-combo-pop { animation: none !important; }
+    .fw-combo-caret, .fw-combo-btn, .fw-opt { transition: none !important; }
+    .fw-combo-btn:active { transform: none !important; }
 }

@@ -92,6 +92,200 @@
         if (t.classList && t.classList.contains('sheet')) { closeSheet(t.id); return; }
     });
 
+    /* ---------------------------------------------------------- combobox ---
+     * A native <select> cannot show an icon or a price against an option, and
+     * cannot be typed into. On a list of twelve platforms and forty-odd
+     * services that is the difference between finding a thing and scrolling
+     * for it — so this is a real listbox: filterable, keyboard-driven, and
+     * announced properly.
+     *
+     * items: [{ value, label, icon, meta }]
+     * -------------------------------------------------------------------- */
+
+    function Combo(rootId, labelId, placeholder, onPick) {
+        var root = $(rootId);
+        if (!root) return null;
+
+        var items = [];
+        var shown = [];
+        var value = null;
+        var active = -1;
+        var open = false;
+
+        root.innerHTML =
+            '<button type="button" class="fw-combo-btn" id="' + rootId + '-btn"' +
+                ' aria-haspopup="listbox" aria-expanded="false" aria-labelledby="' + labelId + ' ' + rootId + '-val">' +
+                '<span class="fw-combo-val" id="' + rootId + '-val"></span>' +
+                '<span class="fw-combo-meta" id="' + rootId + '-meta"></span>' +
+                '<i class="fas fa-chevron-down fw-combo-caret" aria-hidden="true"></i>' +
+            '</button>' +
+            '<div class="fw-combo-pop" id="' + rootId + '-pop" tabindex="-1" hidden>' +
+                '<div class="fw-combo-search" id="' + rootId + '-sw">' +
+                    '<i class="fas fa-magnifying-glass" aria-hidden="true"></i>' +
+                    '<input type="text" id="' + rootId + '-q" role="combobox" autocomplete="off"' +
+                        ' spellcheck="false" placeholder="' + placeholder + '"' +
+                        ' aria-expanded="true" aria-controls="' + rootId + '-list" aria-autocomplete="list">' +
+                '</div>' +
+                '<ul class="fw-combo-list" id="' + rootId + '-list" role="listbox" tabindex="-1"' +
+                    ' aria-labelledby="' + labelId + '"></ul>' +
+            '</div>';
+
+        var btn = $(rootId + '-btn');
+        var val = $(rootId + '-val');
+        var metaEl = $(rootId + '-meta');
+        var pop = $(rootId + '-pop');
+        var q = $(rootId + '-q');
+        var sw = $(rootId + '-sw');
+        var list = $(rootId + '-list');
+
+        function current() {
+            for (var i = 0; i < items.length; i++) if (items[i].value === value) return items[i];
+            return null;
+        }
+
+        function paintButton() {
+            var it = current();
+            val.innerHTML = it ? (it.icon || '') + '<span>' + it.label + '</span>' : '<span>—</span>';
+            metaEl.textContent = it && it.meta ? it.meta : '';
+        }
+
+        function renderList() {
+            if (!shown.length) {
+                list.innerHTML = '<li class="fw-combo-empty" role="presentation">Nothing matches that.</li>';
+                q.removeAttribute('aria-activedescendant');
+                list.removeAttribute('aria-activedescendant');
+                return;
+            }
+            list.innerHTML = shown.map(function (it, i) {
+                var sel = it.value === value;
+                return '<li class="fw-opt' + (sel ? ' is-sel' : '') + (i === active ? ' is-active' : '') + '"' +
+                    ' id="' + rootId + '-o' + i + '" role="option" aria-selected="' + sel + '"' +
+                    ' data-val="' + it.value + '">' +
+                    (it.icon || '') +
+                    '<span class="fw-opt-label">' + it.label + '</span>' +
+                    (it.meta ? '<span class="fw-opt-meta">' + it.meta + '</span>' : '') +
+                    '<i class="fas fa-check fw-opt-tick" aria-hidden="true"></i>' +
+                    '</li>';
+            }).join('');
+            var desc = active >= 0 ? rootId + '-o' + active : '';
+            q.setAttribute('aria-activedescendant', desc);
+            list.setAttribute('aria-activedescendant', desc);
+        }
+
+        function filter() {
+            var t = q.value.trim().toLowerCase();
+            shown = !t ? items.slice() : items.filter(function (it) {
+                return it.label.toLowerCase().indexOf(t) !== -1;
+            });
+            active = shown.length ? 0 : -1;
+            renderList();
+        }
+
+        function setOpen(next) {
+            open = next;
+            pop.hidden = !next;
+            root.classList.toggle('is-open', next);
+            btn.setAttribute('aria-expanded', String(next));
+            if (!next) return;
+
+            // A four-item service list does not need a search box, and putting
+            // one there only throws up a phone keyboard over the options.
+            var searchable = items.length > 6;
+            sw.hidden = !searchable;
+
+            q.value = '';
+            filter();
+            // open with the highlight already on what is chosen
+            for (var i = 0; i < shown.length; i++) {
+                if (shown[i].value === value) { active = i; break; }
+            }
+            renderList();
+
+            // open upward when the field sits too low for the list to fit
+            pop.classList.remove('is-up');
+            var space = window.innerHeight - btn.getBoundingClientRect().bottom;
+            if (space < pop.offsetHeight + 16) pop.classList.add('is-up');
+
+            (searchable ? q : list).focus();
+            scrollActive();
+        }
+
+        function scrollActive() {
+            var el = $(rootId + '-o' + active);
+            if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+        }
+
+        function choose(v) {
+            value = v;
+            paintButton();
+            setOpen(false);
+            btn.focus();
+            if (onPick) onPick(v);
+        }
+
+        btn.addEventListener('click', function () { setOpen(!open); });
+        q.addEventListener('input', filter);
+
+        pop.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!shown.length) return;
+                active = e.key === 'ArrowDown'
+                    ? (active + 1) % shown.length
+                    : (active - 1 + shown.length) % shown.length;
+                renderList();
+                scrollActive();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (active >= 0 && shown[active]) choose(shown[active].value);
+            } else if (e.key === 'Escape') {
+                e.preventDefault();
+                setOpen(false);
+                btn.focus();
+            }
+        });
+
+        list.addEventListener('click', function (e) {
+            var li = e.target.closest('[data-val]');
+            if (li) { choose(li.dataset.val); haptic(); }
+        });
+        list.addEventListener('mousemove', function (e) {
+            var li = e.target.closest('[data-val]');
+            if (!li) return;
+            var i = shown.findIndex(function (it) { return it.value === li.dataset.val; });
+            if (i !== -1 && i !== active) { active = i; renderList(); }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (open && !root.contains(e.target)) setOpen(false);
+        });
+
+        return {
+            setItems: function (next, keep) {
+                items = next || [];
+                var stillThere = keep && items.some(function (it) { return it.value === keep; });
+                value = stillThere ? keep : (items[0] ? items[0].value : null);
+                paintButton();
+                return value;
+            },
+            setValue: function (v) {
+                if (!items.some(function (it) { return it.value === v; })) return;
+                value = v;
+                paintButton();
+            },
+            value: function () { return value; }
+        };
+    }
+
+    var catCombo = Combo('fwCat', 'fwCatLabel', 'Search platforms\u2026', function () {
+        fillServices();
+        haptic();
+    });
+    var svcCombo = Combo('fwSvc', 'fwSvcLabel', 'Search services\u2026', function () {
+        onServiceChange();
+        haptic();
+    });
+
     /* ------------------------------------------------------------- tiles --- */
 
     function renderTiles() {
@@ -116,27 +310,32 @@
 
     function fillCategories() {
         var all = filter ? [filter] : P.GROWTH_PRIMARY.concat(P.GROWTH_MORE);
-        var keep = $('fwCat').value;
-        $('fwCat').innerHTML = all.map(function (key) {
-            return '<option value="' + key + '">' + meta(key).name + '</option>';
-        }).join('');
-        if (keep && all.indexOf(keep) !== -1) $('fwCat').value = keep;
+        catCombo.setItems(all.map(function (key) {
+            return { value: key, label: meta(key).name, icon: mark(key) };
+        }), catCombo.value());
         fillServices();
     }
 
     function fillServices() {
-        var key = $('fwCat').value;
+        var key = catCombo.value();
+        if (!key) return;
+        var cur = P.Region.data(region).currency;
+
         // only services with a real ladder can be quoted on this form
         var ids = (P.PLATFORMS[key].services || []).filter(function (id) {
             var s = P.SERVICES_BY_ID[id];
             return s && s.sizes && s.sizes.length;
         });
-        var keep = $('fwSvc').value;
-        $('fwSvc').innerHTML = ids.map(function (id) {
+        svcCombo.setItems(ids.map(function (id) {
             var s = P.SERVICES_BY_ID[id];
-            return '<option value="' + id + '">' + meta(key).name + ' ' + s.short + '</option>';
-        }).join('');
-        if (keep && ids.indexOf(keep) !== -1) $('fwSvc').value = keep;
+            var from = P.tierUsd(id, P.qtysFor(id)[0]);
+            return {
+                value: id,
+                label: s.short,
+                icon: mark(key),
+                meta: 'from ' + P.money(P.localPrice(from, cur), cur)
+            };
+        }), svcCombo.value());
 
         var hint = P.ACCOUNT_HINTS[key] || { placeholder: 'Profile link' };
         $('fwLink').placeholder = hint.placeholder;
@@ -144,7 +343,7 @@
     }
 
     function onServiceChange() {
-        var id = $('fwSvc').value;
+        var id = svcCombo.value();
         var qtys = P.qtysFor(id);
         $('fwMinMax').textContent = qtys.length
             ? 'Min: ' + qtys[0].toLocaleString() + ' - Max: ' + qtys[qtys.length - 1].toLocaleString()
@@ -152,8 +351,8 @@
 
         var s = P.SERVICES_BY_ID[id];
         // the honest window, plus whether refill covers this specific service
-        $('fwTime').textContent = '1–6 hours' +
-            (s && s.refillEligible ? ' · 30-day refill' : '');
+        $('fwTime').textContent = '1\u20136 hours' +
+            (s && s.refillEligible ? ' \u00b7 30-day refill' : '');
 
         // keep the typed amount if this service sells it, else start clean
         var typed = Number(String($('fwQty').value).replace(/[^\d]/g, ''));
@@ -166,14 +365,14 @@
 
     /** The exact tier this order will be placed at, or null. */
     function resolved() {
-        var id = $('fwSvc').value;
+        var id = svcCombo.value();
         var qtys = P.qtysFor(id);
         var typed = Number(String($('fwQty').value).replace(/[^\d]/g, ''));
         if (!id || !typed || !qtys.length) return null;
 
         var exact = qtys.indexOf(typed) !== -1;
         var qty = exact ? typed : nearest(qtys, typed);
-        return { platform: $('fwCat').value, serviceId: id, qty: qty, typed: typed, exact: exact };
+        return { platform: catCombo.value(), serviceId: id, qty: qty, typed: typed, exact: exact };
     }
 
     function nearest(list, n) {
@@ -236,9 +435,9 @@
         filter = null;
         renderTiles();
         fillCategories();
-        $('fwCat').value = s.platform;
+        catCombo.setValue(s.platform);
         fillServices();
-        $('fwSvc').value = serviceId;
+        svcCombo.setValue(serviceId);
         onServiceChange();
         $('fwSearch').value = '';
         runSearch();
@@ -406,7 +605,7 @@
                 b.classList.toggle('is-on', b.dataset.region === region);
             });
             closeSheet('regionSheet');
-            paint();
+            fillServices();
             renderCombos();
         });
         $('regionLabel').textContent = P.Region.data(region).currency;
@@ -430,8 +629,6 @@
         if (b) pick(b.dataset.pick);
     });
 
-    $('fwCat').addEventListener('change', function () { fillServices(); haptic(); });
-    $('fwSvc').addEventListener('change', function () { onServiceChange(); haptic(); });
     $('fwQty').addEventListener('input', paint);
     $('fwSearch').addEventListener('input', runSearch);
     $('fwLink').addEventListener('input', function () {
