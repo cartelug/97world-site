@@ -769,11 +769,13 @@
     fillCategories();
     renderCombos();
 
-    // ask where they're ordering from on every visit, not just the first —
-    // prices differ by region and the last visit's country is still a guess.
-    // Pricing itself never waits on this: it already defaults to the last
-    // saved region (or UGX) the moment the page paints, same as always.
-    if (regionBtn) {
+    // Ask where they're ordering from on the first visit only, same as the
+    // order pages' own gate — popping this up on every single load (even
+    // with a region already saved) read as the page hanging then a sheet
+    // seizing the screen, not as a helpful prompt. Still reachable any time
+    // from the menu, and the page never waits on it either way — pricing
+    // already defaults to the saved region (or UGX) the moment it paints.
+    if (regionBtn && !P.Region.get()) {
         window.setTimeout(function () { openSheet('regionSheet'); }, 260);
     }
 
