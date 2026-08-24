@@ -78,11 +78,7 @@
          * priced to show. It is a shortcut tile only: opens a WhatsApp quote
          * request, same honest fallback used everywhere else on the site for
          * something we don't have a fixed price for yet. */
-        snapchat:   { name: 'Snapchat',       icon: 'fab fa-snapchat',       color: '#D4B800' },
-
-        /* Also not a boost platform — the shortcut tile for this one links
-         * straight to /business/, the real website-package product. */
-        website:    { name: 'Website',        icon: 'fas fa-window-maximize', href: '/business/', color: '#6C5CE7' }
+        snapchat:   { name: 'Snapchat',       icon: 'fab fa-snapchat',       color: '#D4B800' }
     };
 
     // The 4 platforms shown up front in the growth builder's step 1, and the
@@ -685,6 +681,28 @@
         visits: 'fas fa-arrow-trend-up'
     };
 
+    /* Plain-English explanation of what each unit actually is — shown under
+     * the Service field once one is picked, so "Followers" or "Impressions"
+     * doesn't have to be self-explanatory on its own. */
+    var UNIT_DESC = {
+        followers: 'People who follow your profile. They stay unless they choose to unfollow.',
+        subscribers: 'People who subscribe to your channel. They stay unless they choose to unsubscribe.',
+        members: 'People who join your group or channel.',
+        likes: 'Likes added to one post or video.',
+        views: 'Views added to one post or video.',
+        'watch views': 'Real watch time added to your videos.',
+        reactions: 'Reactions — like, love and the rest — added to one post.',
+        comments: 'Comments added to one post.',
+        saves: 'Saves added to one post.',
+        shares: 'Shares added to one post.',
+        viewers: 'People watching a live stream at the same time.',
+        reposts: 'Reposts added to one post.',
+        impressions: 'Times your post is shown in people’s feeds.',
+        plays: 'Plays added to one track.',
+        'monthly listeners': 'Unique listeners counted each month.',
+        visits: 'Visits sent to your website.'
+    };
+
     function planFeats(service, qty) {
         var feats = [
             { icon: UNIT_ICONS[service.unit] || 'fas fa-bolt', text: qty.toLocaleString() + ' ' + service.unit, gold: true },
@@ -776,6 +794,7 @@
 
     window.K97Pricing = {
         UGX_PER_USD: UGX_PER_USD,
+        UNIT_DESC: UNIT_DESC,
         REGIONS: REGIONS,
         PLATFORMS: PLATFORMS,
         PLAT_META: PLAT_META,

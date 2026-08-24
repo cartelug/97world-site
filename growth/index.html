@@ -59,43 +59,44 @@
             <div class="fw-results" id="fwResults" role="region" aria-live="polite" hidden></div>
 
             <div class="fw-field">
-                <label id="fwCatLabel">Category</label>
+                <label id="fwCatLabel">Platform</label>
                 <div class="fw-combo" id="fwCat"></div>
             </div>
 
             <div class="fw-field">
-                <label id="fwSvcLabel">Service</label>
+                <label id="fwSvcLabel">What do you want?</label>
                 <div class="fw-combo" id="fwSvc"></div>
+                <p class="fw-desc g-roll" id="fwSvcDesc"></p>
+            </div>
+
+            <div class="fw-field">
+                <label for="fwQty">How many do you want?</label>
+                <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off">
+                <p class="fw-minmax" id="fwMinMax"></p>
+                <p class="fw-snap" id="fwSnap" hidden></p>
             </div>
 
             <div class="fw-field" id="fwLinkField">
-                <label for="fwLink">Link</label>
+                <label for="fwLink">Your link</label>
                 <input type="text" class="fw-input" id="fwLink" autocomplete="off"
                        spellcheck="false" autocapitalize="none">
                 <p class="fw-err" id="fwLinkErr" hidden></p>
             </div>
 
             <div class="fw-field">
-                <label for="fwQty">Quantity</label>
-                <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off">
-                <p class="fw-minmax" id="fwMinMax"></p>
-                <p class="fw-snap" id="fwSnap" hidden></p>
-            </div>
-
-            <div class="fw-field">
-                <label for="fwTime">Average time
+                <label for="fwTime">How long does it take?
                     <i class="fas fa-circle-exclamation"
-                       title="The window we quote for delivery to start. Orders then arrive gradually rather than all at once."></i>
+                       title="We start most orders within this window, then deliver gradually rather than all at once."></i>
                 </label>
                 <div class="fw-readonly" id="fwTime">1–6 hours</div>
             </div>
 
             <div class="fw-field">
-                <label for="fwCharge">Charge</label>
+                <label for="fwCharge">Total price</label>
                 <div class="fw-readonly is-charge" id="fwCharge"><span class="g-roll" id="fwChargeVal">—</span></div>
             </div>
 
-            <button type="button" class="fw-submit" id="fwSubmit">Submit</button>
+            <button type="button" class="fw-submit" id="fwSubmit">Continue</button>
         </div>
         <p class="qo-note" style="margin-top:12px"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
     </section>

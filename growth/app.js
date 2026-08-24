@@ -44,11 +44,12 @@
     };
 
     /* Tiles up front, the rest behind the + — never a platform we don't sell.
-     * 'snapchat' and 'website' are shortcut tiles, not priced platforms: they
-     * never set `filter` or drive the Category/Service combos — see
-     * renderTiles() and the click handler below. */
+     * 'snapchat' is a shortcut tile, not a priced platform: it never sets
+     * `filter` or drives the Category/Service combos — see renderTiles() and
+     * the click handler below. Website traffic is the real priced platform
+     * for "website" requests; there is no separate website-builder tile here. */
     var TILES = ['instagram', 'tiktok', 'facebook', 'youtube', 'spotify', 'telegram', 'x', 'whatsapp', 'linkedin'];
-    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic', 'snapchat', 'website'];
+    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic', 'snapchat'];
 
     var $ = function (id) { return document.getElementById(id); };
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -298,15 +299,8 @@
             '" data-tile="all" aria-label="All platforms"><i class="fas fa-bars"></i></button>';
 
         html += shown.map(function (key) {
-            // shortcut tiles: a real link (Website) or a WhatsApp quote
-            // (Snapchat) — neither drives the Category/Service combos, so
-            // neither ever shows as "selected".
-            if (key === 'website') {
-                return '<a href="' + meta(key).href + '" class="fw-tile" aria-label="Website — see the package">' +
-                    mark(key) +
-                    '<span class="fw-tile-badge" aria-hidden="true"><i class="fas fa-arrow-up-right-from-square"></i></span>' +
-                    '</a>';
-            }
+            // shortcut tile: opens a WhatsApp quote instead of driving the
+            // Category/Service combos, so it never shows as "selected".
             if (key === 'snapchat') {
                 return '<button type="button" class="fw-tile" data-tile="snapchat" aria-label="Snapchat — ask on WhatsApp">' +
                     mark(key) +
@@ -365,10 +359,11 @@
         var id = svcCombo.value();
         var qtys = P.qtysFor(id);
         $('fwMinMax').textContent = qtys.length
-            ? 'Min: ' + qtys[0].toLocaleString() + ' - Max: ' + qtys[qtys.length - 1].toLocaleString()
+            ? 'You can order between ' + qtys[0].toLocaleString() + ' and ' + qtys[qtys.length - 1].toLocaleString() + '.'
             : '';
 
         var s = P.SERVICES_BY_ID[id];
+        roll($('fwSvcDesc'), (s && P.UNIT_DESC[s.unit]) || '');
         // the honest window, plus whether refill covers this specific service
         $('fwTime').textContent = '1\u20136 hours' +
             (s && s.refillEligible ? ' \u00b7 30-day refill' : '');
