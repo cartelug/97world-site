@@ -724,4 +724,12 @@
     fillCategories();
     renderCombos();
 
+    // ask where they're ordering from on every visit, not just the first —
+    // prices differ by region and the last visit's country is still a guess.
+    // Pricing itself never waits on this: it already defaults to the last
+    // saved region (or UGX) the moment the page paints, same as always.
+    if (regionBtn) {
+        window.setTimeout(function () { openSheet('regionSheet'); }, 260);
+    }
+
 })(window, document);
