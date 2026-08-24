@@ -186,6 +186,15 @@ a { color: inherit; text-decoration: none; }
 .price-total span { font-size: 0.92rem; font-weight: 700; }
 .price-total b { font-family: var(--g-font-d); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.025em; }
 
+/* deposit now, balance later — split out from the total, not just implied */
+.price-split { display: grid; gap: 8px; }
+.price-split-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.85rem; }
+.price-split-row span { display: flex; align-items: center; gap: 7px; color: var(--g-ink-2); }
+.price-split-row span i { width: 14px; text-align: center; color: var(--g-muted); font-size: 0.8rem; }
+.price-split-row b { font-family: var(--g-font-d); font-weight: 800; }
+.price-split-row.is-now span, .price-split-row.is-now span i { color: var(--g-acc); }
+.price-split-row.is-now b { color: var(--g-acc); }
+
 .acct-list { display: grid; gap: 11px; }
 .acct-field label { display: block; margin-bottom: 5px; font-size: 0.82rem; font-weight: 700; color: var(--g-ink-2); }
 .acct-box { display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: var(--g-r-sm); border: 1px solid var(--g-line-2); background: var(--g-surface); transition: border-color var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease); }
@@ -222,13 +231,18 @@ a { color: inherit; text-decoration: none; }
 /* ================================================= 19 ORDER REVIEW === */
 
 .rev-list { display: grid; gap: 8px; }
-.rev-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--g-r-sm); border: 1px solid var(--g-line); background: var(--g-surface); }
-.rev-row img { width: 20px; height: 20px; object-fit: contain; flex: none; }
-.rev-row i.rev-ic { width: 20px; text-align: center; flex: none; }
+.rev-row { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: var(--g-r-sm); border: 1px solid var(--g-line); background: var(--g-surface); }
+.rev-mark {
+    flex: none; width: 34px; height: 34px; border-radius: 10px;
+    display: grid; place-items: center; overflow: hidden;
+    background: var(--fw-tile); border: 1px solid var(--g-line);
+    font-size: 0.95rem;
+}
+.rev-mark img { width: 21px; height: 21px; object-fit: contain; }
 .rev-copy { flex: 1; min-width: 0; }
-.rev-copy b { display: block; font-size: 0.88rem; font-weight: 700; }
-.rev-copy small { display: block; font-size: 0.77rem; color: var(--g-muted); }
-.rev-amt { flex: none; font-family: var(--g-font-d); font-size: 0.9rem; font-weight: 700; }
+.rev-copy b { display: block; font-size: 0.9rem; font-weight: 750; }
+.rev-copy small { display: block; margin-top: 1px; font-size: 0.78rem; color: var(--g-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rev-amt { flex: none; font-family: var(--g-font-d); font-size: 0.92rem; font-weight: 800; }
 @media (min-width: 720px) { .pop-row { grid-template-columns: repeat(4, 1fr); } }
 
 /* ============================================ 25/26 TRUST + PROOF === */
@@ -243,12 +257,20 @@ a { color: inherit; text-decoration: none; }
 }
 .trust-item i { color: var(--g-acc); font-size: 0.88rem; flex: none; }
 
-.proof-rail { display: flex; gap: 11px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; scroll-snap-type: x proximity; }
-.proof-rail::-webkit-scrollbar { display: none; }
-.proof-rail img {
-    flex: none; width: 168px; border-radius: var(--g-r-sm); scroll-snap-align: start;
-    border: 1px solid var(--g-line); background: var(--g-surface);
+/* honest empty state — shown until there are real order screenshots to put
+   here, same dashed-card language as the combo grid's "more" card */
+.proof-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 30px 22px; border-radius: var(--g-r); text-align: center;
+    border: 1.5px dashed var(--g-line-2); background: var(--g-surface-2);
 }
+.proof-empty-ic {
+    width: 46px; height: 46px; border-radius: 13px;
+    display: grid; place-items: center;
+    background: var(--g-acc-soft); color: var(--g-acc); font-size: 1.2rem;
+}
+.proof-empty p { max-width: 380px; font-size: 0.92rem; color: var(--g-ink-2); line-height: 1.55; }
+.proof-empty .g-btn { margin-top: 4px; }
 
 /* ============================================== 14b HOW IT WORKS === */
 
@@ -514,18 +536,20 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ---- platform tiles ---- */
-.fw-plats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+/* 3 across instead of 4 — bigger targets, and the logos (TikTok included,
+   now that it's cropped to just the mark) actually read at this size. */
+.fw-plats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .fw-tile {
     position: relative; display: grid; place-items: center;
-    height: 62px; border-radius: 13px;
+    height: 76px; border-radius: 16px;
     background: var(--fw-tile); border: 1px solid var(--g-line);
-    color: var(--g-ink-2); font-size: 1.4rem;
+    color: var(--g-ink-2); font-size: 1.65rem;
     transition: background var(--g-fast) var(--g-ease),
                 border-color var(--g-fast) var(--g-ease),
                 box-shadow var(--g-fast) var(--g-ease),
                 transform var(--g-fast) var(--g-ease);
 }
-.fw-tile img { width: 27px; height: 27px; object-fit: contain; }
+.fw-tile img { width: 34px; height: 34px; object-fit: contain; }
 .fw-tile:active { transform: scale(0.96); }
 
 /* Selected glows in place — it never fills solid or inverts the icon, so a
@@ -592,8 +616,18 @@ a { color: inherit; text-decoration: none; }
     transition: border-color var(--g-fast) var(--g-ease);
 }
 .fw-input:focus { border-color: var(--g-acc-line); }
-.fw-field.is-bad .fw-input { border-color: var(--g-danger); }
+.fw-field.is-bad .fw-input { border-color: var(--g-danger); box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.1); }
 .fw-err { margin-top: 6px; font-size: 0.8rem; color: var(--g-danger); }
+
+/* a one-shot nudge the moment a typed amount goes out of range — not a
+   loop, see shake() in app.js */
+@keyframes fwShake {
+    10%, 90% { transform: translateX(-1px); }
+    20%, 80% { transform: translateX(2px); }
+    30%, 50%, 70% { transform: translateX(-4px); }
+    40%, 60% { transform: translateX(4px); }
+}
+.fw-field.is-shake .fw-input { animation: fwShake 420ms var(--g-ease); }
 
 /* readonly display fields — average time and charge */
 .fw-readonly {
@@ -606,6 +640,8 @@ a { color: inherit; text-decoration: none; }
 
 .fw-minmax { margin-top: 8px; font-size: 0.86rem; color: var(--g-ink-2); }
 .fw-snap { margin-top: 6px; font-size: 0.8rem; color: var(--g-acc); font-weight: 650; }
+.fw-snap.is-danger { color: var(--g-danger); }
+.fw-snap.is-danger::before { content: '\f071'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 0.85em; margin-right: 5px; }
 .fw-desc { margin-top: 8px; font-size: 0.86rem; color: var(--g-ink-2); line-height: 1.5; }
 .fw-desc:empty { display: none; }
 

@@ -39,7 +39,7 @@ const WEBSITE_GIFTS = [
 
 const PROOF = [
     { icon: 'fa-lock', title: 'We never ask for your password', body: 'Delivery works entirely from your public handle. Your login stays yours.' },
-    { icon: 'fa-bolt', title: 'You watch it start before you finish paying', body: 'The first batch lands in 1–6 hours. 30% starts the order, the balance is due once delivery is running.' },
+    { icon: 'fa-bolt', title: 'You watch it start before you finish paying', body: 'The first batch lands in 1–6 hours. 50% starts the order, the balance is due once delivery is running.' },
     { icon: 'fa-location-dot', title: 'We are actually here', body: 'Kampala-based. Pay by MTN or Airtel Money, or bring cash to the office.' }
 ];
 
@@ -323,7 +323,7 @@ const BUNDLE_SELL = `        <header class="bs-hero">
             <div><i class="fas fa-lock"></i><span>No password, ever</span></div>
             <div><i class="fas fa-gauge-simple"></i><span>Delivered gradually</span></div>
             <div><i class="fas fa-rotate-left"></i><span>Refill where the parts include it</span></div>
-            <div><i class="fas fa-hand-holding-dollar"></i><span>30% starts it</span></div>
+            <div><i class="fas fa-hand-holding-dollar"></i><span>50% starts it</span></div>
         </section>
 `;
 
@@ -455,8 +455,8 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                 <div class="guarantee">
                     <i class="fas fa-shield-halved"></i>
                     <div>
-                        <b>30% starts it, the rest on delivery</b>
-                        <p>We begin your order on a 30% deposit. The balance is only due once you can see it working.</p>
+                        <b>50% starts it, the rest on delivery</b>
+                        <p>We begin your order on a 50% deposit. The balance is only due once you can see it working.</p>
                     </div>
                 </div>
 

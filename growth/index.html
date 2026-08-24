@@ -69,7 +69,7 @@
                 <p class="fw-desc g-roll" id="fwSvcDesc"></p>
             </div>
 
-            <div class="fw-field">
+            <div class="fw-field" id="fwQtyField">
                 <label for="fwQty">How many do you want?</label>
                 <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off">
                 <p class="fw-minmax" id="fwMinMax"></p>
@@ -124,15 +124,17 @@
     <!-- ==================================================== PROOF === -->
     <section class="g-wrap g-sec">
         <div class="g-sec-head">
+            <span class="combo-kicker"><i class="fas fa-camera-retro"></i> Real orders only</span>
             <h2>Recent customer results</h2>
-            <p>Screenshots from real orders, shared with permission.</p>
+            <p>We only ever post screenshots from real 97 World orders — never a stock testimonial.</p>
         </div>
-        <div class="proof-rail r-up">
-            <img src="/IMAGES/trust1.png" alt="Customer result" loading="lazy">
-            <img src="/IMAGES/trust2.png" alt="Customer result" loading="lazy">
-            <img src="/IMAGES/trust3.png" alt="Customer result" loading="lazy">
-            <img src="/IMAGES/trust4.png" alt="Customer result" loading="lazy">
-            <img src="/IMAGES/trust5.png" alt="Customer result" loading="lazy">
+        <div class="proof-empty r-up">
+            <div class="proof-empty-ic"><i class="fas fa-images"></i></div>
+            <p>We're between batches of screenshots right now. Want to see a recent delivery before you order?</p>
+            <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20can%20I%20see%20a%20screenshot%20from%20a%20recent%20order%3F"
+               target="_blank" rel="noopener" class="g-btn g-btn--ghost">
+                <i class="fab fa-whatsapp"></i> Ask us on WhatsApp
+            </a>
         </div>
     </section>
 
@@ -147,8 +149,8 @@
             </div>
             <div class="step">
                 <div class="step-n">Step 2</div>
-                <b>Pay</b>
-                <p>Confirm on WhatsApp and pay by MTN or Airtel Money, or cash at our Kampala office.</p>
+                <b>Pay 50%</b>
+                <p>Confirm on WhatsApp and pay half by MTN or Airtel Money, or cash at our Kampala office. The other 50% is only due once delivery is visibly running.</p>
             </div>
             <div class="step">
                 <div class="step-n">Step 3</div>
@@ -251,6 +253,17 @@
 
         <div class="price-card" style="margin-top:14px">
             <div class="price-total"><span>Total</span><b id="revTotal">—</b></div>
+            <div class="price-sep"></div>
+            <div class="price-split">
+                <div class="price-split-row is-now">
+                    <span><i class="fas fa-hand-holding-dollar"></i> Pay now (50%)</span>
+                    <b id="revDeposit">—</b>
+                </div>
+                <div class="price-split-row">
+                    <span><i class="fas fa-clock"></i> Balance on delivery</span>
+                    <b id="revBalance">—</b>
+                </div>
+            </div>
         </div>
 
         <div class="acct-list" style="margin-top:16px">

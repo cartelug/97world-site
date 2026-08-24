@@ -516,29 +516,22 @@ body[data-hub] .display-hero em {
 .doc-toc a:hover { color: #fff; transform: translateX(3px); }
 
 /* ==========================================================================
-   PROOF RAIL — client screenshots
-   A scroll-snap rail rather than a scripted carousel: it swipes natively on
-   a phone, keeps working if JavaScript never loads, and the proof is on the
-   page from the start instead of behind three taps.
+   PROOF — client screenshots, honestly
+   An empty state, not a rail of images — shown until there are real order
+   screenshots to put here. Never a stand-in image wearing a caption that
+   claims it's something it isn't.
    ========================================================================== */
-.proof-rail {
-    /* flex-start, not the default stretch: these are screenshots of different
-       heights and stretching pads the short ones with dead card background */
-    display: flex; align-items: flex-start;
-    gap: 14px; overflow-x: auto; padding: 4px 4px 18px;
-    scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin; scrollbar-color: var(--hub-35) transparent;
+.proof-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    max-width: 440px; margin: 0 auto; padding: 36px 26px; border-radius: 20px;
+    text-align: center; border: 1.5px dashed rgba(255,255,255,0.14); background: rgba(255,255,255,0.02);
 }
-.proof-rail::-webkit-scrollbar { height: 6px; }
-.proof-rail::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 100px; }
-.proof-rail::-webkit-scrollbar-thumb { background: var(--hub-35); border-radius: 100px; }
-.proof-shot {
-    flex: none; width: min(260px, 68vw); scroll-snap-align: center;
-    border-radius: 18px; overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);
+.proof-empty-ic {
+    width: 50px; height: 50px; border-radius: 14px;
+    display: grid; place-items: center;
+    background: var(--hub-14); color: var(--hub); font-size: 1.3rem;
 }
-.proof-shot img { display: block; width: 100%; height: auto; }
-.rail-hint { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 6px; font-size: 0.78rem; color: #6a6a73; }
+.proof-empty p { font-size: 0.95rem; color: var(--clr-muted); line-height: 1.6; }
 
 /* ==========================================================================
    CHECKLIST — how to vet any seller, us included
@@ -735,15 +728,6 @@ body.order-page .wa-fab { bottom: calc(var(--dock-h, 92px) + env(safe-area-inset
 .faq-item[open] .faq-a { animation: hubFaq var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)); }
 @keyframes hubFaq { from { opacity: 0; transform: translate3d(0, -6px, 0); } }
 
-/* The proof rail's screenshots settle in sequence as the rail scrolls in. */
-.proof-rail.is-visible img, .proof-rail.is-in img { animation: hubProof var(--m-reveal, 480ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
-.proof-rail img:nth-child(1) { animation-delay: 0ms; }
-.proof-rail img:nth-child(2) { animation-delay: 60ms; }
-.proof-rail img:nth-child(3) { animation-delay: 120ms; }
-.proof-rail img:nth-child(4) { animation-delay: 180ms; }
-.proof-rail img:nth-child(5) { animation-delay: 240ms; }
-@keyframes hubProof { from { opacity: 0; transform: translate3d(0, 14px, 0); } }
-
 /* The trust strip's items tick in left to right on first paint. */
 .trust-strip li { animation: hubTrust var(--m-slow, 380ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
 .trust-strip li:nth-child(1) { animation-delay: 60ms; }
@@ -755,5 +739,5 @@ body.order-page .wa-fab { bottom: calc(var(--dock-h, 92px) + env(safe-area-inset
 @media(prefers-reduced-motion: reduce) {
     .offer-card, .spec, .flow-step, .check, .nav-item::after,
     .hub-btn, .oc-cta, .mm-link { transition: none !important; transform: none !important; }
-    .faq-item[open] .faq-a, .proof-rail img, .trust-strip li { animation: none !important; }
+    .faq-item[open] .faq-a, .trust-strip li { animation: none !important; }
 }

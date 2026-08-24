@@ -73,6 +73,17 @@
         else if (el) el.textContent = text;
     }
 
+    /** One-shot attention shake — the moment a field becomes invalid, not a
+     *  loop that keeps firing while it stays that way. */
+    function shake(el) {
+        if (!el || reduceMotion) return;
+        el.classList.remove('is-shake');
+        void el.offsetWidth;
+        el.classList.add('is-shake');
+        window.setTimeout(function () { el.classList.remove('is-shake'); }, 450);
+        haptic();
+    }
+
     /* ------------------------------------------------------------ sheets --- */
 
     function openSheet(id) {
@@ -400,18 +411,44 @@
     function paint() {
         var r = resolved();
         var snap = $('fwSnap');
+        var qtyField = $('fwQtyField');
+
         if (!r) {
             roll($('fwChargeVal'), '—');
             snap.hidden = true;
+            if (qtyField) qtyField.classList.remove('is-bad');
             return;
         }
+
         if (r.exact) {
             snap.hidden = true;
+            if (qtyField) qtyField.classList.remove('is-bad');
         } else {
+            var qtys = P.qtysFor(r.serviceId);
+            var below = r.typed < qtys[0];
+            var above = r.typed > qtys[qtys.length - 1];
             snap.hidden = false;
-            snap.textContent = 'We sell this in set amounts — priced at ' +
-                r.qty.toLocaleString() + '.';
+            snap.classList.toggle('is-danger', below || above);
+            if (below) {
+                snap.textContent = 'That is below our minimum. Smallest order is ' +
+                    r.qty.toLocaleString() + ' — we’ve set it to that.';
+            } else if (above) {
+                snap.textContent = 'That is above our largest tier. Biggest order is ' +
+                    r.qty.toLocaleString() + ' — we’ve set it to that.';
+            } else {
+                snap.textContent = 'We sell this in set amounts — priced at ' +
+                    r.qty.toLocaleString() + '.';
+            }
+            if (qtyField) {
+                var wasBad = qtyField.classList.contains('is-bad');
+                var isBad = below || above;
+                qtyField.classList.toggle('is-bad', isBad);
+                // only shake on the moment it becomes invalid, not on every
+                // keystroke while it stays invalid — that would just be noise
+                if (isBad && !wasBad) shake(qtyField);
+            }
         }
+
         var q = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: r.qty }], region, 1);
         roll($('fwChargeVal'), P.money(q.total, q.currency));
     }
@@ -501,10 +538,14 @@
 
         var q = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: r.qty }], region, 1);
         var row = q.lines[0];
-        pending = { r: r, account: $('fwLink').value.trim(), quote: q };
+        // the deposit is rounded once; the balance is whatever is left of
+        // the total, so the two always add back up to exactly what's shown
+        var deposit = P.roundMoney(q.total * 0.5, q.currency);
+        var balance = q.total - deposit;
+        pending = { r: r, account: $('fwLink').value.trim(), quote: q, deposit: deposit, balance: balance };
 
         $('revList').innerHTML =
-            '<div class="rev-row">' + mark(r.platform) +
+            '<div class="rev-row"><span class="rev-mark">' + mark(r.platform) + '</span>' +
             '<span class="rev-copy"><b>' + meta(r.platform).name + ' ' +
                 (row.service ? row.service.short : '') + '</b>' +
             '<small>' + r.qty.toLocaleString() + ' ' + (row.service ? row.service.unit : '') +
@@ -512,6 +553,8 @@
             '<span class="rev-amt">' + P.money(row.price, q.currency) + '</span>' +
             '</div>';
         $('revTotal').textContent = P.money(q.total, q.currency);
+        $('revDeposit').textContent = P.money(deposit, q.currency);
+        $('revBalance').textContent = P.money(balance, q.currency);
         openSheet('revSheet');
     }
 
@@ -540,7 +583,9 @@
             '*Quantity:* ' + pending.r.qty.toLocaleString() + ' ' +
                 (row.service ? row.service.unit : '') + '\n' +
             '*Link:* ' + pending.account + '\n' +
-            '*Charge:* ' + P.money(q.total, q.currency) + '\n\n' +
+            '*Charge:* ' + P.money(q.total, q.currency) + '\n' +
+            '*Pay now (50%):* ' + P.money(pending.deposit, q.currency) + '\n' +
+            '*Balance on delivery:* ' + P.money(pending.balance, q.currency) + '\n\n' +
             '*Name:* ' + name + '\n' +
             '*WhatsApp:* ' + phone.clean;
 
