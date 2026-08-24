@@ -541,24 +541,47 @@ a { color: inherit; text-decoration: none; }
 .fw-plats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .fw-tile {
     position: relative; display: grid; place-items: center;
-    height: 76px; border-radius: 16px;
+    height: 76px; border-radius: 18px;
     background: var(--fw-tile); border: 1px solid var(--g-line);
     color: var(--g-ink-2); font-size: 1.65rem;
+    box-shadow: 0 1px 2px rgba(19, 17, 17, 0.04);
     transition: background var(--g-fast) var(--g-ease),
                 border-color var(--g-fast) var(--g-ease),
                 box-shadow var(--g-fast) var(--g-ease),
                 transform var(--g-fast) var(--g-ease);
 }
-.fw-tile img { width: 34px; height: 34px; object-fit: contain; }
+.fw-tile img { width: 34px; height: 34px; object-fit: contain; transition: filter var(--g-fast) var(--g-ease); }
+.fw-tile:hover { border-color: var(--g-line-2); transform: translateY(-1px); box-shadow: 0 8px 18px -12px rgba(19, 17, 17, 0.22); }
 .fw-tile:active { transform: scale(0.96); }
 
-/* Selected glows in place — it never fills solid or inverts the icon, so a
-   real logo (or a brand-coloured glyph) keeps its own colour selected or not. */
+/* Selected glows gold — a deliberate step up from the coral used everywhere
+   else on the page, so "this is your pick" reads as a small reward, not
+   just a state change. Never fills solid or inverts the icon, so a real
+   logo (or a brand-coloured glyph) keeps its own colour selected or not.
+   .fw-tile.is-on is rendered fresh into the DOM on every pick (renderTiles
+   replaces innerHTML), so the pop + ring below auto-play on each selection
+   without any extra JS trigger. */
 .fw-tile.is-on {
-    background: var(--g-acc-soft);
-    border-color: var(--g-acc-line);
-    box-shadow: 0 0 0 3px var(--g-acc-soft), 0 0 0 1px var(--g-acc-line), 0 10px 22px -12px var(--g-acc);
-    color: var(--g-acc);
+    background: linear-gradient(165deg, #FFF9EC 0%, #FFEFCF 100%);
+    border-color: #E7B65B;
+    color: #A96A0A;
+    box-shadow: 0 0 0 3px rgba(231, 148, 51, 0.18), 0 0 0 1px #E7B65B, 0 12px 26px -14px rgba(199, 118, 10, 0.55);
+    animation: fwGoldPop 460ms var(--g-ease);
+}
+.fw-tile.is-on img { filter: drop-shadow(0 3px 10px rgba(199, 118, 10, 0.35)); }
+.fw-tile.is-on::after {
+    content: ''; position: absolute; inset: -6px; border-radius: 24px;
+    border: 1.5px solid #E7B65B; opacity: 0; pointer-events: none;
+    animation: fwGoldRing 620ms var(--g-ease);
+}
+@keyframes fwGoldPop {
+    0% { transform: scale(0.92); }
+    55% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+@keyframes fwGoldRing {
+    from { opacity: 0.6; transform: scale(0.9); }
+    to { opacity: 0; transform: scale(1.2); }
 }
 
 /* corner cue for the two shortcut tiles (Website links out, Snapchat opens
@@ -658,7 +681,9 @@ a { color: inherit; text-decoration: none; }
 
 @media(prefers-reduced-motion: reduce) {
     .fw-tile, .fw-submit, .fw-input { transition: none !important; }
-    .fw-tile:active, .fw-submit:active { transform: none !important; }
+    .fw-tile:active, .fw-submit:active, .fw-tile:hover { transform: none !important; }
+    .fw-tile.is-on { animation: none !important; }
+    .fw-tile.is-on::after { display: none !important; }
 }
 
 /* ==========================================================================
