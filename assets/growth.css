@@ -172,12 +172,6 @@ a { color: inherit; text-decoration: none; }
 }
 .goal-card.is-on .goal-card-tick { border-color: var(--g-acc); background: var(--g-acc); color: #fff; }
 
-.g-link-btn {
-    display: inline-flex; align-items: center; gap: 7px; margin-top: 14px;
-    font-size: 0.86rem; font-weight: 700; color: var(--g-acc);
-    text-decoration: underline; text-underline-offset: 4px;
-}
-
 /* ============================================== 14 PRICE + 17 ACCT === */
 
 .price-card {
@@ -358,42 +352,142 @@ a { color: inherit; text-decoration: none; }
    COMBOS — the real named packages from the price list
    ========================================================================== */
 
-.combo-grid { display: grid; gap: 10px; }
+.combo-kicker {
+    display: inline-flex; align-items: center; gap: 7px; margin-bottom: 7px;
+    padding: 5px 12px; border-radius: 100px;
+    background: var(--g-acc-soft); border: 1px solid var(--g-acc-line);
+    color: var(--g-acc); font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+}
+.combo-kicker i { font-size: 0.7rem; }
+
+.combo-grid { display: grid; gap: 12px; }
 @media (min-width: 620px) { .combo-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1024px) { .combo-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .combo-item {
-    position: relative; display: flex; flex-direction: column; gap: 9px;
-    padding: 17px; border-radius: var(--g-r);
+    position: relative; display: flex; flex-direction: column; gap: 10px;
+    padding: 20px; border-radius: var(--g-r);
     border: 1px solid var(--g-line); background: var(--g-surface);
     transition: border-color var(--g-fast) var(--g-ease),
                 box-shadow var(--g-fast) var(--g-ease),
                 transform var(--g-fast) var(--g-ease);
 }
 @media (hover: hover) {
-    .combo-item:hover { border-color: var(--g-acc-line); box-shadow: var(--g-shadow); transform: translateY(-2px); }
+    .combo-item:hover { border-color: var(--g-acc-line); box-shadow: var(--g-shadow); transform: translateY(-3px); }
 }
 .combo-item:active { transform: scale(0.99); }
-.combo-item.has-tag { padding-top: 26px; }
+.combo-item.has-tag { padding-top: 30px; }
+
+/* the flagship picks get a warm wash instead of a flat white card, same
+   "featured plan" treatment the rest of the site already uses (hub.css's
+   .offer-card.is-hero) — reused, not reinvented */
+.combo-item.is-hero {
+    border-color: var(--g-acc-line);
+    background: linear-gradient(165deg, var(--g-acc-soft), var(--g-surface) 60%);
+    box-shadow: 0 0 0 1px var(--g-acc-line);
+}
+@media (hover: hover) {
+    .combo-item.is-hero:hover { box-shadow: 0 0 0 1px var(--g-acc-line), var(--g-shadow); }
+}
+
 .combo-tag {
     position: absolute; top: 0; right: 0;
-    padding: 3px 10px;
-    border-bottom-left-radius: 11px; border-top-right-radius: var(--g-r);
+    padding: 4px 11px;
+    border-bottom-left-radius: 12px; border-top-right-radius: var(--g-r);
     background: var(--g-ink); color: #fff;
-    font-size: 0.58rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
+    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
 }
-.combo-item-name { font-family: var(--g-font-d); font-size: 1.02rem; font-weight: 800; letter-spacing: -0.02em; padding-right: 78px; }
-.combo-lines { display: grid; gap: 4px; }
-.combo-line { display: flex; align-items: flex-start; gap: 8px; font-size: 0.81rem; color: var(--g-ink-2); }
-.combo-line i { width: 14px; text-align: center; flex: none; font-size: 0.78rem; color: var(--g-acc); margin-top: 3px; }
-.combo-item-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 4px; }
-.combo-item-price { font-family: var(--g-font-d); font-size: 1.15rem; font-weight: 800; color: var(--g-acc); }
-.combo-item-price s { font-family: var(--g-font-b); font-size: 0.78rem; font-weight: 500; color: var(--g-faint); margin-left: 5px; }
-.combo-item-go { font-size: 0.78rem; font-weight: 700; color: var(--g-muted); white-space: nowrap; }
+
+/* which real platforms this bundle touches, shown as small brand-coloured
+   marks rather than buried in the checklist text */
+.combo-marks { display: flex; gap: 6px; }
+.combo-mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    display: grid; place-items: center; overflow: hidden;
+    background: var(--fw-tile); border: 1px solid var(--g-line);
+    font-size: 0.92rem;
+}
+.combo-mark img { width: 19px; height: 19px; object-fit: contain; }
+
+.combo-item-name { font-family: var(--g-font-d); font-size: 1.08rem; font-weight: 800; letter-spacing: -0.02em; }
+.combo-item.has-tag .combo-item-name { padding-right: 68px; }
+
+.combo-lines {
+    display: grid; gap: 7px;
+    padding-top: 10px; border-top: 1px solid var(--g-line);
+}
+.combo-line { display: flex; align-items: flex-start; gap: 9px; font-size: 0.85rem; color: var(--g-ink-2); line-height: 1.4; }
+.combo-line i { width: 15px; text-align: center; flex: none; font-size: 0.8rem; margin-top: 3px; color: var(--g-muted); }
+.combo-line.is-gold { color: var(--g-ink); font-weight: 700; }
+.combo-line.is-gold i { color: var(--g-acc); }
+
+.combo-item-foot {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 10px;
+    margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--g-line-2);
+}
+.combo-item-price-wrap { display: flex; flex-direction: column; gap: 4px; }
+.combo-item-price { font-family: var(--g-font-d); font-size: 1.28rem; font-weight: 800; color: var(--g-ink); letter-spacing: -0.02em; }
+.combo-item-was-row { display: flex; align-items: center; gap: 7px; }
+.combo-item-was { font-family: var(--g-font-b); font-size: 0.78rem; font-weight: 500; color: var(--g-faint); }
+.combo-item-save {
+    padding: 2px 8px; border-radius: 100px;
+    background: var(--g-acc-soft); color: var(--g-acc);
+    font-size: 0.66rem; font-weight: 800;
+}
+.combo-item-go {
+    display: inline-flex; align-items: center; gap: 6px; flex: none;
+    padding: 9px 15px; border-radius: 100px;
+    background: var(--g-acc); color: #fff;
+    font-size: 0.8rem; font-weight: 800; white-space: nowrap;
+    transition: transform var(--g-fast) var(--g-ease), box-shadow var(--g-fast) var(--g-ease);
+}
+.combo-item-go i { transition: transform var(--g-fast) var(--g-ease); }
+@media (hover: hover) {
+    .combo-item:hover .combo-item-go { box-shadow: 0 8px 18px -10px var(--g-acc); }
+    .combo-item:hover .combo-item-go i { transform: translateX(3px); }
+}
+
+/* trailing card: the other 2 bundles. A single cell on mobile; once the
+   grid goes multi-column it would otherwise sit alone with empty cells
+   beside it, so it spans full width and lays out as a banner instead. */
+.combo-more {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    padding: 24px 18px; border-radius: var(--g-r); text-align: center;
+    border: 1.5px dashed var(--g-line-2); background: var(--g-surface-2);
+    transition: border-color var(--g-fast) var(--g-ease), transform var(--g-fast) var(--g-ease);
+}
+@media (hover: hover) {
+    .combo-more:hover { border-color: var(--g-acc-line); transform: translateY(-3px); }
+}
+.combo-more:active { transform: scale(0.99); }
+.combo-more-ic {
+    width: 42px; height: 42px; margin-bottom: 6px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: var(--g-acc-soft); color: var(--g-acc); font-size: 1.1rem;
+}
+.combo-more-copy { display: flex; flex-direction: column; gap: 2px; }
+.combo-more-title { font-family: var(--g-font-d); font-weight: 800; font-size: 1rem; color: var(--g-ink); }
+.combo-more-sub { font-size: 0.82rem; color: var(--g-ink-2); }
+.combo-more-go {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+    font-size: 0.82rem; font-weight: 800; color: var(--g-acc);
+}
+@media (min-width: 620px) {
+    .combo-more {
+        grid-column: 1 / -1; flex-direction: row; justify-content: center;
+        gap: 16px; padding: 20px 24px;
+    }
+    .combo-more-ic { margin-bottom: 0; }
+    .combo-more-copy { text-align: left; }
+    .combo-more-go { margin-top: 0; margin-left: 10px; }
+}
 
 @media(prefers-reduced-motion: reduce) {
     .qo-desc { animation: none !important; }
-    .combo-item { transition: none !important; transform: none !important; }
+    .combo-item, .combo-more, .combo-item-go, .combo-item-go i {
+        transition: none !important; transform: none !important;
+    }
 }
 
 /* ==========================================================================

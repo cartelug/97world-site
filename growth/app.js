@@ -568,30 +568,78 @@
         }
     });
 
-    /* ------------------------------------------------------------ combos --- */
+    /* ------------------------------------------------------------ combos ---
+     * Which real platforms each bundle touches, for the small mark row at
+     * the top of the card. Bundles that reuse a generic feat icon (like
+     * fa-user-plus for "5,000 followers") don't carry a brand icon in their
+     * own feats, so this is the one place that mapping lives.
+     */
+    var BUNDLE_PLATFORMS = {
+        'creator-starter-ig': ['instagram'],
+        'creator-starter-tt': ['tiktok'],
+        'creator-pro-ig': ['instagram'],
+        'creator-pro-tt': ['tiktok'],
+        'multi-platform': ['instagram', 'tiktok', 'facebook'],
+        'artist-launch': ['spotify', 'audiomack'],
+        'youtube-growth': ['youtube'],
+        'business-visibility': ['linkedin', 'webtraffic']
+    };
 
     function renderCombos() {
         var grid = $('comboGrid');
         if (!grid) return;
         var cur = P.Region.data(region).currency;
 
-        grid.innerHTML = P.BUNDLES.slice(0, 6).map(function (b) {
+        // lead with the flagship bundles, same relative order otherwise
+        var ordered = P.BUNDLES.slice().sort(function (a, b) {
+            return (b.hero ? 1 : 0) - (a.hero ? 1 : 0);
+        });
+        var shown = ordered.slice(0, 6);
+        var remaining = P.BUNDLES.length - shown.length;
+
+        grid.innerHTML = shown.map(function (b) {
             var price = P.money(P.localPrice(b.usd, cur), cur);
             var was = b.wasUsd ? P.money(P.localPrice(b.wasUsd, cur), cur) : null;
-            var feats = b.feats.map(function (f) {
-                return '<span class="combo-line"><i class="' + f.icon + '"></i>' + f.text + '</span>';
+            // real saving, derived from the same two numbers already shown —
+            // never a separate, invented percentage
+            var pct = b.wasUsd ? Math.round((1 - b.usd / b.wasUsd) * 100) : 0;
+
+            var marks = (BUNDLE_PLATFORMS[b.id] || []).map(function (key) {
+                return '<span class="combo-mark">' + mark(key) + '</span>';
             }).join('');
-            return '<a href="/boost-package/" class="combo-item' + (b.tag ? ' has-tag' : '') + '">' +
+
+            var feats = b.feats.map(function (f) {
+                return '<span class="combo-line' + (f.gold ? ' is-gold' : '') + '">' +
+                    '<i class="' + f.icon + '"></i>' + f.text + '</span>';
+            }).join('');
+
+            return '<a href="/boost-package/" class="combo-item' +
+                (b.hero ? ' is-hero' : '') + (b.tag ? ' has-tag' : '') + '">' +
                 (b.tag ? '<span class="combo-tag">' + b.tag + '</span>' : '') +
+                (marks ? '<span class="combo-marks">' + marks + '</span>' : '') +
                 '<span class="combo-item-name">' + b.name + '</span>' +
                 '<span class="combo-lines">' + feats + '</span>' +
                 '<span class="combo-item-foot">' +
-                    '<span class="combo-item-price">' + price +
-                        (was ? ' <s>' + was + '</s>' : '') + '</span>' +
+                    '<span class="combo-item-price-wrap">' +
+                        '<span class="combo-item-price">' + price + '</span>' +
+                        (was ? '<span class="combo-item-was-row">' +
+                            '<s class="combo-item-was">' + was + '</s>' +
+                            (pct ? '<span class="combo-item-save">Save ' + pct + '%</span>' : '') +
+                            '</span>' : '') +
+                    '</span>' +
                     '<span class="combo-item-go">Order <i class="fas fa-arrow-right"></i></span>' +
                 '</span>' +
                 '</a>';
-        }).join('');
+        }).join('') + (remaining > 0
+            ? '<a href="/boost-package/" class="combo-more">' +
+                '<span class="combo-more-ic"><i class="fas fa-layer-group"></i></span>' +
+                '<span class="combo-more-copy">' +
+                    '<span class="combo-more-title">See all 8 bundles</span>' +
+                    '<span class="combo-more-sub">' + remaining + ' more, across every platform</span>' +
+                '</span>' +
+                '<span class="combo-more-go">Browse <i class="fas fa-arrow-right"></i></span>' +
+                '</a>'
+            : '');
     }
 
     /* ------------------------------------------------------------ region --- */
