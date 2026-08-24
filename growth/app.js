@@ -43,9 +43,12 @@
         li_postlikes: 1, sp_plays: 1, am_plays: 1, am_likes: 1, sc_plays: 1, sc_likes: 1
     };
 
-    /* Tiles up front, the rest behind the + — never a platform we don't sell. */
+    /* Tiles up front, the rest behind the + — never a platform we don't sell.
+     * 'snapchat' and 'website' are shortcut tiles, not priced platforms: they
+     * never set `filter` or drive the Category/Service combos — see
+     * renderTiles() and the click handler below. */
     var TILES = ['instagram', 'tiktok', 'facebook', 'youtube', 'spotify', 'telegram', 'x', 'whatsapp', 'linkedin'];
-    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic'];
+    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic', 'snapchat', 'website'];
 
     var $ = function (id) { return document.getElementById(id); };
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -58,7 +61,8 @@
 
     function mark(key) {
         var m = meta(key);
-        return m.logo ? '<img src="' + m.logo + '" alt="">' : '<i class="' + m.icon + '"></i>';
+        if (m.logo) return '<img src="' + m.logo + '" alt="">';
+        return '<i class="' + m.icon + '"' + (m.color ? ' style="color:' + m.color + '"' : '') + '></i>';
     }
 
     function haptic() { if (navigator.vibrate && !reduceMotion) navigator.vibrate(9); }
@@ -294,6 +298,21 @@
             '" data-tile="all" aria-label="All platforms"><i class="fas fa-bars"></i></button>';
 
         html += shown.map(function (key) {
+            // shortcut tiles: a real link (Website) or a WhatsApp quote
+            // (Snapchat) — neither drives the Category/Service combos, so
+            // neither ever shows as "selected".
+            if (key === 'website') {
+                return '<a href="' + meta(key).href + '" class="fw-tile" aria-label="Website — see the package">' +
+                    mark(key) +
+                    '<span class="fw-tile-badge" aria-hidden="true"><i class="fas fa-arrow-up-right-from-square"></i></span>' +
+                    '</a>';
+            }
+            if (key === 'snapchat') {
+                return '<button type="button" class="fw-tile" data-tile="snapchat" aria-label="Snapchat — ask on WhatsApp">' +
+                    mark(key) +
+                    '<span class="fw-tile-badge" aria-hidden="true"><i class="fab fa-whatsapp" style="color:#25D366"></i></span>' +
+                    '</button>';
+            }
             return '<button type="button" class="fw-tile' + (filter === key ? ' is-on' : '') +
                 '" data-tile="' + key + '" aria-label="' + meta(key).name + '" aria-pressed="' +
                 (filter === key) + '">' + mark(key) + '</button>';
@@ -618,6 +637,13 @@
         if (!t) return;
         var v = t.dataset.tile;
         if (v === 'more') { tilesOpen = true; renderTiles(); return; }
+        if (v === 'snapchat') {
+            haptic();
+            window.open('https://wa.me/' + WA + '?text=' +
+                encodeURIComponent('Hi 97 World, do you sell Snapchat services? Please send me pricing.'),
+                '_blank', 'noopener');
+            return;
+        }
         filter = v === 'all' ? null : v;
         renderTiles();
         fillCategories();

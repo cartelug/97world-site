@@ -52,19 +52,37 @@
 
     /* ---------------------------------------------------------- platforms --- */
 
+    /* Real logos carry their own colour already. Everything else gets its
+     * icon tinted to the platform's actual brand colour — never a flat grey
+     * glyph — via the `color` field below. Snapchat's true brand yellow
+     * (#FFFC00) reads as almost invisible against this page's light fields,
+     * so its icon uses a deeper gold that still reads unmistakably as
+     * Snapchat rather than the literal hex — a legibility call, not a claim
+     * about anything factual. */
     var PLAT_META = {
         instagram:  { name: 'Instagram',      logo: '/IMAGES/instagram.png', href: '/instagram-boost/' },
         tiktok:     { name: 'TikTok',         logo: '/IMAGES/tiktok.png',    href: '/tiktok-boost/' },
         facebook:   { name: 'Facebook',       logo: '/IMAGES/facebook.png',  href: '/facebook-boost/' },
         youtube:    { name: 'YouTube',        logo: '/IMAGES/youtube.png',   href: '/youtube-boost/' },
         x:          { name: 'X',              logo: '/IMAGES/x.png',        href: '/x-boost/' },
-        telegram:   { name: 'Telegram',       icon: 'fab fa-telegram',       href: '/telegram-boost/' },
-        whatsapp:   { name: 'WhatsApp',       icon: 'fab fa-whatsapp',       href: '/whatsapp-boost/' },
-        linkedin:   { name: 'LinkedIn',       icon: 'fab fa-linkedin',       href: '/linkedin-boost/' },
+        telegram:   { name: 'Telegram',       icon: 'fab fa-telegram',       href: '/telegram-boost/',   color: '#26A5E4' },
+        whatsapp:   { name: 'WhatsApp',       icon: 'fab fa-whatsapp',       href: '/whatsapp-boost/',   color: '#25D366' },
+        linkedin:   { name: 'LinkedIn',       icon: 'fab fa-linkedin',       href: '/linkedin-boost/',   color: '#0A66C2' },
         spotify:    { name: 'Spotify',        logo: '/IMAGES/spotify.png',   href: '/spotify-boost/' },
-        audiomack:  { name: 'Audiomack',      icon: 'fas fa-music',          href: '/audiomack-boost/' },
-        soundcloud: { name: 'SoundCloud',     icon: 'fab fa-soundcloud',     href: '/soundcloud-boost/' },
-        webtraffic: { name: 'Website traffic',icon: 'fas fa-globe',          href: '/website-traffic/' }
+        audiomack:  { name: 'Audiomack',      icon: 'fas fa-music',          href: '/audiomack-boost/',  color: '#FFA200' },
+        soundcloud: { name: 'SoundCloud',     icon: 'fab fa-soundcloud',     href: '/soundcloud-boost/', color: '#FF5500' },
+        webtraffic: { name: 'Website traffic',icon: 'fas fa-globe',          href: '/website-traffic/',  color: '#2F80ED' },
+
+        /* Not a priced boost platform — kept out of PLATFORMS/GROWTH_* below
+         * so the panel never drives a Category → Service flow with nothing
+         * priced to show. It is a shortcut tile only: opens a WhatsApp quote
+         * request, same honest fallback used everywhere else on the site for
+         * something we don't have a fixed price for yet. */
+        snapchat:   { name: 'Snapchat',       icon: 'fab fa-snapchat',       color: '#D4B800' },
+
+        /* Also not a boost platform — the shortcut tile for this one links
+         * straight to /business/, the real website-package product. */
+        website:    { name: 'Website',        icon: 'fas fa-window-maximize', href: '/business/', color: '#6C5CE7' }
     };
 
     // The 4 platforms shown up front in the growth builder's step 1, and the
