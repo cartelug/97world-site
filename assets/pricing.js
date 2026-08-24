@@ -549,6 +549,52 @@
         }
     ];
 
+    /* ----------------------------------------------------------- pro tools ---
+     * CapCut Pro and Canva Pro, resold as prepaid access for a fixed term
+     * (3/4/5/6/9/12 months) rather than an auto-renewing subscription —
+     * transcribed straight from the customer's own price list.
+     *
+     * These are Mobile Money prices quoted only in UGX; the price list gives
+     * no USD rate, so — unlike the boost catalogue — there is nothing to
+     * convert for the USD regions and no claim is made for them here.
+     * -------------------------------------------------------------------- */
+    var TOOL_PLANS = {
+        capcut: {
+            id: 'capcut', name: 'CapCut Pro', icon: 'fas fa-clapperboard',
+            blurb: 'Premium effects, templates and export tools for video.',
+            feats: [
+                'Premium effects, filters and templates unlocked',
+                'Export in 4K with no watermark',
+                'Cloud storage and sync across your devices'
+            ],
+            terms: [
+                { months: 3, ugx: 189000 },
+                { months: 4, ugx: 199000 },
+                { months: 5, ugx: 219000 },
+                { months: 6, ugx: 229000 },
+                { months: 9, ugx: 279000 },
+                { months: 12, ugx: 299000 }
+            ]
+        },
+        canva: {
+            id: 'canva', name: 'Canva Pro', icon: 'fas fa-palette',
+            blurb: 'The full template library, brand kit and design tools.',
+            feats: [
+                'Full premium template and stock photo library',
+                'Background remover, Magic tools and brand kit',
+                'Unlimited cloud storage for your designs'
+            ],
+            terms: [
+                { months: 3, ugx: 179000 },
+                { months: 4, ugx: 189000 },
+                { months: 5, ugx: 209000 },
+                { months: 6, ugx: 219000 },
+                { months: 9, ugx: 269000 },
+                { months: 12, ugx: 289000 }
+            ]
+        }
+    };
+
     /** All services for one platform, popular ones first. */
     function servicesFor(platformKey) {
         return SERVICES.filter(function (s) { return s.platform === platformKey; })
@@ -720,6 +766,7 @@
         SERVICES: SERVICES,
         SERVICES_BY_ID: SERVICES_BY_ID,
         BUNDLES: bundlePlans,
+        TOOL_PLANS: TOOL_PLANS,
         PLATFORM_ROLES: PLATFORM_ROLES,
         GROWTH_PRIMARY: GROWTH_PRIMARY,
         GROWTH_MORE: GROWTH_MORE,

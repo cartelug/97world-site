@@ -344,6 +344,35 @@ body[data-hub] .display-hero em {
 .offer-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 /* ==========================================================================
+   TOOL CARDS — CapCut Pro / Canva Pro term picker
+   An offer-card with a duration chosen instead of quoted once. The chip row
+   picks the term; oc-price rolls to match — same animate-the-value rule as
+   every other price on the site.
+   ========================================================================== */
+.tool-durs {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    padding-top: 2px;
+}
+.tool-dur {
+    padding: 10px 6px; border-radius: 12px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.14);
+    color: #c8c8d0; font-size: 0.84rem; font-weight: 700; text-align: center;
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.16s var(--curve-spring);
+}
+.tool-dur:hover { border-color: var(--hub-35); }
+.tool-dur:active { transform: scale(0.95); }
+.tool-dur.is-on {
+    background: linear-gradient(100deg, var(--hub), var(--hub-2));
+    border-color: transparent; color: var(--hub-ink);
+}
+.oc-per { display: block; margin-top: 3px; font-size: 0.68rem; color: var(--clr-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+    .tool-dur { transition: none !important; }
+    .tool-dur:active { transform: none !important; }
+}
+
+/* ==========================================================================
    BUILDER FRAME — the configurator gets a stage on the growth hub
    ========================================================================== */
 .builder-wrap { position: relative; max-width: 620px; margin: 0 auto; }
