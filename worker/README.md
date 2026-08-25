@@ -9,16 +9,29 @@ money — so it lives here as an encrypted secret and the site calls this instea
 | Route | Method | Auth | Does |
 |---|---|---|---|
 | `/catalogue` | GET | — | Our services with retail prices, built from Fastway's live rates. Never returns wholesale cost. Cached 1 hour. |
-| `/order` | POST | — | Records a **pending** order. Does not contact Fastway. Does not spend anything. |
+| `/order` | POST | — | Records a **pending** order, with the price/deposit/balance the site already showed the customer. Does not contact Fastway. Does not spend anything. |
+| `/order/confirm` | POST | — | Customer says "I've sent the money" (WhatsApp agent, mobile money, cash — this site never collects payment itself). Moves the order to `awaiting_confirmation`. Still spends nothing. |
+| `/order/status` | GET | — | `?ref=K97-XXXX`. What a customer's own tracking page sees: status and amount only — never their name, phone or link. |
 | `/admin/orders` | GET | token | Your queue |
-| `/admin/place` | POST | token | **The only route that spends money.** Sends the order to Fastway. |
+| `/admin/confirm` | POST | token | You've checked the money actually landed. Moves the order to `paid` — the only status `/admin/place` will accept. |
+| `/admin/place` | POST | token | **The only route that spends money.** Sends a `paid` order to Fastway. Refuses anything not yet marked paid. |
 | `/admin/status` | POST | token | Live delivery status for a placed order |
 | `/admin/refill` | POST | token | Requests a refill on a dropped order |
 | `/admin/balance` | GET | token | Your Fastway balance |
 | `/admin/catalogue` | GET | token | **Everything Fastway sells, raw.** Add `?q=instagram` to filter. This is how we pick services. |
 
-A stranger who finds this endpoint can create pending rows and read prices.
-That's all. Your balance is only ever spent by you calling `/admin/place`.
+## Order status flow
+
+```
+pending -> awaiting_confirmation -> paid -> placed -> (Fastway's own status)
+```
+
+`pending` and `awaiting_confirmation` are both reachable by anyone with the
+order's ref — a stranger who finds this endpoint can create pending rows,
+read prices, and tap "I've sent it" on an order that isn't theirs. That's
+all they can do. Nothing spends money, and nothing reaches `paid` — the
+gate in front of `/admin/place` — without you calling `/admin/confirm`
+yourself, after checking your own balance or mobile money statement.
 
 ## Deploy
 

@@ -56,21 +56,38 @@
         </button>
     </section>
 
-    <!-- Statuses are the honest set. We do not show a delivered/total figure,
-         because nothing on our side reports a live per-order count yet — a
-         made-up progress bar would be worse than no progress bar. -->
+    <!-- Real status when the order Worker can be reached; when it can't
+         (not yet deployed, or this ref predates it), everything below
+         quietly falls back to the same honest static copy this page always
+         showed — never a blank or broken result. -->
     <section class="g-wrap g-sec" id="resultSec" hidden>
         <div class="price-card">
             <div class="price-row"><span>Order</span><b id="resRef">—</b></div>
+            <div class="price-row" id="resAmtRow" hidden><span>Amount</span><b id="resAmt">—</b></div>
             <div class="price-sep"></div>
             <div class="steps" style="grid-template-columns:1fr;gap:8px">
-                <div class="step" id="stPay"><div class="step-n">Payment</div><b>Waiting on confirmation</b>
-                    <p>We mark this confirmed once your deposit lands.</p></div>
-                <div class="step" id="stAccept"><div class="step-n">Order accepted</div><b>Queued</b>
+                <div class="step" id="stPay"><div class="step-n">Payment</div><b id="stPayLabel">Waiting on confirmation</b>
+                    <p id="stPayNote">We mark this confirmed once your deposit lands.</p></div>
+                <div class="step" id="stAccept"><div class="step-n">Order accepted</div><b id="stAcceptLabel">Queued</b>
                     <p>Accepted orders are sent to delivery in the order they arrive.</p></div>
-                <div class="step" id="stDeliver"><div class="step-n">Delivery</div><b>Not started</b>
+                <div class="step" id="stDeliver"><div class="step-n">Delivery</div><b id="stDeliverLabel">Not started</b>
                     <p>Delivery begins 1–6 hours after acceptance and arrives gradually.</p></div>
             </div>
+        </div>
+
+        <!-- Only shown once we can see a real "pending" order — someone who
+             hasn't sent anything yet has nothing to confirm. -->
+        <div class="acct-list" id="confirmBlock" style="margin-top:14px" hidden>
+            <div class="acct-field">
+                <label for="payNote">Reference or note (optional)</label>
+                <div class="acct-box">
+                    <i class="fas fa-note-sticky"></i>
+                    <input type="text" id="payNote" placeholder="e.g. agent name or transaction code" autocomplete="off">
+                </div>
+            </div>
+            <button type="button" class="g-btn g-btn--wide" id="confirmPaid" style="margin-top:10px">
+                <i class="fas fa-circle-check"></i> I've sent the payment
+            </button>
         </div>
 
         <p class="acct-note" style="margin-top:14px">
@@ -111,10 +128,92 @@
 (function () {
     'use strict';
     var WA = '256762193386';
+    var API = 'https://the97-orders.carteluganda.workers.dev';
     var input = document.getElementById('refInput');
     var err = document.getElementById('refErr');
     var field = document.getElementById('refField');
     var out = document.getElementById('resultSec');
+    var currentRef = null;
+
+    function money(n, currency) {
+        if (typeof n !== 'number') return null;
+        return currency === 'USD' ? '$' + n.toLocaleString() : n.toLocaleString() + ' UGX';
+    }
+
+    // The honest default this page always showed, before any Worker call —
+    // what a visitor sees the instant they search, and what stays up if the
+    // Worker is unreachable, not yet deployed, or the ref simply isn't one
+    // of its records (e.g. it predates this being wired up).
+    function showUnknown() {
+        document.getElementById('resAmtRow').hidden = true;
+        document.getElementById('stPayLabel').textContent = 'Waiting on confirmation';
+        document.getElementById('stPayNote').textContent = 'We mark this confirmed once your deposit lands.';
+        document.getElementById('stAcceptLabel').textContent = 'Queued';
+        document.getElementById('stDeliverLabel').textContent = 'Not started';
+        ['stPay', 'stAccept', 'stDeliver'].forEach(function (id) {
+            document.getElementById(id).classList.remove('is-done', 'is-current');
+        });
+        document.getElementById('confirmBlock').hidden = true;
+        document.getElementById('resNote').textContent =
+            'For the live position of this order, message us — we reply with the exact status.';
+    }
+
+    function renderStatus(o) {
+        var pay = document.getElementById('stPay'), payLabel = document.getElementById('stPayLabel'), payNote = document.getElementById('stPayNote');
+        var accept = document.getElementById('stAccept'), acceptLabel = document.getElementById('stAcceptLabel');
+        var deliver = document.getElementById('stDeliver'), deliverLabel = document.getElementById('stDeliverLabel');
+        [pay, accept, deliver].forEach(function (el) { el.classList.remove('is-done', 'is-current'); });
+
+        var amt = money(o.amount, o.currency);
+        var amtRow = document.getElementById('resAmtRow');
+        if (amt) { amtRow.hidden = false; document.getElementById('resAmt').textContent = amt; }
+        else { amtRow.hidden = true; }
+
+        var showConfirm = false;
+        var note = 'For the live position of this order, message us — we reply with the exact status.';
+
+        if (o.status === 'pending') {
+            pay.classList.add('is-current');
+            payLabel.textContent = 'Waiting on your payment';
+            payNote.textContent = 'Send your payment, then tap "I\'ve sent the payment" below.';
+            showConfirm = true;
+            note = 'Once you confirm, we check it against our balance and take it from there.';
+        } else if (o.status === 'awaiting_confirmation') {
+            pay.classList.add('is-current');
+            payLabel.textContent = 'Checking your payment';
+            payNote.textContent = 'You told us you\'ve sent it — we\'re confirming it landed.';
+            note = 'This is usually quick. We\'ll message you on WhatsApp once it\'s confirmed.';
+        } else if (o.status === 'paid') {
+            pay.classList.add('is-done'); payLabel.textContent = 'Confirmed';
+            accept.classList.add('is-current'); acceptLabel.textContent = 'Queued for delivery';
+        } else if (o.status === 'placed') {
+            pay.classList.add('is-done'); payLabel.textContent = 'Confirmed';
+            accept.classList.add('is-done'); acceptLabel.textContent = 'Accepted';
+            deliver.classList.add('is-current'); deliverLabel.textContent = 'Delivering';
+            note = 'Delivery arrives gradually, not all at once — that\'s normal.';
+        } else if (o.status === 'partial' || o.status === 'failed') {
+            pay.classList.add('is-done'); payLabel.textContent = 'Confirmed';
+            accept.classList.add('is-done'); acceptLabel.textContent = 'Accepted';
+            deliver.classList.add('is-current'); deliverLabel.textContent = 'Needs a look';
+            note = 'Something needs our attention on this one — message us and we\'ll sort it.';
+        }
+
+        document.getElementById('confirmBlock').hidden = !showConfirm;
+        document.getElementById('resNote').textContent = note;
+
+        var current = document.querySelector('.step.is-current');
+        if (current && window.Motion) window.Motion.flash(current);
+    }
+
+    function loadStatus(ref) {
+        fetch(API + '/order/status?ref=' + encodeURIComponent(ref))
+            .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
+            .then(function (res) {
+                if (!res.ok || !res.data || !res.data.ok) { showUnknown(); return; }
+                renderStatus(res.data);
+            })
+            .catch(showUnknown);
+    }
 
     function check() {
         var ref = input.value.trim().toUpperCase();
@@ -126,16 +225,46 @@
         }
         field.classList.remove('is-bad');
         err.hidden = true;
+        currentRef = ref;
 
         document.getElementById('resRef').textContent = ref;
         document.getElementById('resWa').href = 'https://wa.me/' + WA + '?text=' +
             encodeURIComponent('Hi 97 World, please give me the status of order ' + ref + '.');
+        showUnknown();
         out.hidden = false;
         out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        loadStatus(ref);
     }
 
     document.getElementById('refGo').addEventListener('click', check);
     input.addEventListener('keypress', function (e) { if (e.key === 'Enter') check(); });
+
+    document.getElementById('confirmPaid').addEventListener('click', function () {
+        if (!currentRef) return;
+        var btn = this;
+        btn.disabled = true;
+        btn.querySelector('i').className = 'fas fa-spinner fa-spin';
+        var note = document.getElementById('payNote').value.trim();
+
+        fetch(API + '/order/confirm', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ref: currentRef, note: note || undefined })
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (!data || !data.ok) throw new Error('not ok');
+                loadStatus(currentRef);
+            })
+            .catch(function () {
+                document.getElementById('resNote').textContent =
+                    'Couldn\'t reach us right now — message us on WhatsApp instead and we\'ll confirm it manually.';
+            })
+            .then(function () {
+                btn.disabled = false;
+                btn.querySelector('i').className = 'fas fa-circle-check';
+            });
+    });
 
     var pre = new URLSearchParams(window.location.search).get('ref');
     if (pre) { input.value = pre; check(); }

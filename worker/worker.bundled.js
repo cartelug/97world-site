@@ -13,6 +13,7 @@
  * Generated from worker/src/. Edit those and re-run tools/bundle-worker.mjs.
  */
 
+
 /**
  * 97 WORLD — WHAT WE SELL
  *
@@ -230,10 +231,7 @@ function ref() {
  * busy day doesn't hammer their API — prices don't move minute to minute.
  */
 async function fastwayRates(env, ctx) {
-  // KV is optional — without it we simply don't cache.
-  const cached = env.ORDERS
-    ? await env.ORDERS.get('cache:services', { type: 'json' })
-    : null;
+  const cached = await env.ORDERS.get('cache:services', { type: 'json' });
   if (cached && cached.at > Date.now() - 3600_000) return cached.map;
 
   const services = await fastway(env, 'services');
@@ -249,9 +247,7 @@ async function fastwayRates(env, ctx) {
       type: s.type
     };
   }
-  if (env.ORDERS) {
-    ctx.waitUntil(env.ORDERS.put('cache:services', JSON.stringify({ at: Date.now(), map })));
-  }
+  ctx.waitUntil(env.ORDERS.put('cache:services', JSON.stringify({ at: Date.now(), map })));
   return map;
 }
 
@@ -310,13 +306,13 @@ function publicFields(item) {
 /* -------------------------------------------------------------- routes --- */
 
 async function handleOrder(request, env, origin) {
-  if (!env.ORDERS) {
-    return json({ error: 'Order storage is not set up yet' }, { status: 503 }, origin);
-  }
   const body = await request.json().catch(() => null);
   if (!body) return json({ error: 'Bad request' }, { status: 400 }, origin);
 
-  const { serviceId, bundleId, quantity, link, name, phone, region, referrer, payment } = body;
+  const {
+    serviceId, bundleId, quantity, link, name, phone, region, referrer, payment,
+    amount, currency, deposit, balance
+  } = body;
 
   if (!link || !name || !phone) {
     return json({ error: 'Name, phone and account link are all required' }, { status: 400 }, origin);
@@ -329,7 +325,13 @@ async function handleOrder(request, env, origin) {
   const order = {
     ref: id,
     createdAt: new Date().toISOString(),
-    status: 'pending',            // pending -> placed -> (fastway status)
+    // pending -> awaiting_confirmation -> paid -> placed -> (fastway status)
+    // "pending" means recorded but nothing paid yet; a customer moves it to
+    // awaiting_confirmation themselves via POST /order/confirm once they've
+    // sent the money (WhatsApp agent, mobile money, cash) — this site never
+    // collects payment itself. Only you can move it on to "paid", and only a
+    // "paid" order can be placed — see handleAdminPlace.
+    status: 'pending',
     serviceId: serviceId || null,
     bundleId: bundleId || null,
     quantity: quantity ? parseInt(quantity, 10) : null,
@@ -339,6 +341,15 @@ async function handleOrder(request, env, origin) {
     region: region || 'UG',
     referrer: referrer || 'Direct',
     payment: payment || null,
+    // what the customer owes, as already computed and shown to them on the
+    // site — the Worker never prices anything itself, it just remembers it
+    amount: typeof amount === 'number' ? amount : null,
+    currency: currency || null,
+    deposit: typeof deposit === 'number' ? deposit : null,
+    balance: typeof balance === 'number' ? balance : null,
+    paymentNote: null,             // set by the customer on /order/confirm
+    claimedPaidAt: null,
+    paidAt: null,
     fastway: null                 // filled in when you place it
   };
 
@@ -351,8 +362,70 @@ async function handleOrder(request, env, origin) {
   return json({ ok: true, ref: id }, {}, origin);
 }
 
+/** Customer says "I've sent the money" — never moves anything past this on
+ *  its own. It just flags the order for you to check against your balance
+ *  and confirm with POST /admin/confirm. */
+async function handleOrderConfirm(request, env, origin) {
+  const body = await request.json().catch(() => null);
+  const orderRef = body && body.ref;
+  if (!orderRef) return json({ error: 'No order reference' }, { status: 400 }, origin);
+
+  const order = await env.ORDERS.get('order:' + orderRef, { type: 'json' });
+  if (!order) return json({ error: 'Order not found' }, { status: 404 }, origin);
+
+  if (order.status === 'pending') {
+    order.status = 'awaiting_confirmation';
+    order.claimedPaidAt = new Date().toISOString();
+    if (body.note) order.paymentNote = String(body.note).slice(0, 200);
+    await env.ORDERS.put('order:' + orderRef, JSON.stringify(order));
+  }
+  // already awaiting_confirmation, paid, or further along — treat a repeat
+  // tap as a no-op rather than an error, since the customer's phone may
+  // have just double-sent the request
+  return json({ ok: true, status: order.status }, {}, origin);
+}
+
+/** What a customer's own tracking page is allowed to see — never the name,
+ *  phone or link of who placed it. */
+async function handleOrderStatus(url, env, origin) {
+  const orderRef = (url.searchParams.get('ref') || '').trim();
+  if (!orderRef) return json({ error: 'No order reference' }, { status: 400 }, origin);
+
+  const order = await env.ORDERS.get('order:' + orderRef, { type: 'json' });
+  if (!order) return json({ error: 'Order not found' }, { status: 404 }, origin);
+
+  return json({
+    ok: true,
+    ref: order.ref,
+    status: order.status,
+    createdAt: order.createdAt,
+    claimedPaidAt: order.claimedPaidAt,
+    paidAt: order.paidAt,
+    placedAt: order.placedAt || null,
+    amount: order.amount,
+    currency: order.currency
+  }, {}, origin);
+}
+
+/** You confirm the money actually landed. The only route between a customer
+ *  saying "I paid" and an order becoming placeable. */
+async function handleAdminConfirm(request, env, origin) {
+  const { ref: orderRef } = await request.json().catch(() => ({}));
+  if (!orderRef) return json({ error: 'No order reference' }, { status: 400 }, origin);
+
+  const order = await env.ORDERS.get('order:' + orderRef, { type: 'json' });
+  if (!order) return json({ error: 'Order not found' }, { status: 404 }, origin);
+  if (order.status !== 'pending' && order.status !== 'awaiting_confirmation') {
+    return json({ error: `Order is already ${order.status}` }, { status: 409 }, origin);
+  }
+
+  order.status = 'paid';
+  order.paidAt = new Date().toISOString();
+  await env.ORDERS.put('order:' + orderRef, JSON.stringify(order));
+  return json({ ok: true, order }, {}, origin);
+}
+
 async function handleAdminOrders(env, origin) {
-  if (!env.ORDERS) return json({ orders: [] }, {}, origin);
   const index = (await env.ORDERS.get('index:pending', { type: 'json' })) || [];
   const orders = [];
   for (const id of index.slice(0, 100)) {
@@ -364,16 +437,19 @@ async function handleAdminOrders(env, origin) {
 
 /** The only route that spends money. */
 async function handleAdminPlace(request, env, ctx, origin) {
-  if (!env.ORDERS) {
-    return json({ error: 'Order storage is not set up yet' }, { status: 503 }, origin);
-  }
   const { ref: orderRef } = await request.json().catch(() => ({}));
   if (!orderRef) return json({ error: 'No order reference' }, { status: 400 }, origin);
 
   const order = await env.ORDERS.get('order:' + orderRef, { type: 'json' });
   if (!order) return json({ error: 'Order not found' }, { status: 404 }, origin);
-  if (order.status !== 'pending') {
-    return json({ error: `Order is already ${order.status}` }, { status: 409 }, origin);
+  // The one guard that actually protects your balance: nothing gets placed
+  // until you've confirmed the money is in, via POST /admin/confirm.
+  if (order.status !== 'paid') {
+    return json({
+      error: order.status === 'pending' || order.status === 'awaiting_confirmation'
+        ? 'Payment is not confirmed yet — use Mark paid first.'
+        : `Order is already ${order.status}`
+    }, { status: 409 }, origin);
   }
 
   // resolve what to actually send Fastway
@@ -464,10 +540,19 @@ export default {
       if (path === '/order' && request.method === 'POST') {
         return await handleOrder(request, env, origin);
       }
+      if (path === '/order/confirm' && request.method === 'POST') {
+        return await handleOrderConfirm(request, env, origin);
+      }
+      if (path === '/order/status' && request.method === 'GET') {
+        return await handleOrderStatus(url, env, origin);
+      }
 
       /* ---- yours ---- */
       if (path === '/admin/orders' && request.method === 'GET') {
         return await handleAdminOrders(env, origin);
+      }
+      if (path === '/admin/confirm' && request.method === 'POST') {
+        return await handleAdminConfirm(request, env, origin);
       }
       if (path === '/admin/place' && request.method === 'POST') {
         return await handleAdminPlace(request, env, ctx, origin);

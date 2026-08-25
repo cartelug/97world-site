@@ -621,7 +621,11 @@
                         phone: phone.clean,
                         region: region,
                         referrer: 'Order panel',
-                        payment: null
+                        payment: null,
+                        amount: q.total,
+                        currency: q.currency,
+                        deposit: pending.deposit,
+                        balance: pending.balance
                     }
                 }
             });

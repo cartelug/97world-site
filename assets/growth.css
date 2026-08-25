@@ -276,8 +276,18 @@ a { color: inherit; text-decoration: none; }
 
 .steps { display: grid; gap: 10px; }
 @media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
-.step { padding: 16px; border-radius: var(--g-r); border: 1px solid var(--g-line); background: var(--g-surface); }
+.step {
+    padding: 16px; border-radius: var(--g-r); border: 1px solid var(--g-line); background: var(--g-surface);
+    transition: border-color var(--g-fast) var(--g-ease), background var(--g-fast) var(--g-ease);
+}
 .step-n { font-family: var(--g-font-d); font-size: 0.7rem; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; color: var(--g-acc); }
+
+/* /track/'s live status — a step in progress glows the accent, a finished
+   one settles to a quiet check so the eye lands on what's actually next. */
+.step.is-current { border-color: var(--g-acc-line); background: var(--g-acc-soft); }
+.step.is-done { border-color: var(--g-line-2); }
+.step.is-done .step-n::after { content: ' \2713'; color: var(--g-acc); }
+@media(prefers-reduced-motion: reduce) { .step { transition: none !important; } }
 .step b { display: block; margin-top: 6px; font-size: 0.98rem; font-weight: 750; }
 .step p { margin-top: 4px; font-size: 0.84rem; color: var(--g-muted); }
 

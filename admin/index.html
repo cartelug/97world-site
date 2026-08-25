@@ -44,7 +44,9 @@
             border: 1px solid var(--ord-line); border-left: 3px solid var(--ord-line);
             border-radius: 13px; background: var(--ord-surface);
         }
-        .ord[data-s="pending"] { border-left-color: #F0B440; }
+        .ord[data-s="pending"]               { border-left-color: var(--ord-dim); }
+        .ord[data-s="awaiting_confirmation"] { border-left-color: #F0B440; }
+        .ord[data-s="paid"]                  { border-left-color: #4FBF67; }
         .ord[data-s="placed"]  { border-left-color: var(--acc); }
         .ord[data-s="partial"] { border-left-color: #F0B440; }
         .ord[data-s="failed"]  { border-left-color: var(--ord-danger); }
@@ -143,9 +145,11 @@
         </section>
 
         <p class="desk-note">
-            <b>Nothing here spends money except Place.</b> Orders arrive as pending
-            and sit there until you tap it — so a customer can never trigger a
-            purchase, only ask for one.
+            <b>Nothing here spends money except Place, and Place only works once
+            you've tapped Mark paid.</b> Orders arrive as pending and a customer
+            can move one to "customer says paid" themselves from their tracking
+            page — but only you, checking your own balance, can mark it paid and
+            unlock Place. A customer can ask for a purchase; only you can trigger one.
         </p>
     </main>
 
@@ -241,8 +245,29 @@
             return (o.quantity ? o.quantity.toLocaleString() + ' × ' : '') + (o.serviceId || 'unknown service');
         }
 
+        var STATUS_LABEL = {
+            pending: 'awaiting payment',
+            awaiting_confirmation: 'customer says paid',
+            paid: 'paid — ready to place',
+            placed: 'placed',
+            partial: 'partial',
+            failed: 'failed'
+        };
+
+        function actionsHTML(o) {
+            var wa = '<a class="mini" href="https://wa.me/' + String(o.phone).replace(/\D/g, '') + '">WhatsApp</a>';
+            if (o.status === 'pending' || o.status === 'awaiting_confirmation') {
+                return '<button class="mini go" data-act="confirm" data-ref="' + o.ref + '">Mark paid</button>' + wa;
+            }
+            if (o.status === 'paid') {
+                return '<button class="mini go" data-act="place" data-ref="' + o.ref + '">Place on Fastway</button>' + wa;
+            }
+            return '<button class="mini" data-act="status" data-ref="' + o.ref + '">Check status</button>' + wa;
+        }
+
         function orderHTML(o) {
             var placed = (o.fastway || []).filter(function (p) { return p.orderId; });
+            var hasAmount = typeof o.amount === 'number';
             return '<article class="ord" data-s="' + o.status + '">' +
                 '<div class="ord-top"><span class="ord-ref">' + o.ref + '</span>' +
                 '<span class="ord-when">' + when(o.createdAt) + '</span></div>' +
@@ -253,19 +278,21 @@
                     '<span>' + o.region + '</span>' +
                     (o.payment ? '<span>' + o.payment + '</span>' : '') +
                     (o.referrer && o.referrer !== 'Direct' ? '<span>ref: ' + o.referrer + '</span>' : '') +
-                    '<span>' + o.status + '</span>' +
+                    '<span>' + (STATUS_LABEL[o.status] || o.status) + '</span>' +
                 '</div>' +
+                (hasAmount
+                    ? '<div class="meta">' +
+                        '<span>' + OrderKit.money(o.amount, o.currency) + ' total</span>' +
+                        (typeof o.deposit === 'number' ? '<span>' + OrderKit.money(o.deposit, o.currency) + ' deposit</span>' : '') +
+                        (o.paymentNote ? '<span>note: ' + o.paymentNote + '</span>' : '') +
+                      '</div>'
+                    : '') +
                 (placed.length
                     ? '<div class="meta">' + placed.map(function (p) {
                         return '<span>#' + p.orderId + ' · ' + p.label + '</span>';
                       }).join('') + '</div>'
                     : '') +
-                '<div class="acts">' +
-                    (o.status === 'pending'
-                        ? '<button class="mini go" data-act="place" data-ref="' + o.ref + '">Place on Fastway</button>'
-                        : '<button class="mini" data-act="status" data-ref="' + o.ref + '">Check status</button>') +
-                    '<a class="mini" href="https://wa.me/' + String(o.phone).replace(/\D/g, '') + '">WhatsApp</a>' +
-                '</div>' +
+                '<div class="acts">' + actionsHTML(o) + '</div>' +
             '</article>';
         }
 
@@ -283,6 +310,22 @@
             var btn = e.target.closest('button[data-act]');
             if (!btn) return;
             var ref = btn.dataset.ref;
+
+            if (btn.dataset.act === 'confirm') {
+                if (!confirm('Confirm you\'ve checked this payment landed? This unlocks Place.')) return;
+                btn.disabled = true;
+                btn.textContent = 'Marking…';
+                api('/admin/confirm', { method: 'POST', body: { ref: ref } })
+                    .then(function () {
+                        OrderKit.toast('Marked paid.', 'ok');
+                        loadOrders();
+                    })
+                    .catch(function (err) {
+                        OrderKit.toast(err.message);
+                        btn.disabled = false;
+                        btn.textContent = 'Mark paid';
+                    });
+            }
 
             if (btn.dataset.act === 'place') {
                 if (!confirm('Place this on Fastway? This spends your balance.')) return;

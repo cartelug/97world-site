@@ -125,6 +125,14 @@
 
         region: function () { return REGIONS[Wizard.state.region]; },
 
+        /** Same 50/50 split shown everywhere else on the site — rounded
+         *  once, balance is whatever's left, so the two always add back up
+         *  to exactly the total. */
+        split: function (price, currency) {
+            var deposit = P.roundMoney(price * 0.5, currency);
+            return { deposit: deposit, balance: price - deposit };
+        },
+
         /* ------------------------------------------------------- services */
 
         /** The service tabs above the plan grid — only rendered when a
@@ -327,6 +335,12 @@
             rows.push('<div class="sum-row is-total"><span>Total</span><b>' +
                 OrderKit.money(order.plan.price, region.currency) + '</b></div>');
 
+            var split = Wizard.split(order.plan.price, region.currency);
+            rows.push('<div class="sum-row"><span>Pay now (50%)</span><b>' +
+                OrderKit.money(split.deposit, region.currency) + '</b></div>');
+            rows.push('<div class="sum-row"><span>Balance on delivery</span><b>' +
+                OrderKit.money(split.balance, region.currency) + '</b></div>');
+
             Wizard.$('sum-list').innerHTML = rows.join('');
             OrderKit.openSheet('confirmSheet');
             OrderKit.haptic(12);
@@ -347,10 +361,14 @@
             var total = OrderKit.money(order.plan.price, region.currency);
             var service = Wizard.cfg.service;
 
+            var split = Wizard.split(order.plan.price, region.currency);
+
             var message = '*NEW ORDER [' + region.name.toUpperCase() + ']*\n\n' +
                 '*Service:* ' + service + '\n' +
                 '*Package:* ' + (order.plan.label || order.plan.name) + '\n' +
                 '*Price:* ' + total + '\n' +
+                '*Pay now (50%):* ' + OrderKit.money(split.deposit, region.currency) + '\n' +
+                '*Balance on delivery:* ' + OrderKit.money(split.balance, region.currency) + '\n' +
                 '*Referrer:* ' + order.referrer + '\n\n' +
                 '*Name:* ' + order.name + '\n' +
                 '*WhatsApp:* ' + order.phone.clean + '\n' +
@@ -390,7 +408,11 @@
                         phone: order.phone.clean,
                         region: Wizard.state.region,
                         referrer: order.referrer,
-                        payment: order.payment
+                        payment: order.payment,
+                        amount: order.plan.price,
+                        currency: region.currency,
+                        deposit: split.deposit,
+                        balance: split.balance
                     }
                 } : null
             });
