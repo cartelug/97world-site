@@ -16,6 +16,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
 const WHATSAPP = '256762193386';
+// The order Worker (worker/). Recording here is additive and fire-and-forget
+// — the Sheet + WhatsApp hand-off above is still what actually reaches us,
+// this just gives the admin desk a structured queue alongside it.
+const WORKER_API = 'https://the97-orders.carteluganda.workers.dev';
 
 /* Plan tables and regions live in assets/pricing.js — the one place prices are
  * defined, shared with the home page's price builder. Pages name a catalog
@@ -589,6 +593,7 @@ const script = (p) => `/**
 OrderWizard.start(${JSON.stringify({
     sheetUrl: SHEET_URL,
     whatsapp: WHATSAPP,
+    apiBase: WORKER_API,
     platform: p.platform,
     service: p.service,
     targetLabel: p.targetLabel,

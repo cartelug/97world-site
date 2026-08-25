@@ -343,6 +343,21 @@
             } catch (e) {
                 go();
             }
+
+            // Also records the order in the Worker's KV store (worker/) so
+            // the admin desk has a structured queue to place and track,
+            // alongside the Sheet row above. Strictly best-effort: whether
+            // the Worker is reachable, deployed or not never affects the
+            // WhatsApp hand-off, which has already been scheduled above.
+            if (cfg.worker && cfg.worker.apiBase && cfg.worker.body) {
+                try {
+                    fetch(cfg.worker.apiBase + '/order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(cfg.worker.body)
+                    }).catch(function () { /* offline / not deployed yet */ });
+                } catch (e) { /* ignore — Sheets + WhatsApp already cover it */ }
+            }
         },
 
         /** Turn "+256 700 000 000" into the two shapes we need downstream. */

@@ -358,6 +358,12 @@
                 (order.target ? '*' + (Wizard.cfg.targetLabel || 'Account') + ':* ' + order.target + '\n' : '') +
                 '*Payment Method:* ' + order.payment;
 
+            // Regular platform pages sell a serviceId+quantity tier; the
+            // bundle and website pages sell a fixed plan.id with no
+            // quantity — same distinction Wizard.plans()/plansFor() already
+            // draws, just carried over into what the Worker records.
+            var isFixedPlan = Wizard.cfg.platform === 'bundle' || Wizard.cfg.platform === 'website';
+
             OrderKit.send({
                 sheetUrl: Wizard.cfg.sheetUrl,
                 whatsapp: Wizard.cfg.whatsapp,
@@ -372,7 +378,21 @@
                         ' [Pay: ' + order.payment + ']',
                     Price: String(order.plan.price),
                     Referrer: order.referrer
-                }
+                },
+                worker: Wizard.cfg.apiBase ? {
+                    apiBase: Wizard.cfg.apiBase,
+                    body: {
+                        serviceId: isFixedPlan ? null : (Wizard.state.service || null),
+                        bundleId: isFixedPlan ? order.plan.id : null,
+                        quantity: isFixedPlan ? null : (parseInt(order.plan.id, 10) || null),
+                        link: order.target || order.extra || service,
+                        name: order.name,
+                        phone: order.phone.clean,
+                        region: Wizard.state.region,
+                        referrer: order.referrer,
+                        payment: order.payment
+                    }
+                } : null
             });
 
             setTimeout(function () {

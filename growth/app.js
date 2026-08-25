@@ -31,6 +31,9 @@
 
     var WA = '256762193386';
     var SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
+    // The order Worker (worker/) — same additive, fire-and-forget recording
+    // used on every order-wizard page. Never affects the WhatsApp hand-off.
+    var WORKER_API = 'https://the97-orders.carteluganda.workers.dev';
 
     /* Services delivered to one post/track rather than a profile. */
     var POST_LEVEL = {
@@ -606,6 +609,20 @@
                         (row.service ? row.service.short : '') + ' [' + pending.account + ']',
                     Price: String(q.total),
                     Referrer: 'Order panel'
+                },
+                worker: {
+                    apiBase: WORKER_API,
+                    body: {
+                        serviceId: pending.r.serviceId || null,
+                        bundleId: null,
+                        quantity: pending.r.qty || null,
+                        link: pending.account,
+                        name: name,
+                        phone: phone.clean,
+                        region: region,
+                        referrer: 'Order panel',
+                        payment: null
+                    }
                 }
             });
         } else {

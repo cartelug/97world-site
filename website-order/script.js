@@ -9,6 +9,7 @@
 OrderWizard.start({
     "sheetUrl": "https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec",
     "whatsapp": "256762193386",
+    "apiBase": "https://the97-orders.carteluganda.workers.dev",
     "platform": "website",
     "service": "Website Package",
     "targetLabel": "Business or domain name",
