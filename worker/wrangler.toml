@@ -7,7 +7,7 @@ compatibility_date = "2024-11-01"
 # then paste the returned id below.
 [[kv_namespaces]]
 binding = "ORDERS"
-id = "4bf3e8a3081348cab07e04d8d71b165b"
+id = "4bf3e8a3081548cab07e04d8d7fb105b"
 
 # Secrets are NOT set here — they'd end up in git. Set them with:
 #   npx wrangler secret put FASTWAY_KEY
