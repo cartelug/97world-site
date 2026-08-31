@@ -65,7 +65,7 @@ const SUB_PROOF = [
 
 const PAGES = [
     {
-        dir: 'instagram-boost', accent: 'instagram',
+        dir: 'growth/instagram', accent: 'instagram',
         platformName: 'Instagram', logo: '/IMAGES/instagram.png',
         title: 'Instagram Boost', service: 'Instagram Boost',
         headline: 'Grow your <em>Instagram</em>',
@@ -82,7 +82,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'tiktok-boost', accent: 'tiktok',
+        dir: 'growth/tiktok', accent: 'tiktok',
         platformName: 'TikTok', logo: '/IMAGES/tiktok.png',
         title: 'TikTok Boost', service: 'TikTok Boost',
         headline: 'Blow up on <em>TikTok</em>',
@@ -98,7 +98,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'facebook-boost', accent: 'facebook',
+        dir: 'growth/facebook', accent: 'facebook',
         platformName: 'Facebook', logo: '/IMAGES/facebook.png',
         title: 'Facebook Boost', service: 'Facebook Boost',
         headline: 'Build a <em>Facebook</em> page people trust',
@@ -115,7 +115,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'youtube-boost', accent: 'youtube',
+        dir: 'growth/youtube', accent: 'youtube',
         platformName: 'YouTube', logo: '/IMAGES/youtube.png',
         title: 'YouTube Boost', service: 'YouTube Boost',
         headline: 'Get your channel <em>watched</em>',
@@ -132,7 +132,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'x-boost', accent: 'x',
+        dir: 'growth/x', accent: 'x',
         platformName: 'X', logoIcon: 'fab fa-x-twitter',
         title: 'X Boost', service: 'X Boost',
         headline: 'Grow your <em>audience on X</em>',
@@ -149,7 +149,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'telegram-boost', accent: 'telegram',
+        dir: 'growth/telegram', accent: 'telegram',
         platformName: 'Telegram', logoIcon: 'fab fa-telegram',
         title: 'Telegram Boost', service: 'Telegram Boost',
         headline: 'Fill your <em>Telegram</em>',
@@ -165,7 +165,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'whatsapp-boost', accent: 'whatsapp',
+        dir: 'growth/whatsapp', accent: 'whatsapp',
         platformName: 'WhatsApp', logoIcon: 'fab fa-whatsapp',
         title: 'WhatsApp Boost', service: 'WhatsApp Boost',
         headline: 'Grow your <em>WhatsApp</em> channel',
@@ -181,7 +181,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'linkedin-boost', accent: 'linkedin',
+        dir: 'growth/linkedin', accent: 'linkedin',
         platformName: 'LinkedIn', logoIcon: 'fab fa-linkedin',
         title: 'LinkedIn Boost', service: 'LinkedIn Boost',
         headline: 'Look established on <em>LinkedIn</em>',
@@ -197,7 +197,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'spotify-boost', accent: 'spotify',
+        dir: 'growth/spotify', accent: 'spotify',
         platformName: 'Spotify', logo: '/IMAGES/spotify.png',
         title: 'Spotify Boost', service: 'Spotify Boost',
         headline: 'Get heard on <em>Spotify</em>',
@@ -213,7 +213,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'audiomack-boost', accent: 'audiomack',
+        dir: 'growth/audiomack', accent: 'audiomack',
         platformName: 'Audiomack', logoIcon: 'fas fa-music',
         title: 'Audiomack Boost', service: 'Audiomack Boost',
         headline: 'Grow on <em>Audiomack</em>',
@@ -229,7 +229,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'soundcloud-boost', accent: 'soundcloud',
+        dir: 'growth/soundcloud', accent: 'soundcloud',
         platformName: 'SoundCloud', logoIcon: 'fab fa-soundcloud',
         title: 'SoundCloud Boost', service: 'SoundCloud Boost',
         headline: 'Get played on <em>SoundCloud</em>',
@@ -245,7 +245,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'website-traffic', accent: 'webtraffic',
+        dir: 'growth/traffic', accent: 'webtraffic',
         platformName: 'Website Traffic', logoIcon: 'fas fa-globe',
         title: 'Website Traffic', service: 'Website Traffic',
         headline: 'Send <em>real visits</em> to your site',
@@ -261,7 +261,7 @@ const PAGES = [
         ]
     },
     {
-        dir: 'boost-package', accent: 'bundle',
+        dir: 'growth/bundle', accent: 'bundle',
         platformName: 'Bundles', logo: '/IMAGES/logo.png',
         title: 'Growth Bundles', service: 'Growth Bundle',
         headline: 'More reach, <em>one order</em>',
@@ -276,7 +276,7 @@ const PAGES = [
         sell: true
     },
     {
-        dir: 'website-order', accent: 'website',
+        dir: 'business/website', accent: 'website',
         platformName: 'Website Package', logoIcon: 'fas fa-globe',
         title: 'Website Package', service: 'Website Package',
         headline: 'Order your <em>website</em>',
@@ -286,6 +286,7 @@ const PAGES = [
         targetError: 'We need your business or domain name',
         icon: 'fas fa-building',
         platform: 'website',
+        backHref: '/business/', backLabel: 'Back to business',
         gifts: WEBSITE_GIFTS
     },
     // Shared-profile subscription resells, not boost services — see the
@@ -295,19 +296,19 @@ const PAGES = [
     // (depositPct: 1) rather than the usual 50/50, since there's nothing
     // to "deliver gradually" about handing over a shared login.
     ...[
-        { dir: 'canva-pro', platform: 'canva-pro', name: 'Canva Pro', verb: 'design', icon: 'fas fa-palette' },
-        { dir: 'capcut-pro', platform: 'capcut-pro', name: 'CapCut Pro', verb: 'edit', icon: 'fas fa-film' },
-        { dir: 'google-ai-pro', platform: 'google-ai-pro', name: 'Google AI Pro', verb: 'use it', icon: 'fab fa-google' },
-        { dir: 'coursera-plus', platform: 'coursera-plus', name: 'Coursera Plus', verb: 'start learning', icon: 'fas fa-graduation-cap' },
-        { dir: 'duolingo-super', platform: 'duolingo-super', name: 'Duolingo Super', verb: 'start', icon: 'fas fa-language' },
-        { dir: 'perplexity-pro', platform: 'perplexity-pro', name: 'Perplexity Pro', verb: 'search', icon: 'fas fa-magnifying-glass' },
-        { dir: 'prime-video', platform: 'prime-video', name: 'Prime Video', verb: 'watch', icon: 'fab fa-amazon', shared: true },
-        { dir: 'apple-tv-plus', platform: 'apple-tv-plus', name: 'Apple TV+', verb: 'watch', icon: 'fab fa-apple', shared: true },
-        { dir: 'crunchyroll', platform: 'crunchyroll', name: 'Crunchyroll', verb: 'watch', icon: 'fas fa-play', shared: true },
-        { dir: 'linkedin-premium-career', platform: 'linkedin-premium-career', name: 'LinkedIn Premium Career', verb: 'apply', icon: 'fab fa-linkedin' },
-        { dir: 'adobe-creative-cloud', platform: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', verb: 'create', icon: 'fab fa-adobe' }
+        { dir: 'subs/canva', platform: 'canva-pro', name: 'Canva Pro', verb: 'design', icon: 'fas fa-palette' },
+        { dir: 'subs/capcut', platform: 'capcut-pro', name: 'CapCut Pro', verb: 'edit', icon: 'fas fa-film' },
+        { dir: 'subs/google-ai', platform: 'google-ai-pro', name: 'Google AI Pro', verb: 'use it', icon: 'fab fa-google' },
+        { dir: 'subs/coursera', platform: 'coursera-plus', name: 'Coursera Plus', verb: 'start learning', icon: 'fas fa-graduation-cap' },
+        { dir: 'subs/duolingo', platform: 'duolingo-super', name: 'Duolingo Super', verb: 'start', icon: 'fas fa-language' },
+        { dir: 'subs/perplexity', platform: 'perplexity-pro', name: 'Perplexity Pro', verb: 'search', icon: 'fas fa-magnifying-glass' },
+        { dir: 'subs/prime', platform: 'prime-video', name: 'Prime Video', verb: 'watch', icon: 'fab fa-amazon', shared: true },
+        { dir: 'subs/apple-tv', platform: 'apple-tv-plus', name: 'Apple TV+', verb: 'watch', icon: 'fab fa-apple', shared: true },
+        { dir: 'subs/crunchyroll', platform: 'crunchyroll', name: 'Crunchyroll', verb: 'watch', icon: 'fas fa-play', shared: true },
+        { dir: 'subs/linkedin-premium', platform: 'linkedin-premium-career', name: 'LinkedIn Premium Career', verb: 'apply', icon: 'fab fa-linkedin' },
+        { dir: 'subs/adobe', platform: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', verb: 'create', icon: 'fab fa-adobe' }
     ].map((t) => ({
-        dir: t.dir, accent: t.dir,
+        dir: t.dir, accent: t.platform,
         platformName: t.name, logoIcon: t.icon,
         title: t.name, service: t.name,
         headline: 'Get <em>' + t.name + '</em>',
@@ -317,14 +318,14 @@ const PAGES = [
             ' a delivery that ramps up — pay in full and we send your login on WhatsApp as soon as it is confirmed.',
         platform: t.platform,
         depositPct: 1,
-        backHref: '/subscriptions/', backLabel: 'Back to tools',
+        backHref: '/subs/', backLabel: 'Back to tools',
         gifts: SUB_GIFTS,
         proof: SUB_PROOF
     }))
 ];
 
 /* ------------------------------------------------------- the bundle pitch ---
- * Only /boost-package/ gets this. Every other order page is reached from a card
+ * Only /growth/bundle/ gets this. Every other order page is reached from a card
  * that already sold the package; the bundle is reached from a single row on
  * /growth/ that deliberately says nothing about size or price, so the whole
  * argument has to happen here instead.

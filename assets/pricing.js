@@ -60,18 +60,18 @@
      * Snapchat rather than the literal hex — a legibility call, not a claim
      * about anything factual. */
     var PLAT_META = {
-        instagram:  { name: 'Instagram',      logo: '/IMAGES/instagram.png', href: '/instagram-boost/' },
-        tiktok:     { name: 'TikTok',         logo: '/IMAGES/tiktok.png',    href: '/tiktok-boost/' },
-        facebook:   { name: 'Facebook',       logo: '/IMAGES/facebook.png',  href: '/facebook-boost/' },
-        youtube:    { name: 'YouTube',        logo: '/IMAGES/youtube.png',   href: '/youtube-boost/' },
-        x:          { name: 'X',              logo: '/IMAGES/x.png',        href: '/x-boost/' },
-        telegram:   { name: 'Telegram',       icon: 'fab fa-telegram',       href: '/telegram-boost/',   color: '#26A5E4' },
-        whatsapp:   { name: 'WhatsApp',       icon: 'fab fa-whatsapp',       href: '/whatsapp-boost/',   color: '#25D366' },
-        linkedin:   { name: 'LinkedIn',       icon: 'fab fa-linkedin',       href: '/linkedin-boost/',   color: '#0A66C2' },
-        spotify:    { name: 'Spotify',        logo: '/IMAGES/spotify.png',   href: '/spotify-boost/' },
-        audiomack:  { name: 'Audiomack',      icon: 'fas fa-music',          href: '/audiomack-boost/',  color: '#FFA200' },
-        soundcloud: { name: 'SoundCloud',     icon: 'fab fa-soundcloud',     href: '/soundcloud-boost/', color: '#FF5500' },
-        webtraffic: { name: 'Website traffic',icon: 'fas fa-globe',          href: '/website-traffic/',  color: '#2F80ED' },
+        instagram:  { name: 'Instagram',      logo: '/IMAGES/instagram.png', href: '/growth/instagram/' },
+        tiktok:     { name: 'TikTok',         logo: '/IMAGES/tiktok.png',    href: '/growth/tiktok/' },
+        facebook:   { name: 'Facebook',       logo: '/IMAGES/facebook.png',  href: '/growth/facebook/' },
+        youtube:    { name: 'YouTube',        logo: '/IMAGES/youtube.png',   href: '/growth/youtube/' },
+        x:          { name: 'X',              logo: '/IMAGES/x.png',        href: '/growth/x/' },
+        telegram:   { name: 'Telegram',       icon: 'fab fa-telegram',       href: '/growth/telegram/',   color: '#26A5E4' },
+        whatsapp:   { name: 'WhatsApp',       icon: 'fab fa-whatsapp',       href: '/growth/whatsapp/',   color: '#25D366' },
+        linkedin:   { name: 'LinkedIn',       icon: 'fab fa-linkedin',       href: '/growth/linkedin/',   color: '#0A66C2' },
+        spotify:    { name: 'Spotify',        logo: '/IMAGES/spotify.png',   href: '/growth/spotify/' },
+        audiomack:  { name: 'Audiomack',      icon: 'fas fa-music',          href: '/growth/audiomack/',  color: '#FFA200' },
+        soundcloud: { name: 'SoundCloud',     icon: 'fab fa-soundcloud',     href: '/growth/soundcloud/', color: '#FF5500' },
+        webtraffic: { name: 'Website traffic',icon: 'fas fa-globe',          href: '/growth/traffic/',  color: '#2F80ED' },
 
         /* Not a priced boost platform — kept out of PLATFORMS/GROWTH_* below
          * so the panel never drives a Category → Service flow with nothing
@@ -281,18 +281,18 @@
 
     /** Which services sell on each platform's order page, tab order. First = default. */
     var PLATFORMS = {
-        instagram:  { key: 'instagram',  name: 'Instagram',       href: '/instagram-boost/',  services: ['ig_followers', 'ig_likes', 'ig_reels', 'ig_story'] },
-        tiktok:     { key: 'tiktok',     name: 'TikTok',          href: '/tiktok-boost/',     services: ['tt_followers', 'tt_likes', 'tt_views'] },
-        facebook:   { key: 'facebook',   name: 'Facebook',        href: '/facebook-boost/',   services: ['fb_followers', 'fb_likes', 'fb_reactions', 'fb_views'] },
-        youtube:    { key: 'youtube',    name: 'YouTube',         href: '/youtube-boost/',    services: ['yt_subs', 'yt_views', 'yt_likes', 'yt_hours'] },
-        x:          { key: 'x',          name: 'X',               href: '/x-boost/',          services: ['x_followers', 'x_likes', 'x_reposts', 'x_impressions'] },
-        telegram:   { key: 'telegram',   name: 'Telegram',        href: '/telegram-boost/',   services: ['tg_members', 'tg_premium', 'tg_reactions'] },
-        whatsapp:   { key: 'whatsapp',   name: 'WhatsApp',        href: '/whatsapp-boost/',   services: ['wa_channel', 'wa_group', 'wa_react'] },
-        linkedin:   { key: 'linkedin',   name: 'LinkedIn',        href: '/linkedin-boost/',   services: ['li_profile', 'li_company', 'li_postlikes'] },
-        spotify:    { key: 'spotify',    name: 'Spotify',         href: '/spotify-boost/',    services: ['sp_followers', 'sp_plays', 'sp_listeners'] },
-        audiomack:  { key: 'audiomack',  name: 'Audiomack',       href: '/audiomack-boost/',  services: ['am_followers', 'am_plays', 'am_likes'] },
-        soundcloud: { key: 'soundcloud', name: 'SoundCloud',      href: '/soundcloud-boost/', services: ['sc_followers', 'sc_plays', 'sc_likes'] },
-        webtraffic: { key: 'webtraffic', name: 'Website traffic', href: '/website-traffic/',  services: ['wt_standard', 'wt_premium', 'wt_geo'] }
+        instagram:  { key: 'instagram',  name: 'Instagram',       href: '/growth/instagram/',  services: ['ig_followers', 'ig_likes', 'ig_reels', 'ig_story'] },
+        tiktok:     { key: 'tiktok',     name: 'TikTok',          href: '/growth/tiktok/',     services: ['tt_followers', 'tt_likes', 'tt_views'] },
+        facebook:   { key: 'facebook',   name: 'Facebook',        href: '/growth/facebook/',   services: ['fb_followers', 'fb_likes', 'fb_reactions', 'fb_views'] },
+        youtube:    { key: 'youtube',    name: 'YouTube',         href: '/growth/youtube/',    services: ['yt_subs', 'yt_views', 'yt_likes', 'yt_hours'] },
+        x:          { key: 'x',          name: 'X',               href: '/growth/x/',          services: ['x_followers', 'x_likes', 'x_reposts', 'x_impressions'] },
+        telegram:   { key: 'telegram',   name: 'Telegram',        href: '/growth/telegram/',   services: ['tg_members', 'tg_premium', 'tg_reactions'] },
+        whatsapp:   { key: 'whatsapp',   name: 'WhatsApp',        href: '/growth/whatsapp/',   services: ['wa_channel', 'wa_group', 'wa_react'] },
+        linkedin:   { key: 'linkedin',   name: 'LinkedIn',        href: '/growth/linkedin/',   services: ['li_profile', 'li_company', 'li_postlikes'] },
+        spotify:    { key: 'spotify',    name: 'Spotify',         href: '/growth/spotify/',    services: ['sp_followers', 'sp_plays', 'sp_listeners'] },
+        audiomack:  { key: 'audiomack',  name: 'Audiomack',       href: '/growth/audiomack/',  services: ['am_followers', 'am_plays', 'am_likes'] },
+        soundcloud: { key: 'soundcloud', name: 'SoundCloud',      href: '/growth/soundcloud/', services: ['sc_followers', 'sc_plays', 'sc_likes'] },
+        webtraffic: { key: 'webtraffic', name: 'Website traffic', href: '/growth/traffic/',  services: ['wt_standard', 'wt_premium', 'wt_geo'] }
     };
 
     /* ------------------------------------------------------------- combo ---
@@ -582,77 +582,77 @@
     }
     var SUBSCRIPTIONS = {
         'canva-pro': {
-            name: 'Canva Pro', short: 'Canva Pro', icon: 'fas fa-palette',
+            slug: 'canva', name: 'Canva Pro', short: 'Canva Pro', icon: 'fas fa-palette',
             tiers: [
                 tier(3, 149000, 45), tier(6, 199000, 60), tier(9, 229000, 70),
                 tier(12, 249000, 75, '⭐ Recommended'), tier(18, 329000, 100)
             ]
         },
         'capcut-pro': {
-            name: 'CapCut Pro', short: 'CapCut Pro', icon: 'fas fa-film',
+            slug: 'capcut', name: 'CapCut Pro', short: 'CapCut Pro', icon: 'fas fa-film',
             tiers: [
                 tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 329000, 100),
                 tier(12, 399000, 120, '⭐ Recommended'), tier(18, 499000, 150)
             ]
         },
         'google-ai-pro': {
-            name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fab fa-google',
+            slug: 'google-ai', name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fab fa-google',
             tiers: [
                 tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 299000, 90),
                 tier(12, 349000, 105, '⭐ Recommended'), tier(18, 449000, 135)
             ]
         },
         'coursera-plus': {
-            name: 'Coursera Plus', short: 'Coursera Plus', icon: 'fas fa-graduation-cap',
+            slug: 'coursera', name: 'Coursera Plus', short: 'Coursera Plus', icon: 'fas fa-graduation-cap',
             tiers: [
                 tier(3, 149000, 45), tier(6, 199000, 60), tier(9, 249000, 75),
                 tier(12, 299000, 90, '⭐ Recommended'), tier(18, 399000, 120)
             ]
         },
         'duolingo-super': {
-            name: 'Duolingo Super', short: 'Duolingo Super', icon: 'fas fa-language',
+            slug: 'duolingo', name: 'Duolingo Super', short: 'Duolingo Super', icon: 'fas fa-language',
             tiers: [
                 tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
                 tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
             ]
         },
         'perplexity-pro': {
-            name: 'Perplexity Pro', short: 'Perplexity Pro', icon: 'fas fa-magnifying-glass',
+            slug: 'perplexity', name: 'Perplexity Pro', short: 'Perplexity Pro', icon: 'fas fa-magnifying-glass',
             tiers: [
                 tier(3, 199000, 60), tier(6, 299000, 90), tier(9, 399000, 120),
                 tier(12, 449000, 135, '⭐ Recommended'), tier(18, 599000, 180)
             ]
         },
         'prime-video': {
-            name: 'Prime Video', short: 'Prime Video', icon: 'fab fa-amazon',
+            slug: 'prime', name: 'Prime Video', short: 'Prime Video', icon: 'fab fa-amazon',
             tiers: [
                 tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
                 tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
             ]
         },
         'apple-tv-plus': {
-            name: 'Apple TV+', short: 'Apple TV+', icon: 'fab fa-apple',
+            slug: 'apple-tv', name: 'Apple TV+', short: 'Apple TV+', icon: 'fab fa-apple',
             tiers: [
                 tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
                 tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
             ]
         },
         'crunchyroll': {
-            name: 'Crunchyroll', short: 'Crunchyroll', icon: 'fas fa-play',
+            slug: 'crunchyroll', name: 'Crunchyroll', short: 'Crunchyroll', icon: 'fas fa-play',
             tiers: [
                 tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
                 tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
             ]
         },
         'linkedin-premium-career': {
-            name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fab fa-linkedin',
+            slug: 'linkedin-premium', name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fab fa-linkedin',
             tiers: [
                 tier(3, 349000, 105), tier(6, 599000, 180), tier(9, 749000, 225),
                 tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)
             ]
         },
         'adobe-creative-cloud': {
-            name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fab fa-adobe',
+            slug: 'adobe', name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fab fa-adobe',
             tiers: [
                 tier(3, 299000, 90), tier(6, 549000, 165), tier(9, 699000, 210),
                 tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)

@@ -50,7 +50,7 @@
                 '<div class="oc-price"><b class="m-roll" id="price-' + key + '">—</b><small class="oc-per" id="per-' + key + '">&nbsp;</small></div>' +
             '</div>' +
             '<div class="tool-durs" role="group" aria-label="' + sub.name + ' term" id="durs-' + key + '"></div>' +
-            '<a href="/' + key + '/" class="oc-cta" id="cta-' + key + '">Continue to order <i class="fas fa-arrow-right"></i></a>' +
+            '<a href="/subs/' + sub.slug + '/" class="oc-cta" id="cta-' + key + '">Continue to order <i class="fas fa-arrow-right"></i></a>' +
         '</article>';
     }
 

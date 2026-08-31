@@ -1520,7 +1520,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 /* ==========================================================================
-   THE BUNDLE PITCH — /boost-package/ only
+   THE BUNDLE PITCH — /growth/bundle/ only
    Every other order page is reached from a card that already showed the size
    and the price. The bundle is reached from one row on /growth/ that says
    neither, on purpose — so the entire argument for it happens here, above the

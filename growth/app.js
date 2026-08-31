@@ -679,7 +679,7 @@
                     '<i class="' + f.icon + '"></i>' + f.text + '</span>';
             }).join('');
 
-            return '<a href="/boost-package/" class="combo-item' +
+            return '<a href="/growth/bundle/" class="combo-item' +
                 (b.hero ? ' is-hero' : '') + (b.tag ? ' has-tag' : '') + '">' +
                 (b.tag ? '<span class="combo-tag">' + b.tag + '</span>' : '') +
                 (marks ? '<span class="combo-marks">' + marks + '</span>' : '') +
@@ -697,7 +697,7 @@
                 '</span>' +
                 '</a>';
         }).join('') + (remaining > 0
-            ? '<a href="/boost-package/" class="combo-more">' +
+            ? '<a href="/growth/bundle/" class="combo-more">' +
                 '<span class="combo-more-ic"><i class="fas fa-layer-group"></i></span>' +
                 '<span class="combo-more-copy">' +
                     '<span class="combo-more-title">See all 8 bundles</span>' +
