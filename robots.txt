@@ -4,3 +4,5 @@ Allow: /
 Sitemap: https://the97.world/sitemap.xml
 
 Disallow: /admin/
+Disallow: /worker/
+Disallow: /tools/

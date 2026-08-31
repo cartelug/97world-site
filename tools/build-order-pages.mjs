@@ -297,15 +297,15 @@ const PAGES = [
     ...[
         { dir: 'canva-pro', platform: 'canva-pro', name: 'Canva Pro', verb: 'design', icon: 'fas fa-palette' },
         { dir: 'capcut-pro', platform: 'capcut-pro', name: 'CapCut Pro', verb: 'edit', icon: 'fas fa-film' },
-        { dir: 'google-ai-pro', platform: 'google-ai-pro', name: 'Google AI Pro', verb: 'use it', icon: 'fas fa-robot' },
+        { dir: 'google-ai-pro', platform: 'google-ai-pro', name: 'Google AI Pro', verb: 'use it', icon: 'fab fa-google' },
         { dir: 'coursera-plus', platform: 'coursera-plus', name: 'Coursera Plus', verb: 'start learning', icon: 'fas fa-graduation-cap' },
         { dir: 'duolingo-super', platform: 'duolingo-super', name: 'Duolingo Super', verb: 'start', icon: 'fas fa-language' },
         { dir: 'perplexity-pro', platform: 'perplexity-pro', name: 'Perplexity Pro', verb: 'search', icon: 'fas fa-magnifying-glass' },
-        { dir: 'prime-video', platform: 'prime-video', name: 'Prime Video', verb: 'watch', icon: 'fas fa-clapperboard', shared: true },
-        { dir: 'apple-tv-plus', platform: 'apple-tv-plus', name: 'Apple TV+', verb: 'watch', icon: 'fas fa-tv', shared: true },
+        { dir: 'prime-video', platform: 'prime-video', name: 'Prime Video', verb: 'watch', icon: 'fab fa-amazon', shared: true },
+        { dir: 'apple-tv-plus', platform: 'apple-tv-plus', name: 'Apple TV+', verb: 'watch', icon: 'fab fa-apple', shared: true },
         { dir: 'crunchyroll', platform: 'crunchyroll', name: 'Crunchyroll', verb: 'watch', icon: 'fas fa-play', shared: true },
-        { dir: 'linkedin-premium-career', platform: 'linkedin-premium-career', name: 'LinkedIn Premium Career', verb: 'apply', icon: 'fas fa-briefcase' },
-        { dir: 'adobe-creative-cloud', platform: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', verb: 'create', icon: 'fas fa-swatchbook' }
+        { dir: 'linkedin-premium-career', platform: 'linkedin-premium-career', name: 'LinkedIn Premium Career', verb: 'apply', icon: 'fab fa-linkedin' },
+        { dir: 'adobe-creative-cloud', platform: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', verb: 'create', icon: 'fab fa-adobe' }
     ].map((t) => ({
         dir: t.dir, accent: t.dir,
         platformName: t.name, logoIcon: t.icon,
@@ -317,7 +317,7 @@ const PAGES = [
             ' a delivery that ramps up — pay in full and we send your login on WhatsApp as soon as it is confirmed.',
         platform: t.platform,
         depositPct: 1,
-        backHref: '/tools/', backLabel: 'Back to tools',
+        backHref: '/subscriptions/', backLabel: 'Back to tools',
         gifts: SUB_GIFTS,
         proof: SUB_PROOF
     }))

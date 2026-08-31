@@ -596,7 +596,7 @@
             ]
         },
         'google-ai-pro': {
-            name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fas fa-robot',
+            name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fab fa-google',
             tiers: [
                 tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 299000, 90),
                 tier(12, 349000, 105, '⭐ Recommended'), tier(18, 449000, 135)
@@ -624,14 +624,14 @@
             ]
         },
         'prime-video': {
-            name: 'Prime Video', short: 'Prime Video', icon: 'fas fa-clapperboard',
+            name: 'Prime Video', short: 'Prime Video', icon: 'fab fa-amazon',
             tiers: [
                 tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
                 tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
             ]
         },
         'apple-tv-plus': {
-            name: 'Apple TV+', short: 'Apple TV+', icon: 'fas fa-tv',
+            name: 'Apple TV+', short: 'Apple TV+', icon: 'fab fa-apple',
             tiers: [
                 tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
                 tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
@@ -645,14 +645,14 @@
             ]
         },
         'linkedin-premium-career': {
-            name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fas fa-briefcase',
+            name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fab fa-linkedin',
             tiers: [
                 tier(3, 349000, 105), tier(6, 599000, 180), tier(9, 749000, 225),
                 tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)
             ]
         },
         'adobe-creative-cloud': {
-            name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fas fa-swatchbook',
+            name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fab fa-adobe',
             tiers: [
                 tier(3, 299000, 90), tier(6, 549000, 165), tier(9, 699000, 210),
                 tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)
