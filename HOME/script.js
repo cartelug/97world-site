@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         burgerBtn.addEventListener('click', () => (isOpen() ? closeMenu() : openMenu()));
         if (mmClose) mmClose.addEventListener('click', closeMenu);
 
-        // any link closes it; so do the two intent cards
+        // any link closes it; so do the intent cards
         mobileMenu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
         document.querySelectorAll('.mm-intent-card').forEach((card) => {
             card.addEventListener('click', closeMenu);

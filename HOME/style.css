@@ -156,6 +156,8 @@ body.menu-open { overflow: hidden; }
 .mm-intent-card:hover, .mm-intent-card:focus-visible { border-color: rgba(0,255,178,0.4); background: rgba(0,255,178,0.06); outline: none; }
 .mm-intent-ic { width: 36px; height: 36px; border-radius: 12px; background: rgba(0,255,178,0.12); color: var(--clr-emerald); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; margin-bottom: 6px; }
 .mm-intent-card[data-path="build"] .mm-intent-ic { background: rgba(0,168,225,0.14); color: #6be4ff; }
+.mm-intent-card[data-path="tools"] { grid-column: 1 / -1; }
+.mm-intent-card[data-path="tools"] .mm-intent-ic { background: rgba(255,201,77,0.14); color: #FFC94D; }
 .mm-intent-card b { font-family: var(--font-display); font-size: 1rem; font-weight: 700; line-height: 1.2; }
 .mm-intent-card small { font-size: 0.76rem; color: var(--clr-muted); line-height: 1.35; }
 
@@ -263,7 +265,7 @@ body.menu-open { overflow: hidden; }
    ========================================================================== */
 .hero-ask { width: 100%; max-width: 880px; margin: 0 auto; }
 
-.hero-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.hero-choice { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
 .choice-panel {
     position: relative; overflow: hidden; text-align: left; cursor: pointer;
     display: flex; flex-direction: column; gap: 0;
@@ -297,6 +299,8 @@ body.menu-open { overflow: hidden; }
 .cp-marks img { width: 27px; height: 27px; object-fit: contain; display: block; }
 .cp-marks--glyph { color: #6be4ff; gap: 12px; }
 .cp-marks--glyph svg { width: 26px; height: 26px; display: block; }
+.cp-marks--icons { color: #FFC94D; gap: 12px; }
+.cp-marks--icons i { font-size: 22px; display: block; line-height: 1; }
 
 .cp-title { position: relative; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
 .cp-sub { position: relative; font-size: 0.9rem; color: var(--clr-muted); line-height: 1.5; margin-top: 5px; }
@@ -310,6 +314,7 @@ body.menu-open { overflow: hidden; }
 .cp-from b { color: #fff; font-weight: 800; }
 .cp-go { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; font-size: 0.82rem; color: var(--clr-emerald); white-space: nowrap; }
 .choice-panel[data-path="build"] .cp-go { color: #6be4ff; }
+.choice-panel[data-path="tools"] .cp-go { color: #FFC94D; }
 .cp-go i { transition: transform 0.3s; }
 .choice-panel:hover .cp-go i { transform: translateX(5px); }
 
