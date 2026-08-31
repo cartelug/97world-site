@@ -609,6 +609,57 @@
         }
     };
 
+    /* ------------------------------------------------------ subscriptions ---
+     * Shared-profile streaming/subscription access, resold as a fixed term
+     * paid in full up front — there's nothing to deliver "gradually" here,
+     * so this never uses the boost catalogue's 50/50 split. Same UGX-only
+     * rule as TOOL_PLANS just above: the price list gives no USD rate, so
+     * there is nothing honest to show South Sudan/DR Congo customers yet —
+     * these order pages skip the region gate entirely rather than invent a
+     * conversion. New platforms (Apple TV+, DStv Stream, ...) get added
+     * here as their real prices are given — never before that.
+     * -------------------------------------------------------------------- */
+    var SUBSCRIPTIONS = {
+        'prime-video': {
+            name: 'Prime Video', short: 'Prime Video', icon: 'fas fa-clapperboard',
+            tiers: [
+                { months: 3,  ugx: 120000 },
+                { months: 4,  ugx: 130000 },
+                { months: 6,  ugx: 150000, tag: '⭐ Best value' },
+                { months: 9,  ugx: 190000 },
+                { months: 12, ugx: 230000, tag: '🔥 Most popular' },
+                { months: 18, ugx: 300000 }
+            ]
+        }
+    };
+
+    /** Term tiers turned into the same plan shape the wizard already
+     *  understands — id/name/price/feats — so no wizard code needs to know
+     *  this isn't a boost service. Always UGX; see the note above. */
+    function subscriptionPlans(key) {
+        var sub = SUBSCRIPTIONS[key];
+        if (!sub) return [];
+        return sub.tiers.map(function (t) {
+            var perMonth = Math.round(t.ugx / t.months / 50) * 50;
+            return {
+                id: String(t.months),
+                name: t.months + ' months',
+                short: t.months + ' months',
+                note: '≈ ' + perMonth.toLocaleString() + ' UGX/mo',
+                price: t.ugx,
+                was: null,
+                currency: 'UGX',
+                tag: t.tag || null,
+                hero: !!t.tag,
+                label: t.months + ' months — ' + sub.name,
+                feats: [
+                    { icon: 'fas fa-calendar-check', text: t.months + ' months of ' + sub.name + ' access' },
+                    { icon: 'fas fa-key', text: 'Shared login sent on WhatsApp after payment' }
+                ]
+            };
+        });
+    }
+
     /** All services for one platform, popular ones first. */
     function servicesFor(platformKey) {
         return SERVICES.filter(function (s) { return s.platform === platformKey; })
@@ -714,6 +765,8 @@
 
     /** Plans for one service on a platform, priced for a region. Bundles are handled separately. */
     function plansFor(platformKey, regionCode, serviceId) {
+        if (SUBSCRIPTIONS[platformKey]) return subscriptionPlans(platformKey);
+
         var currency = REGIONS[regionCode] ? REGIONS[regionCode].currency : 'UGX';
 
         if (platformKey === 'bundle' || platformKey === 'website') {
@@ -804,6 +857,7 @@
         SERVICES_BY_ID: SERVICES_BY_ID,
         BUNDLES: bundlePlans,
         TOOL_PLANS: TOOL_PLANS,
+        SUBSCRIPTIONS: SUBSCRIPTIONS,
         PLATFORM_ROLES: PLATFORM_ROLES,
         GROWTH_PRIMARY: GROWTH_PRIMARY,
         GROWTH_MORE: GROWTH_MORE,

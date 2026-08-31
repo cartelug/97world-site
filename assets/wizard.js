@@ -127,9 +127,12 @@
 
         /** Same 50/50 split shown everywhere else on the site — rounded
          *  once, balance is whatever's left, so the two always add back up
-         *  to exactly the total. */
+         *  to exactly the total. A page can override the fraction with
+         *  cfg.depositPct (e.g. 1 for products paid in full, like a
+         *  subscription term with nothing to deliver "gradually"). */
         split: function (price, currency) {
-            var deposit = P.roundMoney(price * 0.5, currency);
+            var pct = typeof Wizard.cfg.depositPct === 'number' ? Wizard.cfg.depositPct : 0.5;
+            var deposit = P.roundMoney(price * pct, currency);
             return { deposit: deposit, balance: price - deposit };
         },
 
@@ -335,11 +338,17 @@
             rows.push('<div class="sum-row is-total"><span>Total</span><b>' +
                 OrderKit.money(order.plan.price, region.currency) + '</b></div>');
 
+            // Only shown when there's an actual split to explain — a
+            // full-payment product (depositPct: 1) has nothing left to owe,
+            // so a "Pay now (100%)" row would just repeat Total.
             var split = Wizard.split(order.plan.price, region.currency);
-            rows.push('<div class="sum-row"><span>Pay now (50%)</span><b>' +
-                OrderKit.money(split.deposit, region.currency) + '</b></div>');
-            rows.push('<div class="sum-row"><span>Balance on delivery</span><b>' +
-                OrderKit.money(split.balance, region.currency) + '</b></div>');
+            if (split.balance > 0) {
+                var pctLabel = Math.round((split.deposit / order.plan.price) * 100);
+                rows.push('<div class="sum-row"><span>Pay now (' + pctLabel + '%)</span><b>' +
+                    OrderKit.money(split.deposit, region.currency) + '</b></div>');
+                rows.push('<div class="sum-row"><span>Balance on delivery</span><b>' +
+                    OrderKit.money(split.balance, region.currency) + '</b></div>');
+            }
 
             Wizard.$('sum-list').innerHTML = rows.join('');
             OrderKit.openSheet('confirmSheet');
@@ -362,13 +371,18 @@
             var service = Wizard.cfg.service;
 
             var split = Wizard.split(order.plan.price, region.currency);
+            var splitLines = '';
+            if (split.balance > 0) {
+                var pctLabel = Math.round((split.deposit / order.plan.price) * 100);
+                splitLines = '*Pay now (' + pctLabel + '%):* ' + OrderKit.money(split.deposit, region.currency) + '\n' +
+                    '*Balance on delivery:* ' + OrderKit.money(split.balance, region.currency) + '\n';
+            }
 
             var message = '*NEW ORDER [' + region.name.toUpperCase() + ']*\n\n' +
                 '*Service:* ' + service + '\n' +
                 '*Package:* ' + (order.plan.label || order.plan.name) + '\n' +
                 '*Price:* ' + total + '\n' +
-                '*Pay now (50%):* ' + OrderKit.money(split.deposit, region.currency) + '\n' +
-                '*Balance on delivery:* ' + OrderKit.money(split.balance, region.currency) + '\n' +
+                splitLines +
                 '*Referrer:* ' + order.referrer + '\n\n' +
                 '*Name:* ' + order.name + '\n' +
                 '*WhatsApp:* ' + order.phone.clean + '\n' +
@@ -379,8 +393,13 @@
             // Regular platform pages sell a serviceId+quantity tier; the
             // bundle and website pages sell a fixed plan.id with no
             // quantity — same distinction Wizard.plans()/plansFor() already
-            // draws, just carried over into what the Worker records.
+            // draws, just carried over into what the Worker records. A
+            // subscription page (no service tabs) also has no
+            // Wizard.state.service to fall back on, so it's recorded as
+            // "quantity months of <platform key>" — e.g. "6 x prime-video" —
+            // not as a bundle, since it isn't one.
             var isFixedPlan = Wizard.cfg.platform === 'bundle' || Wizard.cfg.platform === 'website';
+            var subKey = P.SUBSCRIPTIONS[Wizard.cfg.platform] ? Wizard.cfg.platform : null;
 
             OrderKit.send({
                 sheetUrl: Wizard.cfg.sheetUrl,
@@ -400,7 +419,7 @@
                 worker: Wizard.cfg.apiBase ? {
                     apiBase: Wizard.cfg.apiBase,
                     body: {
-                        serviceId: isFixedPlan ? null : (Wizard.state.service || null),
+                        serviceId: isFixedPlan ? null : (subKey || Wizard.state.service || null),
                         bundleId: isFixedPlan ? order.plan.id : null,
                         quantity: isFixedPlan ? null : (parseInt(order.plan.id, 10) || null),
                         link: order.target || order.extra || service,
@@ -434,15 +453,24 @@
             Wizard.renderGifts();
             Wizard.renderProof();
             Wizard.renderServiceTabs();
-            Wizard.openGate();
 
-            // the home page (or an earlier order) already told us where they are
-            var saved = P.Region.get();
-            if (saved) Wizard.setRegion(saved, false);
+            if (cfg.fixedRegion) {
+                // A single-currency product (e.g. a subscription priced only
+                // in UGX) has nothing for the gate to offer — asking someone
+                // to "pick a region" when there's only one real price would
+                // be theatre, not a choice.
+                Wizard.setRegion(cfg.fixedRegion, false);
+            } else {
+                Wizard.openGate();
+                // the home page (or an earlier order) already told us where they are
+                var saved = P.Region.get();
+                if (saved) Wizard.setRegion(saved, false);
+            }
 
             var trigger = Wizard.$('regionBtn');
             if (trigger) {
                 trigger.addEventListener('click', function () {
+                    if (Wizard.cfg.fixedRegion) return;
                     Wizard.$('regionGate').hidden = false;
                     document.body.classList.add('is-locked');
                 });

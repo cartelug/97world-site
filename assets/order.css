@@ -45,6 +45,7 @@
 [data-accent="soundcloud"]{ --acc: #FF5500; --acc-2: #ff9d4d; --acc-ink: #1a0704; }
 [data-accent="webtraffic"]{ --acc: #6be4ff; --acc-2: #9d8bff; --acc-ink: #04101f; }
 [data-accent="website"]   { --acc: #6be4ff; --acc-2: #9d8bff; --acc-ink: #04101f; }
+[data-accent="prime-video"] { --acc: #00A8E1; --acc-2: #6be4ff; --acc-ink: #04141a; }
 
 /* --------------------------------------------------------------- base ---- */
 * { margin: 0; padding: 0; box-sizing: border-box; }

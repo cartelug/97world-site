@@ -41,9 +41,23 @@ const WEBSITE_GIFTS = [
     { icon: 'fa-globe', title: 'Free domain name check', sub: "We'll check what's available for your business and advise, no charge." }
 ];
 
+/* Subscription resells (Prime Video and anything added after it) are a
+ * different promise from a boost order — there's no "delivery pace" or
+ * refill to speak of, just shared access that either works or gets fixed. */
+const SUB_GIFTS = [
+    { icon: 'fa-rotate', title: 'Replacement guarantee', sub: "If access stops working during your paid period, we replace it. Free." },
+    { icon: 'fa-comments', title: 'Real support, not a ticket queue', sub: "Message us on WhatsApp any time — a person replies, not a bot." }
+];
+
 const PROOF = [
     { icon: 'fa-lock', title: 'We never ask for your password', body: 'Delivery works entirely from your public handle. Your login stays yours.' },
     { icon: 'fa-bolt', title: 'You watch it start before you finish paying', body: 'The first batch lands in 1–6 hours. 50% starts the order, the balance is due once delivery is running.' },
+    { icon: 'fa-location-dot', title: 'We are actually here', body: 'Kampala-based. Pay by MTN or Airtel Money, or bring cash to the office.' }
+];
+
+const SUB_PROOF = [
+    { icon: 'fa-key', title: 'Simple, upfront pricing', body: 'Pick your months, pay once — no recurring charge, no surprise renewal.' },
+    { icon: 'fa-rotate', title: "Replaced if it breaks", body: "If access stops working during your paid period, we sort it — free, same account." },
     { icon: 'fa-location-dot', title: 'We are actually here', body: 'Kampala-based. Pay by MTN or Airtel Money, or bring cash to the office.' }
 ];
 
@@ -273,6 +287,25 @@ const PAGES = [
         icon: 'fas fa-building',
         platform: 'website',
         gifts: WEBSITE_GIFTS
+    },
+    {
+        // Shared-profile subscription resell, not a boost service — see the
+        // SUBSCRIPTIONS block in assets/pricing.js for why this page skips
+        // the region gate (UGX-only, no USD rate given) and is paid in full
+        // (depositPct: 1) rather than the usual 50/50 split.
+        dir: 'prime-video', accent: 'prime-video',
+        platformName: 'Prime Video', logoIcon: 'fas fa-clapperboard',
+        title: 'Prime Video', service: 'Prime Video',
+        headline: 'Get <em>Prime Video</em>',
+        blurb: 'Shared Prime Video access, any term from 3 to 18 months. Pay once, watch the same day.',
+        guaranteeTitle: 'Pay once, watch the same day',
+        guaranteeBody: 'This is shared access, not a delivery that ramps up — pay in full and we send your login on WhatsApp as soon as it is confirmed.',
+        platform: 'prime-video',
+        depositPct: 1,
+        fixedRegion: 'UG',
+        backHref: '/offers/', backLabel: 'Back to offers',
+        gifts: SUB_GIFTS,
+        proof: SUB_PROOF
     }
 ];
 
@@ -377,7 +410,7 @@ const html = (p) => `<!DOCTYPE html>
     </div>
 
     <nav class="ord-nav">
-        <a href="/growth/" class="ord-back" aria-label="Back to growth plans"><i class="fas fa-arrow-left"></i></a>
+        <a href="${p.backHref || '/growth/'}" class="ord-back" aria-label="${p.backLabel || 'Back to growth plans'}"><i class="fas fa-arrow-left"></i></a>
         <a href="/" class="ord-brand">
             <img src="/IMAGES/logo.png" alt="">
             <span>World</span>
@@ -459,8 +492,8 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                 <div class="guarantee">
                     <i class="fas fa-shield-halved"></i>
                     <div>
-                        <b>50% starts it, the rest on delivery</b>
-                        <p>We begin your order on a 50% deposit. The balance is only due once you can see it working.</p>
+                        <b>${p.guaranteeTitle || '50% starts it, the rest on delivery'}</b>
+                        <p>${p.guaranteeBody || 'We begin your order on a 50% deposit. The balance is only due once you can see it working.'}</p>
                     </div>
                 </div>
 
@@ -480,14 +513,14 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                     <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Enter a valid WhatsApp number</span></p>
                 </div>
 
-                <div class="field">
+${p.targetLabel ? `                <div class="field">
                     <div class="field-box">
                         <i class="${p.icon}"></i>
                         <input type="text" id="target-handle" placeholder="${p.targetPlaceholder}" autocomplete="off" spellcheck="false" autocapitalize="none">
                     </div>
                     <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>${p.targetError}</span></p>
                 </div>
-${p.targetHint ? `                <p class="field-hint"><i class="fas fa-circle-info"></i> ${p.targetHint}</p>
+` : ''}${p.targetHint ? `                <p class="field-hint"><i class="fas fa-circle-info"></i> ${p.targetHint}</p>
 ` : ''}
 ${p.extraOptions ? `
                 <div class="field select-box">
@@ -600,8 +633,10 @@ OrderWizard.start(${JSON.stringify({
     targetError: p.targetError,
     ...(p.extraLabel ? { extraLabel: p.extraLabel } : {}),
     ...(p.services ? { services: p.services } : {}),
+    ...(typeof p.depositPct === 'number' ? { depositPct: p.depositPct } : {}),
+    ...(p.fixedRegion ? { fixedRegion: p.fixedRegion } : {}),
     gifts: p.gifts || GIFTS,
-    proof: PROOF
+    proof: p.proof || PROOF
 }, null, 4)});
 `;
 
