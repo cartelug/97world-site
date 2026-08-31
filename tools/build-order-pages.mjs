@@ -288,25 +288,39 @@ const PAGES = [
         platform: 'website',
         gifts: WEBSITE_GIFTS
     },
-    {
-        // Shared-profile subscription resell, not a boost service — see the
-        // SUBSCRIPTIONS block in assets/pricing.js for why this page skips
-        // the region gate (UGX-only, no USD rate given) and is paid in full
-        // (depositPct: 1) rather than the usual 50/50 split.
-        dir: 'prime-video', accent: 'prime-video',
-        platformName: 'Prime Video', logoIcon: 'fas fa-clapperboard',
-        title: 'Prime Video', service: 'Prime Video',
-        headline: 'Get <em>Prime Video</em>',
-        blurb: 'Shared Prime Video access, any term from 3 to 18 months. Pay once, watch the same day.',
-        guaranteeTitle: 'Pay once, watch the same day',
-        guaranteeBody: 'This is shared access, not a delivery that ramps up — pay in full and we send your login on WhatsApp as soon as it is confirmed.',
-        platform: 'prime-video',
+    // Shared-profile subscription resells, not boost services — see the
+    // SUBSCRIPTIONS block in assets/pricing.js. Priced for Uganda (UGX)
+    // and South Sudan (USD) — the region gate stays on, same as every
+    // other order page, since both are real prices now. Paid in full
+    // (depositPct: 1) rather than the usual 50/50, since there's nothing
+    // to "deliver gradually" about handing over a shared login.
+    ...[
+        { dir: 'canva-pro', platform: 'canva-pro', name: 'Canva Pro', verb: 'design', icon: 'fas fa-palette' },
+        { dir: 'capcut-pro', platform: 'capcut-pro', name: 'CapCut Pro', verb: 'edit', icon: 'fas fa-film' },
+        { dir: 'google-ai-pro', platform: 'google-ai-pro', name: 'Google AI Pro', verb: 'use it', icon: 'fas fa-robot' },
+        { dir: 'coursera-plus', platform: 'coursera-plus', name: 'Coursera Plus', verb: 'start learning', icon: 'fas fa-graduation-cap' },
+        { dir: 'duolingo-super', platform: 'duolingo-super', name: 'Duolingo Super', verb: 'start', icon: 'fas fa-language' },
+        { dir: 'perplexity-pro', platform: 'perplexity-pro', name: 'Perplexity Pro', verb: 'search', icon: 'fas fa-magnifying-glass' },
+        { dir: 'prime-video', platform: 'prime-video', name: 'Prime Video', verb: 'watch', icon: 'fas fa-clapperboard', shared: true },
+        { dir: 'apple-tv-plus', platform: 'apple-tv-plus', name: 'Apple TV+', verb: 'watch', icon: 'fas fa-tv', shared: true },
+        { dir: 'crunchyroll', platform: 'crunchyroll', name: 'Crunchyroll', verb: 'watch', icon: 'fas fa-play', shared: true },
+        { dir: 'linkedin-premium-career', platform: 'linkedin-premium-career', name: 'LinkedIn Premium Career', verb: 'apply', icon: 'fas fa-briefcase' },
+        { dir: 'adobe-creative-cloud', platform: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', verb: 'create', icon: 'fas fa-swatchbook' }
+    ].map((t) => ({
+        dir: t.dir, accent: t.dir,
+        platformName: t.name, logoIcon: t.icon,
+        title: t.name, service: t.name,
+        headline: 'Get <em>' + t.name + '</em>',
+        blurb: (t.shared ? 'Shared ' : '') + t.name + ' access, any term from 3 to 18 months. Pay once, ' + t.verb + ' the same day.',
+        guaranteeTitle: 'Pay once, ' + t.verb + ' the same day',
+        guaranteeBody: (t.shared ? 'This is shared access, not' : 'This is access, not') +
+            ' a delivery that ramps up — pay in full and we send your login on WhatsApp as soon as it is confirmed.',
+        platform: t.platform,
         depositPct: 1,
-        fixedRegion: 'UG',
-        backHref: '/offers/', backLabel: 'Back to offers',
+        backHref: '/tools/', backLabel: 'Back to tools',
         gifts: SUB_GIFTS,
         proof: SUB_PROOF
-    }
+    }))
 ];
 
 /* ------------------------------------------------------- the bundle pitch ---

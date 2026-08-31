@@ -46,6 +46,16 @@
 [data-accent="webtraffic"]{ --acc: #6be4ff; --acc-2: #9d8bff; --acc-ink: #04101f; }
 [data-accent="website"]   { --acc: #6be4ff; --acc-2: #9d8bff; --acc-ink: #04101f; }
 [data-accent="prime-video"] { --acc: #00A8E1; --acc-2: #6be4ff; --acc-ink: #04141a; }
+[data-accent="canva-pro"]   { --acc: #00C4CC; --acc-2: #8B3DFF; --acc-ink: #04191a; }
+[data-accent="capcut-pro"]  { --acc: #00F6E8; --acc-2: #FF3B5C; --acc-ink: #04191a; }
+[data-accent="google-ai-pro"] { --acc: #4285F4; --acc-2: #9D8BFF; --acc-ink: #04101f; }
+[data-accent="coursera-plus"] { --acc: #0056D2; --acc-2: #6be4ff; --acc-ink: #04101f; }
+[data-accent="duolingo-super"] { --acc: #58CC02; --acc-2: #b8ff4d; --acc-ink: #0d1a04; }
+[data-accent="perplexity-pro"] { --acc: #20808D; --acc-2: #6be4ff; --acc-ink: #04191a; }
+[data-accent="apple-tv-plus"] { --acc: #cfd6dd; --acc-2: #6be4ff; --acc-ink: #0a0a0a; }
+[data-accent="crunchyroll"] { --acc: #F47521; --acc-2: #ffd24d; --acc-ink: #1a0f04; }
+[data-accent="linkedin-premium-career"] { --acc: #0A66C2; --acc-2: #6be4ff; --acc-ink: #04101f; }
+[data-accent="adobe-creative-cloud"] { --acc: #FF0000; --acc-2: #ff9d4d; --acc-ink: #1a0404; }
 
 /* --------------------------------------------------------------- base ---- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1014,6 +1024,16 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
     box-shadow: 0 0 0 1px var(--acc), 0 20px 44px -24px color-mix(in srgb, var(--acc) 80%, transparent);
 }
 .plan-card.is-hero { border-color: color-mix(in srgb, var(--acc) 40%, transparent); }
+
+/* honest dead end for a region this product isn't priced in yet */
+.plan-empty {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    padding: 36px 20px; text-align: center;
+    border: 1px dashed var(--ord-line-strong); border-radius: 20px;
+    background: var(--ord-surface);
+}
+.plan-empty i.fa-circle-info { font-size: 1.4rem; color: var(--ord-dim); }
+.plan-empty p { font-size: 0.92rem; color: #c2c2cb; line-height: 1.55; max-width: 34ch; }
 .plan-card:has(.tier-tag) { padding-top: 30px; }
 
 .pc-top {

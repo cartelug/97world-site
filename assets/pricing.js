@@ -563,92 +563,129 @@
         }
     ];
 
-    /* ----------------------------------------------------------- pro tools ---
-     * CapCut Pro and Canva Pro, resold as prepaid access for a fixed term
-     * (3/4/5/6/9/12 months) rather than an auto-renewing subscription —
-     * transcribed straight from the customer's own price list.
-     *
-     * These are Mobile Money prices quoted only in UGX; the price list gives
-     * no USD rate, so — unlike the boost catalogue — there is nothing to
-     * convert for the USD regions and no claim is made for them here.
-     * -------------------------------------------------------------------- */
-    var TOOL_PLANS = {
-        capcut: {
-            id: 'capcut', name: 'CapCut Pro', icon: 'fas fa-clapperboard',
-            blurb: 'Premium effects, templates and export tools for video.',
-            feats: [
-                'Premium effects, filters and templates unlocked',
-                'Export in 4K with no watermark',
-                'Cloud storage and sync across your devices'
-            ],
-            terms: [
-                { months: 3, ugx: 189000 },
-                { months: 4, ugx: 199000 },
-                { months: 5, ugx: 219000 },
-                { months: 6, ugx: 229000 },
-                { months: 9, ugx: 279000 },
-                { months: 12, ugx: 299000 }
-            ]
-        },
-        canva: {
-            id: 'canva', name: 'Canva Pro', icon: 'fas fa-palette',
-            blurb: 'The full template library, brand kit and design tools.',
-            feats: [
-                'Full premium template and stock photo library',
-                'Background remover, Magic tools and brand kit',
-                'Unlimited cloud storage for your designs'
-            ],
-            terms: [
-                { months: 3, ugx: 179000 },
-                { months: 4, ugx: 189000 },
-                { months: 5, ugx: 209000 },
-                { months: 6, ugx: 219000 },
-                { months: 9, ugx: 269000 },
-                { months: 12, ugx: 289000 }
-            ]
-        }
-    };
 
     /* ------------------------------------------------------ subscriptions ---
-     * Shared-profile streaming/subscription access, resold as a fixed term
-     * paid in full up front — there's nothing to deliver "gradually" here,
-     * so this never uses the boost catalogue's 50/50 split. Same UGX-only
-     * rule as TOOL_PLANS just above: the price list gives no USD rate, so
-     * there is nothing honest to show South Sudan/DR Congo customers yet —
-     * these order pages skip the region gate entirely rather than invent a
-     * conversion. New platforms (Apple TV+, DStv Stream, ...) get added
-     * here as their real prices are given — never before that.
-     * -------------------------------------------------------------------- */
+     * Shared-profile subscription access, resold as a fixed term paid in
+     * full up front — there's nothing to deliver "gradually" here, so this
+     * never uses the boost catalogue's 50/50 split. Transcribed straight
+     * from the "Client Price Lists" sheet of the customer's own pricing
+     * master (Aug 2026) — Uganda in UGX, South Sudan in USD, both real.
+     * DR Congo isn't in that price list, so it isn't priced here either —
+     * plansFor() returns nothing for it rather than inventing a number,
+     * and the order page falls back to an honest "ask on WhatsApp" state.
+     * 12 months is tagged Recommended (matches the price list's own "12
+     * months is the primary package to push" note) — never "best value",
+     * since the cheapest per-month tier isn't always the 12-month one and
+     * that claim has to stay arithmetically true. */
+    function tier(months, ugx, usd, tag) {
+        return { months: months, ugx: ugx, usd: usd, tag: tag || null };
+    }
     var SUBSCRIPTIONS = {
+        'canva-pro': {
+            name: 'Canva Pro', short: 'Canva Pro', icon: 'fas fa-palette',
+            tiers: [
+                tier(3, 149000, 45), tier(6, 199000, 60), tier(9, 229000, 70),
+                tier(12, 249000, 75, '⭐ Recommended'), tier(18, 329000, 100)
+            ]
+        },
+        'capcut-pro': {
+            name: 'CapCut Pro', short: 'CapCut Pro', icon: 'fas fa-film',
+            tiers: [
+                tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 329000, 100),
+                tier(12, 399000, 120, '⭐ Recommended'), tier(18, 499000, 150)
+            ]
+        },
+        'google-ai-pro': {
+            name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fas fa-robot',
+            tiers: [
+                tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 299000, 90),
+                tier(12, 349000, 105, '⭐ Recommended'), tier(18, 449000, 135)
+            ]
+        },
+        'coursera-plus': {
+            name: 'Coursera Plus', short: 'Coursera Plus', icon: 'fas fa-graduation-cap',
+            tiers: [
+                tier(3, 149000, 45), tier(6, 199000, 60), tier(9, 249000, 75),
+                tier(12, 299000, 90, '⭐ Recommended'), tier(18, 399000, 120)
+            ]
+        },
+        'duolingo-super': {
+            name: 'Duolingo Super', short: 'Duolingo Super', icon: 'fas fa-language',
+            tiers: [
+                tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
+                tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
+            ]
+        },
+        'perplexity-pro': {
+            name: 'Perplexity Pro', short: 'Perplexity Pro', icon: 'fas fa-magnifying-glass',
+            tiers: [
+                tier(3, 199000, 60), tier(6, 299000, 90), tier(9, 399000, 120),
+                tier(12, 449000, 135, '⭐ Recommended'), tier(18, 599000, 180)
+            ]
+        },
         'prime-video': {
             name: 'Prime Video', short: 'Prime Video', icon: 'fas fa-clapperboard',
             tiers: [
-                { months: 3,  ugx: 120000 },
-                { months: 4,  ugx: 130000 },
-                { months: 6,  ugx: 150000, tag: '⭐ Best value' },
-                { months: 9,  ugx: 190000 },
-                { months: 12, ugx: 230000, tag: '🔥 Most popular' },
-                { months: 18, ugx: 300000 }
+                tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
+                tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
+            ]
+        },
+        'apple-tv-plus': {
+            name: 'Apple TV+', short: 'Apple TV+', icon: 'fas fa-tv',
+            tiers: [
+                tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
+                tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
+            ]
+        },
+        'crunchyroll': {
+            name: 'Crunchyroll', short: 'Crunchyroll', icon: 'fas fa-play',
+            tiers: [
+                tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
+                tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
+            ]
+        },
+        'linkedin-premium-career': {
+            name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fas fa-briefcase',
+            tiers: [
+                tier(3, 349000, 105), tier(6, 599000, 180), tier(9, 749000, 225),
+                tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)
+            ]
+        },
+        'adobe-creative-cloud': {
+            name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fas fa-swatchbook',
+            tiers: [
+                tier(3, 299000, 90), tier(6, 549000, 165), tier(9, 699000, 210),
+                tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)
             ]
         }
     };
 
     /** Term tiers turned into the same plan shape the wizard already
      *  understands — id/name/price/feats — so no wizard code needs to know
-     *  this isn't a boost service. Always UGX; see the note above. */
-    function subscriptionPlans(key) {
+     *  this isn't a boost service. Uganda prices in UGX, South Sudan in
+     *  USD; anything else (DR Congo isn't in the price list) returns no
+     *  plans at all rather than a converted or guessed number. */
+    function subscriptionPlans(key, regionCode) {
         var sub = SUBSCRIPTIONS[key];
         if (!sub) return [];
+        if (regionCode !== 'UG' && regionCode !== 'SS') return [];
+        var useUsd = regionCode === 'SS';
+
         return sub.tiers.map(function (t) {
-            var perMonth = Math.round(t.ugx / t.months / 50) * 50;
+            var price = useUsd ? t.usd : t.ugx;
+            var currency = useUsd ? 'USD' : 'UGX';
+            var perMonth = useUsd
+                ? Math.round((t.usd / t.months) * 100) / 100
+                : Math.round(t.ugx / t.months / 50) * 50;
+            var perMonthText = useUsd ? '$' + perMonth : perMonth.toLocaleString() + ' UGX';
             return {
                 id: String(t.months),
                 name: t.months + ' months',
                 short: t.months + ' months',
-                note: '≈ ' + perMonth.toLocaleString() + ' UGX/mo',
-                price: t.ugx,
+                note: '≈ ' + perMonthText + '/mo',
+                price: price,
                 was: null,
-                currency: 'UGX',
+                currency: currency,
                 tag: t.tag || null,
                 hero: !!t.tag,
                 label: t.months + ' months — ' + sub.name,
@@ -765,7 +802,7 @@
 
     /** Plans for one service on a platform, priced for a region. Bundles are handled separately. */
     function plansFor(platformKey, regionCode, serviceId) {
-        if (SUBSCRIPTIONS[platformKey]) return subscriptionPlans(platformKey);
+        if (SUBSCRIPTIONS[platformKey]) return subscriptionPlans(platformKey, regionCode);
 
         var currency = REGIONS[regionCode] ? REGIONS[regionCode].currency : 'UGX';
 
@@ -856,7 +893,6 @@
         SERVICES: SERVICES,
         SERVICES_BY_ID: SERVICES_BY_ID,
         BUNDLES: bundlePlans,
-        TOOL_PLANS: TOOL_PLANS,
         SUBSCRIPTIONS: SUBSCRIPTIONS,
         PLATFORM_ROLES: PLATFORM_ROLES,
         GROWTH_PRIMARY: GROWTH_PRIMARY,

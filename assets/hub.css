@@ -343,6 +343,19 @@ body[data-hub] .display-hero em {
 
 .offer-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
+/* One toggle repricing every card on /tools/ at once — Uganda (UGX) or
+   South Sudan (USD), the only two regions these products are priced for. */
+.region-toggle {
+    display: inline-flex; gap: 6px; padding: 5px;
+    border-radius: 999px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
+}
+.region-toggle-btn {
+    padding: 9px 18px; border-radius: 999px;
+    font-size: 0.86rem; font-weight: 700; color: #c8c8d0;
+    transition: background 0.2s, color 0.2s;
+}
+.region-toggle-btn.is-on { background: linear-gradient(100deg, var(--hub), var(--hub-2)); color: var(--hub-ink); }
+
 /* ==========================================================================
    TOOL CARDS — CapCut Pro / Canva Pro term picker
    An offer-card with a duration chosen instead of quoted once. The chip row

@@ -164,7 +164,27 @@
 
         renderPlans: function () {
             var currency = Wizard.region().currency;
-            Wizard.$('plan-grid').innerHTML = Wizard.plans().map(function (plan, i) {
+            var plans = Wizard.plans();
+
+            // A region this product genuinely isn't priced in yet (e.g. DR
+            // Congo for a subscription only priced for Uganda/South Sudan)
+            // — never an invented conversion, an honest dead end instead.
+            if (!plans.length) {
+                Wizard.$('plan-grid').innerHTML =
+                    '<div class="plan-empty">' +
+                        '<i class="fas fa-circle-info"></i>' +
+                        '<p>We don\'t have this priced for ' + Wizard.region().name +
+                            ' yet. Message us and we\'ll quote you directly.</p>' +
+                        '<a href="https://wa.me/' + (Wizard.cfg.whatsapp || '') + '?text=' +
+                            encodeURIComponent('Hi 97 World, can you quote me for ' + (Wizard.cfg.service || 'this') +
+                                ' in ' + Wizard.region().name + '?') +
+                            '" target="_blank" rel="noopener" class="oc-cta oc-cta--quiet">' +
+                            '<i class="fab fa-whatsapp"></i> Ask on WhatsApp</a>' +
+                    '</div>';
+                return;
+            }
+
+            Wizard.$('plan-grid').innerHTML = plans.map(function (plan, i) {
                 var on = Wizard.state.plan === i;
                 return '<button type="button" class="plan-card' +
                     (on ? ' is-on' : '') + (plan.hero ? ' is-hero' : '') + '"' +
