@@ -78,14 +78,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .oh-cta { position: relative; overflow: hidden; }
 .oh-cta::after { content: ''; position: absolute; top: 0; left: 0; width: 45%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent); transform: translateX(-200%) skewX(-20deg); animation: ctaSheen 3.6s ease-in-out infinite; }
 @keyframes ctaSheen { 0% { transform: translateX(-200%) skewX(-20deg); } 45%, 100% { transform: translateX(320%) skewX(-20deg); } }
-/* the platform marks inside the chooser bob gently, each on its own offset —
-   the card reads as alive without anything actually moving on the page */
-.cp-marks > *, .om-ic { animation: iconFloat 4.5s ease-in-out infinite; }
-@keyframes iconFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-.cp-marks > *:nth-child(2) { animation-delay: 0.35s; }
-.cp-marks > *:nth-child(3) { animation-delay: 0.7s; }
-.cp-marks > *:nth-child(4) { animation-delay: 1.05s; }
-.choice-panel[data-path="build"] .cp-marks > * { animation-duration: 5.2s; }
+/* the badge icon breathes gently — alive without anything drifting around
+   the card the way the old floating logo row used to */
+.cp-badge i, .om-ic { animation: iconFloat 4.5s ease-in-out infinite; }
+@keyframes iconFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 .offer-mini:nth-child(2) .om-ic { animation-delay: 1.1s; }
 
 /* ---- touch feedback: desktop gets hover, mobile gets a real press ---- */
@@ -100,7 +96,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 @media(prefers-reduced-motion: reduce) {
     .fade-up, .scale-in, .slide-in-right, .fade-in, [data-stagger][data-stagger] > * { opacity: 1 !important; transform: none !important; transition: none !important; }
-    .oh-badge, .oh-cta::after, .cp-marks > *, .om-ic, .hero-cue-track::after, .hero-asset { animation: none !important; }
+    .oh-badge, .oh-cta::after, .cp-badge i, .om-ic, .hero-cue-track::after, .hero-asset { animation: none !important; }
     .scroll-progress { display: none; }
 }
 
@@ -156,8 +152,8 @@ body.menu-open { overflow: hidden; }
 .mm-intent-card:hover, .mm-intent-card:focus-visible { border-color: rgba(0,255,178,0.4); background: rgba(0,255,178,0.06); outline: none; }
 .mm-intent-ic { width: 36px; height: 36px; border-radius: 12px; background: rgba(0,255,178,0.12); color: var(--clr-emerald); display: flex; align-items: center; justify-content: center; font-size: 0.95rem; margin-bottom: 6px; }
 .mm-intent-card[data-path="build"] .mm-intent-ic { background: rgba(0,168,225,0.14); color: #6be4ff; }
-.mm-intent-card[data-path="tools"] { grid-column: 1 / -1; }
-.mm-intent-card[data-path="tools"] .mm-intent-ic { background: rgba(255,201,77,0.14); color: #FFC94D; }
+.mm-intent-card:nth-child(3) { grid-column: 1 / -1; }
+.mm-intent-card[data-path="offers"] .mm-intent-ic { background: rgba(255,201,77,0.14); color: #FFC94D; }
 .mm-intent-card b { font-family: var(--font-display); font-size: 1rem; font-weight: 700; line-height: 1.2; }
 .mm-intent-card small { font-size: 0.76rem; color: var(--clr-muted); line-height: 1.35; }
 
@@ -214,6 +210,12 @@ body.menu-open { overflow: hidden; }
 .ha-mtn    { width: 60px; height: auto; top: 22%; left: -6%; opacity: 0.75; animation: float-path-7 27s linear infinite; filter: drop-shadow(0 10px 20px rgba(255, 204, 0, 0.2)); }
 .ha-airtel { width: 55px; height: auto; top: 78%; right: -6%; opacity: 0.75; animation: float-path-8 23s linear infinite reverse; filter: drop-shadow(0 10px 20px rgba(255, 0, 0, 0.2)); }
 
+/* on a phone the hero is barely wider than the choice cards themselves, so a
+   drifting badge has nowhere to go without clipping at the screen edge or
+   crossing into the card stack — it reads as clutter, not texture, at this
+   width. Desktop has the room for it; a phone doesn't. */
+@media(max-width: 768px) { .anti-gravity-bg { display: none; } }
+
 @keyframes float-path-1 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 33% { transform: translate(60vw, 30vh) rotate(15deg); } 66% { transform: translate(20vw, 60vh) rotate(-10deg); } }
 @keyframes float-path-2 { 0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); } 50% { transform: translate(-80vw, -40vh) rotate(-20deg) scale(1.2); } }
 @keyframes float-path-3 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-120vw, 20vh) rotate(25deg); } }
@@ -224,6 +226,10 @@ body.menu-open { overflow: hidden; }
 @keyframes float-path-8 { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-45vw, -35vh) rotate(14deg); } }
 
 .display-hero { font-size: clamp(2.5rem, 6.2vw, 4.8rem); letter-spacing: -0.018em; line-height: 1.03; margin-bottom: 14px; font-weight: 700; }
+/* the 2.5rem floor plus the hard <br> after "you" was tall enough on a
+   narrow phone that "you" broke onto its own orphan line — a smaller floor
+   here keeps "What do you" on one line without touching wider screens */
+@media(max-width: 360px) { .display-hero { font-size: 2.15rem; } }
 .display-hero em {
     font-style: normal;
     background: linear-gradient(100deg, var(--clr-emerald), #b8ff4d);
@@ -295,35 +301,67 @@ body.menu-open { overflow: hidden; }
     font-size: 0.6rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;
 }
 
-.cp-marks { position: relative; display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
-.cp-marks img { width: 27px; height: 27px; object-fit: contain; display: block; }
-.cp-marks--glyph { color: #6be4ff; gap: 12px; }
-.cp-marks--glyph svg { width: 26px; height: 26px; display: block; }
-.cp-marks--icons { color: #FFC94D; gap: 12px; }
-.cp-marks--icons i { font-size: 22px; display: block; line-height: 1; }
+/* icon badge + real-logo proof stack, one shared language across all three
+   cards instead of a different icon treatment per card */
+.cp-top { position: relative; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+.cp-badge {
+    width: 46px; height: 46px; flex: none; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.15rem; background: rgba(0,255,178,0.14); color: var(--clr-emerald);
+}
+.choice-panel[data-path="build"] .cp-badge { background: rgba(0,168,225,0.14); color: #6be4ff; }
+.choice-panel[data-path="offers"] .cp-badge { background: rgba(255,201,77,0.14); color: #FFC94D; }
+
+/* the real platforms/products a card covers, as an overlapping avatar
+   stack — reads as proof ("these exact ones") rather than decoration */
+.cp-stack { display: flex; }
+.cp-stack img, .cp-stack-ic {
+    width: 26px; height: 26px; border-radius: 50%; margin-left: -9px;
+    border: 2px solid #0b0c10; box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+.cp-stack img { object-fit: cover; background: #fff; display: block; }
+.cp-stack-ic { background: #16171c; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; }
+.cp-stack img:first-child, .cp-stack-ic:first-child { margin-left: 0; }
 
 .cp-title { position: relative; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; }
 .cp-sub { position: relative; font-size: 0.9rem; color: var(--clr-muted); line-height: 1.5; margin-top: 5px; }
 
 .cp-foot {
     position: relative; display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; margin-top: 14px; padding-top: 12px;
+    gap: 12px; margin-top: 16px; padding-top: 13px;
     border-top: 1px dashed rgba(255,255,255,0.14);
 }
 .cp-from { font-size: 0.8rem; color: #c8c8d0; }
 .cp-from b { color: #fff; font-weight: 800; }
-.cp-go { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; font-size: 0.82rem; color: var(--clr-emerald); white-space: nowrap; }
-.choice-panel[data-path="build"] .cp-go { color: #6be4ff; }
-.choice-panel[data-path="tools"] .cp-go { color: #FFC94D; }
-.cp-go i { transition: transform 0.3s; }
-.choice-panel:hover .cp-go i { transform: translateX(5px); }
+
+/* a real button, not a text link — every card has one so the choice always
+   reads as "tap here", not just "this whole card happens to be clickable" */
+.cp-btn {
+    display: inline-flex; align-items: center; gap: 7px; flex: none;
+    padding: 10px 16px; border-radius: 100px;
+    font-weight: 800; font-size: 0.8rem; white-space: nowrap;
+    background: rgba(0,255,178,0.14); color: var(--clr-emerald);
+    transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+.cp-btn i { transition: transform 0.3s; }
+.choice-panel:hover .cp-btn, .choice-panel:focus-visible .cp-btn { background: var(--clr-emerald); color: #04140c; }
+.choice-panel:hover .cp-btn i, .choice-panel:focus-visible .cp-btn i { transform: translateX(4px); }
+.choice-panel[data-path="build"] .cp-btn { background: rgba(0,168,225,0.14); color: #6be4ff; }
+.choice-panel[data-path="build"]:hover .cp-btn, .choice-panel[data-path="build"]:focus-visible .cp-btn { background: #6be4ff; color: #04101f; }
+.choice-panel[data-path="offers"] .cp-btn { background: rgba(255,201,77,0.14); color: #FFC94D; }
+.choice-panel[data-path="offers"]:hover .cp-btn, .choice-panel[data-path="offers"]:focus-visible .cp-btn { background: #FFC94D; color: #1a1004; }
+/* touch has no hover — the tap itself is the feedback, so give the button a
+   quick fill flash instead of relying on a state that never arrives */
+.choice-panel:active .cp-btn { background: var(--clr-emerald); color: #04140c; }
+.choice-panel[data-path="build"]:active .cp-btn { background: #6be4ff; color: #04101f; }
+.choice-panel[data-path="offers"]:active .cp-btn { background: #FFC94D; color: #1a1004; }
 
 @media(max-width: 720px) {
     .hero-choice { grid-template-columns: 1fr; gap: 11px; }
     .choice-panel { padding: 17px 17px 14px; border-radius: 20px; background: rgba(6,7,10,0.95); }
-    .cp-marks { margin-bottom: 11px; }
-    .cp-marks img { width: 25px; height: 25px; }
-    .cp-marks--glyph svg { width: 24px; height: 24px; }
+    .cp-top { margin-bottom: 12px; }
+    .cp-badge { width: 42px; height: 42px; border-radius: 13px; font-size: 1.05rem; }
+    .cp-stack img, .cp-stack-ic { width: 24px; height: 24px; }
     .cp-title { font-size: 1.22rem; }
     .cp-sub { font-size: 0.85rem; }
     /* keep the whole chooser + trust row inside one phone screen. A 2x2 grid
