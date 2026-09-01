@@ -122,16 +122,21 @@ body[data-hub] .display-hero em {
 /* ==========================================================================
    STAT STRIP — the numbers, stated once, directly under the promise
    ========================================================================== */
+/* individual floating cards, same grammar as .spec below (bg/border/lift)
+   instead of a hairline grid box — one visual language for every tile on
+   the page, not a special case for stats */
 .hub-stats {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
     max-width: 860px; margin: 40px auto 0;
-    border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden;
-    background: rgba(255,255,255,0.08);
 }
-.hub-stats div { padding: 20px 12px; background: rgba(6,7,10,0.92); }
-.hub-stats b { display: block; font-family: var(--font-display); font-size: clamp(1.2rem, 3.4vw, 1.7rem); font-weight: 700; line-height: 1; letter-spacing: -0.02em; }
+.hub-stats div {
+    position: relative; overflow: hidden;
+    padding: 22px 12px; text-align: center;
+    background: rgba(8,9,12,0.86); border: 1px solid rgba(255,255,255,0.09); border-radius: 18px;
+}
+.hub-stats b { display: block; font-family: var(--font-display); font-size: clamp(1.35rem, 3.6vw, 1.9rem); font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
 .hub-stats div[data-plus] b::after { content: '+'; color: var(--hub); }
-.hub-stats span { display: block; margin-top: 7px; font-size: 0.7rem; color: var(--clr-muted); line-height: 1.35; }
+.hub-stats span { display: block; margin-top: 8px; font-size: 0.72rem; color: var(--clr-muted); line-height: 1.35; }
 
 /* ==========================================================================
    SECTION SHELL
@@ -162,16 +167,19 @@ body[data-hub] .display-hero em {
     position: relative; overflow: hidden;
     padding: 26px 24px; border-radius: 20px;
     background: rgba(8,9,12,0.86); border: 1px solid rgba(255,255,255,0.09);
-    transition: transform 0.35s var(--curve-spring), border-color 0.3s, background 0.3s;
 }
-.spec:hover { transform: translateY(-4px); border-color: var(--hub-35); background: rgba(12,14,18,0.92); }
+/* same corner glow the hero choice cards use on hover — one card language
+   across the whole site instead of a one-off treatment per section */
+.spec-glow { position: absolute; inset: -40% 30% 60% -20%; background: radial-gradient(circle, var(--hub-14), transparent 70%); opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+@media (hover: hover) { .spec:hover .spec-glow { opacity: 1; } }
 .spec-ic {
+    position: relative;
     display: flex; align-items: center; justify-content: center;
-    width: 44px; height: 44px; margin-bottom: 16px;
-    border-radius: 13px; background: var(--hub-14); color: var(--hub); font-size: 1.05rem;
+    width: 46px; height: 46px; margin-bottom: 16px;
+    border-radius: 14px; background: var(--hub-14); color: var(--hub); font-size: 1.1rem;
 }
-.spec h3 { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 7px; }
-.spec p { font-size: 0.88rem; color: var(--clr-muted); line-height: 1.55; }
+.spec h3 { position: relative; font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 7px; }
+.spec p { position: relative; font-size: 0.88rem; color: var(--clr-muted); line-height: 1.55; }
 
 /* ==========================================================================
    PLATFORM RAIL — what we grow, and where it goes
@@ -234,6 +242,24 @@ body[data-hub] .display-hero em {
 .flow-body { padding-top: 8px; }
 .flow-body h3 { font-size: 1.12rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 6px; }
 .flow-body p { font-size: 0.9rem; color: var(--clr-muted); line-height: 1.58; }
+
+/* desktop gets the room to read this as a sequence at a glance instead of a
+   scroll -- a horizontal stepper with the numbered nodes threaded on one
+   line. The connector is drawn per-step (edge of one node to the center of
+   the next) rather than as one line sized to a fixed step count, so this
+   works unchanged whether a page has 4 steps or 5. */
+@media(min-width: 860px) {
+    .flow { max-width: 1040px; display: flex; align-items: flex-start; gap: 0; }
+    .flow-step { grid-template-columns: none; flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; padding-bottom: 0; padding: 0 14px; }
+    .flow-step::before { display: none; }
+    .flow-step:not(:last-child)::after {
+        content: ''; position: absolute; z-index: 1;
+        top: 27px; left: calc(50% + 28px); width: calc(100% - 56px); height: 2px;
+        background: linear-gradient(90deg, var(--hub-35), rgba(255,255,255,0.05));
+    }
+    .flow-n { margin: 0; }
+    .flow-body { padding-top: 0; }
+}
 
 /* ==========================================================================
    FAQ — <details>, so it works with no JavaScript at all
@@ -606,8 +632,8 @@ body[data-hub] .display-hero em {
     .hub-head p { font-size: 0.92rem; margin-top: 11px; }
     .hub-kicker { margin-bottom: 10px; font-size: 0.65rem; }
 
-    .hub-stats { margin-top: 26px; border-radius: 16px; }
-    .hub-stats div { padding: 15px 10px; }
+    .hub-stats { margin-top: 26px; gap: 8px; }
+    .hub-stats div { padding: 15px 10px; border-radius: 15px; }
     .hub-stats span { font-size: 0.66rem; margin-top: 5px; }
 
     .pick-grid { gap: 7px; }
@@ -711,15 +737,17 @@ body.order-page .wa-fab { bottom: calc(var(--dock-h, 92px) + env(safe-area-inset
 /* Cards lift toward the pointer. Touch devices skip this entirely — a hover
    state that sticks after a tap reads as a selection that never happened. */
 @media (hover: hover) {
-    .offer-card, .spec, .flow-step, .pop-card, .check {
+    .offer-card, .spec, .flow-step, .pop-card, .check, .hub-stats div {
         transition: transform var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)),
                     border-color var(--m-base, 260ms) ease,
-                    box-shadow var(--m-base, 260ms) ease;
+                    box-shadow var(--m-base, 260ms) ease,
+                    background var(--m-base, 260ms) ease;
     }
-    .offer-card:hover, .spec:hover, .flow-step:hover, .check:hover {
+    .offer-card:hover, .spec:hover, .flow-step:hover, .check:hover, .hub-stats div:hover {
         transform: translateY(-3px);
         border-color: var(--hub-35);
     }
+    .hub-stats div:hover { background: rgba(12,14,18,0.92); }
     /* the nav underline grows from the left rather than fading in */
     .nav-item { position: relative; }
     .nav-item::after {
