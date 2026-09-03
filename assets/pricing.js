@@ -582,77 +582,77 @@
     }
     var SUBSCRIPTIONS = {
         'canva-pro': {
-            slug: 'canva', name: 'Canva Pro', short: 'Canva Pro', icon: 'fas fa-palette',
+            slug: 'canva', name: 'Canva Pro', short: 'Canva Pro', icon: 'fas fa-palette', brand: '#00C4CC',
             tiers: [
                 tier(3, 149000, 45), tier(6, 199000, 60), tier(9, 229000, 70),
                 tier(12, 249000, 75, '⭐ Recommended'), tier(18, 329000, 100)
             ]
         },
         'capcut-pro': {
-            slug: 'capcut', name: 'CapCut Pro', short: 'CapCut Pro', icon: 'fas fa-film',
+            slug: 'capcut', name: 'CapCut Pro', short: 'CapCut Pro', icon: 'fas fa-film', brand: '#00F6E8',
             tiers: [
                 tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 329000, 100),
                 tier(12, 399000, 120, '⭐ Recommended'), tier(18, 499000, 150)
             ]
         },
         'google-ai-pro': {
-            slug: 'google-ai', name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fab fa-google',
+            slug: 'google-ai', name: 'Google AI Pro', short: 'Google AI Pro', icon: 'fab fa-google', brand: '#4285F4',
             tiers: [
                 tier(3, 199000, 60), tier(6, 249000, 75), tier(9, 299000, 90),
                 tier(12, 349000, 105, '⭐ Recommended'), tier(18, 449000, 135)
             ]
         },
         'coursera-plus': {
-            slug: 'coursera', name: 'Coursera Plus', short: 'Coursera Plus', icon: 'fas fa-graduation-cap',
+            slug: 'coursera', name: 'Coursera Plus', short: 'Coursera Plus', icon: 'fas fa-graduation-cap', brand: '#0056D2',
             tiers: [
                 tier(3, 149000, 45), tier(6, 199000, 60), tier(9, 249000, 75),
                 tier(12, 299000, 90, '⭐ Recommended'), tier(18, 399000, 120)
             ]
         },
         'duolingo-super': {
-            slug: 'duolingo', name: 'Duolingo Super', short: 'Duolingo Super', icon: 'fas fa-language',
+            slug: 'duolingo', name: 'Duolingo Super', short: 'Duolingo Super', icon: 'fas fa-language', brand: '#58CC02',
             tiers: [
                 tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
                 tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
             ]
         },
         'perplexity-pro': {
-            slug: 'perplexity', name: 'Perplexity Pro', short: 'Perplexity Pro', icon: 'fas fa-magnifying-glass',
+            slug: 'perplexity', name: 'Perplexity Pro', short: 'Perplexity Pro', icon: 'fas fa-magnifying-glass', brand: '#20808D',
             tiers: [
                 tier(3, 199000, 60), tier(6, 299000, 90), tier(9, 399000, 120),
                 tier(12, 449000, 135, '⭐ Recommended'), tier(18, 599000, 180)
             ]
         },
         'prime-video': {
-            slug: 'prime', name: 'Prime Video', short: 'Prime Video', icon: 'fab fa-amazon',
+            slug: 'prime', name: 'Prime Video', short: 'Prime Video', icon: 'fab fa-amazon', brand: '#00A8E1',
             tiers: [
                 tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
                 tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
             ]
         },
         'apple-tv-plus': {
-            slug: 'apple-tv', name: 'Apple TV+', short: 'Apple TV+', icon: 'fab fa-apple',
+            slug: 'apple-tv', name: 'Apple TV+', short: 'Apple TV+', icon: 'fab fa-apple', brand: '#cfd6dd',
             tiers: [
                 tier(3, 149000, 45), tier(6, 169000, 50), tier(9, 189000, 55),
                 tier(12, 199000, 60, '⭐ Recommended'), tier(18, 249000, 75)
             ]
         },
         'crunchyroll': {
-            slug: 'crunchyroll', name: 'Crunchyroll', short: 'Crunchyroll', icon: 'fas fa-play',
+            slug: 'crunchyroll', name: 'Crunchyroll', short: 'Crunchyroll', icon: 'fas fa-play', brand: '#F47521',
             tiers: [
                 tier(3, 149000, 45), tier(6, 179000, 55), tier(9, 199000, 60),
                 tier(12, 229000, 70, '⭐ Recommended'), tier(18, 299000, 90)
             ]
         },
         'linkedin-premium-career': {
-            slug: 'linkedin-premium', name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fab fa-linkedin',
+            slug: 'linkedin-premium', name: 'LinkedIn Premium Career', short: 'LinkedIn Premium', icon: 'fab fa-linkedin', brand: '#0A66C2',
             tiers: [
                 tier(3, 349000, 105), tier(6, 599000, 180), tier(9, 749000, 225),
                 tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)
             ]
         },
         'adobe-creative-cloud': {
-            slug: 'adobe', name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fab fa-adobe',
+            slug: 'adobe', name: 'Adobe Creative Cloud', short: 'Adobe Creative Cloud', icon: 'fab fa-adobe', brand: '#FF0000',
             tiers: [
                 tier(3, 299000, 90), tier(6, 549000, 165), tier(9, 699000, 210),
                 tier(12, 849000, 255, '⭐ Recommended'), tier(18, 1099000, 330)

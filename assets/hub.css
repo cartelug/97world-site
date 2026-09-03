@@ -406,6 +406,34 @@ body[data-hub] .display-hero em {
 }
 .oc-per { display: block; margin-top: 3px; font-size: 0.68rem; color: var(--clr-muted); }
 
+/* each card carries its own real brand colour (--tc-brand/--tc-brand-bg,
+   set inline per card from the same accent every product's own order page
+   uses) — the logo badge, the selected term chip and the price all pick it
+   up, so eleven cards read as eleven distinct products instead of one grid
+   painted a single house colour */
+.tc-ic { background: var(--tc-brand-bg, var(--hub-14)); color: var(--tc-brand, var(--hub)); }
+.tool-card .tool-dur.is-on {
+    background: var(--tc-brand, var(--hub)); border-color: transparent;
+    color: #04070a; text-shadow: 0 1px 1px rgba(255,255,255,0.15);
+}
+
+.tc-price-block { padding-top: 2px; }
+.tc-price-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.tc-was { font-size: 0.98rem; font-weight: 600; color: #6a6a74; text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.tc-price {
+    font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; letter-spacing: -0.03em;
+    background: linear-gradient(100deg, var(--tc-brand, var(--hub)), var(--hub-2));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.tc-save {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 7px;
+    padding: 4px 11px; border-radius: 100px;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: -0.01em;
+    background: rgba(0,255,178,0.14); color: #4fe6a8;
+}
+.tc-save i { font-size: 0.68rem; }
+.tc-save b { font-weight: 800; color: inherit; }
+
 @media (prefers-reduced-motion: reduce) {
     .tool-dur { transition: none !important; }
     .tool-dur:active { transform: none !important; }
