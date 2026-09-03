@@ -74,10 +74,13 @@
 
     function cardHTML(key, sub) {
         var style = brandVars(sub.brand);
+        var mark = sub.logo
+            ? '<img src="' + sub.logo + '" alt="" width="24" height="24">'
+            : '<i class="' + sub.icon + '"></i>';
         return '<article class="offer-card tool-card" id="card-' + key + '" data-tool="' + key + '"' + style + '>' +
             '<span class="oc-flag" id="flag-' + key + '" hidden>⭐ Recommended</span>' +
             '<div class="oc-head">' +
-                '<span class="oc-ic tc-ic"><i class="' + sub.icon + '"></i></span>' +
+                '<span class="oc-ic tc-ic">' + mark + '</span>' +
                 '<div class="oc-title"><h3>' + sub.name + '</h3><p>Shared login, fixed term — pick your months below.</p></div>' +
             '</div>' +
             '<ul class="oc-feats tc-feats">' +

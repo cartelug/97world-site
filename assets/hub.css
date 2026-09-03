@@ -412,6 +412,7 @@ body[data-hub] .display-hero em {
    up, so eleven cards read as eleven distinct products instead of one grid
    painted a single house colour */
 .tc-ic { background: var(--tc-brand-bg, var(--hub-14)); color: var(--tc-brand, var(--hub)); }
+.tc-ic img { width: 24px; height: 24px; object-fit: contain; display: block; }
 .tool-card .tool-dur.is-on {
     background: var(--tc-brand, var(--hub)); border-color: transparent;
     color: #04070a; text-shadow: 0 1px 1px rgba(255,255,255,0.15);
