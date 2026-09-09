@@ -142,6 +142,7 @@ img { max-width: 100%; }
 .feature-art.compact .feature-mark { width: 70px; height: 70px; border-radius: 20px; font-size: 2rem; }
 .feature-mark .brandmark { width: 62%; height: 62%; }
 .feature-mark .brandmark-image { filter: brightness(0) invert(1); }
+.art-gamepass .feature-mark { color: #57d374; }
 .prime-mark { width: auto !important; padding: 0 17px; font-size: 1rem !important; border-radius: 18px !important; }
 .art-canva { --brand: #7e51ff; --brand2: #17d5ce; }
 .art-capcut { --brand: #e8f8f5; --brand2: #37e7d7; }
