@@ -341,7 +341,7 @@
     function hydrateDepartmentCounts() {
         document.querySelectorAll('[data-department-count]').forEach(function (node) {
             var category = node.dataset.departmentCount;
-            var count = PRODUCTS.filter(function (product) { return product.primaryCategory === category; }).length;
+            var count = PRODUCTS.filter(function (product) { return product.categories.indexOf(category) !== -1; }).length;
             node.textContent = count + ' product' + (count === 1 ? '' : 's');
         });
     }
