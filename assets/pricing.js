@@ -660,6 +660,117 @@
         }
     };
 
+    /* ------------------------------------------------ Uganda digital goods ---
+     * Customer-safe catalogue additions sourced from the September 2026
+     * Uganda pricebook. These products never require a customer's password.
+     * `orderable: false` keeps a researched-but-unverified package visible
+     * while forcing a stock/region check before money is collected. New
+     * South Sudan prices are intentionally left null until separately quoted. */
+    function digitalTier(id, name, ugx, tag, orderable) {
+        return { id: id, name: name, ugx: ugx, usd: null, tag: tag || null, orderable: orderable !== false };
+    }
+
+    var DIGITAL_PRODUCTS = {
+        'xbox-game-pass': {
+            slug: 'xbox-game-pass', name: 'Xbox Game Pass Ultimate', category: 'Gaming',
+            mark: 'X', brand: '#107C10', accent: '#70E000', fulfilment: 'Digital key',
+            description: 'A customer-redeemed Game Pass Ultimate key. We confirm the key region and account eligibility before payment.',
+            notice: 'Pilot product · region and stacking eligibility are confirmed before payment.',
+            tiers: [
+                digitalTier('1m', '1 month', 80000),
+                digitalTier('3m', '3 months', 214000, 'Recommended'),
+                digitalTier('6m', '6 months', 399000, 'Source check required', false),
+                digitalTier('12m', '12 months', 749000, 'Source check required', false)
+            ]
+        },
+        'roblox-gift-card': {
+            slug: 'roblox-gift-card', name: 'Roblox Gift Card', category: 'Gaming', mark: 'R', brand: '#E2231A', accent: '#FFFFFF', fulfilment: 'Digital code',
+            description: 'A redeemable Roblox gift-card code. The card currency and account compatibility are confirmed first.',
+            tiers: [digitalTier('usd10', 'US$10 card', 38000), digitalTier('usd30', 'US$30 card', 110000, 'Stock check required', false)]
+        },
+        'mobile-legends': {
+            slug: 'mobile-legends', name: 'Mobile Legends Diamonds', category: 'Gaming', mark: 'ML', brand: '#1649A8', accent: '#FFD65A', fulfilment: 'Player-ID top-up',
+            description: 'Diamonds delivered directly using Player ID and Server ID. No password is requested.',
+            tiers: [digitalTier('706', '706 Diamonds', 60000, 'Popular')]
+        },
+        'free-fire': {
+            slug: 'free-fire', name: 'Free Fire Diamonds', category: 'Gaming', mark: 'FF', brand: '#F6A800', accent: '#111111', fulfilment: 'Player-ID top-up',
+            description: 'Password-free diamond top-up. Uganda compatibility and stock are checked before payment.',
+            notice: 'Compatibility test product · order only after 97 confirms the route.',
+            tiers: [digitalTier('1060', '1,060 Diamonds', 35000, 'Compatibility check', false)]
+        },
+        'pubg-mobile': {
+            slug: 'pubg-mobile', name: 'PUBG Mobile UC', category: 'Gaming', mark: 'PUBG', brand: '#D99B2B', accent: '#151515', fulfilment: 'Player-ID top-up',
+            description: 'UC sent to the supplied PUBG Player ID. No account login or password is required.',
+            tiers: [digitalTier('325', '325 UC', 20000), digitalTier('660', '660 UC', 40000), digitalTier('1800', '1,800 UC', 100000)]
+        },
+        'valorant-points': {
+            slug: 'valorant-points', name: 'Valorant Points', category: 'Gaming', mark: 'V', brand: '#FF4655', accent: '#FFFFFF', fulfilment: 'Region-matched digital key',
+            description: 'Valorant/Riot credit sourced only as a customer-redeemed, region-matched key.',
+            notice: 'Tell us your Riot account region so we can quote a compatible key.', tiers: []
+        },
+        'steam-wallet': {
+            slug: 'steam-wallet', name: 'Steam Wallet', category: 'Gift cards', mark: 'S', brand: '#1B4B73', accent: '#66C0F4', fulfilment: 'Digital wallet code',
+            description: 'Steam Wallet credit for a disclosed account country and currency.',
+            tiers: [digitalTier('usd20', 'US$20 Wallet', 80000), digitalTier('usd50', 'US$50 Wallet', 195000)]
+        },
+        'psn-wallet': {
+            slug: 'psn-wallet', name: 'PlayStation Store', category: 'Gift cards', mark: 'PS', brand: '#006FCD', accent: '#FFFFFF', fulfilment: 'Digital code',
+            description: 'A PlayStation Store code matched to the customer’s PSN account region.', tiers: [digitalTier('usd25', 'US$25 card', 115000)]
+        },
+        'xbox-gift-card': {
+            slug: 'xbox-gift-card', name: 'Xbox Gift Card', category: 'Gift cards', mark: 'X', brand: '#107C10', accent: '#FFFFFF', fulfilment: 'Digital code',
+            description: 'Xbox credit matched to the customer’s account country and currency.', notice: 'Live supplier quote required before payment.',
+            tiers: [digitalTier('usd25', 'US$25 card', 99000, 'Stock check required', false)]
+        },
+        'google-play-credit': {
+            slug: 'google-play-credit', name: 'Google Play Credit', category: 'Gift cards', mark: 'G', brand: '#34A853', accent: '#FFFFFF', fulfilment: 'Digital code',
+            description: 'Google Play credit sold only after confirming the Play account country.', tiers: [digitalTier('usd10', 'US$10 card', 40000)]
+        },
+        'apple-gift-card': {
+            slug: 'apple-gift-card', name: 'Apple Gift Card', category: 'Gift cards', mark: '', brand: '#6B7280', accent: '#FFFFFF', fulfilment: 'Digital code',
+            description: 'Apple credit matched to the country of the customer’s Apple Account.', tiers: [digitalTier('usd10', 'US$10 card', 40000)]
+        },
+        'netflix-gift-card': {
+            slug: 'netflix-gift-card', name: 'Netflix Gift Card', category: 'Entertainment', mark: 'N', brand: '#E50914', accent: '#FFFFFF', fulfilment: 'Digital code',
+            description: 'A Netflix gift-card code. Billing currency and account country must match.', tiers: [digitalTier('usd25', 'US$25 card', 105000)]
+        },
+        'discord-nitro': {
+            slug: 'discord-nitro', name: 'Discord Nitro', category: 'Entertainment', mark: 'D', brand: '#5865F2', accent: '#FFFFFF', fulfilment: 'Digital key',
+            description: 'A customer-redeemed Nitro key, subject to region and account eligibility.', tiers: [digitalTier('1m', '1 month', 40000), digitalTier('12m', '12 months', 380000, 'Annual')]
+        },
+        'youtube-premium': {
+            slug: 'youtube-premium', name: 'YouTube Premium', category: 'Entertainment', mark: '▶', brand: '#FF0000', accent: '#FFFFFF', fulfilment: 'Approved activation only',
+            description: 'Ad-free YouTube requested through 97 Concierge. We only proceed after eligibility and plan rules are confirmed.',
+            notice: 'Availability and compliant activation method must be confirmed.', tiers: []
+        },
+        'spotify-premium': {
+            slug: 'spotify-premium', name: 'Spotify Premium', category: 'Entertainment', mark: 'S', brand: '#1DB954', accent: '#09110B', fulfilment: 'Approved activation only',
+            description: 'Spotify Premium requested through 97 Concierge after country and account eligibility are checked.',
+            notice: 'Availability and compliant activation method must be confirmed.', tiers: []
+        },
+        'software-licenses': {
+            slug: 'software-licenses', name: 'Software Licence Keys', category: 'Work', mark: 'KEY', brand: '#7C3AED', accent: '#FFFFFF', fulfilment: 'Authorized licence key',
+            description: 'Legitimate customer-redeemed software licences. Tell us the application and term you need.',
+            notice: 'Only verifiable, authorized licence sources are quoted.', tiers: []
+        },
+        'fortnite-gifts': {
+            slug: 'fortnite-gifts', name: 'Fortnite Gifts & V-Bucks', category: 'Gaming', mark: 'F', brand: '#6D4AFF', accent: '#FFFFFF', fulfilment: 'Password-free gift/code only',
+            description: 'Fortnite requests are accepted only when they can be delivered without account login.',
+            notice: 'No password-based manual top-ups. Ask 97 Concierge for a clean route.', tiers: []
+        },
+        'efootball-coins': {
+            slug: 'efootball-coins', name: 'eFootball Coins', category: 'Gaming', mark: 'eF', brand: '#1428FF', accent: '#E8FF00', fulfilment: 'Player-ID or official route only',
+            description: 'eFootball coin requests are quoted only when a password-free official route is available.',
+            notice: 'Manual-login fulfilment is not accepted.', tiers: []
+        },
+        'cod-mobile-cp': {
+            slug: 'cod-mobile-cp', name: 'Call of Duty Mobile CP', category: 'Gaming', mark: 'CP', brand: '#222222', accent: '#F4D03F', fulfilment: 'Player-ID or official route only',
+            description: 'COD Mobile CP quoted only through a clean, password-free fulfilment route.',
+            notice: 'Manual-login fulfilment is not accepted.', tiers: []
+        }
+    };
+
     /** Term tiers turned into the same plan shape the wizard already
      *  understands — id/name/price/feats — so no wizard code needs to know
      *  this isn't a boost service. Uganda prices in UGX, South Sudan in
@@ -894,6 +1005,7 @@
         SERVICES_BY_ID: SERVICES_BY_ID,
         BUNDLES: bundlePlans,
         SUBSCRIPTIONS: SUBSCRIPTIONS,
+        DIGITAL_PRODUCTS: DIGITAL_PRODUCTS,
         PLATFORM_ROLES: PLATFORM_ROLES,
         GROWTH_PRIMARY: GROWTH_PRIMARY,
         GROWTH_MORE: GROWTH_MORE,

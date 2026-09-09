@@ -8,9 +8,7 @@
     if (!grid || !PRODUCTS.length) return;
 
     var PRODUCT_BY_ID = {};
-    var CARD_BY_ID = {};
     PRODUCTS.forEach(function (product) { PRODUCT_BY_ID[product.id] = product; });
-    document.querySelectorAll('[data-product]').forEach(function (card) { CARD_BY_ID[card.dataset.product] = card; });
 
     var BRANDS = {
         canva: ['#17d5ce', '#382081'], capcut: ['#37e7d7', '#111419'],
@@ -18,9 +16,14 @@
         duolingo: ['#75df25', '#245908'], perplexity: ['#45bac2', '#0a3034'],
         prime: ['#1596e9', '#071929'], apple: ['#c3cad4', '#252a33'],
         crunchyroll: ['#ff8d43', '#4b1705'], linkedin: ['#2d8bdf', '#06274a'],
-        adobe: ['#ff6258', '#4c0b08']
+        adobe: ['#ff6258', '#4c0b08'], xbox: ['#38c556', '#0b3816'], roblox: ['#ed463c', '#3d0d0a'],
+        'mobile-legends': ['#ffd65a', '#123a83'], 'free-fire': ['#ffb31a', '#3a2100'], pubg: ['#d99b2b', '#332208'],
+        valorant: ['#ff4655', '#3a0b12'], steam: ['#66c0f4', '#122d43'], playstation: ['#2d8df0', '#05284d'],
+        'google-play': ['#4ee48b', '#103626'], 'apple-credit': ['#d4d8df', '#30343c'], netflix: ['#e50914', '#390005'],
+        discord: ['#8791ff', '#232964'], 'youtube-premium': ['#ff3333', '#420000'], 'spotify-premium': ['#1ed760', '#092716'],
+        software: ['#a880ff', '#241044'], fortnite: ['#a48aff', '#2d1963'], efootball: ['#e8ff00', '#1428ff'], cod: ['#f4d03f', '#272727']
     };
-    var CATEGORY_LABELS = { all: 'All products', create: 'Create', watch: 'Watch', work: 'Work', ai: 'AI', learn: 'Learn' };
+    var CATEGORY_LABELS = { all: 'All products', gaming: 'Gaming', gifts: 'Gift cards', create: 'Create', watch: 'Entertainment', work: 'Work', ai: 'AI', learn: 'Learn' };
     var VALID_CATEGORIES = Object.keys(CATEGORY_LABELS);
     var REGION_KEY = 'k97_region';
     var RECENT_KEY = 'k97_marketplace_recent';
@@ -62,18 +65,48 @@
         if (Array.isArray(window.dataLayer)) window.dataLayer.push(payload);
     }
 
-    function productHref(product) { return '/subs/' + product.slug + '/'; }
+    function productHref(product) { return product.href || '/subs/' + product.slug + '/'; }
+
+    function ensureProductCards() {
+        PRODUCTS.forEach(function (product, index) {
+            if (document.querySelector('[data-product="' + product.id + '"]')) return;
+            var colors = BRANDS[product.art] || ['#43f5a5', '#16231e'];
+            var uses = (product.useCases || []).slice(0, 2);
+            var badge = product.badge ? '<i>' + escapeHTML(product.badge) + '</i>' : '';
+            var article = document.createElement('article');
+            article.className = 'product-card art-digital reveal-section m-lift';
+            article.dataset.product = product.id;
+            article.dataset.order = String(index);
+            article.style.setProperty('--brand', colors[0]);
+            article.style.setProperty('--brand2', colors[1]);
+            article.innerHTML = '<a class="product-card-link" href="' + productHref(product) + '" aria-label="View ' + escapeHTML(product.name) + '" data-product-link="' + product.id + '"></a>' +
+                '<div class="product-art" aria-hidden="true"><span class="digital-orbit orbit-a"></span><span class="digital-orbit orbit-b"></span><b>' + markHTML(product) + '</b></div>' +
+                '<div class="product-body"><div class="product-topline"><span>' + escapeHTML(product.label) + '</span>' + badge + '</div><h3>' + escapeHTML(product.name) + '</h3><p>' + escapeHTML(product.description) + '</p>' +
+                '<ul>' + uses.map(function (item) { return '<li>' + escapeHTML(item) + '</li>'; }).join('') + '</ul><div class="product-bottom"><div><small>' + (hasLocalPrice(product) ? 'From' : 'Availability') + '</small><strong data-price="' + product.id + '">' + escapeHTML(priceText(product)) + '</strong></div><span class="status"><i></i>' + (hasLocalPrice(product) ? ' Available' : ' Request') + '</span></div></div>' +
+                '<button class="quick-button" type="button" aria-label="Quick view ' + escapeHTML(product.name) + '" data-quick="' + product.id + '">+</button>';
+            grid.appendChild(article);
+        });
+    }
+
+    ensureProductCards();
+    var CARD_BY_ID = {};
+    document.querySelectorAll('[data-product]').forEach(function (card) { CARD_BY_ID[card.dataset.product] = card; });
 
     function tierFor(product) {
-        var sub = P && P.SUBSCRIPTIONS && P.SUBSCRIPTIONS[product.id];
+        var sub = P && ((P.SUBSCRIPTIONS && P.SUBSCRIPTIONS[product.id]) || (P.DIGITAL_PRODUCTS && P.DIGITAL_PRODUCTS[product.id]));
         if (!sub || !sub.tiers || !sub.tiers.length) return null;
         return sub.tiers[0];
+    }
+
+    function hasLocalPrice(product) {
+        return isFinite(startingValue(product, state.region));
     }
 
     function startingValue(product, region) {
         var tier = tierFor(product);
         if (!tier) return Number.POSITIVE_INFINITY;
-        return region === 'SS' ? tier.usd : tier.ugx;
+        var value = region === 'SS' ? tier.usd : tier.ugx;
+        return value == null ? Number.POSITIVE_INFINITY : value;
     }
 
     function money(value, region) {
@@ -81,12 +114,24 @@
         return region === 'SS' ? '$' + Number(value).toLocaleString('en-US') : Number(value).toLocaleString('en-US') + ' UGX';
     }
 
-    function priceText(product) { return money(startingValue(product, state.region), state.region); }
+    function priceText(product) {
+        return hasLocalPrice(product) ? money(startingValue(product, state.region), state.region) : 'Ask for quote';
+    }
 
     function updatePrices() {
         document.querySelectorAll('[data-price]').forEach(function (node) {
             var product = PRODUCT_BY_ID[node.dataset.price];
-            if (product) node.textContent = priceText(product);
+            if (product) {
+                var priced = hasLocalPrice(product);
+                node.textContent = priceText(product);
+                var bottom = node.closest('.product-bottom');
+                if (bottom) {
+                    var label = bottom.querySelector('small');
+                    var status = bottom.querySelector('.status');
+                    if (label) label.textContent = priced ? 'From' : 'Availability';
+                    if (status) status.innerHTML = '<i></i>' + (priced ? ' Available' : ' Request');
+                }
+            }
         });
         if (activeQuickProduct) {
             var quickPrice = document.querySelector('[data-quick-price]');
@@ -162,7 +207,7 @@
 
     function matchesState(product, score) {
         var inCategory = state.category === 'all' || product.categories.indexOf(state.category) !== -1;
-        return inCategory && score >= 0 && product.availability[state.region] === 'available';
+        return inCategory && score >= 0 && product.availability[state.region] !== 'unavailable';
     }
 
     function syncCategoryButtons() {
@@ -278,9 +323,10 @@
     }
 
     function resultHTML(product) {
+        var priceLead = hasLocalPrice(product) ? 'From ' : '';
         return '<a class="search-result" href="' + productHref(product) + '" role="option" data-product-link="' + product.id + '">' +
             '<span class="result-mark">' + markHTML(product) + '</span>' +
-            '<span class="result-copy"><b>' + escapeHTML(product.name) + '</b><small>' + escapeHTML(product.label) + ' · From ' + escapeHTML(priceText(product)) + '</small></span>' +
+            '<span class="result-copy"><b>' + escapeHTML(product.name) + '</b><small>' + escapeHTML(product.label) + ' · ' + priceLead + escapeHTML(priceText(product)) + '</small></span>' +
             '<i aria-hidden="true">→</i></a>';
     }
 
@@ -401,8 +447,9 @@
         section.hidden = recent.length === 0;
         rail.innerHTML = recent.map(function (product) {
             var colors = BRANDS[product.art] || ['#43f5a5', '#16231e'];
+            var priceLead = hasLocalPrice(product) ? 'From ' : '';
             return '<article class="recent-card" style="--brand:' + colors[0] + ';--brand2:' + colors[1] + '">' +
-                '<div class="recent-card-art">' + markHTML(product) + '</div><div class="recent-card-copy"><small>' + escapeHTML(product.label) + '</small><h3>' + escapeHTML(product.name) + '</h3><strong>From ' + escapeHTML(priceText(product)) + '</strong></div>' +
+                '<div class="recent-card-art">' + markHTML(product) + '</div><div class="recent-card-copy"><small>' + escapeHTML(product.label) + '</small><h3>' + escapeHTML(product.name) + '</h3><strong>' + priceLead + escapeHTML(priceText(product)) + '</strong></div>' +
                 '<a href="' + productHref(product) + '" aria-label="View ' + escapeHTML(product.name) + ' plans" data-product-link="' + product.id + '"></a></article>';
         }).join('');
     }
@@ -422,8 +469,11 @@
         document.querySelector('[data-quick-description]').textContent = product.description;
         document.querySelector('[data-quick-uses]').innerHTML = product.useCases.map(function (item) { return '<li>' + escapeHTML(item) + '</li>'; }).join('');
         document.querySelector('[data-quick-price]').textContent = priceText(product);
+        var hasTier = hasLocalPrice(product);
+        var quickStatus = document.querySelector('[data-quick-status]');
+        if (quickStatus) quickStatus.innerHTML = '<i></i> ' + (hasTier ? 'Available now' : 'Check availability');
         var cta = document.querySelector('[data-quick-cta]');
-        cta.href = productHref(product); cta.dataset.productLink = product.id;
+        cta.href = productHref(product); cta.dataset.productLink = product.id; cta.firstChild.nodeValue = hasTier ? 'View plans ' : 'Check availability ';
         var relatedWrap = document.querySelector('[data-quick-related]');
         var relatedList = document.querySelector('[data-related-list]');
         var related = (product.related || []).map(function (id) { return PRODUCT_BY_ID[id]; }).filter(Boolean).slice(0, 2);
