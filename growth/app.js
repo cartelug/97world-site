@@ -21,7 +21,7 @@
  *      per-1000 rate to multiply an arbitrary amount by.
  *
  * Everything priced comes from assets/pricing.js. Submitting hands off to
- * the same review sheet, WhatsApp message and Sheets row as the order pages.
+ * the same WhatsApp message, Sheets row and Worker queue as the order pages.
  */
 (function (window, document) {
     'use strict';
@@ -34,6 +34,7 @@
     // The order Worker (worker/) — same additive, fire-and-forget recording
     // used on every order-wizard page. Never affects the WhatsApp hand-off.
     var WORKER_API = 'https://the97-orders.carteluganda.workers.dev';
+    var PROFILE_KEY = 'k97_checkout_profile';
 
     /* Services delivered to one post/track rather than a profile. */
     var POST_LEVEL = {
@@ -580,6 +581,10 @@
             ? window.OrderKit.phone(phoneRaw)
             : { clean: phoneRaw, sheet: "'" + phoneRaw };
 
+        try {
+            localStorage.setItem(PROFILE_KEY, JSON.stringify({ name: name, phone: phoneRaw }));
+        } catch (e) { /* private mode */ }
+
         var message = '*NEW 97 GROWTH ORDER [' + reg.name.toUpperCase() + ']*\n\n' +
             '*Service:* ' + meta(pending.r.platform).name + ' ' +
                 (row.service ? row.service.short : '') + '\n' +
@@ -679,7 +684,7 @@
                     '<i class="' + f.icon + '"></i>' + f.text + '</span>';
             }).join('');
 
-            return '<a href="/growth/bundle/" class="combo-item' +
+            return '<a href="/growth/bundle/?plan=' + encodeURIComponent(b.id) + '" data-plan="' + b.id + '" class="combo-item' +
                 (b.hero ? ' is-hero' : '') + (b.tag ? ' has-tag' : '') + '">' +
                 (b.tag ? '<span class="combo-tag">' + b.tag + '</span>' : '') +
                 (marks ? '<span class="combo-marks">' + marks + '</span>' : '') +
@@ -764,6 +769,13 @@
         if (b) pick(b.dataset.pick);
     });
 
+    $('comboGrid').addEventListener('click', function (e) {
+        var card = e.target.closest('[data-plan]');
+        if (!card) return;
+        P.Pending.set('bundle', null, card.dataset.plan);
+        haptic();
+    });
+
     $('fwQty').addEventListener('input', paint);
     $('fwSearch').addEventListener('input', runSearch);
     $('fwLink').addEventListener('input', function () {
@@ -789,6 +801,14 @@
     renderTiles();
     fillCategories();
     renderCombos();
+
+    try {
+        var savedProfile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
+        if (savedProfile) {
+            if (savedProfile.name) $('revName').value = savedProfile.name;
+            if (savedProfile.phone) $('revPhone').value = savedProfile.phone;
+        }
+    } catch (e) { /* private mode */ }
 
     // Ask where they're ordering from on the first visit only, same as the
     // order pages' own gate — popping this up on every single load (even

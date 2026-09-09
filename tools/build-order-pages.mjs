@@ -1,9 +1,9 @@
 /**
- * Generates every boost order page from one template.
+ * Generates every 97 World order page from one template.
  *
- * The five order pages must be identical in flow and markup — the only things
+ * The order pages must be identical in flow and markup — the only things
  * that may differ are the accent colour, the platform wording and the plan
- * table. Generating them guarantees that instead of hoping five hand-edited
+ * table. Generating them guarantees that instead of hoping hand-edited
  * files stay in sync.
  *
  *   node tools/build-order-pages.mjs
@@ -13,6 +13,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const ASSET_VERSION = '20260909-qc1';
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
 const WHATSAPP = '256762193386';
@@ -325,10 +326,9 @@ const PAGES = [
 ];
 
 /* ------------------------------------------------------- the bundle pitch ---
- * Only /growth/bundle/ gets this. Every other order page is reached from a card
- * that already sold the package; the bundle is reached from a single row on
- * /growth/ that deliberately says nothing about size or price, so the whole
- * argument has to happen here instead.
+ * Only /growth/bundle/ gets this. Visitors who choose a specific Growth combo
+ * arrive with ?plan= and are moved straight to checkout; visitors who use the
+ * generic "see all" route get this context before the package grid.
  *
  * Money figures carry data-usd and are filled in at runtime by wizard.js, in
  * whichever currency the visitor chose — hardcoding them would put a second
@@ -402,7 +402,7 @@ const html = (p) => `<!DOCTYPE html>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" href="/assets/motion.css">
-    <link rel="stylesheet" href="/assets/order.css">
+    <link rel="stylesheet" href="/assets/order.css?v=${ASSET_VERSION}">
 </head>
 <body class="order-page" data-accent="${p.accent}">
 <div id="k97pl" aria-hidden="true">
@@ -448,11 +448,9 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
         </header>`}
 
         <div class="ord-card" id="wizardCard">
-            <ol class="wiz-track">
+            <ol class="wiz-track" aria-label="Order progress">
                 <li class="is-on">1. Package</li>
-                <li>2. Gifts</li>
-                <li>3. Proof</li>
-                <li>4. Finish</li>
+                <li>2. Checkout</li>
             </ol>
 
             <!-- 1 ------------------------------------------------------- -->
@@ -470,38 +468,24 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
             </section>
 
             <!-- 2 ------------------------------------------------------- -->
-            <section class="wiz-step" data-step="2" aria-label="Your free gifts">
+            <section class="wiz-step" data-step="2" aria-label="Complete your order">
                 <div class="wiz-head">
-                    <h2>Your <em>free gifts</em></h2>
-                    <p>Included with every order. Tap each one to claim it.</p>
+                    <h2>Complete your <em>order</em></h2>
+                    <p>Your package is ready. Add delivery details and continue to WhatsApp.</p>
                 </div>
-                <div class="gift-list" id="gift-list"></div>
-                <button type="button" class="wiz-btn" id="btn-step-2" data-go="3" disabled>
-                    <span class="wb-label">Claim your gifts</span>
-                    <i class="fas fa-check"></i>
-                </button>
-                <button type="button" class="wiz-back" data-go="1">Back</button>
-            </section>
 
-            <!-- 3 ------------------------------------------------------- -->
-            <section class="wiz-step" data-step="3" aria-label="Why people trust us">
-                <div class="wiz-head">
-                    <h2>Why people <em>trust us</em></h2>
-                    <p>The three things customers ask before every order.</p>
-                </div>
-                <div class="proof-list" id="proof-list"></div>
-                <button type="button" class="wiz-btn" data-go="4">
-                    <span class="wb-label">Makes sense — continue</span>
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-                <button type="button" class="wiz-back" data-go="2">Back</button>
-            </section>
-
-            <!-- 4 ------------------------------------------------------- -->
-            <section class="wiz-step" data-step="4" aria-label="Finish your order">
-                <div class="wiz-head">
-                    <h2>Finish your <em>order</em></h2>
-                    <p>Last step. Nothing is charged on this page.</p>
+                <div class="checkout-choice" id="checkout-choice" aria-live="polite">
+                    <div class="checkout-choice-top">
+                        <div>
+                            <span class="checkout-eyebrow">Selected package</span>
+                            <b id="checkout-plan-name">—</b>
+                        </div>
+                        <button type="button" class="checkout-change" data-go="1">
+                            <i class="fas fa-pen"></i> Change
+                        </button>
+                    </div>
+                    <div class="checkout-choice-price" id="checkout-plan-price">—</div>
+                    <ul class="checkout-choice-feats" id="checkout-plan-feats"></ul>
                 </div>
 
                 <div class="guarantee">
@@ -512,6 +496,15 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                     </div>
                 </div>
 
+${p.targetLabel ? `                <div class="field">
+                    <div class="field-box">
+                        <i class="${p.icon}"></i>
+                        <input type="text" id="target-handle" placeholder="${p.targetPlaceholder}" autocomplete="off" spellcheck="false" autocapitalize="none">
+                    </div>
+                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>${p.targetError}</span></p>
+                </div>
+` : ''}${p.targetHint ? `                <p class="field-hint"><i class="fas fa-circle-info"></i> ${p.targetHint}</p>
+` : ''}
                 <div class="field">
                     <div class="field-box">
                         <i class="fas fa-user"></i>
@@ -527,16 +520,6 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                     </div>
                     <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>Enter a valid WhatsApp number</span></p>
                 </div>
-
-${p.targetLabel ? `                <div class="field">
-                    <div class="field-box">
-                        <i class="${p.icon}"></i>
-                        <input type="text" id="target-handle" placeholder="${p.targetPlaceholder}" autocomplete="off" spellcheck="false" autocapitalize="none">
-                    </div>
-                    <p class="field-err"><i class="fas fa-circle-exclamation"></i><span>${p.targetError}</span></p>
-                </div>
-` : ''}${p.targetHint ? `                <p class="field-hint"><i class="fas fa-circle-info"></i> ${p.targetHint}</p>
-` : ''}
 ${p.extraOptions ? `
                 <div class="field select-box">
                     <select id="extra-select" aria-label="${p.extraLabel}">
@@ -544,6 +527,7 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
                     </select>
                 </div>
 ` : ''}
+                <div class="checkout-field-label"><i class="fas fa-wallet"></i> Payment method</div>
                 <div class="field select-box">
                     <select id="payment-method" aria-label="Payment method"></select>
                 </div>
@@ -568,16 +552,36 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
                     </div>
                 </div>
 
+                <div class="checkout-included">
+                    <div class="checkout-section-label"><i class="fas fa-gift"></i> Included free</div>
+                    <div class="gift-list gift-list--included" id="gift-list"></div>
+                </div>
+
+                <details class="checkout-proof">
+                    <summary>
+                        <span><i class="fas fa-shield-halved"></i> Why people trust 97 World</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </summary>
+                    <div class="proof-list" id="proof-list"></div>
+                </details>
+
                 <div class="total-line">
                     <span>Total</span>
                     <b id="total-value">—</b>
                 </div>
 
-                <button type="button" class="wiz-btn" id="btn-submit">
-                    <span class="wb-label">Review my order</span>
+                <div class="checkout-split" id="checkout-split" hidden>
+                    <span><small id="checkout-deposit-label">Pay now</small><b id="checkout-deposit">—</b></span>
                     <i class="fas fa-arrow-right"></i>
+                    <span><small>Balance on delivery</small><b id="checkout-balance">—</b></span>
+                </div>
+
+                <button type="button" class="wiz-btn" id="btn-submit">
+                    <span class="cta-icon"><i class="fab fa-whatsapp"></i></span>
+                    <span class="cta-label">Confirm on WhatsApp</span>
                 </button>
-                <button type="button" class="wiz-back" data-go="3">Back</button>
+                <p class="checkout-submit-note"><i class="fas fa-lock"></i> Nothing is charged here. We confirm everything with you first.</p>
+                <button type="button" class="wiz-back" data-go="1">Change package</button>
             </section>
         </div>
 
@@ -592,30 +596,6 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
         </p>
     </main>
 
-    <!-- confirm -->
-    <div class="sheet" id="confirmSheet" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirm-h">
-        <div class="sheet-card">
-            <div class="sheet-grab"></div>
-            <div class="sheet-head">
-                <div class="sheet-icon"><i class="fas fa-receipt"></i></div>
-                <h2 id="confirm-h">Check it over</h2>
-                <p>This is exactly what we'll receive.</p>
-            </div>
-            <div class="sum-list" id="sum-list"></div>
-            <div class="sheet-note">
-                <i class="fas fa-shield-halved"></i>
-                <span>Next you'll land in WhatsApp with this order already typed out. Nothing is charged here — we confirm everything with you first.</span>
-            </div>
-            <div class="sheet-actions">
-                <button type="button" class="btn-wa" id="btn-confirm">
-                    <span class="cta-icon"><i class="fab fa-whatsapp"></i></span>
-                    <span class="cta-label">Send on WhatsApp</span>
-                </button>
-                <button type="button" class="btn-ghost" data-close="confirmSheet">Go back and edit</button>
-            </div>
-        </div>
-    </div>
-
     <a href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi, I have a question about ${p.service}.`)}" target="_blank" rel="noopener" class="wa-fab" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
@@ -623,7 +603,7 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
     <script src="/assets/pricing.js"></script>
     <script src="/assets/motion.js" defer></script>
     <script src="/assets/order.js"></script>
-    <script src="/assets/wizard.js"></script>
+    <script src="/assets/wizard.js?v=${ASSET_VERSION}"></script>
     <script src="script.js"></script>
 <script src="/assets/preloader.js" defer></script>
 </body>

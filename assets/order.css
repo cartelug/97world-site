@@ -897,8 +897,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 @keyframes ordSpin { to { transform: rotate(360deg); } }
 
 /* ======================================================= THE WIZARD =======
-   The flow the Netflix / Spotify / Prime order pages used, standardised:
-   region gate -> plan -> free gifts -> proof -> finalise.
+   The compact flow every order page shares:
+   region gate -> package -> checkout -> WhatsApp.
    ========================================================================= */
 
 /* ---- region gatekeeper: blocks the page until we know how to price ---- */
@@ -1214,9 +1214,202 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .total-line span { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ord-muted); }
 .total-line b { font-family: var(--font-display); font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; color: var(--acc); }
 
+/* ---- compact checkout: the selected package stays visible while the
+   customer adds the three details needed to place it ---- */
+.checkout-choice {
+    position: relative;
+    margin-bottom: 16px;
+    padding: 18px;
+    overflow: hidden;
+    border-radius: 20px;
+    border: 1px solid color-mix(in srgb, var(--acc) 38%, transparent);
+    background:
+        radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--acc) 16%, transparent), transparent 46%),
+        var(--ord-surface);
+    animation: checkoutReady var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1));
+}
+@keyframes checkoutReady { from { opacity: 0; transform: translate3d(0, 10px, 0); } }
+
+.checkout-choice-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+.checkout-choice-top > div { min-width: 0; }
+.checkout-eyebrow,
+.checkout-section-label,
+.checkout-field-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--ord-muted);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.checkout-choice-top b {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    line-height: 1.28;
+}
+.checkout-change {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--ord-line-strong);
+    color: #d0d0d8;
+    font-size: 0.72rem;
+    font-weight: 700;
+    transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), border-color 0.2s ease, color 0.2s ease;
+}
+.checkout-change:hover { border-color: var(--acc); color: #fff; }
+.checkout-change:active { transform: scale(0.96); }
+.checkout-choice-price {
+    margin-top: 14px;
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 7vw, 2.15rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: var(--acc);
+}
+.checkout-choice-feats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 12px;
+    list-style: none;
+}
+.checkout-choice-feats li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--ord-line);
+    background: rgba(0, 0, 0, 0.24);
+    color: #c9c9d1;
+    font-size: 0.71rem;
+    font-weight: 650;
+}
+.checkout-choice-feats i { color: var(--acc); }
+
+.checkout-field-label { margin: 17px 3px 8px; }
+.checkout-field-label i,
+.checkout-section-label i { color: var(--acc); }
+
+.checkout-included {
+    margin: 18px 0 12px;
+    padding-top: 17px;
+    border-top: 1px solid var(--ord-line);
+}
+.checkout-section-label { margin: 0 2px 10px; }
+.gift-list--included { margin-bottom: 0; }
+.gift--included {
+    cursor: default;
+    border-style: solid;
+    padding: 13px 14px;
+}
+.gift--included:active { transform: none; }
+.gift--included .gift-ic {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    color: var(--acc);
+    background: color-mix(in srgb, var(--acc) 12%, transparent);
+    border-color: color-mix(in srgb, var(--acc) 26%, transparent);
+}
+.gift--included .gift-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-color: rgba(37, 211, 102, 0.3);
+    color: #7ee2a3;
+    background: rgba(37, 211, 102, 0.08);
+}
+
+.checkout-proof {
+    margin: 12px 0 16px;
+    border: 1px solid var(--ord-line);
+    border-radius: 17px;
+    background: rgba(255, 255, 255, 0.025);
+}
+.checkout-proof summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 15px;
+    cursor: pointer;
+    list-style: none;
+    color: #d3d3db;
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+.checkout-proof summary::-webkit-details-marker { display: none; }
+.checkout-proof summary span { display: inline-flex; align-items: center; gap: 8px; }
+.checkout-proof summary span i { color: var(--acc); }
+.checkout-proof summary > i {
+    color: var(--ord-dim);
+    transition: transform var(--m-base, 260ms) var(--m-out, cubic-bezier(0.16,1,0.3,1));
+}
+.checkout-proof[open] summary > i { transform: rotate(180deg); }
+.checkout-proof .proof-list { gap: 8px; margin: 0; padding: 0 10px 10px; }
+.checkout-proof .proof-row { padding: 12px; border-radius: 14px; }
+
+.checkout-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    margin: -5px 0 16px;
+    padding: 13px 15px;
+    border-radius: 16px;
+    border: 1px solid var(--ord-line);
+    background: rgba(255, 255, 255, 0.025);
+}
+.checkout-split[hidden] { display: none; }
+.checkout-split span { min-width: 0; }
+.checkout-split small { display: block; color: var(--ord-dim); font-size: 0.66rem; font-weight: 700; line-height: 1.25; }
+.checkout-split b { display: block; margin-top: 3px; font-family: var(--font-display); font-size: 0.9rem; line-height: 1.2; }
+.checkout-split > i { color: var(--ord-dim); font-size: 0.72rem; }
+
+#btn-submit { background: var(--ord-wa); color: #04220f; border-color: rgba(37, 211, 102, 0.5); box-shadow: 0 14px 34px -14px rgba(37, 211, 102, 0.9); }
+#btn-submit.is-busy { pointer-events: none; opacity: 0.82; }
+#btn-submit .spinner { border-color: rgba(4, 34, 15, 0.3); border-top-color: #04220f; }
+.checkout-submit-note {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 7px;
+    margin: -5px auto 0;
+    color: var(--ord-dim);
+    font-size: 0.72rem;
+    line-height: 1.45;
+    text-align: center;
+}
+.checkout-submit-note i { margin-top: 2px; color: var(--ord-muted); }
+
 @media (min-width: 560px) {
     .plan-grid { gap: 14px; }
     .wiz-track li { font-size: 0.75rem; }
+    .gift-list--included { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gift--included { align-items: flex-start; }
+    .gift--included .gift-state { display: none; }
+}
+
+@media (max-width: 559px) {
+    #btn-submit {
+        position: sticky;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+        z-index: 10;
+    }
 }
 
 /* --------------------------------------------------------------- sheet --- */
@@ -1706,10 +1899,12 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 .plan-card:nth-child(n+7) { animation-delay: 270ms; }
 @keyframes ordCard { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
 
-/* Claiming a gift ticks over. */
+/* Included gifts settle into the checkout after the package transition. */
 .gift { transition: transform var(--m-quick, 160ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)), border-color 0.25s ease, background 0.25s ease; }
 .gift:active { transform: scale(0.985); }
-.gift.is-open .gift-state { animation: ordClaim var(--m-slow, 380ms) cubic-bezier(0.34, 1.4, 0.64, 1); }
+.wiz-step.is-on .gift--included { animation: ordIncluded var(--m-slow, 380ms) var(--m-out, cubic-bezier(0.16,1,0.3,1)) backwards; }
+.wiz-step.is-on .gift--included:nth-child(2) { animation-delay: 55ms; }
+@keyframes ordIncluded { from { opacity: 0; transform: translate3d(0, 7px, 0); } }
 @keyframes ordClaim { from { opacity: 0; transform: scale(0.7); } }
 
 /* Buttons and the progress track. */
@@ -1735,7 +1930,9 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.
 }
 
 @media(prefers-reduced-motion: reduce) {
-    .plan-card, .svc-tab, .gift, .wiz-btn, .btn-wa, .btn-ghost { transition: none !important; transform: none !important; }
-    .plan-card, .plan-grid, .gift.is-open .gift-state,
-    .sheet[aria-hidden="false"] .sum-row, .field.has-error .field-box { animation: none !important; }
+    .plan-card, .svc-tab, .gift, .wiz-btn, .btn-wa, .btn-ghost,
+    .checkout-change, .checkout-proof summary > i { transition: none !important; transform: none !important; }
+    .plan-card, .plan-grid, .gift.is-open .gift-state, .gift--included,
+    .sheet[aria-hidden="false"] .sum-row, .field.has-error .field-box,
+    .checkout-choice { animation: none !important; }
 }

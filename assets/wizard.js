@@ -1,22 +1,22 @@
 /**
  * 97 WORLD — ORDER WIZARD
  *
- * The flow the old Netflix / Spotify / Prime order pages used, rebuilt as one
- * engine every order page shares:
+ * The compact checkout every order page shares:
  *
- *   region gate  ->  1. Plan  ->  2. Gifts  ->  3. Proof  ->  4. Finalise
+ *   region gate  ->  1. Package  ->  2. Checkout  ->  WhatsApp
  *
  * A page supplies data only (plans, gifts, proof, copy) — never behaviour.
  * That is the whole point: one flow, one set of bugs, one place to fix them.
  *
  * Depends on OrderKit (/assets/order.js) for money formatting, the phone
- * sanitiser, toasts, field errors and the Sheets + WhatsApp hand-off.
+ * sanitiser, field errors and the Sheets + WhatsApp hand-off.
  */
 (function (window, document) {
     'use strict';
 
     var P = window.K97Pricing;
     var REGIONS = P.REGIONS;
+    var PROFILE_KEY = 'k97_checkout_profile';
 
     var Wizard = {
 
@@ -28,12 +28,82 @@
             step: 1,
             service: null,
             plan: -1,
-            gifts: 0,
+            intent: null,
+            quickStart: false,
             referred: false,
             busy: false
         },
 
         $: function (id) { return document.getElementById(id); },
+
+        /* A package can arrive from a Growth card, the subscription builder,
+         * or a shareable ?plan= URL. Read it once, then keep it in wizard
+         * state so changing currency cannot throw the customer's choice away. */
+        captureIntent: function () {
+            var pending = P.Pending.take(Wizard.cfg.platform);
+            var planId = pending && pending.planId;
+            var serviceId = pending && pending.serviceId;
+            try {
+                var params = new URLSearchParams(window.location.search);
+                planId = params.get('plan') || planId;
+                serviceId = params.get('service') || serviceId;
+            } catch (e) { /* older webview: session hand-off still works */ }
+            Wizard.state.intent = planId ? {
+                planId: String(planId),
+                serviceId: serviceId || null
+            } : null;
+            Wizard.state.quickStart = !!planId;
+        },
+
+        rememberPlan: function () {
+            var plan = Wizard.selectedPlan();
+            if (!plan) return;
+            Wizard.state.intent = {
+                planId: String(plan.id),
+                serviceId: Wizard.state.service || null
+            };
+            try {
+                var url = new URL(window.location.href);
+                url.searchParams.set('plan', plan.id);
+                if (Wizard.state.service) url.searchParams.set('service', Wizard.state.service);
+                else url.searchParams.delete('service');
+                window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+            } catch (e) { /* selection still lives in state */ }
+        },
+
+        clearPlanIntent: function () {
+            Wizard.state.intent = null;
+            Wizard.state.quickStart = false;
+            try {
+                var url = new URL(window.location.href);
+                url.searchParams.delete('plan');
+                if (Wizard.state.service) url.searchParams.set('service', Wizard.state.service);
+                else url.searchParams.delete('service');
+                window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+            } catch (e) { /* state remains correct */ }
+        },
+
+        loadProfile: function () {
+            try {
+                var saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
+                if (!saved) return;
+                if (saved.name) Wizard.$('client-name').value = saved.name;
+                if (saved.phone) Wizard.$('client-number').value = saved.phone;
+            } catch (e) { /* private mode */ }
+        },
+
+        saveProfile: function (name, phone) {
+            try {
+                localStorage.setItem(PROFILE_KEY, JSON.stringify({ name: name, phone: phone }));
+            } catch (e) { /* private mode */ }
+        },
+
+        track: function (name, detail) {
+            var payload = Object.assign({ event: name, platform: Wizard.cfg.platform }, detail || {});
+            if (Array.isArray(window.dataLayer)) window.dataLayer.push(payload);
+            try { window.dispatchEvent(new CustomEvent('k97:order-event', { detail: payload })); }
+            catch (e) { /* analytics must never block checkout */ }
+        },
 
         /* --------------------------------------------------------- region */
 
@@ -82,23 +152,24 @@
                 }).join('');
             }
 
-            // prices changed, so any earlier choice is void — unless they
-            // already built this exact order on the home page
+            // Re-price the same package when the region changes. The order
+            // intent was captured once at boot and remains valid in state.
+            var wanted = Wizard.state.intent;
             Wizard.state.plan = -1;
-            var pending = P.Pending.take(Wizard.cfg.platform);
-            if (pending) {
-                if (pending.serviceId && Wizard.cfg.services) {
-                    var has = Wizard.cfg.services.some(function (s) { return s.id === pending.serviceId; });
-                    if (has) { Wizard.state.service = pending.serviceId; Wizard.renderServiceTabs(); }
+            if (wanted) {
+                if (wanted.serviceId && Wizard.cfg.services) {
+                    var has = Wizard.cfg.services.some(function (s) { return s.id === wanted.serviceId; });
+                    if (has) { Wizard.state.service = wanted.serviceId; Wizard.renderServiceTabs(); }
                 }
                 Wizard.plans().forEach(function (plan, i) {
-                    if (plan.id === pending.planId) Wizard.state.plan = i;
+                    if (String(plan.id) === String(wanted.planId)) Wizard.state.plan = i;
                 });
             }
             // one package means there is nothing to choose — asking for a tap
             // to confirm the only option is a step that buys nobody anything
             if (Wizard.state.plan === -1 && Wizard.plans().length === 1) {
                 Wizard.state.plan = 0;
+                Wizard.state.quickStart = true;
             }
             Wizard.renderPlans();
             Wizard.syncPlanBtn();
@@ -107,6 +178,12 @@
             var gate = Wizard.$('regionGate');
             gate.hidden = true;
             document.body.classList.remove('is-locked');
+
+            if (Wizard.state.quickStart && Wizard.state.plan !== -1) {
+                Wizard.go(2);
+            } else if (Wizard.state.step === 2 && Wizard.state.plan === -1) {
+                Wizard.go(1, true);
+            }
         },
 
         /* Any element carrying data-usd gets the figure in the region's own
@@ -218,43 +295,53 @@
             var btn = Wizard.$('btn-step-1');
             var plan = Wizard.selectedPlan();
             btn.disabled = !plan;
-            btn.querySelector('.wb-label').textContent = plan ? 'Continue' : 'Choose a package';
+            btn.querySelector('.wb-label').textContent = plan ? 'Continue with ' + plan.name : 'Choose a package';
             Wizard.syncTotal();
         },
 
         syncTotal: function () {
             var plan = Wizard.selectedPlan();
             var el = Wizard.$('total-value');
-            if (!el) return;
-            el.textContent = plan
-                ? OrderKit.money(plan.price, Wizard.region().currency)
-                : '—';
+            var currency = Wizard.state.region ? Wizard.region().currency : 'UGX';
+            var formatted = plan ? OrderKit.money(plan.price, currency) : '—';
+            if (el) el.textContent = formatted;
+
+            var name = Wizard.$('checkout-plan-name');
+            var price = Wizard.$('checkout-plan-price');
+            var feats = Wizard.$('checkout-plan-feats');
+            if (name) name.textContent = plan ? (plan.label || plan.name) : '—';
+            if (price) price.textContent = formatted;
+            if (feats) {
+                feats.innerHTML = plan ? plan.feats.map(function (f) {
+                    return '<li><i class="' + f.icon + '"></i>' + f.text + '</li>';
+                }).join('') : '';
+            }
+
+            var splitWrap = Wizard.$('checkout-split');
+            if (splitWrap && plan) {
+                var split = Wizard.split(plan.price, currency);
+                splitWrap.hidden = split.balance <= 0;
+                if (split.balance > 0) {
+                    var pct = Math.round((split.deposit / plan.price) * 100);
+                    Wizard.$('checkout-deposit-label').textContent = 'Pay now (' + pct + '%)';
+                    Wizard.$('checkout-deposit').textContent = OrderKit.money(split.deposit, currency);
+                    Wizard.$('checkout-balance').textContent = OrderKit.money(split.balance, currency);
+                }
+            } else if (splitWrap) {
+                splitWrap.hidden = true;
+            }
         },
 
         /* ---------------------------------------------------------- gifts */
 
         renderGifts: function () {
-            Wizard.$('gift-list').innerHTML = Wizard.cfg.gifts.map(function (gift, i) {
-                return '<button type="button" class="gift" data-gift="' + i + '">' +
+            Wizard.$('gift-list').innerHTML = Wizard.cfg.gifts.map(function (gift) {
+                return '<div class="gift gift--included">' +
                     '<span class="gift-ic"><i class="fas ' + gift.icon + '"></i></span>' +
                     '<span class="gift-copy"><b>' + gift.title + '</b><small>' + gift.sub + '</small></span>' +
-                    '<span class="gift-state">Tap to claim</span>' +
-                    '</button>';
+                    '<span class="gift-state"><i class="fas fa-check"></i> Included</span>' +
+                    '</div>';
             }).join('');
-        },
-
-        claimGift: function (btn) {
-            if (btn.classList.contains('is-open')) return;
-            btn.classList.add('is-open');
-            btn.querySelector('.gift-state').textContent = 'Claimed';
-            Wizard.state.gifts++;
-            OrderKit.haptic(14);
-
-            if (Wizard.state.gifts >= Wizard.cfg.gifts.length) {
-                var btn2 = Wizard.$('btn-step-2');
-                btn2.disabled = false;
-                btn2.querySelector('.wb-label').textContent = 'Continue';
-            }
         },
 
         /* ---------------------------------------------------------- proof */
@@ -270,16 +357,24 @@
 
         /* ----------------------------------------------------------- flow */
 
-        go: function (step) {
+        go: function (step, quiet) {
             Wizard.state.step = step;
             document.querySelectorAll('.wiz-step').forEach(function (pane) {
                 pane.classList.toggle('is-on', Number(pane.dataset.step) === step);
             });
             document.querySelectorAll('.wiz-track li').forEach(function (li, i) {
                 li.classList.toggle('is-on', i + 1 <= step);
+                if (i + 1 === step) li.setAttribute('aria-current', 'step');
+                else li.removeAttribute('aria-current');
             });
-            if (step === 4) Wizard.syncTotal();
-            OrderKit.scrollTo('wizardCard', 40);
+            if (step === 2) {
+                Wizard.syncTotal();
+                Wizard.track('checkout_open', {
+                    planId: Wizard.selectedPlan() ? Wizard.selectedPlan().id : null,
+                    region: Wizard.state.region
+                });
+            }
+            if (!quiet) OrderKit.scrollTo('wizardCard', 40);
         },
 
         /* ----------------------------------------------------- validation */
@@ -289,6 +384,16 @@
             if (!plan) { Wizard.go(1); return null; }
 
             OrderKit.clearErrors();
+
+            var target = null;
+            var targetEl = Wizard.$('target-handle');
+            if (targetEl) {
+                target = targetEl.value.trim().replace(/^@/, '');
+                if (!target) {
+                    OrderKit.fieldError('target-handle', Wizard.cfg.targetError || 'We need this to deliver');
+                    return null;
+                }
+            }
 
             var name = Wizard.$('client-name').value.trim();
             if (name.length < 2) {
@@ -300,16 +405,6 @@
             if (raw.replace(/\D/g, '').length < 8) {
                 OrderKit.fieldError('client-number', 'Enter a valid WhatsApp number');
                 return null;
-            }
-
-            var target = null;
-            var targetEl = Wizard.$('target-handle');
-            if (targetEl) {
-                target = targetEl.value.trim().replace(/^@/, '');
-                if (!target) {
-                    OrderKit.fieldError('target-handle', Wizard.cfg.targetError || 'We need this to deliver');
-                    return null;
-                }
             }
 
             var referrer = 'Direct';
@@ -325,6 +420,7 @@
                 plan: plan,
                 name: name,
                 phone: OrderKit.phone(raw),
+                rawPhone: raw,
                 target: target,
                 extra: extraEl ? extraEl.value : null,
                 payment: Wizard.$('payment-method').value,
@@ -332,57 +428,15 @@
             };
         },
 
-        /* --------------------------------------------------------- review */
-
-        openReview: function () {
-            var order = Wizard.validate();
-            if (!order) return;
-
-            var region = Wizard.region();
-            var rows = [
-                '<div class="sum-row"><span>Package</span><b>' + (order.plan.label || order.plan.name) + '</b></div>'
-            ];
-            order.plan.feats.forEach(function (f) {
-                rows.push('<div class="sum-row"><span>Includes</span><b>' + f.text + '</b></div>');
-            });
-            if (order.extra) {
-                rows.push('<div class="sum-row"><span>' + (Wizard.cfg.extraLabel || 'Choice') +
-                    '</span><b>' + order.extra + '</b></div>');
-            }
-            if (order.target) {
-                rows.push('<div class="sum-row"><span>' + (Wizard.cfg.targetLabel || 'Account') +
-                    '</span><b>' + order.target + '</b></div>');
-            }
-            rows.push('<div class="sum-row"><span>WhatsApp</span><b>' + order.phone.clean + '</b></div>');
-            rows.push('<div class="sum-row"><span>Payment</span><b>' + order.payment + '</b></div>');
-            rows.push('<div class="sum-row is-total"><span>Total</span><b>' +
-                OrderKit.money(order.plan.price, region.currency) + '</b></div>');
-
-            // Only shown when there's an actual split to explain — a
-            // full-payment product (depositPct: 1) has nothing left to owe,
-            // so a "Pay now (100%)" row would just repeat Total.
-            var split = Wizard.split(order.plan.price, region.currency);
-            if (split.balance > 0) {
-                var pctLabel = Math.round((split.deposit / order.plan.price) * 100);
-                rows.push('<div class="sum-row"><span>Pay now (' + pctLabel + '%)</span><b>' +
-                    OrderKit.money(split.deposit, region.currency) + '</b></div>');
-                rows.push('<div class="sum-row"><span>Balance on delivery</span><b>' +
-                    OrderKit.money(split.balance, region.currency) + '</b></div>');
-            }
-
-            Wizard.$('sum-list').innerHTML = rows.join('');
-            OrderKit.openSheet('confirmSheet');
-            OrderKit.haptic(12);
-        },
-
         confirm: function () {
             if (Wizard.state.busy) return;
             var order = Wizard.validate();
-            if (!order) { OrderKit.closeSheet('confirmSheet'); return; }
+            if (!order) return;
 
             Wizard.state.busy = true;
-            var btn = Wizard.$('btn-confirm');
+            var btn = Wizard.$('btn-submit');
             btn.classList.add('is-busy');
+            btn.disabled = true;
             btn.querySelector('.cta-label').textContent = 'Opening WhatsApp…';
             btn.querySelector('.cta-icon').innerHTML = '<span class="spinner"></span>';
 
@@ -420,6 +474,19 @@
             // not as a bundle, since it isn't one.
             var isFixedPlan = Wizard.cfg.platform === 'bundle' || Wizard.cfg.platform === 'website';
             var subKey = P.SUBSCRIPTIONS[Wizard.cfg.platform] ? Wizard.cfg.platform : null;
+
+            Wizard.saveProfile(order.name, order.rawPhone);
+            Wizard.track('checkout_submit', {
+                planId: order.plan.id,
+                serviceId: isFixedPlan ? null : (subKey || Wizard.state.service || null),
+                region: Wizard.state.region,
+                currency: region.currency,
+                amount: order.plan.price
+            });
+            Wizard.track('whatsapp_order_start', {
+                planId: order.plan.id,
+                region: Wizard.state.region
+            });
 
             OrderKit.send({
                 sheetUrl: Wizard.cfg.sheetUrl,
@@ -459,7 +526,8 @@
             setTimeout(function () {
                 Wizard.state.busy = false;
                 btn.classList.remove('is-busy');
-                btn.querySelector('.cta-label').textContent = 'Send on WhatsApp';
+                btn.disabled = false;
+                btn.querySelector('.cta-label').textContent = 'Confirm on WhatsApp';
                 btn.querySelector('.cta-icon').innerHTML = '<i class="fab fa-whatsapp"></i>';
             }, 6000);
         },
@@ -469,10 +537,12 @@
         start: function (cfg) {
             Wizard.cfg = cfg;
             OrderKit.boot();
+            Wizard.captureIntent();
 
             Wizard.renderGifts();
             Wizard.renderProof();
             Wizard.renderServiceTabs();
+            Wizard.loadProfile();
 
             if (cfg.fixedRegion) {
                 // A single-currency product (e.g. a subscription priced only
@@ -501,8 +571,15 @@
                 if (!card) return;
                 Wizard.state.plan = Number(card.dataset.index);
                 Wizard.renderPlans();
+                Wizard.rememberPlan();
                 Wizard.syncPlanBtn();
                 OrderKit.haptic(14);
+                Wizard.track('plan_select', {
+                    planId: Wizard.selectedPlan().id,
+                    serviceId: Wizard.state.service,
+                    region: Wizard.state.region
+                });
+                window.setTimeout(function () { Wizard.go(2); }, 150);
             });
 
             var svcTabs = Wizard.$('svcTabs');
@@ -512,6 +589,7 @@
                     if (!tab || tab.dataset.service === Wizard.state.service) return;
                     Wizard.state.service = tab.dataset.service;
                     Wizard.state.plan = -1;
+                    Wizard.clearPlanIntent();
                     Wizard.renderServiceTabs();
                     Wizard.renderPlans();
                     Wizard.syncPlanBtn();
@@ -519,15 +597,12 @@
                 });
             }
 
-            Wizard.$('gift-list').addEventListener('click', function (e) {
-                var gift = e.target.closest('.gift');
-                if (gift) Wizard.claimGift(gift);
-            });
-
             document.querySelectorAll('[data-go]').forEach(function (btn) {
                 btn.addEventListener('click', function () {
                     if (btn.disabled) return;
-                    Wizard.go(Number(btn.dataset.go));
+                    var next = Number(btn.dataset.go);
+                    if (next === 1) Wizard.state.quickStart = false;
+                    Wizard.go(next);
                 });
             });
 
@@ -546,14 +621,13 @@
 
             document.querySelectorAll('.field input').forEach(function (input) {
                 input.addEventListener('keypress', function (e) {
-                    if (e.key === 'Enter') { e.preventDefault(); Wizard.openReview(); }
+                    if (e.key === 'Enter') { e.preventDefault(); Wizard.confirm(); }
                 });
             });
 
-            Wizard.$('btn-submit').addEventListener('click', Wizard.openReview);
-            Wizard.$('btn-confirm').addEventListener('click', Wizard.confirm);
+            Wizard.$('btn-submit').addEventListener('click', Wizard.confirm);
 
-            Wizard.go(1);
+            if (Wizard.state.step !== 2) Wizard.go(1, true);
         }
     };
 
