@@ -3,6 +3,7 @@
     'use strict';
 
     var P = window.K97Pricing;
+    var Brandmarks = window.K97Brandmarks;
     var PRODUCTS = window.K97MarketplaceData || [];
     var grid = document.querySelector('[data-product-grid]');
     if (!grid || !PRODUCTS.length) return;
@@ -80,15 +81,17 @@
             article.style.setProperty('--brand', colors[0]);
             article.style.setProperty('--brand2', colors[1]);
             article.innerHTML = '<a class="product-card-link" href="' + productHref(product) + '" aria-label="View ' + escapeHTML(product.name) + '" data-product-link="' + product.id + '"></a>' +
-                '<div class="product-art" aria-hidden="true"><span class="digital-orbit orbit-a"></span><span class="digital-orbit orbit-b"></span><b>' + markHTML(product) + '</b></div>' +
+                '<div class="product-art" aria-hidden="true"><span class="digital-orbit orbit-a"></span><span class="digital-orbit orbit-b"></span><span class="product-department">' + escapeHTML(CATEGORY_LABELS[product.primaryCategory] || product.label) + '</span><b class="product-logo">' + markHTML(product) + '</b></div>' +
                 '<div class="product-body"><div class="product-topline"><span>' + escapeHTML(product.label) + '</span>' + badge + '</div><h3>' + escapeHTML(product.name) + '</h3><p>' + escapeHTML(product.description) + '</p>' +
-                '<ul>' + uses.map(function (item) { return '<li>' + escapeHTML(item) + '</li>'; }).join('') + '</ul><div class="product-bottom"><div><small>' + (hasLocalPrice(product) ? 'From' : 'Availability') + '</small><strong data-price="' + product.id + '">' + escapeHTML(priceText(product)) + '</strong></div><span class="status"><i></i>' + (hasLocalPrice(product) ? ' Available' : ' Request') + '</span></div></div>' +
+                '<ul>' + uses.map(function (item) { return '<li>' + escapeHTML(item) + '</li>'; }).join('') + '</ul><div class="product-bottom"><div><small>' + (hasLocalPrice(product) ? 'From' : 'Availability') + '</small><strong data-price="' + product.id + '">' + escapeHTML(priceText(product)) + '</strong></div><span class="status"><i></i> ' + statusText(product) + '</span></div></div>' +
                 '<button class="quick-button" type="button" aria-label="Quick view ' + escapeHTML(product.name) + '" data-quick="' + product.id + '">+</button>';
             grid.appendChild(article);
         });
     }
 
+    grid.textContent = '';
     ensureProductCards();
+    grid.classList.add('is-ready');
     var CARD_BY_ID = {};
     document.querySelectorAll('[data-product]').forEach(function (card) { CARD_BY_ID[card.dataset.product] = card; });
 
@@ -96,6 +99,17 @@
         var sub = P && ((P.SUBSCRIPTIONS && P.SUBSCRIPTIONS[product.id]) || (P.DIGITAL_PRODUCTS && P.DIGITAL_PRODUCTS[product.id]));
         if (!sub || !sub.tiers || !sub.tiers.length) return null;
         return sub.tiers[0];
+    }
+
+    function canStartOrder(product) {
+        var pricedProduct = P && ((P.SUBSCRIPTIONS && P.SUBSCRIPTIONS[product.id]) || (P.DIGITAL_PRODUCTS && P.DIGITAL_PRODUCTS[product.id]));
+        return !!pricedProduct && hasLocalPrice(product) && pricedProduct.tiers.some(function (tier) { return tier.orderable !== false; });
+    }
+
+    function statusText(product) {
+        if (canStartOrder(product)) return 'Available';
+        if (hasLocalPrice(product)) return 'Check first';
+        return 'Request';
     }
 
     function hasLocalPrice(product) {
@@ -129,7 +143,7 @@
                     var label = bottom.querySelector('small');
                     var status = bottom.querySelector('.status');
                     if (label) label.textContent = priced ? 'From' : 'Availability';
-                    if (status) status.innerHTML = '<i></i>' + (priced ? ' Available' : ' Request');
+                    if (status) status.innerHTML = '<i></i> ' + statusText(product);
                 }
             }
         });
@@ -312,8 +326,24 @@
     }
 
     function markHTML(product) {
+        if (Brandmarks && Brandmarks.render) return Brandmarks.render(product.id);
         if (product.logo) return '<img src="' + product.logo + '" width="26" height="26" alt="">';
         return escapeHTML(product.mark || product.name.charAt(0));
+    }
+
+    function hydrateStaticBrandmarks() {
+        if (!Brandmarks || !Brandmarks.render) return;
+        document.querySelectorAll('[data-brand-logo]').forEach(function (node) {
+            node.innerHTML = Brandmarks.render(node.dataset.brandLogo);
+        });
+    }
+
+    function hydrateDepartmentCounts() {
+        document.querySelectorAll('[data-department-count]').forEach(function (node) {
+            var category = node.dataset.departmentCount;
+            var count = PRODUCTS.filter(function (product) { return product.primaryCategory === category; }).length;
+            node.textContent = count + ' product' + (count === 1 ? '' : 's');
+        });
     }
 
     function escapeHTML(value) {
@@ -469,16 +499,16 @@
         document.querySelector('[data-quick-description]').textContent = product.description;
         document.querySelector('[data-quick-uses]').innerHTML = product.useCases.map(function (item) { return '<li>' + escapeHTML(item) + '</li>'; }).join('');
         document.querySelector('[data-quick-price]').textContent = priceText(product);
-        var hasTier = hasLocalPrice(product);
+        var orderReady = canStartOrder(product);
         var quickStatus = document.querySelector('[data-quick-status]');
-        if (quickStatus) quickStatus.innerHTML = '<i></i> ' + (hasTier ? 'Available now' : 'Check availability');
+        if (quickStatus) quickStatus.innerHTML = '<i></i> ' + (orderReady ? 'Available now' : 'Check availability');
         var cta = document.querySelector('[data-quick-cta]');
-        cta.href = productHref(product); cta.dataset.productLink = product.id; cta.firstChild.nodeValue = hasTier ? 'View plans ' : 'Check availability ';
+        cta.href = productHref(product); cta.dataset.productLink = product.id; cta.firstChild.nodeValue = orderReady ? 'View plans ' : 'Check availability ';
         var relatedWrap = document.querySelector('[data-quick-related]');
         var relatedList = document.querySelector('[data-related-list]');
         var related = (product.related || []).map(function (id) { return PRODUCT_BY_ID[id]; }).filter(Boolean).slice(0, 2);
         relatedWrap.hidden = related.length === 0;
-        relatedList.innerHTML = related.map(function (item) { return '<a class="related-link" href="' + productHref(item) + '" data-product-link="' + item.id + '"><span>' + escapeHTML(item.name) + '</span><i>→</i></a>'; }).join('');
+        relatedList.innerHTML = related.map(function (item) { return '<a class="related-link" href="' + productHref(item) + '" data-product-link="' + item.id + '"><b>' + markHTML(item) + '</b><span>' + escapeHTML(item.name) + '</span><i>→</i></a>'; }).join('');
         openLayer(layer, '[data-quick-close]');
         track('quick_view_open', { product_id: product.id });
     }
@@ -616,6 +646,8 @@
         document.querySelectorAll('.reveal-section').forEach(function (node) { revealObserver.observe(node); });
     } else document.querySelectorAll('.reveal-section').forEach(function (node) { node.classList.add('is-visible'); });
 
+    hydrateStaticBrandmarks();
+    hydrateDepartmentCounts();
     updateRegionUI();
     updatePrices();
     syncSearchInputs(state.query);

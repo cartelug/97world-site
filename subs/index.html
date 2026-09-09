@@ -17,6 +17,7 @@
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
     <link rel="preconnect" href="https://api.fontshare.com">
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&amp;f[]=satoshi@400,500,600,700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/motion.css">
     <link rel="stylesheet" href="/subs/marketplace.css">
 </head>
 <body class="marketplace-page">
@@ -89,7 +90,7 @@
                     <button class="category-chip" type="button" data-category="gaming" aria-pressed="false">Gaming</button>
                     <button class="category-chip" type="button" data-category="gifts" aria-pressed="false">Gift cards</button>
                     <button class="category-chip" type="button" data-category="create" aria-pressed="false">Create</button>
-                    <button class="category-chip" type="button" data-category="watch" aria-pressed="false">Watch</button>
+                    <button class="category-chip" type="button" data-category="watch" aria-pressed="false">Entertainment</button>
                     <button class="category-chip" type="button" data-category="work" aria-pressed="false">Work</button>
                     <button class="category-chip" type="button" data-category="ai" aria-pressed="false">AI</button>
                     <button class="category-chip" type="button" data-category="learn" aria-pressed="false">Learn</button>
@@ -102,7 +103,7 @@
                 <span><i aria-hidden="true">✓</i> Pay once</span>
                 <span><i aria-hidden="true">✓</i> Local payment</span>
                 <span><i aria-hidden="true">✓</i> Human support</span>
-                <span><i aria-hidden="true">✓</i> Fixed-term access</span>
+                <span><i aria-hidden="true">✓</i> Clean digital fulfilment</span>
             </div>
         </section>
 
@@ -115,31 +116,49 @@
                 <button class="category-chip" type="button" data-category="gaming" aria-pressed="false">Gaming</button>
                 <button class="category-chip" type="button" data-category="gifts" aria-pressed="false">Gift cards</button>
                 <button class="category-chip" type="button" data-category="create" aria-pressed="false">Create</button>
-                <button class="category-chip" type="button" data-category="watch" aria-pressed="false">Watch</button>
+                <button class="category-chip" type="button" data-category="watch" aria-pressed="false">Entertainment</button>
                 <button class="category-chip" type="button" data-category="work" aria-pressed="false">Work</button>
                 <button class="category-chip" type="button" data-category="ai" aria-pressed="false">AI</button>
                 <button class="category-chip" type="button" data-category="learn" aria-pressed="false">Learn</button>
             </div>
         </div>
 
+        <section class="department-section" aria-labelledby="department-title">
+            <div class="section-shell">
+                <div class="department-heading reveal-section">
+                    <div><p class="section-kicker">SHOP BY DEPARTMENT</p><h2 id="department-title">A place for every digital need.</h2></div>
+                    <p>Thirty carefully selected products, organized by what you want to play, buy, watch, create or learn.</p>
+                </div>
+                <div class="department-grid" data-stagger>
+                    <button class="department-card department-gaming m-lift reveal-section" type="button" data-category-jump="gaming"><span class="department-logo" data-brand-logo="xbox-game-pass" aria-hidden="true"></span><span><small>PLAY</small><strong>Gaming</strong><em data-department-count="gaming">9 products</em></span><i>→</i></button>
+                    <button class="department-card department-gifts m-lift reveal-section" type="button" data-category-jump="gifts"><span class="department-logo" data-brand-logo="steam-wallet" aria-hidden="true"></span><span><small>LOAD</small><strong>Gift cards</strong><em data-department-count="gifts">5 products</em></span><i>→</i></button>
+                    <button class="department-card department-watch m-lift reveal-section" type="button" data-category-jump="watch"><span class="department-logo" data-brand-logo="netflix-gift-card" aria-hidden="true"></span><span><small>WATCH</small><strong>Entertainment</strong><em data-department-count="watch">7 products</em></span><i>→</i></button>
+                    <button class="department-card department-create m-lift reveal-section" type="button" data-category-jump="create"><span class="department-logo" data-brand-logo="canva-pro" aria-hidden="true"></span><span><small>MAKE</small><strong>Create</strong><em data-department-count="create">3 products</em></span><i>→</i></button>
+                    <button class="department-card department-ai m-lift reveal-section" type="button" data-category-jump="ai"><span class="department-logo" data-brand-logo="google-ai-pro" aria-hidden="true"></span><span><small>THINK</small><strong>AI tools</strong><em data-department-count="ai">2 products</em></span><i>→</i></button>
+                    <button class="department-card department-work m-lift reveal-section" type="button" data-category-jump="work"><span class="department-logo" data-brand-logo="linkedin-premium-career" aria-hidden="true"></span><span><small>ADVANCE</small><strong>Work</strong><em data-department-count="work">2 products</em></span><i>→</i></button>
+                    <button class="department-card department-learn m-lift reveal-section" type="button" data-category-jump="learn"><span class="department-logo" data-brand-logo="coursera-plus" aria-hidden="true"></span><span><small>GROW</small><strong>Learn</strong><em data-department-count="learn">2 products</em></span><i>→</i></button>
+                </div>
+            </div>
+        </section>
+
         <section class="section featured-section" aria-labelledby="featured-title">
             <div class="section-shell">
                 <div class="section-heading reveal-section">
                     <div><p class="section-kicker">CURATED BY 97</p><h2 id="featured-title">Featured on 97</h2></div>
-                    <p>Three useful places to start, selected for how people create and unwind.</p>
+                    <p>High-demand products with straightforward delivery and clear Uganda pricing.</p>
                 </div>
 
                 <div class="featured-grid">
                     <article class="feature-card feature-card-main art-gamepass reveal-section">
-                        <div class="feature-art" aria-hidden="true"><span class="art-orbit orbit-one"></span><span class="art-orbit orbit-two"></span><span class="feature-mark">X</span></div>
+                        <div class="feature-art" aria-hidden="true"><span class="art-orbit orbit-one"></span><span class="art-orbit orbit-two"></span><span class="feature-mark" data-brand-logo="xbox-game-pass"></span></div>
                         <div class="feature-content"><p>FEATURED · GAMING</p><h3>Xbox Game Pass Ultimate</h3><span>3 months. Customer-redeemed key. Region checked first.</span><a href="/subs/digital/?product=xbox-game-pass" data-product-link="xbox-game-pass">View Game Pass <i aria-hidden="true">→</i></a></div>
                     </article>
                     <article class="feature-card feature-card-small art-mobile-legends reveal-section">
-                        <div class="feature-art compact" aria-hidden="true"><span class="cut-lines"></span><span class="feature-mark">ML</span></div>
+                        <div class="feature-art compact" aria-hidden="true"><span class="cut-lines"></span><span class="feature-mark" data-brand-logo="mobile-legends"></span></div>
                         <div class="feature-content"><p>FAST TOP-UP</p><h3>Mobile Legends</h3><a href="/subs/digital/?product=mobile-legends" data-product-link="mobile-legends">Top up diamonds <i aria-hidden="true">→</i></a></div>
                     </article>
                     <article class="feature-card feature-card-small art-steam reveal-section">
-                        <div class="feature-art compact" aria-hidden="true"><span class="film-frame"></span><span class="feature-mark">S</span></div>
+                        <div class="feature-art compact" aria-hidden="true"><span class="film-frame"></span><span class="feature-mark" data-brand-logo="steam-wallet"></span></div>
                         <div class="feature-content"><p>PC GAMING</p><h3>Steam Wallet</h3><a href="/subs/digital/?product=steam-wallet" data-product-link="steam-wallet">View wallet codes <i aria-hidden="true">→</i></a></div>
                     </article>
                 </div>
@@ -186,7 +205,7 @@
         <section class="protection-section" aria-labelledby="protection-title"><div class="section-shell protection-grid"><div class="protection-heading reveal-section"><p class="section-kicker">97 PROTECTION</p><h2 id="protection-title">Clear terms.<br>Local support.</h2><p>Only the promises we can keep—stated before you choose.</p><a href="/trust/">Visit the Trust Centre <i aria-hidden="true">→</i></a></div><div class="protection-points"><article class="reveal-section"><span>01</span><h3>Pay once</h3><p>Your selected package or term is paid upfront. Nothing renews automatically.</p></article><article class="reveal-section"><span>02</span><h3>No card stored</h3><p>Payment is confirmed directly with 97. Your card is not stored here.</p></article><article class="reveal-section"><span>03</span><h3>Real support</h3><p>If you need help after delivery, you can reach a person locally.</p></article><article class="reveal-section"><span>04</span><h3>Delivery support</h3><p>If a code, top-up or digital service needs attention, 97 helps resolve it.</p></article></div></div></section>
     </main>
 
-    <footer class="market-footer"><div class="footer-main"><div class="footer-brand"><a class="market-brand" href="/"><img src="/IMAGES/logo.png" width="42" height="42" alt=""><span>WORLD</span></a><p>The elite digital standard.</p><div class="footer-region"><span data-region-label>Uganda · UGX</span><i>•</i><span class="system-status">Systems operational</span></div></div><nav aria-label="Marketplace links"><h2>Marketplace</h2><button type="button" data-category-jump="all">All products</button><button type="button" data-category-jump="gaming">Gaming</button><button type="button" data-category-jump="gifts">Gift cards</button><button type="button" data-category-jump="create">Create</button><button type="button" data-category-jump="watch">Entertainment</button><button type="button" data-category-jump="work">Work</button></nav><nav aria-label="97 World links"><h2>97 World</h2><a href="/">World</a><a href="/growth/">Grow</a><a href="/business/">Business</a><a href="/trust/">Trust</a></nav><nav aria-label="Support links"><h2>Support</h2><a href="https://wa.me/256762193386" target="_blank" rel="noopener">97 Concierge</a><a href="/track/">Track an order</a><a href="/trust/">Trust Centre</a></nav><nav aria-label="Legal links"><h2>Legal</h2><a href="/terms-of-service/">Terms</a><a href="/privacy-policy/">Privacy</a><a href="/trust/">Product disclaimer</a></nav></div><div class="footer-bottom"><span>© 2026 97 World</span><span>Built for Uganda and South Sudan.</span></div></footer>
+    <footer class="market-footer"><div class="footer-main"><div class="footer-brand"><a class="market-brand" href="/"><img src="/IMAGES/logo.png" width="42" height="42" alt=""><span>WORLD</span></a><p>The elite digital standard.</p><div class="footer-region"><span data-region-label>Uganda · UGX</span><i>•</i><span class="system-status">Systems operational</span></div></div><nav aria-label="Marketplace links"><h2>Marketplace</h2><button type="button" data-category-jump="all">All products</button><button type="button" data-category-jump="gaming">Gaming</button><button type="button" data-category-jump="gifts">Gift cards</button><button type="button" data-category-jump="watch">Entertainment</button><button type="button" data-category-jump="create">Create</button><button type="button" data-category-jump="ai">AI tools</button><button type="button" data-category-jump="work">Work</button><button type="button" data-category-jump="learn">Learn</button></nav><nav aria-label="97 World links"><h2>97 World</h2><a href="/">World</a><a href="/growth/">Grow</a><a href="/business/">Business</a><a href="/trust/">Trust</a></nav><nav aria-label="Support links"><h2>Support</h2><a href="https://wa.me/256762193386" target="_blank" rel="noopener">97 Concierge</a><a href="/track/">Track an order</a><a href="/trust/">Trust Centre</a></nav><nav aria-label="Legal links"><h2>Legal</h2><a href="/terms-of-service/">Terms</a><a href="/privacy-policy/">Privacy</a><a href="/trust/">Product disclaimer</a></nav></div><div class="footer-bottom"><span>© 2026 97 World</span><span>Built for Uganda and South Sudan.</span></div></footer>
 
     <div class="dialog-layer" hidden data-region-dialog><button class="dialog-backdrop" type="button" tabindex="-1" data-dialog-close aria-label="Close region selector"></button><section class="region-dialog" role="dialog" aria-modal="true" aria-labelledby="region-title"><div class="dialog-grab" aria-hidden="true"></div><div class="dialog-heading"><div><p class="section-kicker">YOUR MARKET</p><h2 id="region-title">Choose your region</h2></div><button class="dialog-close" type="button" data-dialog-close aria-label="Close">×</button></div><p>Prices, availability and payment information update automatically.</p><div class="region-options"><button type="button" data-region="UG"><span>🇺🇬</span><div><b>Uganda</b><small>UGX · MTN / Airtel Money</small></div><i aria-hidden="true">✓</i></button><button type="button" data-region="SS"><span>🇸🇸</span><div><b>South Sudan</b><small>USD · Local payment support</small></div><i aria-hidden="true">✓</i></button></div></section></div>
 
@@ -197,7 +216,9 @@
     <div class="quick-layer" hidden data-quick-dialog><button class="dialog-backdrop" type="button" tabindex="-1" data-quick-close aria-label="Close quick view"></button><aside class="quick-view" role="dialog" aria-modal="true" aria-labelledby="quick-title"><div class="dialog-grab" aria-hidden="true"></div><button class="dialog-close quick-close" type="button" data-quick-close aria-label="Close quick view">×</button><div class="quick-art" data-quick-art aria-hidden="true"><b data-quick-mark>97</b></div><div class="quick-content"><p class="section-kicker" data-quick-category>DIGITAL PRODUCT</p><h2 id="quick-title" data-quick-name>Product</h2><p data-quick-description></p><ul data-quick-uses></ul><div class="quick-trust"><span><i>✓</i> Pay once</span><span><i>✓</i> Local support</span></div><div class="quick-price"><div><small>Starting from</small><strong data-quick-price>—</strong></div><span data-quick-status><i></i> Available now</span></div><a class="quick-cta pressable" href="/subs/" data-quick-cta>View plans <i aria-hidden="true">→</i></a><div class="quick-related" hidden data-quick-related><p>You may also like</p><div data-related-list></div></div></div></aside></div>
 
     <script src="/assets/pricing.js"></script>
+    <script src="/assets/brandmarks.js"></script>
     <script src="/subs/marketplace-data.js"></script>
+    <script src="/assets/motion.js"></script>
     <script src="/subs/marketplace.js"></script>
 </body>
 </html>

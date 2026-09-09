@@ -2,6 +2,7 @@
     'use strict';
 
     var P = window.K97Pricing;
+    var Brandmarks = window.K97Brandmarks;
     var id = new URL(window.location.href).searchParams.get('product');
     var product = P && P.DIGITAL_PRODUCTS && P.DIGITAL_PRODUCTS[id];
     if (!product) { window.location.replace('/subs/'); return; }
@@ -24,7 +25,9 @@
     text('[data-category]', product.category.toUpperCase() + ' · ' + product.fulfilment.toUpperCase());
     text('[data-product-name]', product.name);
     text('[data-description]', product.description);
-    text('[data-product-mark], [data-summary-mark]', product.mark || product.name.charAt(0));
+    document.querySelectorAll('[data-product-mark], [data-summary-mark]').forEach(function (node) {
+        node.innerHTML = Brandmarks && Brandmarks.render ? Brandmarks.render(id) : escapeHTML(product.mark || product.name.charAt(0));
+    });
     text('[data-summary-category]', product.category);
     text('[data-summary-name]', product.name);
     text('[data-fulfilment]', product.fulfilment);
