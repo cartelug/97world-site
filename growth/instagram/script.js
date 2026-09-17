@@ -53,7 +53,7 @@ OrderWizard.start({
         {
             "icon": "fa-bolt",
             "title": "You watch it start before you finish paying",
-            "body": "The first batch lands in 1–6 hours. 50% starts the order, the balance is due once delivery is running."
+            "body": "The first batch lands in 1–6 hours. 50% starts the order, and the balance is due after the agreed delivery is finished."
         },
         {
             "icon": "fa-location-dot",

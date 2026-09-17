@@ -449,7 +449,7 @@
             if (split.balance > 0) {
                 var pctLabel = Math.round((split.deposit / order.plan.price) * 100);
                 splitLines = '*Pay now (' + pctLabel + '%):* ' + OrderKit.money(split.deposit, region.currency) + '\n' +
-                    '*Balance on delivery:* ' + OrderKit.money(split.balance, region.currency) + '\n';
+                    '*Balance after completion:* ' + OrderKit.money(split.balance, region.currency) + '\n';
             }
 
             var message = '*NEW ORDER [' + region.name.toUpperCase() + ']*\n\n' +

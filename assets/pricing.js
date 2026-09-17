@@ -449,6 +449,103 @@
         return n;
     }
 
+    /* ----------------------------------------------------- growth offer ---
+     * The one configuration behind /growth/: "10,000 followers per selected
+     * platform", sold across Instagram, TikTok and Facebook.
+     *
+     * Nothing here is a second price list. The per-platform price is READ
+     * from SERVICES above — the 10,000-follower tier of that platform's own
+     * follower service, which is $100 on all three — so one and two platforms
+     * are literally the catalogue price, summed, with no discount claimed.
+     *
+     * BUNDLE_3_USD is the only number that is not a sum of the list: $250 for
+     * all three, $50 under the $300 the same three packages cost bought
+     * separately. It is the owner's approved bundle price for this offer, and
+     * the saving shown on the page is always (list − bundle) computed here,
+     * never typed into the markup.
+     *
+     * UGX is not a separate tariff: it is the same USD figure through the
+     * site-wide published rate (UGX_PER_USD), the way every other price on
+     * 97 World converts. There is no hand-written shilling price anywhere.
+     * -------------------------------------------------------------------- */
+
+    var GROWTH_OFFER = {
+        platforms: ['instagram', 'tiktok', 'facebook'],
+        qty: 10000,
+        unit: 'followers',
+        bundleUsd: 250,          // all three; see note above
+        depositRate: 0.5
+    };
+
+    /** The follower service that carries this offer for a platform. */
+    function offerService(key) {
+        var role = PLATFORM_ROLES[key];
+        return role ? SERVICES_BY_ID[role.followers] || null : null;
+    }
+
+    /** List price of one platform's 10,000 followers, straight from SERVICES. */
+    function offerUnitUsd(key) {
+        var role = PLATFORM_ROLES[key];
+        return role ? tierUsd(role.followers, GROWTH_OFFER.qty) : null;
+    }
+
+    /**
+     * Price a growth-offer selection.
+     *
+     * keys:       platform keys in GROWTH_OFFER.platforms, any order
+     * regionCode: 'UG' | 'SS' | 'CD'
+     *
+     * `priced` is false if any selected platform has no 10,000-follower tier
+     * in the price list — the caller must then show nothing rather than a
+     * guess. Deposit is rounded in the display currency and the balance is
+     * whatever is left, so the two halves always add back to the total shown.
+     */
+    function offerQuote(keys, regionCode) {
+        var currency = REGIONS[regionCode] ? REGIONS[regionCode].currency : null;
+        var list = [];
+        var priced = keys.length > 0 && !!currency;
+        var listUsd = 0;
+
+        for (var i = 0; i < keys.length; i++) {
+            var usd = offerUnitUsd(keys[i]);
+            if (usd == null) priced = false;
+            else listUsd += usd;
+            list.push({ platform: keys[i], usd: usd });
+        }
+
+        var n = keys.length;
+        var totalUsd = (priced && n === GROWTH_OFFER.platforms.length)
+            ? GROWTH_OFFER.bundleUsd
+            : listUsd;
+
+        if (!priced) {
+            return {
+                priced: false, currency: currency, count: n, lines: list,
+                qty: GROWTH_OFFER.qty, totalQty: n * GROWTH_OFFER.qty,
+                listPrice: null, total: null, saving: 0,
+                deposit: null, balance: null
+            };
+        }
+
+        var listPrice = roundMoney(localPrice(listUsd, currency), currency);
+        var total = roundMoney(localPrice(totalUsd, currency), currency);
+        var deposit = roundMoney(total * GROWTH_OFFER.depositRate, currency);
+
+        return {
+            priced: true,
+            currency: currency,
+            count: n,
+            lines: list,
+            qty: GROWTH_OFFER.qty,
+            totalQty: n * GROWTH_OFFER.qty,
+            listPrice: listPrice,
+            total: total,
+            saving: listPrice - total,          // 0 unless the bundle applies
+            deposit: deposit,
+            balance: total - deposit            // never derived independently
+        };
+    }
+
     /* What to ask for so we can deliver, per platform. Never a password. */
     var ACCOUNT_HINTS = {
         instagram:  { label: 'Instagram', placeholder: '@username or profile link' },
@@ -1010,6 +1107,7 @@
         GROWTH_PRIMARY: GROWTH_PRIMARY,
         GROWTH_MORE: GROWTH_MORE,
         COMBO_TIERS: COMBO_TIERS,
+        GROWTH_OFFER: GROWTH_OFFER,
         ACCOUNT_HINTS: ACCOUNT_HINTS,
         comboEligible: comboEligible,
         comboRate: comboRate,
@@ -1019,6 +1117,9 @@
         qtysFor: qtysFor,
         tierUsd: tierUsd,
         quote: quote,
+        offerQuote: offerQuote,
+        offerUnitUsd: offerUnitUsd,
+        offerService: offerService,
         servicesFor: servicesFor,
         searchServices: searchServices,
         localPrice: localPrice,

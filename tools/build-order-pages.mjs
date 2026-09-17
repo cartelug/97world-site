@@ -52,7 +52,7 @@ const SUB_GIFTS = [
 
 const PROOF = [
     { icon: 'fa-lock', title: 'We never ask for your password', body: 'Delivery works entirely from your public handle. Your login stays yours.' },
-    { icon: 'fa-bolt', title: 'You watch it start before you finish paying', body: 'The first batch lands in 1–6 hours. 50% starts the order, the balance is due once delivery is running.' },
+    { icon: 'fa-bolt', title: 'You watch it start before you finish paying', body: 'The first batch lands in 1–6 hours. 50% starts the order, and the balance is due after the agreed delivery is finished.' },
     { icon: 'fa-location-dot', title: 'We are actually here', body: 'Kampala-based. Pay by MTN or Airtel Money, or bring cash to the office.' }
 ];
 
@@ -491,8 +491,8 @@ ${p.sell ? BUNDLE_SELL : `        <header class="ord-hero">
                 <div class="guarantee">
                     <i class="fas fa-shield-halved"></i>
                     <div>
-                        <b>${p.guaranteeTitle || '50% starts it, the rest on delivery'}</b>
-                        <p>${p.guaranteeBody || 'We begin your order on a 50% deposit. The balance is only due once you can see it working.'}</p>
+                        <b>${p.guaranteeTitle || '50% starts it, the balance after completion'}</b>
+                        <p>${p.guaranteeBody || 'We begin your order on a 50% deposit. The balance is only due after the agreed delivery is finished.'}</p>
                     </div>
                 </div>
 
@@ -573,7 +573,7 @@ ${p.extraOptions.map((o) => `                        <option value="${o}">${o}</
                 <div class="checkout-split" id="checkout-split" hidden>
                     <span><small id="checkout-deposit-label">Pay now</small><b id="checkout-deposit">—</b></span>
                     <i class="fas fa-arrow-right"></i>
-                    <span><small>Balance on delivery</small><b id="checkout-balance">—</b></span>
+                    <span><small>Balance after completion</small><b id="checkout-balance">—</b></span>
                 </div>
 
                 <button type="button" class="wiz-btn" id="btn-submit">

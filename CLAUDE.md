@@ -49,11 +49,38 @@ and growth pages) are handled by the same engine — don't rename them.
 
 ## Layout
 
-- `/growth/` is light (`assets/growth.css`, `growth/app.js`) and
-  self-contained. Everything else is dark (`HOME/style.css` +
-  `assets/hub.css`). Don't let the two leak into each other.
+- `/growth/` is light and self-contained. Everything else is dark
+  (`HOME/style.css` + `assets/hub.css`). Don't let the two leak into each
+  other. Two light surfaces live under `/growth/`:
+  - **`/growth/` itself** — the offer page from the sales conversation:
+    `growth/index.html` + `growth/offer.css` + `growth/offer.js`. Its design
+    system is scoped to `.gx` and every reset declaration sits inside
+    `:where()` so a component class always wins.
+  - **the 14 platform order pages** — `assets/order.css` + `assets/wizard.js`.
 - The 14 order pages are **generated** — edit
   `tools/build-order-pages.mjs` and re-run it, never the output files.
+
+## The /growth/ offer
+
+- Prices come from `K97Pricing.GROWTH_OFFER` / `offerQuote()` in
+  `assets/pricing.js` and nowhere else. One and two platforms are the plain
+  sum of the 10,000-follower tier already in `SERVICES` ($100 each);
+  `bundleUsd` is the single declared number, $250 for all three. UGX is the
+  same USD figure through `UGX_PER_USD` — never a hand-typed shilling price.
+- The page has one state model (country, platforms, step, proof filter) in
+  `growth/offer.js`. Totals, the payment split, the saving and the WhatsApp
+  message are all derived from it; nothing is read back off the DOM.
+- `PROOF` in `growth/offer.js` is **empty on purpose**. Nothing in `/IMAGES/`
+  is publishable growth evidence — every screenshot there is a Netflix or
+  Spotify conversation carrying a real name, a phone number, a shared
+  password, a PIN or a Mobile Money number, and none of them shows a follower
+  count. Add an entry only when the image file itself has had the private
+  parts removed (not blurred) and the client has cleared it; the gallery,
+  filters, story rail and viewer all switch on by themselves.
+- Payment terms across the site read **"balance after completion"** — the
+  balance is due once the agreed delivery is finished, not when it is
+  "visibly running". `terms-of-service/`, `trust/`, `assets/wizard.js` and
+  `tools/build-order-pages.mjs` all say this; keep them together.
 
 ## Verification before shipping
 
