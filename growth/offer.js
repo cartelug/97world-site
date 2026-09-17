@@ -147,7 +147,7 @@
     // Anonymous integration hooks. No network requests, identifiers or chat text.
     // A configured analytics listener can consume these without touching checkout.
     function trackEvent(event, extra) {
-        var payload = Object.assign({ event: 'growth_' + event, version: 'pro3',
+        var payload = Object.assign({ event: 'growth_' + event, version: 'studio4',
             country: state.country, platforms: state.platforms.join(','),
             platform_count: state.platforms.length }, extra || {});
         try {
@@ -376,6 +376,19 @@
             if (box.checked !== on) box.checked = on;
             label.classList.toggle('is-on', on);
         });
+        document.querySelectorAll('[data-hero-platform]').forEach(function (button) {
+            var on = state.platforms.indexOf(button.dataset.heroPlatform) !== -1;
+            button.setAttribute('aria-pressed', String(on));
+            button.querySelector('.gx-mini-check').textContent = on ? '✓' : '+';
+        });
+        document.querySelectorAll('[data-wire]').forEach(function (wire) {
+            wire.classList.toggle('is-connected', state.platforms.indexOf(wire.dataset.wire) !== -1);
+        });
+        var q = quote();
+        $('heroSelection').textContent = q.count ? q.count + (q.count === 1 ? ' platform · ' : ' platforms · ') + (q.count * 10) + 'K total followers' : 'Choose your platforms above';
+        roll($('heroTotal'), q.priced ? money(q.total) : '—');
+        $('heroContinue').disabled = !q.priced;
+        $('heroContinue').textContent = q.priced ? 'See client results →' : 'Choose a platform above';
     }
 
     /* -- the live summary ------------------------------------------- */
@@ -619,12 +632,12 @@
 
     /* -- the mobile action bar --------------------------------------- */
 
-    var barVisible = { summaryCta: false, sendCta: false };
+    var barVisible = { summaryCta: false, sendCta: false, heroCta: false };
 
     function renderBar() {
         var bar = $('bar');
         var q = quote();
-        var wanted = q.priced && !barVisible.summaryCta && !barVisible.sendCta;
+        var wanted = q.priced && !barVisible.heroCta && !barVisible.summaryCta && !barVisible.sendCta;
 
         if (wanted) {
             bar.hidden = false;
@@ -1281,6 +1294,10 @@
         save();
         render();
         announceSelection();
+        if (canAnimate) play(document.querySelector('.gx-core-number'), [
+            { transform: 'scale(.94)', opacity: .65 },
+            { transform: 'scale(1)', opacity: 1 }
+        ], { duration: 260, easing: 'cubic-bezier(.16,1,.3,1)' });
     }
 
     /**
@@ -1316,6 +1333,12 @@
         ];
 
         trackEvent('page_view');
+        document.querySelectorAll('[data-hero-platform]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var key = button.dataset.heroPlatform;
+                togglePlatform(key, state.platforms.indexOf(key) === -1);
+            });
+        });
         $('bundleBtn').addEventListener('click', function () {
             if (!state.country) { openCountry(false); return; }
             state.platforms = ORDER.slice();
@@ -1401,6 +1424,8 @@
             }, { threshold: 0 });
 
             var cta = $('sumBody');
+            var heroCta = $('heroContinue');
+            if (heroCta) { heroCta.setAttribute('data-bar-watch', 'heroCta'); watch.observe(heroCta); }
             if (cta) { cta.setAttribute('data-bar-watch', 'summaryCta'); watch.observe(cta); }
             var send = $('send');
             if (send) { send.setAttribute('data-bar-watch', 'sendCta'); watch.observe(send); }

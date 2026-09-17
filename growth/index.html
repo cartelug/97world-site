@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,600,700&display=swap">
 <link rel="stylesheet" href="/assets/motion.css">
-<link rel="stylesheet" href="/growth/offer.css?v=20260917-pro3">
+<link rel="stylesheet" href="/growth/offer.css?v=20260917-studio4">
 </head>
 
 <body class="gx">
@@ -75,10 +75,11 @@
 
   <!-- ==================================================== INTRO === -->
   <div class="gx-shell">
-    <section class="gx-intro" aria-labelledby="introH">
+    <section class="gx-intro gx-hero" aria-labelledby="introH">
+      <div class="gx-hero-copy">
       <p class="gx-eyebrow m-fade">97 World Growth</p>
-      <h1 id="introH" class="m-up">More followers.<br><span>Your next chapter.</span></h1>
-      <p class="gx-lead m-up">10,000 followers on each platform you choose. See the results, then confirm your order with us.</p>
+      <h1 id="introH" class="m-up">Your next<br><span>10,000 followers.</span></h1>
+      <p class="gx-lead m-up">One platform or all three. Your accounts stay yours. Your order starts with a conversation.</p>
       <ul class="gx-assurance" aria-label="How we work">
         <li><span aria-hidden="true">✓</span> No password needed</li>
         <li><span aria-hidden="true">✓</span> Half after completion</li>
@@ -89,6 +90,23 @@
         <li data-step="results"><b>2</b>See results</li>
         <li data-step="send"><b>3</b>Send request</li>
       </ol>
+      <a href="#choose" class="gx-btn gx-btn--primary gx-hero-cta m-press">Build my package <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="gx-console m-scale" aria-labelledby="consoleH">
+        <div class="gx-console-head"><span id="consoleH">YOUR GROWTH PACKAGE</span><span class="gx-console-tag">10K per platform</span></div>
+        <div class="gx-network" aria-hidden="true">
+          <svg class="gx-network-lines" viewBox="0 0 420 210" preserveAspectRatio="xMidYMid meet"><path data-wire="instagram" d="M210 75 C160 75 85 100 70 190"/><path data-wire="tiktok" d="M210 75 L210 190"/><path data-wire="facebook" d="M210 75 C260 75 335 100 350 190"/></svg>
+          <div class="gx-core"><span class="gx-core-number">10<span>K</span></span><span>FOLLOWERS EACH</span></div>
+        </div>
+        <div class="gx-console-platforms" role="group" aria-label="Choose platforms for your growth package">
+          <button type="button" data-hero-platform="instagram" aria-pressed="false"><svg aria-hidden="true"><use href="#mk-instagram"/></svg><span>Instagram</span><span class="gx-mini-check" aria-hidden="true">+</span></button>
+          <button type="button" data-hero-platform="tiktok" aria-pressed="false"><svg aria-hidden="true"><use href="#mk-tiktok"/></svg><span>TikTok</span><span class="gx-mini-check" aria-hidden="true">+</span></button>
+          <button type="button" data-hero-platform="facebook" aria-pressed="false"><svg aria-hidden="true"><use href="#mk-facebook"/></svg><span>Facebook</span><span class="gx-mini-check" aria-hidden="true">+</span></button>
+        </div>
+        <div class="gx-console-total"><span id="heroSelection">Choose your platforms above</span><b id="heroTotal">—</b></div>
+        <p class="gx-console-foot">50% after confirmation · 50% after completion.</p>
+        <button id="heroContinue" type="button" class="gx-btn gx-console-continue" data-action="continue" disabled>Choose a platform above</button>
+      </div>
     </section>
   </div>
 
@@ -173,9 +191,9 @@
   <div class="gx-shell">
     <section class="gx-sec" id="results" aria-labelledby="resultsH">
       <header>
-        <p class="gx-eyebrow gx-section-label">02 / See the evidence</p>
-        <h2 id="resultsH" tabindex="-1">Real clients. See their progress.</h2>
-        <p id="proofIntro">Follow each story below. Tap any screenshot to take a closer look.</p>
+        <p class="gx-eyebrow gx-section-label">02 / The people behind the progress</p>
+        <h2 id="resultsH" tabindex="-1">See the story.<br>Then decide.</h2>
+        <p id="proofIntro">Follow the same client from the starting point to the latest update. Every screenshot opens for a closer look.</p>
       </header>
 
       <div id="proofFilters" hidden>
@@ -352,9 +370,10 @@
 <dialog class="gx-dlg" id="trustDlg" aria-labelledby="trustH" aria-describedby="trustP">
   <div class="gx-dlg-card gx-dlg-split">
    <div class="gx-dlg-scroll">
+    <div class="gx-trust-seal" aria-hidden="true">97<span>WORLD</span></div>
     <h2 id="trustH">At 97 World, trust comes first.</h2>
     <p id="trustP">
-      Your account stays yours. We confirm every order with you in chat.
+      Your account. Your login. Your decision.
     </p>
 
     <div class="gx-commits">
@@ -449,6 +468,6 @@
 
 <script src="/assets/pricing.js"></script>
 <script src="/assets/motion.js" defer></script>
-<script src="/growth/offer.js?v=20260917-pro3" defer></script>
+<script src="/growth/offer.js?v=20260917-studio4" defer></script>
 </body>
 </html>
