@@ -14,7 +14,7 @@
  * message are recomputed at click time from state.
  *
  * Sections below, in order:
- *   1. Data the owner maintains (proof library — currently empty, see PROOF)
+ *   1. Data the owner maintains (proof library — client timelines)
  *   2. State + persistence
  *   3. Derivations (pricing, message)
  *   4. DOM helpers, motion helpers (FLIP, number roll)
@@ -34,118 +34,53 @@
 
     var WA_NUMBER = '256762193386';
 
-    /**
-     * THE PROOF LIBRARY
-     *
-     * Six records from two real 97 World conversations, supplied by the owner
-     * in the Growth master package. Every file here was re-encoded after solid
-     * rectangles were painted over the private parts, so what ships contains no
-     * recoverable original — this is redaction, not a blur over an intact file.
-     * Removed: the client's name, their photographs, their date of birth, their
-     * spouse's name, their bio, the contact names in both chats, the amounts,
-     * 97 World's own Mobile Money number, the mobile-money balance and
-     * transaction ID, the client's name inside the receipt and its filename,
-     * and two third-party reference accounts. EXIF was dropped on encode.
-     *
-     * Two records from the package were not published at all: a duplicate
-     * capture of the same sales chat, and a chat carrying 97 World's Mobile
-     * Money number and account name, a third party's phone number and three
-     * third-party Instagram handles.
-     *
-     * What each record is allowed to say is bounded by what it shows:
-     *   - `country: null` on all of them. The client's names read as South
-     *     Sudanese and the payment was in shillings, but neither is a verified
-     *     country, and country is never inferred from a name.
-     *   - Nothing is `stage: 'complete'`. 97 World's own message on the last
-     *     frame reads "Boost nearly done", so the order was still running when
-     *     the 13K profile was captured. There is no completion record here.
-     *   - `orderId` groups the four frames of the Facebook order into one card
-     *     and the two frames of the sales chat into another, so six screenshots
-     *     are never read as six customers.
-     *
-     * Shape of an entry, for whatever is added next:
-     *   {
-     *     id:       'ug-ig-2026-03',            // stable, unique
-     *     orderId:  'ug-ig-2026-03',            // frames of one order share it
-     *     src:      '/IMAGES/proof/x.webp',     // cleared file, private data removed
-     *     thumb:    '/IMAGES/proof/x-420.webp', // the card's crop, 709:460
-     *     srcset:   '…-420.webp 420w, …-840.webp 840w',   // optional, responsive
-     *     sizes:    '(min-width: 760px) 210px, 45vw',     // optional, with srcset
-     *     w: 709, h: 460,                       // the crop's size, reserves the box
-     *     platform: 'instagram',                // a key this page sells
-     *     country:  'UG',                       // ONLY if actually verified; else null
-     *     shows:    'What the screenshot shows, in one sentence.',
-     *     period:   'March 2026',               // omit if not known
-     *     stage:    'progress'                  // 'process' | 'progress' | 'complete'
-     *   }
-     */
-    function shot(id, orderId, name, platform, shows, stage, period) {
+    // Owner-supplied evidence. Names and profile identity remain visible.
+    // Country and elapsed delivery time are unknown; do not infer either.
+    // A progress screenshot is not evidence of a completed 10K order.
+    function shot(id, orderId, name, platform, shows, stage) {
         return {
-            id: id,
-            orderId: orderId,
+            id: id, orderId: orderId,
             src: '/IMAGES/proof/' + name + '.webp',
             thumb: '/IMAGES/proof/' + name + '-420.webp',
-            srcset: '/IMAGES/proof/' + name + '-420.webp 420w, ' +
-                    '/IMAGES/proof/' + name + '-840.webp 840w',
-            sizes: '(min-width: 1000px) 210px, (min-width: 620px) 30vw, 45vw',
-            w: 709, h: 460,          // the card's crop; the viewer's file is taller
-            platform: platform,
-            country: null,
-            shows: shows,
-            period: period || null,
-            stage: stage
+            srcset: '/IMAGES/proof/' + name + '-420.webp 420w, /IMAGES/proof/' + name + '-840.webp 840w',
+            sizes: '(min-width: 1000px) 320px, (min-width: 760px) 28vw, 85vw',
+            w: 709, h: 680, platform: platform, country: null,
+            shows: shows, period: null, stage: stage
         };
     }
-
     var PROOF = [
-        /* --- one Facebook follower order, four records, one client --- */
         shot('fb-01', 'fb-order', 'case-fb-before', 'facebook',
-            'The client\u2019s Facebook profile before the boost: 9.8K followers, at 16:25.',
-            'progress', '16 September 2026'),
-        shot('fb-02', 'fb-order', 'case-payment-receipt', 'facebook',
-            'The client\u2019s mobile-money payment for this order, and the numbered receipt 97 World issued for it.',
-            'progress', '16 September 2026'),
+            'Yai Tong Akoon — starting profile showing 9.8K followers.', 'progress'),
         shot('fb-03', 'fb-order', 'case-progress', 'facebook',
-            '97 World sends the client their updated profile with the message \u201cBoost nearly done\u201d.',
-            'progress', '16 September 2026'),
+            'Yai’s update in chat: “Boost nearly done.”', 'progress'),
         shot('fb-04', 'fb-order', 'case-fb-after', 'facebook',
-            'The same profile at 16:31, six minutes later: 13K followers, while the order was still running.',
-            'progress', '16 September 2026'),
-
-        /* --- one sales conversation, two records: how an order is agreed --- */
+            'Yai Tong Akoon — latest profile showing 13K followers.', 'progress'),
         shot('sale-01', 'sale-chat', 'offer-quote', 'instagram',
-            'The offer as 97 World sends it: 10,000 followers on Instagram, TikTok or Facebook \u2014 ' +
-            '$100 for one platform, $250 for all three. Prices are set in US dollars; the total above ' +
-            'is the same offer in your own currency.',
-            'process', '17 September 2026'),
+            'Nlmb 150 — the offer and the customer’s reply.', 'process'),
         shot('sale-02', 'sale-chat', 'offer-terms', 'instagram',
-            'The same chat: all three chosen, account links checked, then the terms \u2014 $250 total, $125 to start and $125 after completion.',
-            'process', '17 September 2026')
+            'The same conversation: account review and the 50/50 agreement.', 'process')
     ];
-
-    /**
-     * The one documented order, told in the order it happened. Every claim in
-     * `note` is one the screenshots themselves carry; the increase is stated as
-     * what it is rather than rounded up to the package size.
-     */
-    var STORY = {
-        title: 'One Facebook order, as it was recorded',
-        note: 'Four records from a single order \u2014 one client, not four. Between ' +
-              '16:25 and 16:31 on the same day the profile went from 9.8K to 13K ' +
-              'followers, an increase of about 3,200. 97 World\u2019s own message calls ' +
-              'the boost \u201cnearly done\u201d at that point, so this is delivery in ' +
-              'progress, not a finished 10,000-follower order, and it is not proof ' +
-              'that any particular account will grow the same way. Names, photographs, ' +
-              'payment details and personal information were removed from the image files.',
-        steps: [
-            { label: 'Starting point', proofId: 'fb-01',
-              body: '9.8K followers on the client\u2019s Facebook profile before the boost began.' },
-            { label: 'Progress', proofId: 'fb-03',
-              body: '97 World sends the client their profile mid-delivery: \u201cBoost nearly done.\u201d' },
-            { label: 'Latest documented result', proofId: 'fb-04',
-              body: '13K followers six minutes after the first capture. The order was still running.' }
-        ]
-    };
+    var STORIES = [
+        {
+            platform: 'facebook', title: 'Yai Tong Akoon', eyebrow: 'Facebook · Client progress',
+            note: '9.8K → 13K followers in the supplied records. Delivery was still in progress.',
+            footnote: 'Capture dates and delivery duration are not established by these screenshots.',
+            steps: [
+                { label: 'Before', proofId: 'fb-01', body: 'The starting profile: 9.8K followers.' },
+                { label: 'Progress shared', proofId: 'fb-03', body: 'An account update sent directly in chat.' },
+                { label: 'Latest result', proofId: 'fb-04', body: '13K followers. The same name and profile.' }
+            ]
+        },
+        {
+            platform: 'instagram', title: 'From selection to agreement', eyebrow: 'Nlmb 150 · Order conversation',
+            note: 'A separate conversation showing how the offer and payment steps are agreed.',
+            footnote: 'This records the order process; no delivery result is shown.',
+            steps: [
+                { label: 'Offer shared', proofId: 'sale-01', body: 'The package and price, clearly explained.' },
+                { label: 'Accounts & terms', proofId: 'sale-02', body: 'All three chosen. Accounts reviewed. Half now, half after completion.' }
+            ]
+        }
+    ];
 
     var PAGE_SIZE = 6;
 
@@ -207,6 +142,19 @@
     /** Only platforms this offer actually sells, always in canonical order. */
     function normalise(list) {
         return ORDER.filter(function (k) { return list.indexOf(k) !== -1; });
+    }
+
+    // Anonymous integration hooks. No network requests, identifiers or chat text.
+    // A configured analytics listener can consume these without touching checkout.
+    function trackEvent(event, extra) {
+        var payload = Object.assign({ event: 'growth_' + event, version: 'pro3',
+            country: state.country, platforms: state.platforms.join(','),
+            platform_count: state.platforms.length }, extra || {});
+        try {
+            window.dataLayer = window.dataLayer || [];
+            if (Array.isArray(window.dataLayer)) window.dataLayer.push(payload);
+            window.dispatchEvent(new CustomEvent('k97:growth', { detail: payload }));
+        } catch (e) { /* measurement cannot interrupt an order */ }
     }
 
     /* ============================================= 3. DERIVATIONS === */
@@ -546,7 +494,7 @@
             savingTxt.appendChild(lead);
 
             var sub = el('span', 'gx-saving-sub');
-            sub.appendChild(document.createTextNode('The three packages bought separately are '));
+            sub.appendChild(document.createTextNode('Separately: '));
             var listVal = el('span', 'gx-roll', money(q.listPrice));
             listVal.setAttribute('data-money', 'list');
             sub.appendChild(listVal);
@@ -562,11 +510,11 @@
         /* ---- the two payment stages, each explained where it is read ---- */
         dl.appendChild(row('deposit', 'gx-row gx-row-split gx-stage gx-stage-1',
             '50% to start', money(q.deposit),
-            'After we review and confirm your order in chat.'));
+            'After confirmation in chat.'));
 
         dl.appendChild(row('balance', 'gx-row gx-row-split gx-stage gx-stage-2',
             '50% after completion', money(q.balance),
-            'Remaining balance after the agreed delivery is finished.'));
+            'After the agreed delivery is finished.'));
 
         body.appendChild(dl);
 
@@ -665,8 +613,7 @@
         } else if (!state.country) {
             status.textContent = 'Choose your country so the request carries the right currency.';
         } else {
-            status.textContent = 'Nothing is charged here. You read the message and send it yourself, ' +
-                'and we reply in the chat before any payment instructions.';
+            status.textContent = 'No payment here. We confirm your order personally in chat.';
         }
     }
 
@@ -684,7 +631,7 @@
             $('barLabel').textContent = 'Total';
             roll($('barTotal'), money(q.total));
             $('barBtn').querySelector('.gx-btn-label').textContent =
-                state.resultsSeen ? 'Send request' : 'Continue';
+                state.resultsSeen ? 'Review request' : 'Continue';
             // let `hidden` clear before the transform transition starts
             window.requestAnimationFrame(function () { bar.classList.add('is-up'); });
         } else {
@@ -701,11 +648,25 @@
     function render() {
         renderCountry();
         renderPlatforms();
+        renderOfferValue();
         renderSummaries();
         renderSteps();
         renderSend();
         renderBar();
         renderProof();
+    }
+
+    function renderOfferValue() {
+        var full = P.offerQuote(ORDER, state.country);
+        var all = state.platforms.length === ORDER.length;
+        $('bundleBtn').setAttribute('aria-pressed', String(all));
+        $('bundlePrice').textContent = full.priced ? money(full.total) : 'Choose country';
+        $('bundleSaving').textContent = full.priced ? 'Save ' + money(full.saving) : '';
+        $('bundleAction').textContent = all ? 'All three selected ✓' : 'Select all three ↗';
+        document.querySelectorAll('.gx-plat').forEach(function (label) {
+            var unit = P.offerQuote([label.dataset.plat], state.country);
+            label.querySelector('[data-unit-price]').textContent = unit.priced ? money(unit.total) : '';
+        });
     }
 
     function announceSelection() {
@@ -863,7 +824,8 @@
     function commitCountry() {
         var picked = document.querySelector('.gx-ctry input:checked');
         if (!picked) return;
-        state.country = picked.value;       // platforms are untouched on purpose
+        state.country = picked.value;
+        trackEvent('country_selected');       // platforms are untouched on purpose
         sendTouched = false;                // the old hand-off note no longer fits
         save();
         welcome.close(function () {
@@ -876,6 +838,7 @@
     /* -- trust ------------------------------------------------------- */
 
     function continueToResults() {
+        trackEvent('continue_to_results');
         if (state.trustSeen) { goToResults(); return; }
         state.trustSeen = true;
         save();
@@ -886,6 +849,7 @@
 
     function goToResults() {
         state.resultsSeen = true;
+        trackEvent('results_reached');
         save();
         renderSteps();
         renderProof();
@@ -959,55 +923,19 @@
         renderFilters(filters);
         renderStory(story);
 
-        var orders = visibleProof();
-        var page = orders.slice(0, state.shown);
-
-        grid.hidden = false;
+        // Timelines already contain every frame; avoid repeating them as extra clients.
+        grid.hidden = true;
         grid.textContent = '';
-        page.forEach(function (order, i) { grid.appendChild(proofCard(order, i)); });
-
-        /* Cards are rebuilt whenever the ranking changes, which can happen
-           while the customer is looking at them. The entrance plays once; after
-           that new cards arrive already revealed rather than fading in again
-           under the reader's eyes. */
-        if (proofRevealed) {
-            grid.querySelectorAll('.m-up').forEach(function (n) {
-                n.classList.add('is-in', 'is-visible');
-            });
-        } else if ('IntersectionObserver' in window) {
-            proofRevealed = grid.getBoundingClientRect().top < window.innerHeight;
-        }
-
-        moreWrap.hidden = orders.length <= state.shown;
-        if (window.Motion) window.Motion.observe(grid);
-
-        /* Evidence we do not have is said out loud, not papered over: for the
-           country the customer chose and for the platforms they picked. */
+        moreWrap.hidden = true;
         var note = $('proofLocalNote');
         if (note) note.remove();
-
-        var gaps = [];
         if (state.country) {
-            var local = orders.some(function (o) {
-                return o.frames.some(function (f) { return f.country === state.country; });
-            });
+            var local = PROOF.some(function (p) { return p.country === state.country; });
             if (!local) {
-                gaps.push('We have not verified the country on any of these records, so none ' +
-                    'of them is published as a result from ' + countryName() + '.');
+                var gap = el('p', 'gx-smallprint', 'Showing available client records. Ask us in chat for results from ' + countryName() + '.');
+                gap.id = 'proofLocalNote';
+                story.parentNode.insertBefore(gap, story);
             }
-        }
-        var missing = state.platforms.filter(function (k) {
-            return !orders.some(function (o) { return o.cover.platform === k; });
-        });
-        if (missing.length) {
-            gaps.push('We have nothing published yet for ' +
-                listSentence(missing.map(function (k) { return PLAT_NAME[k]; })) + '.');
-        }
-        if (gaps.length) {
-            var gapNote = el('p', 'gx-smallprint', gaps.join(' ') +
-                ' Ask us in the chat and we will show you what else we can share.');
-            gapNote.id = 'proofLocalNote';
-            grid.parentNode.insertBefore(gapNote, grid);
         }
     }
 
@@ -1082,9 +1010,9 @@
             if (present.indexOf(it.platform) === -1) present.push(it.platform);
         });
 
-        var options = [{ key: 'all', label: 'All results' }];
+        var options = [{ key: 'all', label: 'All stories' }];
         ORDER.forEach(function (k) {
-            if (present.indexOf(k) !== -1) options.push({ key: k, label: PLAT_NAME[k] });
+            if (present.indexOf(k) !== -1) options.push({ key: k, label: k === 'instagram' ? 'Order conversation' : PLAT_NAME[k] });
         });
 
         options.forEach(function (opt) {
@@ -1095,6 +1023,8 @@
                 state.filter = opt.key;
                 state.shown = PAGE_SIZE;
                 renderProof();
+                var active = row.querySelector('[aria-pressed="true"]');
+                if (active) active.focus({ preventScroll: true });
                 var n = visibleProof().length;
                 announce(opt.label + ' selected. ' + n + ' documented ' +
                     (n === 1 ? 'order' : 'orders') + ' shown.');
@@ -1104,25 +1034,65 @@
     }
 
     function renderStory(mount) {
-        if (!STORY) { mount.hidden = true; mount.textContent = ''; return; }
+        var signature = state.filter;
+        if (mount.dataset.filter === signature && mount.childElementCount) return;
+        mount.dataset.filter = signature;
         mount.hidden = false;
-        mount.textContent = '';
-
-        var card = el('div', 'gx-story m-up');
-        card.appendChild(el('h3', null, STORY.title));
-        if (STORY.note) card.appendChild(el('p', 'gx-smallprint', STORY.note));
-
-        var rail = el('div', 'gx-story-rail');
-        STORY.steps.forEach(function (step) {
-            var s = el('div', 'gx-story-step');
-            s.appendChild(el('h4', null, step.label));
-            var shot = PROOF.filter(function (p) { return p.id === step.proofId; })[0];
-            if (shot) s.appendChild(proofCard({ key: shot.id, cover: shot, frames: [shot] }, 0, true));
-            s.appendChild(el('p', null, step.body));
-            rail.appendChild(s);
+        mount.querySelectorAll('.gx-story-rail').forEach(function (rail) {
+            if (rail._resizeObserver) rail._resizeObserver.disconnect();
         });
-        card.appendChild(rail);
-        mount.appendChild(card);
+        mount.textContent = '';
+        STORIES.filter(function (story) {
+            return state.filter === 'all' || story.platform === state.filter;
+        }).forEach(function (story) {
+            var card = el('article', 'gx-story m-up');
+            card.appendChild(el('p', 'gx-eyebrow', story.eyebrow));
+            card.appendChild(el('h3', null, story.title));
+            card.appendChild(el('p', 'gx-story-note', story.note));
+            var rail = el('ol', 'gx-story-rail');
+            rail.style.setProperty('--stages', story.steps.length);
+            story.steps.forEach(function (step, index) {
+                var frame = PROOF.find(function (p) { return p.id === step.proofId; });
+                var node = el('li', 'gx-story-step');
+                var heading = el('div', 'gx-timeline-heading');
+                heading.appendChild(el('span', 'gx-timeline-dot', String(index + 1)));
+                heading.appendChild(el('h4', null, step.label));
+                node.appendChild(heading);
+                if (frame) node.appendChild(proofCard({ key: frame.id, cover: frame, frames: story.steps.map(function (x) { return PROOF.find(function (p) { return p.id === x.proofId; }); }) }, 0, true));
+                node.appendChild(el('p', null, step.body));
+                rail.appendChild(node);
+            });
+            rail.tabIndex = 0;
+            rail.setAttribute('aria-label', story.title + ' timeline. Scroll to see each step.');
+            card.appendChild(rail);
+            var nav = el('div', 'gx-timeline-nav');
+            var previous = el('button', 'gx-chip', '← Previous');
+            var next = el('button', 'gx-chip', 'Next step →');
+            previous.type = next.type = 'button';
+            previous.setAttribute('aria-label', 'Previous step in ' + story.title);
+            next.setAttribute('aria-label', 'Next step in ' + story.title);
+            var move = function (direction) {
+                var distance = rail.firstElementChild.getBoundingClientRect().width + 22;
+                rail.scrollBy({ left: direction * distance, behavior: reduced ? 'instant' : 'smooth' });
+            };
+            previous.addEventListener('click', function () { move(-1); });
+            next.addEventListener('click', function () { move(1); });
+            var sync = function () {
+                previous.disabled = rail.scrollLeft < 2;
+                next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 3;
+            };
+            rail.addEventListener('scroll', sync, { passive: true });
+            if ('ResizeObserver' in window) {
+                rail._resizeObserver = new ResizeObserver(sync);
+                rail._resizeObserver.observe(rail);
+            }
+            nav.append(previous, next);
+            card.appendChild(nav);
+            window.requestAnimationFrame(sync);
+            card.appendChild(el('p', 'gx-smallprint', story.footnote));
+            mount.appendChild(card);
+        });
+        if (window.Motion) window.Motion.observe(mount);
     }
 
     /** One card per order. `order` is { key, cover, frames }. */
@@ -1152,6 +1122,7 @@
         img.addEventListener('load', function () { img.classList.add('is-loaded'); });
         if (img.complete) img.classList.add('is-loaded');
         box.appendChild(img);
+        box.appendChild(el('span', 'gx-enlarge', 'View screenshot ↗'));
         card.appendChild(box);
 
         /* In the story rail the step supplies the words, so the card carries
@@ -1195,6 +1166,7 @@
     var viewerList = [], viewerAt = 0;
 
     function openViewer(list, index) {
+        trackEvent('evidence_opened', { proof_id: list[index].id });
         viewerList = list;
         viewerAt = Math.max(0, index);
         paintViewer();
@@ -1243,30 +1215,25 @@
         var btn = $('sendBtn');
         var text = orderMessage();
         var url = chatUrl();
+        trackEvent('chat_open_requested', { currency: q.currency, value: q.total });
 
         btn.classList.add('is-busy');
         var spin = el('span', 'gx-spin');
         btn.appendChild(spin);
 
-        var opened = null;
-        try { opened = window.open(url, '_blank', 'noopener'); } catch (e) { opened = null; }
+        // With noopener, browsers can return null even when the tab opens.
+        // Do not mistake that for a blocked popup or a successfully sent order.
+        try { window.open(url, '_blank', 'noopener'); } catch (e) { /* copy fallback below */ }
 
         sendTouched = true;
         window.setTimeout(function () {
             btn.classList.remove('is-busy');
             spin.remove();
 
-            if (opened) {
-                $('sendStatusTxt').textContent =
-                    'WhatsApp is opening with your request. Read it, send it, and we’ll reply ' +
-                    'in the chat — nothing is ordered or paid until we confirm it with you.';
-                $('fallback').hidden = true;
-            } else {
-                $('sendStatusTxt').textContent =
-                    'Your browser blocked the chat from opening. Copy the message below and paste ' +
-                    'it into your chat with 97 World.';
-                showFallback(text);
-            }
+            $('sendStatusTxt').textContent =
+                'Send your message in WhatsApp. If it didn’t open, copy your request below.';
+            $('fallback').hidden = false;
+            $('fallbackTxt').value = text;
             announce($('sendStatusTxt').textContent);
         }, 420);
     }
@@ -1279,6 +1246,7 @@
     }
 
     function copyMessage(button) {
+        trackEvent('copy_requested');
         var text = orderMessage();
         if (!text) return;
         var done = function (ok) {
@@ -1308,6 +1276,7 @@
         var next = state.platforms.filter(function (k) { return k !== key; });
         if (on) next.push(key);
         state.platforms = normalise(next);
+        trackEvent('platform_selected');
         sendTouched = false;
         save();
         render();
@@ -1345,6 +1314,20 @@
             { body: $('sumBody'), count: $('sumCount'), shape: null, role: 'choose' },
             { body: $('sum2Body'), count: $('sum2Count'), shape: null, role: 'send' }
         ];
+
+        trackEvent('page_view');
+        $('bundleBtn').addEventListener('click', function () {
+            if (!state.country) { openCountry(false); return; }
+            state.platforms = ORDER.slice();
+            sendTouched = false;
+            save(); render(); announceSelection();
+            trackEvent('bundle_selected');
+        });
+        document.querySelectorAll('.gx-faq details').forEach(function (item, index) {
+            item.addEventListener('toggle', function () {
+                if (item.open) trackEvent('answer_opened', { answer_index: index });
+            });
+        });
 
         /* -- platforms -- */
         document.querySelectorAll('.gx-plat').forEach(function (label) {
@@ -1429,6 +1412,10 @@
                     entries.forEach(function (entry) {
                         if (!entry.isIntersecting) return;
                         var id = entry.target.id;
+                        if (!entry.target.dataset.measured) {
+                            entry.target.dataset.measured = 'true';
+                            trackEvent('section_viewed', { section: id });
+                        }
                         track.querySelectorAll('li').forEach(function (li) {
                             var on = li.getAttribute('data-step') === id;
                             if (on) li.setAttribute('aria-current', 'step');

@@ -223,7 +223,7 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 .gx-intro h1 {
     margin-block-start: var(--sp-3);
     font-family: var(--f-display); font-weight: 800;
-    font-size: clamp(28px, 5.4vw, 42px); line-height: 1.08; letter-spacing: -.03em;
+    font-size: clamp(34px, 5.4vw, 56px); line-height: 1.02; letter-spacing: -.045em;
     max-inline-size: 20ch;
 }
 .gx-lead {
@@ -545,9 +545,9 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
     background: var(--c-surface); border: 1px solid var(--c-line);
     border-radius: var(--r-xl); box-shadow: var(--e-1);
 }
-.gx-story-rail { display: grid; gap: var(--sp-4); margin-block-start: var(--sp-4); }
-@media (min-width: 760px) { .gx-story-rail { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.gx-story-step { display: grid; gap: var(--sp-2); }
+.gx-story-rail { display: grid; gap: var(--sp-5); margin-block-start: var(--sp-5); list-style: none; padding: 0; }
+@media (min-width: 760px) { .gx-story-rail { grid-template-columns: repeat(var(--stages, 3), minmax(0, 1fr)); } }
+.gx-story-step { display: grid; gap: var(--sp-3); align-content: start; position: relative; min-inline-size: 0; }
 .gx-story-step h4 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--c-muted); font-weight: 700; }
 
 /* gallery */
@@ -571,12 +571,12 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 /* Reserved box: the grid never reflows as images arrive. The ratio matches
    the band each thumbnail was cropped to, so nothing is cropped twice. */
 .gx-shot-img {
-    position: relative; aspect-ratio: 709 / 460;
+    position: relative; aspect-ratio: 709 / 680;
     background: var(--c-surface-3);
     overflow: clip;
 }
 .gx-shot-img img {
-    inline-size: 100%; block-size: 100%; object-fit: cover; object-position: center;
+    inline-size: 100%; block-size: 100%; object-fit: contain; object-position: center;
     opacity: 0; transition: opacity var(--t-slow) var(--ease);
 }
 .gx-shot-img img.is-loaded { opacity: 1; }
@@ -956,3 +956,72 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 
 /* Story-rail frames carry only their stage label; the step supplies the words. */
 .gx-story-rail .gx-shot-meta { padding: var(--sp-2) var(--sp-3); }
+
+/* A continuous evidence timeline: steps describe records, never invented dates. */
+.gx-story > .gx-eyebrow { margin-block-end: 8px; font-size: 11px; }
+.gx-story h3 { font-size: clamp(24px, 3vw, 34px); }
+.gx-story-note { margin-block-start: 8px; max-inline-size: 64ch; color: var(--c-ink-2); }
+.gx-timeline-heading { display: flex; align-items: center; gap: 10px; position: relative; }
+.gx-timeline-dot { display: grid; place-items: center; inline-size: 30px; block-size: 30px; flex-shrink: 0; border: 1px solid var(--c-acc-line); background: var(--c-acc-soft); color: var(--c-acc); border-radius: 50%; font-size: 12px; font-weight: 700; z-index: 1; }
+.gx-enlarge { position: absolute; inset-block-end: 10px; inset-inline-end: 10px; padding: 6px 10px; border-radius: var(--r-pill); background: #17120feb; color: white; font-size: 11px; font-weight: 600; pointer-events: none; }
+.gx-story-step .gx-shot-meta { display: none; }
+.gx-story-step .gx-shot { grid-template-rows: auto; }
+.gx-story > .gx-smallprint { margin-block-start: 20px; font-size: 12px; }
+@media (min-width: 760px) {
+    .gx-story-step:not(:last-child) .gx-timeline-heading::after { content: ''; position: absolute; inset-inline-start: 35px; inset-inline-end: calc(-1 * var(--sp-5)); inset-block-start: 14px; block-size: 1px; background: var(--c-line-2); z-index: 0; }
+    .gx-timeline-heading h4 { background: white; padding-inline: 5px; z-index: 1; }
+}
+@media (max-width: 759px) {
+    .gx-story { padding: 20px 16px; }
+    .gx-story-rail { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-inline: contain; scrollbar-width: thin; scrollbar-color: var(--c-line-3) transparent; padding-block-end: 10px; }
+    .gx-story-step { flex: 0 0 91%; scroll-snap-align: start; scroll-snap-stop: always; }
+    .gx-story-step h4 { letter-spacing: .06em; }
+}
+
+/* Decision cues, grouped around the package rather than scattered badges. */
+.gx-intro h1 span { color: var(--c-acc); }
+.gx-assurance { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-block-start: 18px; list-style: none; }
+.gx-assurance li { font-size: 12px; color: var(--c-ink-2); display: flex; gap: 7px; align-items: center; }
+.gx-assurance li span { color: var(--c-ok); font-weight: 800; }
+.gx-section-label { margin-block-end: 12px; }
+.gx-unit-price { display: block; font-size: 15px; color: var(--c-ink); font-weight: 700; font-variant-numeric: tabular-nums; margin-block-start: 5px; }
+.gx-bundle { display: flex; align-items: center; justify-content: space-between; gap: 18px; inline-size: 100%; text-align: start; background: #201c19; color: #fff; border-radius: var(--r-lg); padding: 22px; margin-block-start: 16px; border: 2px solid #201c19; box-shadow: var(--e-2); transition: transform var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+.gx-bundle:hover { border-color: var(--c-acc); }
+.gx-bundle[aria-pressed="true"] { border-color: var(--c-acc); }
+.gx-bundle-copy, .gx-bundle-cost { display: grid; gap: 7px; }
+.gx-bundle-copy strong { font-family: var(--f-display); font-weight: 800; font-size: 25px; letter-spacing: -.02em; }
+.gx-bundle-copy > span:last-child { font-size: 12px; color: #d4ccc5; max-inline-size: 30ch; }
+.gx-bundle-badge { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #f5c28b; font-weight: 700; }
+.gx-bundle-cost { text-align: end; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.gx-bundle-cost b { font-size: clamp(18px, 2.2vw, 25px); }
+#bundleSaving { color: #bce5cd; font-size: 12px; }
+.gx-bundle-action { font-size: 11px; color: #fff; }
+.gx-timeline-nav { display: none; }
+.gx-faq { margin-block-start: 24px; max-inline-size: 800px; border-block-start: 1px solid var(--c-line); }
+.gx-faq details { border-block-end: 1px solid var(--c-line); }
+.gx-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; cursor: pointer; padding-block: 20px; min-block-size: 56px; font-size: 16px; font-weight: 700; list-style: none; }
+.gx-faq summary::-webkit-details-marker { display: none; }
+.gx-faq summary::after { content: '+'; display: grid; place-items: center; inline-size: 26px; block-size: 26px; flex-shrink: 0; border-radius: 50%; background: var(--c-surface-3); color: var(--c-ink-2); transition: transform var(--t-base) var(--ease); }
+.gx-faq details[open] summary::after { transform: rotate(45deg); }
+.gx-faq p { padding-block-end: 22px; max-inline-size: 65ch; font-size: 15px; color: var(--c-ink-2); }
+.gx-faq details[open] p { animation: gxCommit 240ms var(--ease); }
+.gx-faq a { text-decoration: underline; text-underline-offset: 3px; }
+.gx-welcome-mark { margin-block-end: 18px; }
+.gx-welcome-mark + .gx-eyebrow { display: flex; margin-block-end: 12px; }
+@media (max-width: 759px) {
+    .gx-timeline-nav { display: flex; justify-content: space-between; gap: 10px; margin-block-start: 12px; }
+    .gx-timeline-nav button { min-block-size: 44px; font-size: 12px; }
+    .gx-timeline-nav button:disabled { opacity: .4; cursor: default; }
+    .gx-bundle { padding: 17px 15px; }
+    .gx-bundle-copy strong { font-size: 22px; }
+    .gx-bundle-cost b { max-inline-size: 12ch; overflow-wrap: anywhere; }
+    .gx-bundle-copy > span:last-child { max-inline-size: 19ch; }
+    .gx-assurance { gap: 7px 14px; }
+    .gx-assurance li { font-size: 11px; }
+    .gx-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .gx-steps li { padding: 7px 5px; gap: 5px; font-size: 10.5px; justify-content: center; }
+    .gx-steps li b { inline-size: 18px; block-size: 18px; font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .gx-faq details[open] p { animation: none; }
+}
