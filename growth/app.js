@@ -593,7 +593,7 @@
             '*Link:* ' + pending.account + '\n' +
             '*Charge:* ' + P.money(q.total, q.currency) + '\n' +
             '*Pay now (50%):* ' + P.money(pending.deposit, q.currency) + '\n' +
-            '*Balance on delivery:* ' + P.money(pending.balance, q.currency) + '\n\n' +
+            '*Balance once delivery is visibly running:* ' + P.money(pending.balance, q.currency) + '\n\n' +
             '*Name:* ' + name + '\n' +
             '*WhatsApp:* ' + phone.clean;
 
@@ -816,8 +816,7 @@
     // seizing the screen, not as a helpful prompt. Still reachable any time
     // from the menu, and the page never waits on it either way — pricing
     // already defaults to the saved region (or UGX) the moment it paints.
-    if (regionBtn && !P.Region.get()) {
-        window.setTimeout(function () { openSheet('regionSheet'); }, 260);
-    }
+    // The verification story is the first action on this page. Region can be
+    // changed from the menu when a visitor chooses to build an exact order.
 
 })(window, document);
