@@ -529,7 +529,7 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
     margin-block-start: var(--sp-5);
 }
 .gx-chip {
-    min-block-size: 40px; padding-inline: var(--sp-4);
+    min-block-size: var(--tap); padding-inline: var(--sp-4);
     display: inline-flex; align-items: center; gap: 6px;
     background: var(--c-surface); border: 1px solid var(--c-line-2);
     border-radius: var(--r-pill);
@@ -551,11 +551,14 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 .gx-story-step h4 { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--c-muted); font-weight: 700; }
 
 /* gallery */
+/* A browsable gallery, so two across even on the narrowest phone — one
+   column turns six records into six screens of scrolling. */
 .gx-gallery {
     margin-block-start: var(--sp-6);
-    display: grid; gap: var(--sp-4);
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+    display: grid; gap: var(--sp-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 148px), 1fr));
 }
+@media (min-width: 620px) { .gx-gallery { gap: var(--sp-4); } }
 .gx-shot {
     display: grid; grid-template-rows: auto 1fr;
     background: var(--c-surface); border: 1px solid var(--c-line);
@@ -565,23 +568,26 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 }
 @media (hover: hover) { .gx-shot:hover { transform: translateY(-3px); box-shadow: var(--e-2); border-color: var(--c-line-2); } }
 .gx-shot:active { transform: scale(.99); }
-/* reserved box: the grid never reflows as images arrive */
+/* Reserved box: the grid never reflows as images arrive. The ratio matches
+   the band each thumbnail was cropped to, so nothing is cropped twice. */
 .gx-shot-img {
-    position: relative; aspect-ratio: 3 / 4;
+    position: relative; aspect-ratio: 709 / 460;
     background: var(--c-surface-3);
     overflow: clip;
 }
 .gx-shot-img img {
-    inline-size: 100%; block-size: 100%; object-fit: cover; object-position: top center;
+    inline-size: 100%; block-size: 100%; object-fit: cover; object-position: center;
     opacity: 0; transition: opacity var(--t-slow) var(--ease);
 }
 .gx-shot-img img.is-loaded { opacity: 1; }
-.gx-shot-meta { padding: var(--sp-3) var(--sp-4) var(--sp-4); display: grid; gap: 6px; align-content: start; }
-.gx-shot-meta strong { font-size: 14.5px; font-weight: 700; line-height: 1.35; }
-.gx-shot-meta p { font-size: 13px; color: var(--c-muted); }
+.gx-shot-meta { padding: var(--sp-3); display: grid; gap: 6px; align-content: start; }
+@media (min-width: 620px) { .gx-shot-meta { padding: var(--sp-3) var(--sp-4) var(--sp-4); } }
+.gx-shot-meta strong { font-size: 13.5px; font-weight: 600; line-height: 1.45; letter-spacing: -.005em; }
+.gx-shot-meta p { font-size: 12.5px; color: var(--c-muted); }
+.gx-shot-meta:empty { display: none; }
 .gx-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-block-start: 2px; }
 .gx-tag {
-    font-size: 11.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
     padding: 3px 8px; border-radius: var(--r-pill);
     background: var(--c-surface-3); color: var(--c-muted);
 }
@@ -797,17 +803,26 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 }
 .gx-viewer::backdrop { background: rgba(18, 14, 12, .96); }
 .gx-viewer-in {
+    block-size: 100vh;
     block-size: 100dvh;
     display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
     padding: calc(env(safe-area-inset-top, 0px) + 8px) 8px calc(env(safe-area-inset-bottom, 0px) + 8px);
     color: #F5F0EA;
+    overflow: hidden;
 }
 .gx-viewer-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
 .gx-viewer-count { font-size: 13px; color: #BFB4AA; font-variant-numeric: tabular-nums; padding-inline-start: var(--sp-3); }
-.gx-viewer-stage { display: grid; place-items: center; min-block-size: 0; padding: var(--sp-2); }
+.gx-viewer-stage {
+    display: flex; align-items: center; justify-content: center;
+    min-block-size: 0; overflow: hidden; padding: var(--sp-2);
+}
+/* `min-block-size: 0` on the image too: a flex item's automatic minimum is its
+   content size, so without this the screenshot pushes the row open and spills
+   over the caption and the previous/next controls. */
 .gx-viewer-stage img {
     max-inline-size: 100%; max-block-size: 100%;
     inline-size: auto; block-size: auto;
+    min-inline-size: 0; min-block-size: 0;
     object-fit: contain; border-radius: var(--r);
 }
 .gx-viewer-foot {
@@ -927,3 +942,17 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
     font-variant-numeric: tabular-nums;
 }
 .gx-whole b { color: var(--c-ink-2); font-weight: 700; }
+
+/* Process evidence — a sales conversation, not a delivery result. Neutral on
+   purpose: green is reserved for a finished order. */
+.gx-tag--process { background: var(--c-surface-3); color: var(--c-ink-2); }
+
+/* The story rail's own caption carries the limits of what it proves, so it
+   gets room to be read rather than being tucked under the heading. */
+.gx-story > .gx-smallprint { margin-block-start: var(--sp-3); max-inline-size: 78ch; }
+.gx-story h3 { font-family: var(--f-display); font-size: clamp(18px, 2.4vw, 22px); font-weight: 800; letter-spacing: -.02em; }
+.gx-story-rail .gx-shot { pointer-events: auto; }
+.gx-story-step p { font-size: 14px; color: var(--c-ink-2); }
+
+/* Story-rail frames carry only their stage label; the step supplies the words. */
+.gx-story-rail .gx-shot-meta { padding: var(--sp-2) var(--sp-3); }

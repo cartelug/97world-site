@@ -35,54 +35,132 @@
     var WA_NUMBER = '256762193386';
 
     /**
-     * THE PROOF LIBRARY — deliberately empty.
+     * THE PROOF LIBRARY
      *
-     * Nothing in this repository is publishable growth evidence. Every
-     * screenshot currently in /IMAGES/ is a Netflix or Spotify subscription
-     * conversation, and each one carries something that must never go on a
-     * public page: a client's full name and profile photo, a phone number, a
-     * shared account password, a PIN, a Mobile Money number. None of them
-     * shows a follower count at all.
+     * Six records from two real 97 World conversations, supplied by the owner
+     * in the Growth master package. Every file here was re-encoded after solid
+     * rectangles were painted over the private parts, so what ships contains no
+     * recoverable original — this is redaction, not a blur over an intact file.
+     * Removed: the client's name, their photographs, their date of birth, their
+     * spouse's name, their bio, the contact names in both chats, the amounts,
+     * 97 World's own Mobile Money number, the mobile-money balance and
+     * transaction ID, the client's name inside the receipt and its filename,
+     * and two third-party reference accounts. EXIF was dropped on encode.
      *
-     * So this page ships with no gallery rather than with a stand-in. Blurring
-     * would not fix it — the original pixels would still be served. To publish
-     * evidence, add entries here whose image files have had the private parts
-     * cropped or painted out *in the file*, and the whole section — filters,
-     * gallery, viewer, counts — turns on by itself.
+     * Two records from the package were not published at all: a duplicate
+     * capture of the same sales chat, and a chat carrying 97 World's Mobile
+     * Money number and account name, a third party's phone number and three
+     * third-party Instagram handles.
      *
+     * What each record is allowed to say is bounded by what it shows:
+     *   - `country: null` on all of them. The client's names read as South
+     *     Sudanese and the payment was in shillings, but neither is a verified
+     *     country, and country is never inferred from a name.
+     *   - Nothing is `stage: 'complete'`. 97 World's own message on the last
+     *     frame reads "Boost nearly done", so the order was still running when
+     *     the 13K profile was captured. There is no completion record here.
+     *   - `orderId` groups the four frames of the Facebook order into one card
+     *     and the two frames of the sales chat into another, so six screenshots
+     *     are never read as six customers.
+     *
+     * Shape of an entry, for whatever is added next:
      *   {
      *     id:       'ug-ig-2026-03',            // stable, unique
-     *     src:      '/IMAGES/proof/ug-ig-1.jpg',   // cleared file, private data removed
-     *     thumb:    '/IMAGES/proof/ug-ig-1-thumb.jpg', // optional smaller file
-     *     srcset:   '…-420.jpg 420w, …-840.jpg 840w',   // optional, responsive
-     *     sizes:    '(min-width: 760px) 210px, 45vw',   // optional, with srcset
-     *     w: 1200, h: 1600,                     // intrinsic size, reserves the box
-     *     platform: 'instagram',                // must be a key this page sells
+     *     orderId:  'ug-ig-2026-03',            // frames of one order share it
+     *     src:      '/IMAGES/proof/x.webp',     // cleared file, private data removed
+     *     thumb:    '/IMAGES/proof/x-420.webp', // the card's crop, 709:460
+     *     srcset:   '…-420.webp 420w, …-840.webp 840w',   // optional, responsive
+     *     sizes:    '(min-width: 760px) 210px, 45vw',     // optional, with srcset
+     *     w: 709, h: 460,                       // the crop's size, reserves the box
+     *     platform: 'instagram',                // a key this page sells
      *     country:  'UG',                       // ONLY if actually verified; else null
-     *     shows:    'Follower count on the client profile after delivery.',
+     *     shows:    'What the screenshot shows, in one sentence.',
      *     period:   'March 2026',               // omit if not known
-     *     stage:    'complete'                  // 'progress' | 'complete'
+     *     stage:    'progress'                  // 'process' | 'progress' | 'complete'
      *   }
-     *
-     * Rules the renderer enforces so the data can't overstate itself:
-     *   - `country: null` prints no country at all (never a guess).
-     *   - `stage: 'progress'` is labelled Progress, never Completed.
-     *   - Several frames of one order share an `orderId` and are counted as
-     *     one client, not several.
      */
-    var PROOF = [];
+    function shot(id, orderId, name, platform, shows, stage, period) {
+        return {
+            id: id,
+            orderId: orderId,
+            src: '/IMAGES/proof/' + name + '.webp',
+            thumb: '/IMAGES/proof/' + name + '-420.webp',
+            srcset: '/IMAGES/proof/' + name + '-420.webp 420w, ' +
+                    '/IMAGES/proof/' + name + '-840.webp 840w',
+            sizes: '(min-width: 1000px) 210px, (min-width: 620px) 30vw, 45vw',
+            w: 709, h: 460,          // the card's crop; the viewer's file is taller
+            platform: platform,
+            country: null,
+            shows: shows,
+            period: period || null,
+            stage: stage
+        };
+    }
+
+    var PROOF = [
+        /* --- one Facebook follower order, four records, one client --- */
+        shot('fb-01', 'fb-order', 'case-fb-before', 'facebook',
+            'The client\u2019s Facebook profile before the boost: 9.8K followers, at 16:25.',
+            'progress', '16 September 2026'),
+        shot('fb-02', 'fb-order', 'case-payment-receipt', 'facebook',
+            'The client\u2019s mobile-money payment for this order, and the numbered receipt 97 World issued for it.',
+            'progress', '16 September 2026'),
+        shot('fb-03', 'fb-order', 'case-progress', 'facebook',
+            '97 World sends the client their updated profile with the message \u201cBoost nearly done\u201d.',
+            'progress', '16 September 2026'),
+        shot('fb-04', 'fb-order', 'case-fb-after', 'facebook',
+            'The same profile at 16:31, six minutes later: 13K followers, while the order was still running.',
+            'progress', '16 September 2026'),
+
+        /* --- one sales conversation, two records: how an order is agreed --- */
+        shot('sale-01', 'sale-chat', 'offer-quote', 'instagram',
+            'The offer as 97 World sends it: 10,000 followers on Instagram, TikTok or Facebook \u2014 ' +
+            '$100 for one platform, $250 for all three. Prices are set in US dollars; the total above ' +
+            'is the same offer in your own currency.',
+            'process', '17 September 2026'),
+        shot('sale-02', 'sale-chat', 'offer-terms', 'instagram',
+            'The same chat: all three chosen, account links checked, then the terms \u2014 $250 total, $125 to start and $125 after completion.',
+            'process', '17 September 2026')
+    ];
 
     /**
-     * One documented client story: starting point → progress → latest result.
-     * Same evidence rules. `null` until there is a cleared, complete record.
-     *
-     *   { title, country, platform, steps: [{ label, body, proofId }] }
+     * The one documented order, told in the order it happened. Every claim in
+     * `note` is one the screenshots themselves carry; the increase is stated as
+     * what it is rather than rounded up to the package size.
      */
-    var STORY = null;
+    var STORY = {
+        title: 'One Facebook order, as it was recorded',
+        note: 'Four records from a single order \u2014 one client, not four. Between ' +
+              '16:25 and 16:31 on the same day the profile went from 9.8K to 13K ' +
+              'followers, an increase of about 3,200. 97 World\u2019s own message calls ' +
+              'the boost \u201cnearly done\u201d at that point, so this is delivery in ' +
+              'progress, not a finished 10,000-follower order, and it is not proof ' +
+              'that any particular account will grow the same way. Names, photographs, ' +
+              'payment details and personal information were removed from the image files.',
+        steps: [
+            { label: 'Starting point', proofId: 'fb-01',
+              body: '9.8K followers on the client\u2019s Facebook profile before the boost began.' },
+            { label: 'Progress', proofId: 'fb-03',
+              body: '97 World sends the client their profile mid-delivery: \u201cBoost nearly done.\u201d' },
+            { label: 'Latest documented result', proofId: 'fb-04',
+              body: '13K followers six minutes after the first capture. The order was still running.' }
+        ]
+    };
 
     var PAGE_SIZE = 6;
 
     var PLAT_NAME = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook' };
+
+    /**
+     * What a record is allowed to claim about itself. A sales conversation is
+     * not a delivery result and a part-way profile is not a finished order, so
+     * each has its own label rather than being rounded up to the next one.
+     */
+    var STAGE = {
+        complete: { cls: 'complete', tag: 'Completed order', long: 'Completed order' },
+        progress: { cls: 'progress', tag: 'Delivery in progress', long: 'Delivery in progress, not a finished order' },
+        process:  { cls: 'process',  tag: 'Order process',      long: 'Order process, not a delivery result' }
+    };
     var ORDER = P.GROWTH_OFFER.platforms.slice();   // canonical display order
 
     /* =================================================== 2. STATE === */
@@ -204,7 +282,15 @@
     var canAnimate = typeof Element !== 'undefined' &&
         typeof Element.prototype.animate === 'function' && !reduced;
 
-    /** Every running animation is tracked so a rapid change can cancel it. */
+    /**
+     * The last animation started on a node, kept so the next one can cancel it.
+     *
+     * The reference is deliberately NOT dropped when an animation finishes: a
+     * finished `fill: 'forwards'` animation still holds the element at its end
+     * state, so forgetting it leaves the next animation composing on top of an
+     * opacity of 0 — a figure that is correct in the DOM and invisible on
+     * screen. Cancelling on the way in releases the fill.
+     */
     var running = new WeakMap();
 
     function play(node, frames, options) {
@@ -213,9 +299,7 @@
         if (prev) { try { prev.cancel(); } catch (e) { /* already gone */ } }
         var anim = node.animate(frames, options);
         running.set(node, anim);
-        anim.finished.then(function () {
-            if (running.get(node) === anim) running.delete(node);
-        }, function () { /* cancelled — expected */ });
+        anim.finished.catch(function () { /* cancelled — expected */ });
         return anim;
     }
 
@@ -260,23 +344,36 @@
      * their column (tabular numerals in CSS), so nothing jitters.
      */
     function roll(node, text) {
-        if (!node || node.textContent === text) return;
-        if (!canAnimate) { node.textContent = text; return; }
+        if (!node) return;
+        /* Already showing it, or already animating towards it. Without the
+           second guard a burst of renders re-enters the fade-out before it can
+           finish, and the figure can be left invisible. */
+        if (node.textContent === text && node._rollTo == null) return;
+        if (node._rollTo === text) return;
+        if (!canAnimate) { node.textContent = text; node._rollTo = null; return; }
+        node._rollTo = text;
 
         var out = play(node, [
             { opacity: 1, transform: 'none' },
             { opacity: 0, transform: 'translate3d(0,-6px,0)' }
         ], { duration: 120, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' });
 
-        if (!out) { node.textContent = text; return; }
+        if (!out) { node.textContent = text; node._rollTo = null; return; }
         out.finished.then(function () {
             node.textContent = text;
+            node._rollTo = null;
             play(node, [
                 { opacity: 0, transform: 'translate3d(0,8px,0)' },
                 { opacity: 1, transform: 'none' }
             ], { duration: 200, easing: 'cubic-bezier(.16,1,.3,1)' });
         }, function () {
-            node.textContent = text;                       // cancelled: land on truth
+            /* Cancelled by a newer value. That newer roll owns the node now and
+               will land it on its own text; all this one has to do is not fight
+               it. If it was the last one in flight, show the truth. */
+            if (node._rollTo === text) {
+                node.textContent = text;
+                node._rollTo = null;
+            }
         });
     }
 
@@ -819,6 +916,7 @@
                finished label is never put on an order that has none. */
             var done = g.frames.filter(function (f) { return f.stage === 'complete'; });
             g.cover = done.length ? done[done.length - 1] : g.frames[g.frames.length - 1];
+            if (!STAGE[g.cover.stage]) g.cover.stage = 'progress';
         });
         return groups;
     }
@@ -883,20 +981,33 @@
         moreWrap.hidden = orders.length <= state.shown;
         if (window.Motion) window.Motion.observe(grid);
 
-        /* Local evidence missing is said out loud, not papered over. */
+        /* Evidence we do not have is said out loud, not papered over: for the
+           country the customer chose and for the platforms they picked. */
         var note = $('proofLocalNote');
         if (note) note.remove();
+
+        var gaps = [];
         if (state.country) {
             var local = orders.some(function (o) {
                 return o.frames.some(function (f) { return f.country === state.country; });
             });
             if (!local) {
-                var p = el('p', 'gx-smallprint', 'We don’t have published results from ' +
-                    countryName() + ' yet. These are documented results from other 97 World ' +
-                    'clients, labelled with the country only where we verified it.');
-                p.id = 'proofLocalNote';
-                grid.parentNode.insertBefore(p, grid);
+                gaps.push('We have not verified the country on any of these records, so none ' +
+                    'of them is published as a result from ' + countryName() + '.');
             }
+        }
+        var missing = state.platforms.filter(function (k) {
+            return !orders.some(function (o) { return o.cover.platform === k; });
+        });
+        if (missing.length) {
+            gaps.push('We have nothing published yet for ' +
+                listSentence(missing.map(function (k) { return PLAT_NAME[k]; })) + '.');
+        }
+        if (gaps.length) {
+            var gapNote = el('p', 'gx-smallprint', gaps.join(' ') +
+                ' Ask us in the chat and we will show you what else we can share.');
+            gapNote.id = 'proofLocalNote';
+            grid.parentNode.insertBefore(gapNote, grid);
         }
     }
 
@@ -1006,7 +1117,7 @@
             var s = el('div', 'gx-story-step');
             s.appendChild(el('h4', null, step.label));
             var shot = PROOF.filter(function (p) { return p.id === step.proofId; })[0];
-            if (shot) s.appendChild(proofCard({ key: shot.id, cover: shot, frames: [shot] }, 0));
+            if (shot) s.appendChild(proofCard({ key: shot.id, cover: shot, frames: [shot] }, 0, true));
             s.appendChild(el('p', null, step.body));
             rail.appendChild(s);
         });
@@ -1015,7 +1126,7 @@
     }
 
     /** One card per order. `order` is { key, cover, frames }. */
-    function proofCard(order, index) {
+    function proofCard(order, index, compact) {
         var item = order.cover;
         var card = el('button', 'gx-shot m-up');
         card.type = 'button';
@@ -1031,7 +1142,10 @@
             img.sizes = item.sizes || '(min-width: 760px) 210px, 45vw';
         }
         img.alt = item.shows;
-        img.loading = index < 2 ? 'eager' : 'lazy';
+        /* The whole evidence section sits below the fold, so nothing in it is
+           eager: the box is reserved either way, so a late image costs a
+           placeholder, never a reflow. */
+        img.loading = 'lazy';
         img.decoding = 'async';
         if (item.w) img.width = item.w;
         if (item.h) img.height = item.h;
@@ -1040,20 +1154,22 @@
         box.appendChild(img);
         card.appendChild(box);
 
+        /* In the story rail the step supplies the words, so the card carries
+           the image and the stage label only: the same sentence printed twice
+           reads as two separate records. */
         var meta = el('span', 'gx-shot-meta');
-        meta.appendChild(el('strong', null, item.shows));
+        if (!compact) meta.appendChild(el('strong', null, item.shows));
 
         /* Only what the record actually supports. A country that was never
            verified prints nothing at all rather than a guess. */
         var facts = [PLAT_NAME[item.platform] || item.platform];
         if (item.country && P.REGIONS[item.country]) facts.push(P.REGIONS[item.country].name);
         if (item.period) facts.push(item.period);
-        meta.appendChild(el('p', null, facts.join(' \u00b7 ')));
+        if (!compact) meta.appendChild(el('p', null, facts.join(' \u00b7 ')));
 
         var tags = el('span', 'gx-tags');
-        tags.appendChild(el('span', 'gx-tag gx-tag--' + (item.stage === 'complete' ? 'complete' : 'progress'),
-            item.stage === 'complete' ? 'Completed order' : 'Progress'));
-        if (order.frames.length > 1) {
+        tags.appendChild(el('span', 'gx-tag gx-tag--' + STAGE[item.stage].cls, STAGE[item.stage].tag));
+        if (!compact && order.frames.length > 1) {
             tags.appendChild(el('span', 'gx-tag', order.frames.length + ' records \u00b7 one order'));
         }
         meta.appendChild(tags);
@@ -1096,7 +1212,7 @@
         var facts = [PLAT_NAME[item.platform] || item.platform];
         if (item.country && P.REGIONS[item.country]) facts.push(P.REGIONS[item.country].name);
         if (item.period) facts.push(item.period);
-        facts.push(item.stage === 'complete' ? 'Completed order' : 'Progress, not a finished order');
+        facts.push(STAGE[item.stage].long);
         $('viewerCapMeta').textContent = facts.join(' · ');
 
         $('viewerCount').textContent = (viewerAt + 1) + ' of ' + viewerList.length;

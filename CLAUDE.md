@@ -70,13 +70,27 @@ and growth pages) are handled by the same engine — don't rename them.
 - The page has one state model (country, platforms, step, proof filter) in
   `growth/offer.js`. Totals, the payment split, the saving and the WhatsApp
   message are all derived from it; nothing is read back off the DOM.
-- `PROOF` in `growth/offer.js` is **empty on purpose**. Nothing in `/IMAGES/`
-  is publishable growth evidence — every screenshot there is a Netflix or
-  Spotify conversation carrying a real name, a phone number, a shared
-  password, a PIN or a Mobile Money number, and none of them shows a follower
-  count. Add an entry only when the image file itself has had the private
-  parts removed (not blurred) and the client has cleared it; the gallery,
-  filters, story rail and viewer all switch on by themselves.
+- `PROOF` in `growth/offer.js` holds six records from two real conversations,
+  served from `/IMAGES/proof/`. Every file was **re-encoded after solid
+  rectangles were painted over the private parts** — redaction, never a blur
+  over an intact original — and EXIF was dropped. Removed: the client's name,
+  photographs, date of birth, spouse's name and bio; both contact names; the
+  amounts; 97 World's own Mobile Money number; the mobile-money balance and
+  transaction ID; the client's name in the receipt and its filename; and two
+  third-party reference accounts. The regeneration script lives outside the
+  repo — if the originals are re-processed, check the output by eye before
+  shipping it.
+- Things `PROOF` is not allowed to say, enforced by the renderer and by the
+  data: `country` is `null` everywhere, because a name is not a country and
+  paying in shillings is not a residence; nothing is `stage: 'complete'`,
+  because 97 World's own message on the last frame reads "Boost nearly done";
+  and `orderId` groups frames so six screenshots are shown as the two orders
+  they came from. The three stages are `process` (a sales chat), `progress`
+  (delivery running) and `complete` — never rounded up.
+- The old `/IMAGES/` screenshots (`trust1-5.png`, `1-5.png`) are **not**
+  publishable: they are Netflix and Spotify conversations carrying real names,
+  phone numbers, a shared account password, a PIN and a Mobile Money number.
+  Two records from the growth package are withheld for the same reason.
 - Payment terms across the site read **"balance after completion"** — the
   balance is due once the agreed delivery is finished, not when it is
   "visibly running". `terms-of-service/`, `trust/`, `assets/wizard.js` and
