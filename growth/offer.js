@@ -366,64 +366,84 @@
         btn.setAttribute('aria-label', r.name + ', prices in ' + r.currency + '. Change country');
     }
 
-    /* South Sudan campaign art follows the selected platforms. The model is
+    /* Country campaign art follows the selected platforms. The models are
        fictional campaign artwork; client evidence remains in the proof section. */
     var campaignImage = null;
     var campaignVisual = 'creators';
     var campaignRequest = 0;
     var CAMPAIGN_IMAGES = {
         creators: '/IMAGES/growth-campaign/creators-v1.webp',
-        base: '/IMAGES/growth-campaign/ssd-base-v1.webp',
-        facebook: '/IMAGES/growth-campaign/ssd-facebook-v1.webp',
-        instagram: '/IMAGES/growth-campaign/ssd-instagram-v1.webp',
-        tiktok: '/IMAGES/growth-campaign/ssd-tiktok-v1.webp',
-        all: '/IMAGES/growth-campaign/ssd-all-three-v1.webp'
+        UG: {
+            base: '/IMAGES/growth-campaign/ug-base-v1.webp',
+            facebook: '/IMAGES/growth-campaign/ug-facebook-v1.webp',
+            instagram: '/IMAGES/growth-campaign/ug-instagram-v1.webp',
+            tiktok: '/IMAGES/growth-campaign/ug-tiktok-v1.webp',
+            all: '/IMAGES/growth-campaign/ug-all-three-v1.webp'
+        },
+        SS: {
+            base: '/IMAGES/growth-campaign/ssd-base-v1.webp',
+            facebook: '/IMAGES/growth-campaign/ssd-facebook-v1.webp',
+            instagram: '/IMAGES/growth-campaign/ssd-instagram-v1.webp',
+            tiktok: '/IMAGES/growth-campaign/ssd-tiktok-v1.webp',
+            all: '/IMAGES/growth-campaign/ssd-all-three-v1.webp'
+        },
+        CD: {
+            base: '/IMAGES/growth-campaign/cd-base-v1.webp',
+            facebook: '/IMAGES/growth-campaign/cd-facebook-v1.webp',
+            instagram: '/IMAGES/growth-campaign/cd-instagram-v1.webp',
+            tiktok: '/IMAGES/growth-campaign/cd-tiktok-v1.webp',
+            all: '/IMAGES/growth-campaign/cd-all-three-v1.webp'
+        }
     };
 
     function renderCampaign() {
         var hero = $('campaignHero');
         if (!hero) return;
-        var southSudan = state.country === 'SS';
+        var country = state.country;
         var visual = 'creators';
-        if (southSudan) {
+        if (country) {
             if (state.platforms.length === 1) visual = state.platforms[0];
             else if (state.platforms.length === ORDER.length) visual = 'all';
             else visual = 'base';
         }
+        var imageKey = country ? country + '-' + visual : 'creators';
+        var imageSrc = country ? CAMPAIGN_IMAGES[country][visual] : CAMPAIGN_IMAGES.creators;
 
-        var pair = southSudan && state.platforms.length === 2
+        var pair = country && state.platforms.length === 2
             ? state.platforms.join('+') : 'none';
         hero.dataset.platformPair = pair;
-        hero.closest('.gx-hero').dataset.country = southSudan ? 'SS' : 'other';
+        hero.closest('.gx-hero').dataset.country = country || 'none';
         var consoleCard = hero.parentElement.querySelector('.gx-console');
-        consoleCard.dataset.ssd = southSudan ? 'true' : 'false';
-        if (southSudan) consoleCard.style.setProperty('--campaign-art', 'url("' + CAMPAIGN_IMAGES[visual] + '")');
+        consoleCard.dataset.campaign = country ? 'true' : 'false';
+        if (country) consoleCard.style.setProperty('--campaign-art', 'url("' + imageSrc + '")');
         else consoleCard.style.removeProperty('--campaign-art');
-        $('heroEyebrow').textContent = southSudan ? '97 World Growth · South Sudan' : '97 World Growth';
+        $('heroEyebrow').textContent = country
+            ? '97 World Growth · ' + P.REGIONS[country].name : '97 World Growth';
 
         // Keep the current image visible until the new one is ready. A request
         // number prevents a slow earlier selection from replacing a newer one.
         var request = ++campaignRequest;
-        if (visual === campaignVisual) return;
+        if (imageKey === campaignVisual) return;
         var next = new window.Image();
         next.onload = function () {
             if (request !== campaignRequest) return;
             var current = campaignImage || $('campaignImageA');
             var target = current.id === 'campaignImageA' ? $('campaignImageB') : $('campaignImageA');
-            target.src = CAMPAIGN_IMAGES[visual];
-            target.alt = visual === 'creators'
+            target.src = imageSrc;
+            target.alt = !country
                 ? 'AI-generated campaign artwork of three fictional creators collaborating around a phone.'
-                : 'AI-generated campaign artwork of a fictional South Sudanese woman, the South Sudan flag, and growth visuals.';
+                : 'AI-generated campaign artwork of a fictional woman, the ' + P.REGIONS[country].name + ' flag, and growth visuals.';
             target.removeAttribute('aria-hidden');
             target.classList.add('is-active');
             current.classList.remove('is-active');
             current.alt = '';
             current.setAttribute('aria-hidden', 'true');
             campaignImage = target;
-            campaignVisual = visual;
+            campaignVisual = imageKey;
             hero.dataset.visual = visual;
+            hero.dataset.country = country || 'none';
         };
-        next.src = CAMPAIGN_IMAGES[visual];
+        next.src = imageSrc;
     }
 
     /* -- platform cards --------------------------------------------- */

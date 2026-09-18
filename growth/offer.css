@@ -1126,6 +1126,8 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 .gx-campaign[data-visual="instagram"] .gx-campaign-img,
 .gx-campaign[data-visual="tiktok"] .gx-campaign-img,
 .gx-campaign[data-visual="all"] .gx-campaign-img { object-position: 63% 42%; }
+.gx-campaign[data-country="UG"] .gx-campaign-img,
+.gx-campaign[data-country="CD"] .gx-campaign-img { object-position: 63% 6%; }
 .gx-campaign-logo { position: absolute; inset-inline-start: clamp(28px,4vw,60px); inset-block-start: 30px; width: 52px; height: 52px; }
 .gx-campaign .gx-hero-copy { padding: 124px clamp(28px,4vw,60px) 80px; max-inline-size: 640px; }
 .gx-campaign h1 { font-size: clamp(42px,5.4vw,74px); line-height: 1; max-inline-size: 14ch; }
@@ -1140,11 +1142,11 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
 .gx-campaign .gx-hero-cta { background: var(--c-gold); color: var(--c-console); margin-block-start: 22px; box-shadow: none; }
 .gx-art-caption { position: absolute; inset-inline-end: 24px; inset-block-end: 58px; padding: 5px 9px; border-radius: 5px; font-size: 11px; color: #fff; background: #10251bdd; }
 .gx-hero .gx-console { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); gap: 0 30px; width: calc(100% - 96px); margin: -35px auto 0; z-index: 2; padding: 24px 28px; border: 1px solid #53715e; border-radius: 20px; box-shadow: 0 22px 55px -32px #142a2288; }
-.gx-hero .gx-console[data-ssd="true"]::before { background-image: linear-gradient(90deg,#142a22f5 0%,#142a22e9 58%,#142a22c9 100%),var(--campaign-art); background-size: cover; background-position: center, 72% 47%; mask-image: none; }
-.gx-hero[data-country="SS"] .gx-console-platforms button[data-hero-platform="facebook"][aria-pressed="true"] { background: linear-gradient(145deg,#17477f,#1877f2); border-color: #80b9ff; }
-.gx-hero[data-country="SS"] .gx-console-platforms button[data-hero-platform="instagram"][aria-pressed="true"] { background: linear-gradient(145deg,#633ac9,#c63d99 65%,#f09543); border-color: #ec94d0; }
-.gx-hero[data-country="SS"] .gx-console-platforms button[data-hero-platform="tiktok"][aria-pressed="true"] { background: linear-gradient(145deg,#102b36,#075d6a 58%,#a52b72); border-color: #4ce4ea; }
-.gx-hero[data-country="SS"] .gx-console-platforms button[aria-pressed="true"] .gx-mini-check { color: #fff; }
+.gx-hero .gx-console[data-campaign="true"]::before { background-image: linear-gradient(90deg,#142a22f5 0%,#142a22e9 58%,#142a22c9 100%),var(--campaign-art); background-size: cover; background-position: center, 72% 47%; mask-image: none; }
+.gx-hero[data-country]:not([data-country="none"]) .gx-console-platforms button[data-hero-platform="facebook"][aria-pressed="true"] { background: linear-gradient(145deg,#17477f,#1877f2); border-color: #80b9ff; }
+.gx-hero[data-country]:not([data-country="none"]) .gx-console-platforms button[data-hero-platform="instagram"][aria-pressed="true"] { background: linear-gradient(145deg,#633ac9,#c63d99 65%,#f09543); border-color: #ec94d0; }
+.gx-hero[data-country]:not([data-country="none"]) .gx-console-platforms button[data-hero-platform="tiktok"][aria-pressed="true"] { background: linear-gradient(145deg,#102b36,#075d6a 58%,#a52b72); border-color: #4ce4ea; }
+.gx-hero[data-country]:not([data-country="none"]) .gx-console-platforms button[aria-pressed="true"] .gx-mini-check { color: #fff; }
 .gx-hero .gx-console-head { grid-column: 1/-1; margin-block-end: 18px; }
 .gx-hero .gx-network { display: none; }
 .gx-hero .gx-console-platforms { grid-column: 1; grid-row: 2/5; align-items: stretch; }
@@ -1184,6 +1186,8 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
     .gx-campaign[data-visual="instagram"] .gx-campaign-img,
     .gx-campaign[data-visual="tiktok"] .gx-campaign-img,
     .gx-campaign[data-visual="all"] .gx-campaign-img { object-position: 73% 20%; }
+    .gx-campaign[data-country="UG"] .gx-campaign-img,
+    .gx-campaign[data-country="CD"] .gx-campaign-img { object-position: 90% 20%; }
     .gx-campaign::after { background: linear-gradient(0deg,#0b211cf5 0%,#0b211ce8 22%,#0b211c26 66%,#0b211c0a); }
     .gx-campaign .gx-hero-copy { position: absolute; inset-inline: 0; inset-block-end: 0; padding: 0 24px 50px; max-inline-size: 100%; }
     .gx-campaign h1 { font-size: clamp(40px,7.5vw,59px); max-inline-size: 15ch; }
