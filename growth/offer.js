@@ -147,7 +147,7 @@
     // Anonymous integration hooks. No network requests, identifiers or chat text.
     // A configured analytics listener can consume these without touching checkout.
     function trackEvent(event, extra) {
-        var payload = Object.assign({ event: 'growth_' + event, version: 'studio4',
+        var payload = Object.assign({ event: 'growth_' + event, version: 'campaign5',
             country: state.country, platforms: state.platforms.join(','),
             platform_count: state.platforms.length }, extra || {});
         try {
@@ -1437,6 +1437,10 @@
                     entries.forEach(function (entry) {
                         if (!entry.isIntersecting) return;
                         var id = entry.target.id;
+                        document.querySelectorAll('[data-chapter]').forEach(function (link) {
+                            if (link.dataset.chapter === id) link.setAttribute('aria-current', 'step');
+                            else link.removeAttribute('aria-current');
+                        });
                         if (!entry.target.dataset.measured) {
                             entry.target.dataset.measured = 'true';
                             trackEvent('section_viewed', { section: id });

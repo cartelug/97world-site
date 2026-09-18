@@ -1108,3 +1108,83 @@ html { background: #FBF8F4; -webkit-text-size-adjust: 100%; }
     .gx-console-tag { font-size: 9px; }
     .gx-console-platforms { gap: 7px; }
 }
+
+/* Campaign-led scroll: editorial opening, compact selection, evidence chapters. */
+.gx-campaign-shell { max-inline-size: 1360px; }
+.gx-hero { display: block; padding-block: 20px 36px; }
+.gx-campaign { position: relative; isolation: isolate; min-block-size: 570px; background: var(--c-console); border-radius: 26px; overflow: hidden; color: #fff; }
+.gx-campaign-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% 45%; z-index: -2; animation: gxCampaignIn 420ms var(--ease) both; }
+.gx-campaign::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #0d211be8 0%, #0d211ba8 34%, #0d211b0a 69%), linear-gradient(0deg, #0d211b9e, transparent 35%); }
+.gx-campaign-logo { position: absolute; inset-inline-start: clamp(28px,4vw,60px); inset-block-start: 30px; width: 52px; height: 52px; }
+.gx-campaign .gx-hero-copy { padding: 124px clamp(28px,4vw,60px) 80px; max-inline-size: 640px; }
+.gx-campaign h1 { font-size: clamp(42px,5.4vw,74px); line-height: 1; max-inline-size: 14ch; }
+.gx-campaign h1 span { color: var(--c-gold); }
+.gx-campaign .gx-eyebrow { color: var(--c-gold); font-size: 10px; }
+.gx-campaign .gx-eyebrow::before { background: var(--c-gold); }
+.gx-campaign .gx-lead { color: #e6ece6; max-inline-size: 34ch; font-size: 16px; }
+.gx-campaign .gx-assurance { max-inline-size: 40ch; gap: 8px 15px; }
+.gx-campaign .gx-assurance li { color: #e6ece6; }
+.gx-campaign .gx-assurance li span { color: var(--c-gold); }
+.gx-campaign .gx-steps { display: none; }
+.gx-campaign .gx-hero-cta { background: var(--c-gold); color: var(--c-console); margin-block-start: 22px; box-shadow: none; }
+.gx-art-caption { position: absolute; inset-inline-end: 24px; inset-block-end: 58px; padding: 5px 9px; border-radius: 5px; font-size: 11px; color: #fff; background: #10251bdd; }
+.gx-hero .gx-console { display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,1fr); gap: 0 30px; width: calc(100% - 96px); margin: -35px auto 0; z-index: 2; padding: 24px 28px; border: 1px solid #53715e; border-radius: 20px; box-shadow: 0 22px 55px -32px #142a2288; }
+.gx-hero .gx-console-head { grid-column: 1/-1; margin-block-end: 18px; }
+.gx-hero .gx-network { display: none; }
+.gx-hero .gx-console-platforms { grid-column: 1; grid-row: 2/5; align-items: stretch; }
+.gx-hero .gx-console-platforms button { min-block-size: 107px; justify-content: center; align-content: center; gap: 10px; font-size: 12px; }
+.gx-hero .gx-console-platforms svg { width: 38px; height: 38px; }
+.gx-hero .gx-console-total { grid-column: 2; grid-row: 2; margin: 0; padding: 0; border: 0; }
+.gx-hero .gx-console-foot { grid-column: 2; grid-row: 3; font-size: 11px; }
+.gx-hero .gx-console-continue { grid-column: 2; grid-row: 4; margin-block-start: 12px; }
+.gx-chapters { position: sticky; inset-block-start: var(--head-h); z-index: 35; background: #fbf8f4f5; border-block: 1px solid var(--c-line); backdrop-filter: blur(12px); }
+.gx-chapters > div { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.gx-chapters a { position: relative; padding: 17px 12px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; color: var(--c-muted); min-block-size: 50px; }
+.gx-chapters a span { font-size: 10px; color: var(--c-acc); font-variant-numeric: tabular-nums; }
+.gx-chapters a::after { content: ''; position: absolute; inset-inline: 12px; inset-block-end: -1px; height: 2px; background: var(--c-acc); transform: scaleX(0); transform-origin: left; transition: transform 240ms var(--ease); }
+.gx-chapters a[aria-current] { color: var(--c-ink); background: #edf2eb70; }
+.gx-chapters a[aria-current]::after { transform: scaleX(1); }
+.gx-chapters a:hover { color: var(--c-acc); }
+.gx-sec, .gx-sec h2 { scroll-margin-block-start: calc(var(--head-h) + 72px); }
+.gx-config-aside { inset-block-start: calc(var(--head-h) + 72px); }
+.gx-scene-wrap { margin-block: 8px 48px; }
+.gx-brand-scene { position: relative; isolation: isolate; overflow: hidden; min-block-size: 320px; border-radius: 24px; background: var(--c-console); color: #fff; scroll-margin-block-start: calc(var(--head-h) + 72px); }
+.gx-brand-scene > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 65% 48%; z-index: -2; }
+.gx-brand-scene::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg,#0b211cbb,transparent 80%); }
+.gx-brand-scene-copy { padding: 38px clamp(24px,5vw,58px); max-inline-size: 60%; }
+.gx-brand-scene-copy > img { float: left; margin-inline-end: 14px; width: 38px; height: 38px; }
+.gx-brand-scene .gx-eyebrow { color: var(--c-gold); margin-block: 12px 22px; font-size: 10px; }
+.gx-brand-scene .gx-eyebrow::before { display: none; }
+.gx-brand-scene h2 { clear: both; font-family: var(--f-display); font-size: clamp(32px,4vw,47px); font-weight: 800; line-height: 1.04; letter-spacing: -.035em; }
+.gx-brand-scene-copy > p:last-child { font-size: 15px; line-height: 1.6; color: #d9e7dd; margin-block-start: 14px; }
+.gx-head .gx-brand img { width: 32px; height: 32px; }
+@keyframes gxCampaignIn { from { transform: scale(1.025); opacity: .65; } to { transform: scale(1); opacity: 1; } }
+@media (max-width: 899px) {
+    .gx-campaign-shell { width: 100%; }
+    .gx-hero { padding-block-start: 0; }
+    .gx-campaign { border-radius: 0 0 22px 22px; min-block-size: 510px; }
+    .gx-campaign-img { object-position: 73% 18%; }
+    .gx-campaign::after { background: linear-gradient(0deg,#0b211cf5 0%,#0b211ce8 22%,#0b211c26 66%,#0b211c0a); }
+    .gx-campaign .gx-hero-copy { position: absolute; inset-inline: 0; inset-block-end: 0; padding: 0 24px 50px; max-inline-size: 100%; }
+    .gx-campaign h1 { font-size: clamp(40px,7.5vw,59px); max-inline-size: 15ch; }
+    .gx-campaign .gx-lead { font-size: 14px; max-inline-size: 35ch; margin-block-start: 12px; }
+    .gx-campaign-logo { inset-inline-start: 24px; inset-block-start: 20px; width: 46px; height: 46px; }
+    .gx-campaign .gx-assurance { margin-block-start: 12px; }
+    .gx-campaign .gx-assurance li { font-size: 10px; }
+    .gx-art-caption { inset-block-end: auto; inset-block-start: 27px; inset-inline-end: 18px; font-size: 10px; }
+    .gx-hero .gx-console { width: calc(100% - 32px); margin-block-start: -28px; padding: 18px; gap: 0; display: block; border-radius: 18px; }
+    .gx-hero .gx-console-head { margin-block-end: 14px; }
+    .gx-hero .gx-console-platforms button { min-block-size: 78px; padding: 9px 4px; gap: 7px; font-size: 11px; }
+    .gx-hero .gx-console-platforms svg { width: 32px; height: 32px; }
+    .gx-hero .gx-console-total { padding-block-start: 14px; margin-block-start: 14px; border-block-start: 1px solid var(--c-console-line); }
+    .gx-hero .gx-console-foot { font-size: 10px; }
+    .gx-hero .gx-console-continue { margin-block-start: 12px; }
+    .gx-chapters .gx-shell { width: 100%; }
+    .gx-chapters a { font-size: 11px; gap: 6px; padding-inline: 4px; }
+    .gx-chapters a::after { inset-inline: 4px; }
+    .gx-brand-scene { min-block-size: 330px; }
+    .gx-brand-scene-copy { max-inline-size: 82%; padding: 26px; }
+    .gx-brand-scene > img { object-position: 66% 50%; }
+    .gx-brand-scene::after { background: linear-gradient(90deg,#0b211cf0,#0b211c9c 65%,#0b211c33); }
+}
+@media (prefers-reduced-motion: reduce) { .gx-campaign-img { animation: none; } }
