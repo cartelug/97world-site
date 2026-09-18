@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,600,700&display=swap">
 <link rel="stylesheet" href="/assets/motion.css">
-<link rel="stylesheet" href="/growth/offer.css?v=20260917-campaign5">
+<link rel="stylesheet" href="/growth/offer.css?v=20260918-ssd6">
 </head>
 
 <body class="gx">
@@ -76,11 +76,13 @@
   <!-- ==================================================== INTRO === -->
   <div class="gx-shell gx-campaign-shell">
     <section class="gx-intro gx-hero" aria-labelledby="introH">
-      <div class="gx-campaign">
-        <img class="gx-campaign-img" src="/IMAGES/growth-campaign/creators-v1.webp" width="1536" height="1024" alt="AI-generated campaign artwork of three fictional creators collaborating around a phone." fetchpriority="high" decoding="async">
+      <div class="gx-campaign" id="campaignHero" data-visual="creators" data-platform-pair="none">
+        <img class="gx-campaign-img is-active" id="campaignImageA" src="/IMAGES/growth-campaign/creators-v1.webp" width="1536" height="1024" alt="AI-generated campaign artwork of three fictional creators collaborating around a phone." fetchpriority="high" decoding="async">
+        <img class="gx-campaign-img" id="campaignImageB" width="1536" height="1024" alt="" aria-hidden="true" decoding="async">
+        <span class="gx-campaign-tint" aria-hidden="true"></span>
         <img class="gx-campaign-logo" src="/IMAGES/logo.png" width="64" height="64" alt="97 World">
         <div class="gx-hero-copy">
-      <p class="gx-eyebrow m-fade">97 World Growth</p>
+      <p class="gx-eyebrow m-fade" id="heroEyebrow">97 World Growth</p>
       <h1 id="introH" class="m-up">Your world.<br><span>Ready to grow.</span></h1>
       <p class="gx-lead m-up">10,000 followers per platform. Choose your growth, see client progress, and confirm with us in chat.</p>
       <ul class="gx-assurance" aria-label="How we work">
@@ -493,6 +495,6 @@
 
 <script src="/assets/pricing.js"></script>
 <script src="/assets/motion.js" defer></script>
-<script src="/growth/offer.js?v=20260917-campaign5" defer></script>
+<script src="/growth/offer.js?v=20260918-ssd6" defer></script>
 </body>
 </html>
