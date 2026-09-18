@@ -1003,17 +1003,28 @@
         var filters = $('proofFilters');
         var moreWrap = $('proofMoreWrap');
         var story = $('proofStory');
+        var nextStep = $('proofNext');
 
         if (!PROOF.length) {
             grid.hidden = true;
             filters.hidden = true;
             moreWrap.hidden = true;
             story.hidden = true;
+            nextStep.hidden = true;
             renderProofEmpty(empty);
             return;
         }
 
         empty.textContent = '';
+        nextStep.hidden = false;
+        var nextLink = $('proofNextLink');
+        var hasPackage = state.platforms.length > 0;
+        nextLink.href = hasPackage ? '#send' : '#choose';
+        nextLink.querySelector('.gx-btn-label').textContent = hasPackage ? 'Review my request' : 'Choose my platforms';
+        $('proofNextTitle').textContent = hasPackage ? 'Ready to discuss your package?' : 'Ready to build your package?';
+        $('proofNextCopy').textContent = hasPackage
+            ? 'Review your request, then confirm the details with us in chat.'
+            : 'Choose your platforms, then review the request with us in chat.';
         renderFilters(filters);
         renderStory(story);
 
@@ -1026,7 +1037,7 @@
         if (state.country) {
             var local = PROOF.some(function (p) { return p.country === state.country; });
             if (!local) {
-                var gap = el('p', 'gx-smallprint', 'Showing available client records. Ask us in chat for results from ' + countryName() + '.');
+                var gap = el('p', 'gx-smallprint', 'These records do not establish the client\u2019s country.');
                 gap.id = 'proofLocalNote';
                 story.parentNode.insertBefore(gap, story);
             }

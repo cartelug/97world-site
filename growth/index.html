@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,600,700&display=swap">
 <link rel="stylesheet" href="/assets/motion.css">
-<link rel="stylesheet" href="/growth/offer.css?v=20260918-regions7">
+<link rel="stylesheet" href="/growth/offer.css?v=20260918-proof8">
 </head>
 
 <body class="gx">
@@ -217,10 +217,17 @@
   <!-- ================================================ STEP 2 === -->
   <div class="gx-shell">
     <section class="gx-sec" id="results" aria-labelledby="resultsH">
-      <header>
-        <p class="gx-eyebrow gx-section-label">02 / Client stories</p>
-        <h2 id="resultsH" tabindex="-1">See the story.<br>Then decide.</h2>
-        <p id="proofIntro">Follow the same client from the starting point to the latest update. Every screenshot opens for a closer look.</p>
+      <header class="gx-proof-intro">
+        <div>
+          <p class="gx-eyebrow gx-section-label">02 / Client stories</p>
+          <h2 id="resultsH" tabindex="-1">See the story.<br>Then decide.</h2>
+          <p id="proofIntro">Real screenshots, in order. Tap any image for a closer look.</p>
+        </div>
+        <aside class="gx-proof-spotlight m-up" aria-label="Recorded Facebook client progress">
+          <span>From one supplied client record</span>
+          <strong>9.8K <i aria-hidden="true">→</i> 13K</strong>
+          <p>Follower counts shown across the captures. Delivery was still in progress.</p>
+        </aside>
       </header>
 
       <div id="proofFilters" hidden>
@@ -234,6 +241,14 @@
         <button type="button" class="gx-btn gx-btn--quiet" id="proofMore">Show more results</button>
       </div>
       <div id="proofEmpty"><!-- rendered --></div>
+      <div class="gx-proof-next m-up" id="proofNext" hidden>
+        <div>
+          <span>Next step</span>
+          <strong id="proofNextTitle">Ready to build your package?</strong>
+          <p id="proofNextCopy">Choose your platforms, then review the request with us in chat.</p>
+        </div>
+        <a class="gx-btn gx-btn--primary m-press" id="proofNextLink" href="#choose"><span class="gx-btn-label">Choose my platforms</span><span aria-hidden="true">↗</span></a>
+      </div>
     </section>
   </div>
 
@@ -495,6 +510,6 @@
 
 <script src="/assets/pricing.js"></script>
 <script src="/assets/motion.js" defer></script>
-<script src="/growth/offer.js?v=20260918-regions7" defer></script>
+<script src="/growth/offer.js?v=20260918-proof8" defer></script>
 </body>
 </html>
