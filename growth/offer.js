@@ -698,9 +698,15 @@
         var btn = $('sendBtn');
         var status = $('sendStatusTxt');
         var copy = $('copyBtn');
+        var total = $('sendBtnTotal');
 
         btn.disabled = !q.priced;
         copy.hidden = !q.priced;
+        total.hidden = !q.priced;
+        total.textContent = q.priced ? money(q.total) : '';
+        btn.setAttribute('aria-label', q.priced
+            ? 'Send order for ' + money(q.total) + ' on WhatsApp'
+            : 'Send order on WhatsApp');
 
         if (sendTouched) return;                            // keep the live result
 
@@ -731,7 +737,10 @@
             $('barLabel').textContent = 'Total';
             roll($('barTotal'), money(q.total));
             $('barBtn').querySelector('.gx-btn-label').textContent =
-                state.resultsSeen ? 'Review order' : 'Continue';
+                state.resultsSeen ? 'Send order' : 'See client stories';
+            $('barBtn').setAttribute('aria-label', state.resultsSeen
+                ? 'Send order for ' + money(q.total) + ' on WhatsApp'
+                : 'Continue to client stories');
             // let `hidden` clear before the transform transition starts
             window.requestAnimationFrame(function () { bar.classList.add('is-up'); });
         } else {
@@ -1028,9 +1037,9 @@
         var hasPackage = state.platforms.length > 0;
         nextLink.href = hasPackage ? '#send' : '#choose';
         nextLink.querySelector('.gx-btn-label').textContent = hasPackage ? 'Review my order' : 'Choose my platforms';
-        $('proofNextTitle').textContent = hasPackage ? 'Ready to discuss your package?' : 'Ready to build your package?';
+        $('proofNextTitle').textContent = hasPackage ? 'Your package is ready.' : 'Ready to build your package?';
         $('proofNextCopy').textContent = hasPackage
-            ? 'Review your order, then confirm the details with us in chat.'
+            ? 'Review the exact total, then send your order in WhatsApp.'
             : 'Choose your platforms, then review the order with us in chat.';
         renderFilters(filters);
         renderStory(story);
@@ -1501,13 +1510,8 @@
         $('fallbackCopy').addEventListener('click', function () { copyMessage(this); });
         $('barBtn').addEventListener('click', function () {
             if (state.resultsSeen) {
-                scrollTo($('send'));
-                var btn = $('sendBtn');
-                if (btn && !btn.disabled) {
-                    window.setTimeout(function () {
-                        try { btn.focus({ preventScroll: true }); } catch (e) { btn.focus(); }
-                    }, reduced ? 0 : 420);
-                }
+                sendOrder();
+                window.setTimeout(function () { scrollTo($('send')); }, reduced ? 0 : 420);
             } else {
                 continueToResults();
             }
