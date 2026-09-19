@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,600,700&display=swap">
 <link rel="stylesheet" href="/assets/motion.css">
-<link rel="stylesheet" href="/growth/offer.css?v=20260918-proof8">
+<link rel="stylesheet" href="/growth/offer.css?v=20260919-close9">
 </head>
 
 <body class="gx">
@@ -93,7 +93,7 @@
       <ol class="gx-steps m-fade" id="stepTrack" aria-label="How this page works">
         <li data-step="choose" aria-current="step"><b>1</b>Choose</li>
         <li data-step="results"><b>2</b>See results</li>
-        <li data-step="send"><b>3</b>Send request</li>
+        <li data-step="send"><b>3</b>Send order</li>
       </ol>
       <a href="#choose" class="gx-btn gx-btn--primary gx-hero-cta m-press">Build my package <span aria-hidden="true">↗</span></a>
       </div>
@@ -121,7 +121,7 @@
     <div class="gx-shell">
       <a href="#choose" data-chapter="choose" aria-current="step"><span>01</span> Your package</a>
       <a href="#results" data-chapter="results"><span>02</span> Client stories</a>
-      <a href="#send" data-chapter="send"><span>03</span> Your request</a>
+      <a href="#send" data-chapter="send"><span>03</span> Your order</a>
     </div>
   </nav>
 
@@ -245,7 +245,7 @@
         <div>
           <span>Next step</span>
           <strong id="proofNextTitle">Ready to build your package?</strong>
-          <p id="proofNextCopy">Choose your platforms, then review the request with us in chat.</p>
+          <p id="proofNextCopy">Choose your platforms, then review the order with us in chat.</p>
         </div>
         <a class="gx-btn gx-btn--primary m-press" id="proofNextLink" href="#choose"><span class="gx-btn-label">Choose my platforms</span><span aria-hidden="true">↗</span></a>
       </div>
@@ -281,35 +281,41 @@
     <section class="gx-sec gx-send" id="send" aria-labelledby="sendH">
       <div>
         <header>
-          <p class="gx-eyebrow gx-section-label">03 / Let’s confirm it</p>
-          <h2 id="sendH" tabindex="-1">Ready to get started?</h2>
-          <p>Send us your selection. We’ll check your accounts and confirm the details with you.</p>
+          <p class="gx-eyebrow gx-section-label">03 / Send your order</p>
+          <h2 id="sendH" tabindex="-1">Your order is ready.</h2>
+          <p>Open WhatsApp with your package already written. Review it, send it, then share your public account links.</p>
         </header>
 
         <ol class="gx-next">
-          <li><b>1</b><span>Review your message and send it in WhatsApp.</span></li>
-          <li><b>2</b><span>We check your accounts and confirm your order.</span></li>
-          <li><b>3</b><span>We send your MoMo instructions personally.</span></li>
+          <li><b>1</b><span>WhatsApp opens with your package and exact price.</span></li>
+          <li><b>2</b><span>Send it, then share your public account links.</span></li>
+          <li><b>3</b><span>We confirm availability, timing and payment instructions.</span></li>
         </ol>
+
+        <ul class="gx-send-promises" aria-label="Order safeguards">
+          <li><span aria-hidden="true">✓</span>No password</li>
+          <li><span aria-hidden="true">✓</span>Account check first</li>
+          <li><span aria-hidden="true">✓</span>Pay after confirmation</li>
+        </ul>
 
         <div class="gx-send-actions">
           <button type="button" class="gx-btn gx-btn--primary" id="sendBtn" disabled>
-            <span class="gx-btn-label">Send my request on WhatsApp</span>
+            <span class="gx-btn-label">Send order to WhatsApp</span>
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M4 10h11M10.5 5.5 15.5 10l-5 4.5"/>
             </svg>
           </button>
-          <button type="button" class="gx-btn gx-btn--text" id="copyBtn" hidden>Copy my request</button>
+          <button type="button" class="gx-btn gx-btn--text" id="copyBtn" hidden>Copy order message</button>
           <p class="gx-status" id="sendStatus" role="status">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
               <circle cx="10" cy="10" r="7.5"/><path d="M10 9.2v4.4M10 6.6v.9"/>
             </svg>
-            <span id="sendStatusTxt">Choose at least one platform above to build your request.</span>
+            <span id="sendStatusTxt">Choose at least one platform above to build your order.</span>
           </p>
         </div>
 
         <div class="gx-fallback" id="fallback" hidden>
-          <h3 id="fallbackH">Copy this message into the chat</h3>
+          <h3 id="fallbackH">Your ready-to-send order</h3>
           <textarea id="fallbackTxt" readonly aria-labelledby="fallbackH"></textarea>
           <div>
             <button type="button" class="gx-btn gx-btn--quiet" id="fallbackCopy">Copy message</button>
@@ -320,7 +326,7 @@
       <aside aria-labelledby="sum2H">
         <div class="gx-sum">
           <div class="gx-sum-head">
-            <h2 id="sum2H">Your selection</h2>
+            <h2 id="sum2H">Order summary</h2>
             <span class="gx-sum-count" id="sum2Count"></span>
           </div>
           <div class="gx-sum-body" id="sum2Body"><!-- rendered --></div>
@@ -464,7 +470,7 @@
         </span>
         <span class="gx-commit-txt">
           <b>You can review the evidence</b>
-          <p>Explore client screenshots and progress records before sending your request.</p>
+          <p>Explore client screenshots and progress records before sending your order.</p>
         </span>
       </div>
     </div>
@@ -510,6 +516,6 @@
 
 <script src="/assets/pricing.js"></script>
 <script src="/assets/motion.js" defer></script>
-<script src="/growth/offer.js?v=20260918-proof8" defer></script>
+<script src="/growth/offer.js?v=20260919-close9" defer></script>
 </body>
 </html>

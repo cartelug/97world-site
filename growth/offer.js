@@ -187,14 +187,17 @@
     function orderMessage() {
         var q = quote();
         if (!q.priced) return '';
-        return 'Hello 97 World, I’ve reviewed the Growth page and would like you to check this order.\n\n' +
+        return 'Hello 97 World. I’m ready to place this Growth order.\n\n' +
+            '*MY ORDER*\n' +
             'Country: ' + countryName() + '\n' +
-            'Platforms: ' + platformNames().join(', ') + '\n' +
-            'Package: 10,000 followers per selected platform\n' +
-            'Total: ' + P.money(q.total, q.currency) + '\n' +
-            'First payment after confirmation: ' + P.money(q.deposit, q.currency) + '\n' +
-            'Balance after completion: ' + P.money(q.balance, q.currency) + '\n\n' +
-            'Please review my accounts and confirm the order details before sending payment instructions.';
+            'Platforms: ' + listSentence(platformNames()) + '\n' +
+            'Growth: 10,000 followers on each selected platform\n' +
+            'Total: ' + P.money(q.total, q.currency) + '\n\n' +
+            '*PAYMENT PLAN*\n' +
+            '50% to start after confirmation: ' + P.money(q.deposit, q.currency) + '\n' +
+            '50% after completion: ' + P.money(q.balance, q.currency) + '\n\n' +
+            '*NEXT*\n' +
+            'I’ll send my public account links in this chat. Please check them and confirm availability and the delivery schedule before I pay. No password will be shared.';
     }
 
     function chatUrl() {
@@ -701,12 +704,16 @@
 
         if (sendTouched) return;                            // keep the live result
 
+        /* A country or platform change makes the previous order obsolete. */
+        $('fallback').hidden = true;
+        $('fallbackTxt').value = '';
+
         if (!state.platforms.length) {
-            status.textContent = 'Choose at least one platform above to build your request.';
+            status.textContent = 'Choose at least one platform above to build your order.';
         } else if (!state.country) {
-            status.textContent = 'Choose your country so the request carries the right currency.';
+            status.textContent = 'Choose your country so the order carries the right currency.';
         } else {
-            status.textContent = 'No payment here. We confirm your order personally in chat.';
+            status.textContent = 'Nothing is charged here. You can review the message before sending.';
         }
     }
 
@@ -724,7 +731,7 @@
             $('barLabel').textContent = 'Total';
             roll($('barTotal'), money(q.total));
             $('barBtn').querySelector('.gx-btn-label').textContent =
-                state.resultsSeen ? 'Review request' : 'Continue';
+                state.resultsSeen ? 'Review order' : 'Continue';
             // let `hidden` clear before the transform transition starts
             window.requestAnimationFrame(function () { bar.classList.add('is-up'); });
         } else {
@@ -1020,11 +1027,11 @@
         var nextLink = $('proofNextLink');
         var hasPackage = state.platforms.length > 0;
         nextLink.href = hasPackage ? '#send' : '#choose';
-        nextLink.querySelector('.gx-btn-label').textContent = hasPackage ? 'Review my request' : 'Choose my platforms';
+        nextLink.querySelector('.gx-btn-label').textContent = hasPackage ? 'Review my order' : 'Choose my platforms';
         $('proofNextTitle').textContent = hasPackage ? 'Ready to discuss your package?' : 'Ready to build your package?';
         $('proofNextCopy').textContent = hasPackage
-            ? 'Review your request, then confirm the details with us in chat.'
-            : 'Choose your platforms, then review the request with us in chat.';
+            ? 'Review your order, then confirm the details with us in chat.'
+            : 'Choose your platforms, then review the order with us in chat.';
         renderFilters(filters);
         renderStory(story);
 
@@ -1335,8 +1342,11 @@
             btn.classList.remove('is-busy');
             spin.remove();
 
+            /* Ignore a hand-off result if the customer changed the package. */
+            if (!sendTouched || orderMessage() !== text) return;
+
             $('sendStatusTxt').textContent =
-                'Send your message in WhatsApp. If it didn’t open, copy your request below.';
+                'Review and send the order in WhatsApp. If it didn’t open, copy it below.';
             $('fallback').hidden = false;
             $('fallbackTxt').value = text;
             announce($('sendStatusTxt').textContent);
