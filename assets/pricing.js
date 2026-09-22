@@ -23,6 +23,9 @@
 
     var UGX_PER_USD = 3750;
 
+    /* Deposit codes are real merchant codes, transcribed once here so every
+     * page that lists a payment method — this select included — shows the
+     * exact code to pay to rather than a name with nowhere to send money. */
     var REGIONS = {
         UG: {
             name: 'Uganda',
@@ -30,7 +33,7 @@
             flag: '🇺🇬',
             blurb: 'Prices in UGX · Mobile Money',
             phone: 'e.g. +256 700 000 000',
-            payments: ['MTN Mobile Money', 'Airtel Money', 'Cash in office (Kampala)']
+            payments: ['MTN Mobile Money — Code 196514', 'Airtel Money — Code 6398934']
         },
         SS: {
             name: 'South Sudan',
@@ -38,7 +41,7 @@
             flag: '🇸🇸',
             blurb: 'Prices in USD',
             phone: 'e.g. +211 900 000 000',
-            payments: ['Mobile Money via agent', 'Cash in South Sudan']
+            payments: ['Deposit via Mobile Money agent']
         },
         CD: {
             name: 'DR Congo',
@@ -46,7 +49,7 @@
             flag: '🇨🇩',
             blurb: 'Prices in USD',
             phone: 'e.g. +243 800 000 000',
-            payments: ['Mobile Money', 'Cash on delivery']
+            payments: ['Deposit via Mobile Money agent']
         }
     };
 
