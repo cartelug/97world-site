@@ -541,32 +541,123 @@
         $('fwLinkErr').hidden = true;
 
         var q = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: r.qty }], region, 1);
-        var row = q.lines[0];
         // the deposit is rounded once; the balance is whatever is left of
         // the total, so the two always add back up to exactly what's shown
         var deposit = P.roundMoney(q.total * 0.5, q.currency);
         var balance = q.total - deposit;
-        pending = { r: r, account: $('fwLink').value.trim(), quote: q, deposit: deposit, balance: balance };
+        pending = {
+            kind: 'single', r: r, account: $('fwLink').value.trim(), quote: q,
+            total: q.total, currency: q.currency, deposit: deposit, balance: balance
+        };
+        paintReview();
+    }
 
-        $('revList').innerHTML =
-            '<div class="rev-row"><span class="rev-mark">' + mark(r.platform) + '</span>' +
-            '<span class="rev-copy"><b>' + meta(r.platform).name + ' ' +
-                (row.service ? row.service.short : '') + '</b>' +
-            '<small>' + r.qty.toLocaleString() + ' ' + (row.service ? row.service.unit : '') +
-                ' — ' + pending.account + '</small></span>' +
-            '<span class="rev-amt">' + P.money(row.price, q.currency) + '</span>' +
-            '</div>';
-        $('revTotal').textContent = P.money(q.total, q.currency);
-        $('revDeposit').textContent = P.money(deposit, q.currency);
-        $('revBalance').textContent = P.money(balance, q.currency);
+    /** A combo card is tapped: same review sheet, no navigation, no re-typed
+     *  quantity — the two platforms and 10,000-follower quantities are fixed
+     *  by the bundle itself. Only the handle is still asked. */
+    function openCombo(id) {
+        var b = null;
+        for (var i = 0; i < P.BUNDLES.length; i++) {
+            if (P.BUNDLES[i].id === id) { b = P.BUNDLES[i]; break; }
+        }
+        if (!b) return;
+        var cur = P.Region.data(region).currency;
+        var total = P.localPrice(b.usd, cur);
+        var deposit = P.roundMoney(total * 0.5, cur);
+        var balance = total - deposit;
+        pending = {
+            kind: 'bundle', bundle: b, account: pending && pending.account || '',
+            total: total, currency: cur, deposit: deposit, balance: balance
+        };
+        paintReview();
+    }
+
+    /** Paints revList/revTotal/revDeposit/revBalance for whichever kind of
+     *  order is pending, then opens the sheet — the one place either flow
+     *  lands before it becomes a WhatsApp message. */
+    function paintReview() {
+        var cur = pending.currency;
+
+        if (pending.kind === 'bundle') {
+            var b = pending.bundle;
+            var platforms = BUNDLE_PLATFORMS[b.id] || [];
+            $('revList').innerHTML = platforms.map(function (key, i) {
+                var f = b.feats[i];
+                return '<div class="rev-row"><span class="rev-mark">' + mark(key) + '</span>' +
+                    '<span class="rev-copy"><b>' + meta(key).name + '</b>' +
+                    '<small>' + (f ? f.text : '') + '</small></span></div>';
+            }).join('');
+            $('revAccountField').hidden = false;
+            $('revAccount').value = pending.account || '';
+        } else {
+            var r = pending.r, row = pending.quote.lines[0];
+            $('revList').innerHTML =
+                '<div class="rev-row"><span class="rev-mark">' + mark(r.platform) + '</span>' +
+                '<span class="rev-copy"><b>' + meta(r.platform).name + ' ' +
+                    (row.service ? row.service.short : '') + '</b>' +
+                '<small>' + r.qty.toLocaleString() + ' ' + (row.service ? row.service.unit : '') +
+                    ' — ' + pending.account + '</small></span>' +
+                '<span class="rev-amt">' + P.money(row.price, cur) + '</span>' +
+                '</div>';
+            $('revAccountField').hidden = true;
+        }
+
+        $('revTotal').textContent = P.money(pending.total, cur);
+        $('revDeposit').textContent = P.money(pending.deposit, cur);
+        $('revBalance').textContent = P.money(pending.balance, cur);
+        renderPayment();
         openSheet('revSheet');
+    }
+
+    /** The WhatsApp message, built from whichever kind of order is pending —
+     *  the two flows share every line except how the package itself reads. */
+    function buildMessage(name, phone) {
+        var reg = P.Region.data(region);
+        var lines = ['*NEW 97 GROWTH ORDER [' + reg.name.toUpperCase() + ']*', ''];
+
+        if (pending.kind === 'bundle') {
+            var b = pending.bundle;
+            lines.push('*Package:* ' + b.name);
+            lines.push('*Includes:* ' + b.feats.map(function (f) { return f.text; }).join(' + '));
+            lines.push('*Handle:* ' + pending.account);
+        } else {
+            var row = pending.quote.lines[0];
+            lines.push('*Service:* ' + meta(pending.r.platform).name + ' ' +
+                (row.service ? row.service.short : ''));
+            lines.push('*Quantity:* ' + pending.r.qty.toLocaleString() + ' ' +
+                (row.service ? row.service.unit : ''));
+            lines.push('*Link:* ' + pending.account);
+        }
+
+        lines.push('*Charge:* ' + P.money(pending.total, pending.currency));
+        lines.push('*Pay now (50%):* ' + P.money(pending.deposit, pending.currency));
+        lines.push('*Balance on delivery:* ' + P.money(pending.balance, pending.currency));
+        if (paymentChoice) lines.push('*Payment method:* ' + paymentChoice);
+        lines.push('');
+        lines.push('*Name:* ' + name);
+        lines.push('*WhatsApp:* ' + phone);
+        return lines.join('\n');
     }
 
     $('revSend').addEventListener('click', function () {
         if (!pending) return;
+        var errEl = $('revErr');
+
+        if (pending.kind === 'bundle') {
+            var acct = $('revAccount').value.trim();
+            if (!acct) {
+                $('revAccountField').classList.add('is-bad');
+                shake($('revAccountField'));
+                errEl.hidden = false;
+                errEl.textContent = 'Add your @handle so we know where to deliver.';
+                return;
+            }
+            $('revAccountField').classList.remove('is-bad');
+            pending.account = acct;
+        }
+
         var name = $('revName').value.trim();
         var phoneRaw = $('revPhone').value.trim();
-        var errEl = $('revErr');
 
         if (name.length < 2) { errEl.hidden = false; errEl.textContent = 'Please add your name.'; return; }
         if (phoneRaw.replace(/\D/g, '').length < 8) {
@@ -574,9 +665,9 @@
         }
         errEl.hidden = true;
 
-        var q = pending.quote;
-        var row = q.lines[0];
-        var reg = P.Region.data(region);
+        var isBundle = pending.kind === 'bundle';
+        var b = isBundle ? pending.bundle : null;
+        var row = isBundle ? null : pending.quote.lines[0];
         var phone = window.OrderKit
             ? window.OrderKit.phone(phoneRaw)
             : { clean: phoneRaw, sheet: "'" + phoneRaw };
@@ -585,17 +676,7 @@
             localStorage.setItem(PROFILE_KEY, JSON.stringify({ name: name, phone: phoneRaw }));
         } catch (e) { /* private mode */ }
 
-        var message = '*NEW 97 GROWTH ORDER [' + reg.name.toUpperCase() + ']*\n\n' +
-            '*Service:* ' + meta(pending.r.platform).name + ' ' +
-                (row.service ? row.service.short : '') + '\n' +
-            '*Quantity:* ' + pending.r.qty.toLocaleString() + ' ' +
-                (row.service ? row.service.unit : '') + '\n' +
-            '*Link:* ' + pending.account + '\n' +
-            '*Charge:* ' + P.money(q.total, q.currency) + '\n' +
-            '*Pay now (50%):* ' + P.money(pending.deposit, q.currency) + '\n' +
-            '*Balance on delivery:* ' + P.money(pending.balance, q.currency) + '\n\n' +
-            '*Name:* ' + name + '\n' +
-            '*WhatsApp:* ' + phone.clean;
+        var message = buildMessage(name, phone.clean);
 
         var btn = this;
         btn.disabled = true;
@@ -609,26 +690,28 @@
                 sheet: {
                     ClientName: name,
                     Number: phone.sheet,
-                    Service: '97 Growth [' + q.currency + ']',
-                    Package: meta(pending.r.platform).name + ' ' + pending.r.qty + ' ' +
-                        (row.service ? row.service.short : '') + ' [' + pending.account + ']',
-                    Price: String(q.total),
-                    Referrer: 'Order panel'
+                    Service: '97 Growth [' + pending.currency + ']',
+                    Package: isBundle
+                        ? b.name + ' [' + pending.account + ']'
+                        : meta(pending.r.platform).name + ' ' + pending.r.qty + ' ' +
+                            (row.service ? row.service.short : '') + ' [' + pending.account + ']',
+                    Price: String(pending.total),
+                    Referrer: isBundle ? 'Combo panel' : 'Order panel'
                 },
                 worker: {
                     apiBase: WORKER_API,
                     body: {
-                        serviceId: pending.r.serviceId || null,
-                        bundleId: null,
-                        quantity: pending.r.qty || null,
+                        serviceId: isBundle ? null : (pending.r.serviceId || null),
+                        bundleId: isBundle ? b.id : null,
+                        quantity: isBundle ? null : (pending.r.qty || null),
                         link: pending.account,
                         name: name,
                         phone: phone.clean,
                         region: region,
-                        referrer: 'Order panel',
-                        payment: null,
-                        amount: q.total,
-                        currency: q.currency,
+                        referrer: isBundle ? 'Combo panel' : 'Order panel',
+                        payment: paymentChoice,
+                        amount: pending.total,
+                        currency: pending.currency,
                         deposit: pending.deposit,
                         balance: pending.balance
                     }
@@ -638,6 +721,69 @@
             window.location.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(message);
         }
     });
+
+    /* -------------------------------------------------------- payment --- */
+
+    var paymentChoice = null;
+
+    function payMeta(label) {
+        if (/mtn/i.test(label)) return { icon: 'fas fa-mobile-screen-button', color: '#FFCC08' };
+        if (/airtel/i.test(label)) return { icon: 'fas fa-mobile-screen-button', color: '#ED1C24' };
+        if (/agent/i.test(label)) return { icon: 'fas fa-handshake', color: null };
+        if (/cash/i.test(label)) return { icon: 'fas fa-money-bill-wave', color: null };
+        return { icon: 'fas fa-wallet', color: null };
+    }
+
+    /** Real options for whichever region is selected — never Airtel/MTN
+     *  where mobile money isn't actually how that region pays. */
+    function renderPayment() {
+        var grid = $('payGrid');
+        if (!grid) return;
+        var opts = P.Region.data(region).payments || [];
+        if (opts.indexOf(paymentChoice) === -1) paymentChoice = opts[0] || null;
+
+        $('payLabel').textContent = opts.length > 1 ? 'How will you pay?' : 'How you’ll pay';
+        grid.innerHTML = opts.map(function (label) {
+            var m = payMeta(label);
+            var on = label === paymentChoice;
+            return '<button type="button" class="pay-opt m-press' + (on ? ' is-on' : '') + '"' +
+                ' data-pay="' + encodeURIComponent(label) + '" aria-pressed="' + on + '">' +
+                '<i class="' + m.icon + ' pay-ic"' + (m.color ? ' style="color:' + m.color + '"' : '') + '></i>' +
+                '<span>' + label + '</span>' +
+                '<span class="pay-tick"><i class="fas fa-check"></i></span>' +
+                '</button>';
+        }).join('');
+    }
+
+    /* -------------------------------------------------------- proof --- */
+
+    /* Placeholder slots for real, redacted screenshots — no name, number or
+     * date invented here. Each <img> quietly removes itself on a 404, so the
+     * dashed placeholder keeps showing until a real file lands at that path;
+     * dropping a real photo in at these exact paths is the whole update. */
+    var PROOF_SLOTS = ['recent-1', 'recent-2', 'recent-3', 'recent-4', 'recent-5', 'recent-6'];
+
+    function proofImg(slug, cls) {
+        return '<img class="' + cls + '" src="/IMAGES/proof/' + slug + '.webp" alt=""' +
+            ' loading="lazy" onerror="this.remove()">';
+    }
+
+    function renderProof() {
+        var grid = $('proofGrid');
+        if (grid) {
+            grid.innerHTML = PROOF_SLOTS.map(function (slug) {
+                return '<div class="proof-card"><span class="proof-ph"><i class="fas fa-image"></i></span>' +
+                    proofImg(slug, '') + '</div>';
+            }).join('');
+        }
+        var strip = $('revProofImgs');
+        if (strip) {
+            strip.innerHTML = PROOF_SLOTS.slice(0, 3).map(function (slug) {
+                return '<span class="proof-strip-av"><i class="fas fa-image"></i>' +
+                    proofImg(slug, '') + '</span>';
+            }).join('');
+        }
+    }
 
     /* ------------------------------------------------------------ combos ---
      * Which real platforms each bundle touches, for the small mark row at
@@ -679,7 +825,7 @@
                     '<i class="' + f.icon + '"></i>' + f.text + '</span>';
             }).join('');
 
-            return '<a href="/growth/bundle/?plan=' + encodeURIComponent(b.id) + '" data-plan="' + b.id + '" class="combo-item' +
+            return '<button type="button" data-plan="' + b.id + '" class="combo-item' +
                 (b.hero ? ' is-hero' : '') + (b.tag ? ' has-tag' : '') + '">' +
                 (b.tag ? '<span class="combo-tag">' + b.tag + '</span>' : '') +
                 (marks ? '<span class="combo-marks">' + marks + '</span>' : '') +
@@ -695,7 +841,7 @@
                     '</span>' +
                     '<span class="combo-item-go">Order <i class="fas fa-arrow-right"></i></span>' +
                 '</span>' +
-                '</a>';
+                '</button>';
         }).join('') + (remaining > 0
             ? '<a href="/growth/bundle/" class="combo-more">' +
                 '<span class="combo-more-ic"><i class="fas fa-layer-group"></i></span>' +
@@ -767,9 +913,46 @@
     $('comboGrid').addEventListener('click', function (e) {
         var card = e.target.closest('[data-plan]');
         if (!card) return;
-        P.Pending.set('bundle', null, card.dataset.plan);
         haptic();
+        openCombo(card.dataset.plan);
     });
+
+    var payGrid = $('payGrid');
+    if (payGrid) {
+        payGrid.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-pay]');
+            if (!b) return;
+            paymentChoice = decodeURIComponent(b.dataset.pay);
+            payGrid.querySelectorAll('[data-pay]').forEach(function (x) {
+                var on = x === b;
+                x.classList.toggle('is-on', on);
+                x.setAttribute('aria-pressed', String(on));
+            });
+            haptic();
+        });
+    }
+
+    var comboMenuBtn = $('comboMenuBtn');
+    if (comboMenuBtn) {
+        comboMenuBtn.addEventListener('click', function () {
+            closeSheet('menuSheet');
+            window.setTimeout(function () {
+                var el = $('combosSec');
+                if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+            }, reduceMotion ? 0 : 300);
+        });
+    }
+
+    var revProofStrip = $('revProofStrip');
+    if (revProofStrip) {
+        revProofStrip.addEventListener('click', function () {
+            closeSheet('revSheet');
+            window.setTimeout(function () {
+                var el = $('proofSec');
+                if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+            }, reduceMotion ? 0 : 300);
+        });
+    }
 
     $('fwQty').addEventListener('input', paint);
     $('fwSearch').addEventListener('input', runSearch);
@@ -796,6 +979,7 @@
     renderTiles();
     fillCategories();
     renderCombos();
+    renderProof();
 
     try {
         var savedProfile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');

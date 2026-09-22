@@ -122,20 +122,17 @@
     </section>
 
     <!-- ==================================================== PROOF === -->
-    <section class="g-wrap g-sec">
+    <section class="g-wrap g-sec" id="proofSec">
         <div class="g-sec-head">
             <span class="combo-kicker"><i class="fas fa-camera-retro"></i> Real orders only</span>
             <h2>Recent customer results</h2>
             <p>We only ever post screenshots from real 97 World orders — never a stock testimonial.</p>
         </div>
-        <div class="proof-empty r-up">
-            <div class="proof-empty-ic"><i class="fas fa-images"></i></div>
-            <p>We're between batches of screenshots right now. Want to see a recent delivery before you order?</p>
-            <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20can%20I%20see%20a%20screenshot%20from%20a%20recent%20order%3F"
-               target="_blank" rel="noopener" class="g-btn g-btn--ghost">
-                <i class="fab fa-whatsapp"></i> Ask us on WhatsApp
-            </a>
-        </div>
+        <div class="proof-scroll" id="proofGrid" data-stagger></div>
+        <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20can%20I%20see%20a%20screenshot%20from%20a%20recent%20order%3F"
+           target="_blank" rel="noopener" class="g-btn g-btn--ghost" style="margin-top:14px">
+            <i class="fab fa-whatsapp"></i> Ask us on WhatsApp
+        </a>
     </section>
 
     <!-- =========================================== HOW IT WORKS === -->
@@ -233,7 +230,7 @@
                 <span class="goal-card-copy"><b>Currency &amp; region</b><small>Currently <span id="regionLabel">UGX</span> — tap to change</small></span>
             </button>
             <a href="/track/" class="goal-card"><span class="goal-card-copy"><b>Track an order</b><small>Check where your delivery has reached</small></span></a>
-            <a href="/growth/bundle/" class="goal-card"><span class="goal-card-copy"><b>Combos</b><small>Set packages across platforms</small></span></a>
+            <button type="button" class="goal-card" id="comboMenuBtn"><span class="goal-card-copy"><b>Combos</b><small>Set packages across platforms</small></span></button>
             <a href="/business/" class="goal-card"><span class="goal-card-copy"><b>Business &amp; websites</b><small>Websites, business email and design</small></span></a>
             <a href="/trust/" class="goal-card"><span class="goal-card-copy"><b>Trust centre</b><small>Who we are and how we work</small></span></a>
             <a href="/" class="goal-card"><span class="goal-card-copy"><b>Home</b><small>Everything 97 World does</small></span></a>
@@ -267,7 +264,21 @@
             </div>
         </div>
 
+        <button type="button" class="proof-strip m-press" id="revProofStrip">
+            <span class="proof-strip-imgs" id="revProofImgs"></span>
+            <span class="proof-strip-copy"><b>Recently delivered</b><small>See real screenshots from other orders</small></span>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
         <div class="acct-list" style="margin-top:16px">
+            <div class="acct-field" id="revAccountField" hidden>
+                <label for="revAccount">Your @handle</label>
+                <div class="acct-box"><i class="fas fa-at"></i>
+                    <input type="text" id="revAccount" placeholder="Your @handle" autocomplete="off"
+                           spellcheck="false" autocapitalize="none">
+                </div>
+                <p class="acct-hint">Same handle on both platforms — tell us on WhatsApp if it differs.</p>
+            </div>
             <div class="acct-field">
                 <label for="revName">Your name</label>
                 <div class="acct-box"><i class="fas fa-user"></i>
@@ -281,6 +292,12 @@
                 </div>
             </div>
         </div>
+
+        <div class="pay-field" style="margin-top:16px">
+            <label class="pay-label" id="payLabel">How will you pay?</label>
+            <div class="pay-grid" id="payGrid"></div>
+        </div>
+
         <p class="acct-err" id="revErr" hidden></p>
 
         <p class="acct-note"><i class="fas fa-shield-halved"></i> Nothing is charged here. You confirm on WhatsApp and pay by MTN, Airtel Money or cash.</p>

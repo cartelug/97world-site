@@ -7,7 +7,7 @@
  * honest feature lines every subscription order page already promises,
  * a term picker, a price with a real "was" comparison, and a Get now
  * button that hands the chosen term to that product's own order page via
- * P.Pending — same handoff /growth/'s combo cards use.
+ * P.Pending.
  *
  * The "was" price and savings figure are not invented: they're the
  * product's own 3-month rate multiplied out to the chosen term length,
