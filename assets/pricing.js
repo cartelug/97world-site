@@ -122,7 +122,7 @@
     var SERVICES = [
         /* --------------------------------------------------------- Instagram --- */
         svc('ig_followers', 'instagram', 'Instagram followers', 'Followers', 'followers',
-            T(500,15, 1000,25, 2500,50, 5000,70, 10000,100, 25000,250),
+            T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
             'ig insta gram follow subs audience', true, true),
         svc('ig_likes', 'instagram', 'Instagram post likes', 'Likes', 'likes',
             T(500,5, 1000,8, 5000,20, 10000,35, 25000,70, 50000,120),
@@ -140,7 +140,7 @@
 
         /* ------------------------------------------------------------ TikTok --- */
         svc('tt_followers', 'tiktok', 'TikTok followers', 'Followers', 'followers',
-            T(500,15, 1000,25, 2500,50, 5000,70, 10000,100, 25000,250),
+            T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
             'tik tok follow audience', true, true),
         svc('tt_likes', 'tiktok', 'TikTok likes', 'Likes', 'likes',
             T(500,5, 1000,8, 5000,25, 10000,40, 25000,80, 50000,140),
@@ -155,7 +155,7 @@
 
         /* ---------------------------------------------------------- Facebook --- */
         svc('fb_followers', 'facebook', 'Facebook page followers', 'Followers', 'followers',
-            T(500,15, 1000,25, 2500,50, 5000,70, 10000,100, 25000,250),
+            T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
             'fb face book page follow', true, true),
         svc('fb_likes', 'facebook', 'Facebook page likes', 'Page likes', 'likes',
             T(500,10, 1000,18, 2500,40, 5000,70, 10000,120),
@@ -171,7 +171,7 @@
 
         /* ----------------------------------------------------------- YouTube --- */
         svc('yt_subs', 'youtube', 'YouTube subscribers', 'Subscribers', 'subscribers',
-            T(500,35, 1000,65, 2500,150, 5000,280, 10000,520),
+            T(1000,80, 2500,180, 5000,335, 10000,625),
             'yt you tube subscribers channel', true, true),
         svc('yt_views', 'youtube', 'YouTube views', 'Views', 'views',
             T(1000,8, 5000,20, 10000,35, 25000,75, 50000,130, 100000,220),
@@ -187,7 +187,7 @@
 
         /* ---------------------------------------------------------------- X --- */
         svc('x_followers', 'x', 'X followers', 'Followers', 'followers',
-            T(500,15, 1000,25, 2500,50, 5000,70, 10000,100, 25000,250),
+            T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
             'twitter tweet follow', true, true),
         svc('x_likes', 'x', 'X likes', 'Likes', 'likes',
             T(100,5, 250,10, 500,18, 1000,30, 2500,65, 5000,120),
@@ -201,10 +201,10 @@
 
         /* --------------------------------------------------------- Telegram --- */
         svc('tg_members', 'telegram', 'Telegram channel or group members', 'Members', 'members',
-            T(500,10, 1000,15, 2500,30, 5000,45, 10000,75, 25000,150, 50000,250),
+            T(1000,18, 2500,35, 5000,55, 10000,90, 25000,180, 50000,300),
             'tg join group channel', true, true),
         svc('tg_premium', 'telegram', 'Telegram premium members', 'Premium members', 'members',
-            T(500,15, 1000,25, 2500,55, 5000,100, 10000,180, 25000,400),
+            T(1000,30, 2500,65, 5000,120, 10000,215, 25000,480),
             'tg join premium', true, true),
         svc('tg_reactions', 'telegram', 'Telegram post reactions', 'Post reactions', 'reactions',
             T(100,3, 500,5, 1000,8, 5000,20, 10000,35, 50000,120),
@@ -214,10 +214,10 @@
 
         /* --------------------------------------------------------- WhatsApp --- */
         svc('wa_channel', 'whatsapp', 'WhatsApp channel members', 'Channel members', 'members',
-            T(500,20, 1000,35, 2500,75, 5000,140, 10000,250),
+            T(1000,40, 2500,90, 5000,170, 10000,300),
             'whats app status broadcast channel', true, true),
         svc('wa_group', 'whatsapp', 'WhatsApp group members', 'Group members', 'members',
-            T(500,25, 1000,45, 2500,95, 5000,180, 10000,330),
+            T(1000,55, 2500,115, 5000,215, 10000,395),
             'whats app group join', true, true),
         svc('wa_react', 'whatsapp', 'WhatsApp channel post reactions', 'Post reactions', 'reactions',
             T(100,3, 500,8, 1000,12, 5000,35, 10000,65, 25000,150),
@@ -225,10 +225,10 @@
 
         /* --------------------------------------------------------- LinkedIn --- */
         svc('li_profile', 'linkedin', 'LinkedIn profile followers', 'Profile followers', 'followers',
-            T(500,18, 1000,30, 2500,65, 5000,120),
+            T(1000,35, 2500,80, 5000,145),
             'linkedin profile connect', true, true),
         svc('li_company', 'linkedin', 'LinkedIn company page followers', 'Company followers', 'followers',
-            T(500,25, 1000,45, 2500,100, 5000,180, 10000,330),
+            T(1000,55, 2500,120, 5000,215, 10000,395),
             'linkedin company page business', true, true),
         svc('li_postlikes', 'linkedin', 'LinkedIn post likes', 'Post likes', 'likes',
             T(100,8, 250,18, 500,30, 1000,55, 2500,130, 5000,250),
@@ -236,7 +236,7 @@
 
         /* ----------------------------------------------------------- Spotify --- */
         svc('sp_followers', 'spotify', 'Spotify followers', 'Followers', 'followers',
-            T(500,15, 1000,25, 2500,50, 5000,70, 10000,100, 25000,250),
+            T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
             'spotify artist follow', true, true),
         svc('sp_plays', 'spotify', 'Spotify plays', 'Plays', 'plays',
             T(1000,5, 5000,15, 10000,25, 25000,50, 50000,85, 100000,150),
@@ -247,7 +247,7 @@
 
         /* --------------------------------------------------------- Audiomack --- */
         svc('am_followers', 'audiomack', 'Audiomack followers', 'Followers', 'followers',
-            T(500,15, 1000,25, 2500,50, 5000,70, 10000,100, 25000,250),
+            T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
             'audiomack artist follow', true, true),
         svc('am_plays', 'audiomack', 'Audiomack plays', 'Plays', 'plays',
             T(1000,5, 5000,15, 10000,25, 25000,50, 50000,90, 100000,160),
@@ -258,7 +258,7 @@
 
         /* -------------------------------------------------------- SoundCloud --- */
         svc('sc_followers', 'soundcloud', 'SoundCloud followers', 'Followers', 'followers',
-            T(100,25, 250,55, 500,100, 1000,180, 2500,420),
+            T(250,65, 500,120, 1000,215, 2500,505),
             'soundcloud artist follow', true, true),
         svc('sc_plays', 'soundcloud', 'SoundCloud plays', 'Plays', 'plays',
             T(1000,8, 5000,20, 10000,35, 25000,75, 50000,130, 100000,240),
@@ -584,16 +584,17 @@
 
     /* --------------------------------------------------------------- bundles ---
      * Two-platform combos across Instagram, TikTok and Facebook — the three
-     * platforms priced at parity ($100 each for 10,000 followers, straight
-     * from SERVICES above). Each combo is that $200 sum brought down to $150,
-     * a flat $50 saving that is arithmetically true (200 - 50 = 150) and
-     * shown as both the struck-out price and the derived percentage.
+     * platforms priced at parity ($120 each for 10,000 followers, straight
+     * from SERVICES above). Each combo is that $240 sum brought down by the
+     * same 25% every combo has always given, landing on $180 — arithmetically
+     * true (240 - 60 = 180) and shown as both the struck-out price and the
+     * derived percentage.
      * -------------------------------------------------------------------- */
 
     var bundlePlans = [
         {
             id: 'fb-ig', name: 'Facebook + Instagram', short: 'FB + IG',
-            usd: 150, wasUsd: 200, tag: 'Save $50', hero: true, label: 'Facebook + Instagram (10,000 followers on each)',
+            usd: 180, wasUsd: 240, tag: 'Save $60', hero: true, label: 'Facebook + Instagram (10,000 followers on each)',
             feats: [
                 { icon: 'fab fa-facebook-f', text: '10,000 Facebook followers', gold: true },
                 { icon: 'fab fa-instagram', text: '10,000 Instagram followers', gold: true }
@@ -601,7 +602,7 @@
         },
         {
             id: 'fb-tt', name: 'Facebook + TikTok', short: 'FB + TT',
-            usd: 150, wasUsd: 200, tag: 'Save $50', hero: true, label: 'Facebook + TikTok (10,000 followers on each)',
+            usd: 180, wasUsd: 240, tag: 'Save $60', hero: true, label: 'Facebook + TikTok (10,000 followers on each)',
             feats: [
                 { icon: 'fab fa-facebook-f', text: '10,000 Facebook followers', gold: true },
                 { icon: 'fab fa-tiktok', text: '10,000 TikTok followers', gold: true }
@@ -609,7 +610,7 @@
         },
         {
             id: 'ig-tt', name: 'Instagram + TikTok', short: 'IG + TT',
-            usd: 150, wasUsd: 200, tag: 'Save $50', hero: true, label: 'Instagram + TikTok (10,000 followers on each)',
+            usd: 180, wasUsd: 240, tag: 'Save $60', hero: true, label: 'Instagram + TikTok (10,000 followers on each)',
             feats: [
                 { icon: 'fab fa-instagram', text: '10,000 Instagram followers', gold: true },
                 { icon: 'fab fa-tiktok', text: '10,000 TikTok followers', gold: true }
@@ -990,7 +991,7 @@
         if (!service || !service.sizes) return [];
 
         return service.sizes.map(function (tier) {
-            var isAnchor = tier.qty === 10000 && tier.usd === 100;
+            var isAnchor = tier.qty === 10000;
             return {
                 id: String(tier.qty),
                 name: tier.qty.toLocaleString() + ' ' + service.unit,
