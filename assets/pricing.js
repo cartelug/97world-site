@@ -580,82 +580,36 @@
     ];
 
     /* --------------------------------------------------------------- bundles ---
-     * Curated compositions, priced against the sum of their real parts above.
-     * Creator Starter/Pro need a platform choice, so each is two self-
-     * contained cards (Instagram / TikTok) instead of a runtime picker —
-     * one fewer decision on the order page.
+     * Two-platform combos across Instagram, TikTok and Facebook — the three
+     * platforms priced at parity ($100 each for 10,000 followers, straight
+     * from SERVICES above). Each combo is that $200 sum brought down to $150,
+     * a flat $50 saving that is arithmetically true (200 - 50 = 150) and
+     * shown as both the struck-out price and the derived percentage.
      * -------------------------------------------------------------------- */
 
     var bundlePlans = [
         {
-            id: 'creator-starter-ig', name: 'Creator Starter — Instagram', short: 'Creator Starter (IG)',
-            usd: 100, wasUsd: 115, tag: 'Starter', label: 'Creator Starter — Instagram (5K followers + 50K views + 5K likes)',
+            id: 'fb-ig', name: 'Facebook + Instagram', short: 'FB + IG',
+            usd: 150, wasUsd: 200, tag: 'Save $50', hero: true, label: 'Facebook + Instagram (10,000 followers on each)',
             feats: [
-                { icon: 'fas fa-user-plus', text: '5,000 Instagram followers', gold: true },
-                { icon: 'fas fa-eye', text: '50,000 reel views' },
-                { icon: 'fas fa-heart', text: '5,000 likes' }
+                { icon: 'fab fa-facebook-f', text: '10,000 Facebook followers', gold: true },
+                { icon: 'fab fa-instagram', text: '10,000 Instagram followers', gold: true }
             ]
         },
         {
-            id: 'creator-starter-tt', name: 'Creator Starter — TikTok', short: 'Creator Starter (TT)',
-            usd: 100, wasUsd: 130, tag: 'Starter', label: 'Creator Starter — TikTok (5K followers + 50K views + 5K likes)',
+            id: 'fb-tt', name: 'Facebook + TikTok', short: 'FB + TT',
+            usd: 150, wasUsd: 200, tag: 'Save $50', hero: true, label: 'Facebook + TikTok (10,000 followers on each)',
             feats: [
-                { icon: 'fas fa-user-plus', text: '5,000 TikTok followers', gold: true },
-                { icon: 'fas fa-eye', text: '50,000 video views' },
-                { icon: 'fas fa-heart', text: '5,000 likes' }
+                { icon: 'fab fa-facebook-f', text: '10,000 Facebook followers', gold: true },
+                { icon: 'fab fa-tiktok', text: '10,000 TikTok followers', gold: true }
             ]
         },
         {
-            id: 'creator-pro-ig', name: 'Creator Pro — Instagram', short: 'Creator Pro (IG)',
-            usd: 175, tag: 'Popular', hero: true, label: 'Creator Pro — Instagram (10K followers + 100K views + 10K likes)',
+            id: 'ig-tt', name: 'Instagram + TikTok', short: 'IG + TT',
+            usd: 150, wasUsd: 200, tag: 'Save $50', hero: true, label: 'Instagram + TikTok (10,000 followers on each)',
             feats: [
-                { icon: 'fas fa-user-plus', text: '10,000 Instagram followers', gold: true },
-                { icon: 'fas fa-eye', text: '100,000 reel views' },
-                { icon: 'fas fa-heart', text: '10,000 likes' },
-                { icon: 'fas fa-layer-group', text: 'One order instead of three' }
-            ]
-        },
-        {
-            id: 'creator-pro-tt', name: 'Creator Pro — TikTok', short: 'Creator Pro (TT)',
-            usd: 175, wasUsd: 195, tag: 'Popular', hero: true, label: 'Creator Pro — TikTok (10K followers + 100K views + 10K likes)',
-            feats: [
-                { icon: 'fas fa-user-plus', text: '10,000 TikTok followers', gold: true },
-                { icon: 'fas fa-eye', text: '100,000 video views' },
-                { icon: 'fas fa-heart', text: '10,000 likes' }
-            ]
-        },
-        {
-            id: 'multi-platform', name: 'Multi-Platform Growth', short: 'Multi-Platform',
-            usd: 300, wasUsd: 305, tag: 'All 3', label: 'Multi-Platform Growth (5K followers + 50K views on Instagram, TikTok & Facebook)',
-            feats: [
-                { icon: 'fab fa-instagram', text: '5,000 followers + 50,000 views on Instagram', gold: true },
-                { icon: 'fab fa-tiktok', text: '5,000 followers + 50,000 views on TikTok' },
-                { icon: 'fab fa-facebook-f', text: '5,000 followers + 50,000 views on Facebook' }
-            ]
-        },
-        {
-            id: 'artist-launch', name: 'Artist Launch', short: 'Artist Launch',
-            usd: 200, wasUsd: 315, tag: 'Best value', hero: true, label: 'Artist Launch (Spotify + Audiomack plays & followers)',
-            feats: [
-                { icon: 'fab fa-spotify', text: '50,000 Spotify plays + 5,000 Spotify followers', gold: true },
-                { icon: 'fas fa-music', text: '50,000 Audiomack plays + 5,000 Audiomack followers' }
-            ]
-        },
-        {
-            id: 'youtube-growth', name: 'YouTube Growth', short: 'YouTube Growth',
-            usd: 300, wasUsd: 340, tag: 'Channel builder', label: 'YouTube Growth (2.5K subscribers + 50K views + 10K likes)',
-            feats: [
-                { icon: 'fas fa-user-plus', text: '2,500 subscribers', gold: true },
-                { icon: 'fas fa-eye', text: '50,000 views' },
-                { icon: 'fas fa-thumbs-up', text: '10,000 likes' }
-            ]
-        },
-        {
-            id: 'business-visibility', name: 'Business Visibility', short: 'Business Visibility',
-            usd: 250, wasUsd: 280, tag: 'For business pages', label: 'Business Visibility (5K LinkedIn followers + 50K premium website visits)',
-            feats: [
-                { icon: 'fab fa-linkedin', text: '5,000 LinkedIn profile followers', gold: true },
-                { icon: 'fas fa-globe', text: '50,000 premium-social website visits' }
+                { icon: 'fab fa-instagram', text: '10,000 Instagram followers', gold: true },
+                { icon: 'fab fa-tiktok', text: '10,000 TikTok followers', gold: true }
             ]
         }
     ];

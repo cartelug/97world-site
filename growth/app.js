@@ -646,14 +646,9 @@
      * own feats, so this is the one place that mapping lives.
      */
     var BUNDLE_PLATFORMS = {
-        'creator-starter-ig': ['instagram'],
-        'creator-starter-tt': ['tiktok'],
-        'creator-pro-ig': ['instagram'],
-        'creator-pro-tt': ['tiktok'],
-        'multi-platform': ['instagram', 'tiktok', 'facebook'],
-        'artist-launch': ['spotify', 'audiomack'],
-        'youtube-growth': ['youtube'],
-        'business-visibility': ['linkedin', 'webtraffic']
+        'fb-ig': ['facebook', 'instagram'],
+        'fb-tt': ['facebook', 'tiktok'],
+        'ig-tt': ['instagram', 'tiktok']
     };
 
     function renderCombos() {
@@ -705,7 +700,7 @@
             ? '<a href="/growth/bundle/" class="combo-more">' +
                 '<span class="combo-more-ic"><i class="fas fa-layer-group"></i></span>' +
                 '<span class="combo-more-copy">' +
-                    '<span class="combo-more-title">See all 8 bundles</span>' +
+                    '<span class="combo-more-title">See all ' + P.BUNDLES.length + ' bundles</span>' +
                     '<span class="combo-more-sub">' + remaining + ' more, across every platform</span>' +
                 '</span>' +
                 '<span class="combo-more-go">Browse <i class="fas fa-arrow-right"></i></span>' +

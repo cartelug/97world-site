@@ -266,7 +266,7 @@ const PAGES = [
         platformName: 'Bundles', logo: '/IMAGES/logo.png',
         title: 'Growth Bundles', service: 'Growth Bundle',
         headline: 'More reach, <em>one order</em>',
-        blurb: 'Eight real bundles across platforms — pick the one that fits.',
+        blurb: 'Three real bundles across Instagram, TikTok and Facebook — pick the one that fits.',
         targetLabel: 'Your @handle', targetPlaceholder: 'Your @handle',
         targetError: 'We need your handle to deliver to',
         targetHint: 'If your handle differs on any platform, tell us on WhatsApp.',
@@ -335,16 +335,14 @@ const PAGES = [
  * source of truth next to pricing.js and guarantee they drift.
  * -------------------------------------------------------------------------- */
 const BUNDLE_SELL = `        <header class="bs-hero">
-            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> 8 real bundles</span>
+            <span class="bs-badge r-up"><i class="fas fa-layer-group"></i> 3 real bundles</span>
             <h1 class="bs-title r-up">More reach.<br><em>One order.</em></h1>
-            <p class="bs-sub r-up">Eight curated compositions across Instagram, TikTok, Facebook, YouTube, Spotify, Audiomack and LinkedIn — each priced against buying the parts separately. Pick the one that matches what you're building, below.</p>
+            <p class="bs-sub r-up">Three combos across Instagram, TikTok and Facebook — each priced against buying the parts separately. Pick the one that matches what you're building, below.</p>
 
             <div class="bs-marks r-up" aria-hidden="true">
                 <img src="/IMAGES/instagram.png" alt="">
                 <img src="/IMAGES/tiktok.png" alt="">
                 <img src="/IMAGES/facebook.png" alt="">
-                <img src="/IMAGES/youtube.png" alt="">
-                <img src="/IMAGES/spotify.png" alt="">
             </div>
         </header>
 
