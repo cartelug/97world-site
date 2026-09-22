@@ -1,522 +1,300 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FBF8F4">
-<title>97 World Growth | 10,000 followers per platform</title>
-<meta name="description" content="Choose Instagram, TikTok or Facebook, see what each platform gets and what it costs in your currency, then send your order back to 97 World for confirmation. Nothing is charged on this page.">
-<link rel="canonical" href="https://the97.world/growth/">
-<link rel="icon" href="/IMAGES/logo.png" type="image/png">
-<meta property="og:title" content="97 World Growth">
-<meta property="og:description" content="10,000 followers per selected platform. Choose your platforms, review the evidence, and send your order back to the chat for confirmation.">
-<meta property="og:url" content="https://the97.world/growth/">
-<meta property="og:type" content="website">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F6F7F5">
 
-<link rel="preconnect" href="https://api.fontshare.com">
-<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,600,700&display=swap">
-<link rel="stylesheet" href="/assets/motion.css">
-<link rel="stylesheet" href="/growth/offer.css?v=20260919-close10">
+    <title>New Order | 97 Growth</title>
+    <meta name="description" content="Followers, likes, views and plays across Instagram, TikTok, YouTube, Facebook, X, Telegram, Spotify and more. Pick a service, see the exact charge, order in under a minute.">
+
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+
+    <link rel="preconnect" href="https://api.fontshare.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="/assets/growth.css?v=20260909-qc1">
 </head>
+<body class="growth">
 
-<body class="gx">
-<a class="gx-skip" href="#main">Skip to content</a>
-
-<!-- ================================================== BRAND MARKS ===
-     Defined once, referenced with <use>. Recognizable marks, always paired
-     with the platform's name in text — never a logo standing in for a label.
--->
-<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  <defs>
-    <symbol id="mk-instagram" viewBox="0 0 48 48">
-      <linearGradient id="igg" x1="7" y1="41" x2="41" y2="7" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#FDBB5B"/><stop offset=".25" stop-color="#F8842E"/>
-        <stop offset=".5" stop-color="#E8425F"/><stop offset=".75" stop-color="#C32EA3"/>
-        <stop offset="1" stop-color="#7D34C0"/>
-      </linearGradient>
-      <rect x="4" y="4" width="40" height="40" rx="12" fill="url(#igg)"/>
-      <rect x="12.5" y="12.5" width="23" height="23" rx="7.5" fill="none" stroke="#fff" stroke-width="3"/>
-      <circle cx="24" cy="24" r="5.6" fill="none" stroke="#fff" stroke-width="3"/>
-      <circle cx="33.4" cy="14.6" r="2.1" fill="#fff"/>
-    </symbol>
-    <symbol id="mk-tiktok" viewBox="0 0 48 48">
-      <rect x="4" y="4" width="40" height="40" rx="12" fill="#111014"/>
-      <path d="M27.4 11.5h4.2c.3 2.9 2.4 5.2 5.3 5.6v4.2a10 10 0 0 1-5.3-1.8v8.8a8.6 8.6 0 1 1-8.6-8.6c.4 0 .8 0 1.2.1v4.3a4.4 4.4 0 1 0 3.2 4.2V11.5Z" fill="#25F4EE" transform="translate(-1.6 -.8)"/>
-      <path d="M27.4 11.5h4.2c.3 2.9 2.4 5.2 5.3 5.6v4.2a10 10 0 0 1-5.3-1.8v8.8a8.6 8.6 0 1 1-8.6-8.6c.4 0 .8 0 1.2.1v4.3a4.4 4.4 0 1 0 3.2 4.2V11.5Z" fill="#FE2C55" transform="translate(1.4 .8)"/>
-      <path d="M27.4 11.5h4.2c.3 2.9 2.4 5.2 5.3 5.6v4.2a10 10 0 0 1-5.3-1.8v8.8a8.6 8.6 0 1 1-8.6-8.6c.4 0 .8 0 1.2.1v4.3a4.4 4.4 0 1 0 3.2 4.2V11.5Z" fill="#fff"/>
-    </symbol>
-    <symbol id="mk-facebook" viewBox="0 0 48 48">
-      <rect x="4" y="4" width="40" height="40" rx="12" fill="#0866FF"/>
-      <path d="M31 30.2l.9-5.9h-5.6v-3.8c0-1.6.8-3.2 3.3-3.2h2.6v-5s-2.4-.4-4.6-.4c-4.7 0-7.8 2.9-7.8 8v4.4h-5.2v5.9h5.2V44a20 20 0 0 0 6.5 0V30.2H31Z" fill="#fff"/>
-    </symbol>
-    <symbol id="mk-check" viewBox="0 0 16 16"><path d="M3.4 8.4 6.5 11.5 12.6 4.9"/></symbol>
-  </defs>
-</svg>
-
-<!-- ======================================================= HEADER === -->
-<header class="gx-head" data-motion-header>
-  <div class="gx-shell gx-head-in">
-    <a class="gx-brand" href="/">
-      <img src="/IMAGES/logo.png" alt="" width="26" height="26">
-      <b class="gx-brand-word">97<span> World</span></b>
-      <span class="gx-sr">97 World home</span>
-    </a>
-    <button type="button" class="gx-country m-press" id="countryBtn" data-state="unset"
-            aria-haspopup="dialog">
-      <span class="gx-flag" aria-hidden="true"></span>
-      <span class="gx-country-txt">Choose your country</span>
-      <u>Change</u>
-    </button>
-  </div>
+<!-- ==================================================== HEADER === -->
+<header class="g-header" id="gHeader">
+    <div class="g-wrap g-header-in">
+        <a href="/" class="g-brand">
+            <img src="/IMAGES/logo.png" alt="">
+            <span>97 Growth</span>
+        </a>
+        <div class="g-head-right">
+            <a href="/track/" class="g-track-btn">Orders</a>
+            <button type="button" class="g-menu-btn" id="menuBtn" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
 </header>
 
-<main id="main">
+<main>
 
-  <!-- ==================================================== INTRO === -->
-  <div class="gx-shell gx-campaign-shell">
-    <section class="gx-intro gx-hero" aria-labelledby="introH">
-      <div class="gx-campaign" id="campaignHero" data-visual="creators" data-platform-pair="none">
-        <img class="gx-campaign-img is-active" id="campaignImageA" src="/IMAGES/growth-campaign/creators-v1.webp" width="1536" height="1024" alt="AI-generated campaign artwork of three fictional creators collaborating around a phone." fetchpriority="high" decoding="async">
-        <img class="gx-campaign-img" id="campaignImageB" width="1536" height="1024" alt="" aria-hidden="true" decoding="async">
-        <span class="gx-campaign-tint" aria-hidden="true"></span>
-        <img class="gx-campaign-logo" src="/IMAGES/logo.png" width="64" height="64" alt="97 World">
-        <div class="gx-hero-copy">
-      <p class="gx-eyebrow m-fade" id="heroEyebrow">97 World Growth</p>
-      <h1 id="introH" class="m-up">Your world.<br><span>Ready to grow.</span></h1>
-      <p class="gx-lead m-up">10,000 followers per platform. Choose your growth, see client progress, and confirm with us in chat.</p>
-      <ul class="gx-assurance" aria-label="How we work">
-        <li><span aria-hidden="true">✓</span> No password needed</li>
-        <li><span aria-hidden="true">✓</span> Half after completion</li>
-        <li><span aria-hidden="true">✓</span> Confirm in chat</li>
-      </ul>
-      <ol class="gx-steps m-fade" id="stepTrack" aria-label="How this page works">
-        <li data-step="choose" aria-current="step"><b>1</b>Choose</li>
-        <li data-step="results"><b>2</b>See results</li>
-        <li data-step="send"><b>3</b>Send order</li>
-      </ol>
-      <a href="#choose" class="gx-btn gx-btn--primary gx-hero-cta m-press">Build my package <span aria-hidden="true">↗</span></a>
-      </div>
-        <p class="gx-art-caption">Campaign artwork · AI-generated</p>
-      </div>
-      <div class="gx-console m-scale" aria-labelledby="consoleH">
-        <div class="gx-console-head"><span id="consoleH">YOUR GROWTH PACKAGE</span><span class="gx-console-tag">10K per platform</span></div>
-        <div class="gx-network" aria-hidden="true">
-          <svg class="gx-network-lines" viewBox="0 0 420 210" preserveAspectRatio="xMidYMid meet"><path data-wire="instagram" d="M210 75 C160 75 85 100 70 190"/><path data-wire="tiktok" d="M210 75 L210 190"/><path data-wire="facebook" d="M210 75 C260 75 335 100 350 190"/></svg>
-          <div class="gx-core"><span class="gx-core-number">10<span>K</span></span><span>FOLLOWERS EACH</span></div>
-        </div>
-        <div class="gx-console-platforms" role="group" aria-label="Choose platforms for your growth package">
-          <button type="button" data-hero-platform="instagram" aria-pressed="false"><svg aria-hidden="true"><use href="#mk-instagram"/></svg><span>Instagram</span><span class="gx-mini-check" aria-hidden="true">+</span></button>
-          <button type="button" data-hero-platform="tiktok" aria-pressed="false"><svg aria-hidden="true"><use href="#mk-tiktok"/></svg><span>TikTok</span><span class="gx-mini-check" aria-hidden="true">+</span></button>
-          <button type="button" data-hero-platform="facebook" aria-pressed="false"><svg aria-hidden="true"><use href="#mk-facebook"/></svg><span>Facebook</span><span class="gx-mini-check" aria-hidden="true">+</span></button>
-        </div>
-        <div class="gx-console-total"><span id="heroSelection">Choose your platforms above</span><b id="heroTotal">—</b></div>
-        <p class="gx-console-foot">50% after confirmation · 50% after completion.</p>
-        <button id="heroContinue" type="button" class="gx-btn gx-console-continue" data-action="continue" disabled>Choose a platform above</button>
-      </div>
+    <!-- ================================================ NEW ORDER === -->
+    <section class="g-wrap g-open">
+        <h1>New order</h1>
+        <p>Pick a service, see the exact charge, and confirm on WhatsApp.</p>
     </section>
-  </div>
 
-  <nav class="gx-chapters" id="chapterNav" aria-label="Growth page chapters">
-    <div class="gx-shell">
-      <a href="#choose" data-chapter="choose" aria-current="step"><span>01</span> Your package</a>
-      <a href="#results" data-chapter="results"><span>02</span> Client stories</a>
-      <a href="#send" data-chapter="send"><span>03</span> Your order</a>
-    </div>
-  </nav>
+    <section class="g-wrap g-sec" id="orderSec">
+        <div class="fw-card">
 
-  <!-- ================================================ STEP 1 === -->
-  <div class="gx-shell">
-    <section class="gx-sec gx-config" id="choose" aria-labelledby="chooseH">
+            <!-- platform tiles: "All" plus the platforms we actually sell.
+                 The + reveals the rest rather than listing anything we don't. -->
+            <div class="fw-plats" id="fwPlats" role="group" aria-label="Filter by platform"></div>
 
-      <div class="gx-config-main">
-        <p class="gx-eyebrow gx-section-label">01 / Build your package</p>
-        <header>
-          <h2 id="chooseH" tabindex="-1">Where would you like to grow?</h2>
-          <p>
-            Choose one, two, or all three platforms. Each selected platform
-            includes 10,000 followers.
-          </p>
-        </header>
+            <div class="fw-search">
+                <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" id="fwSearch" placeholder="Search" autocomplete="off"
+                       spellcheck="false" aria-label="Search services">
+            </div>
+            <div class="fw-results" id="fwResults" role="region" aria-live="polite" hidden></div>
 
-        <fieldset class="gx-plats" id="plats">
-          <legend class="gx-sr">Platforms to grow</legend>
+            <div class="fw-field">
+                <label id="fwCatLabel">Platform</label>
+                <div class="fw-combo" id="fwCat"></div>
+            </div>
 
-          <label class="gx-plat m-up" data-plat="instagram">
-            <input type="checkbox" name="platform" value="instagram">
-            <span class="gx-plat-mark"><svg><use href="#mk-instagram"/></svg></span>
-            <span class="gx-plat-txt">
-              <span class="gx-plat-name">Instagram</span>
-              <span class="gx-plat-qty">10,000 followers</span><span class="gx-unit-price" data-unit-price></span>
-            </span>
-            <span class="gx-plat-check" aria-hidden="true"><svg><use href="#mk-check"/></svg></span>
-          </label>
+            <div class="fw-field">
+                <label id="fwSvcLabel">What do you want?</label>
+                <div class="fw-combo" id="fwSvc"></div>
+                <p class="fw-desc g-roll" id="fwSvcDesc"></p>
+            </div>
 
-          <label class="gx-plat m-up" data-plat="tiktok">
-            <input type="checkbox" name="platform" value="tiktok">
-            <span class="gx-plat-mark"><svg><use href="#mk-tiktok"/></svg></span>
-            <span class="gx-plat-txt">
-              <span class="gx-plat-name">TikTok</span>
-              <span class="gx-plat-qty">10,000 followers</span><span class="gx-unit-price" data-unit-price></span>
-            </span>
-            <span class="gx-plat-check" aria-hidden="true"><svg><use href="#mk-check"/></svg></span>
-          </label>
+            <div class="fw-field" id="fwQtyField">
+                <label for="fwQty">How many do you want?</label>
+                <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off">
+                <p class="fw-minmax" id="fwMinMax"></p>
+                <p class="fw-snap" id="fwSnap" hidden></p>
+            </div>
 
-          <label class="gx-plat m-up" data-plat="facebook">
-            <input type="checkbox" name="platform" value="facebook">
-            <span class="gx-plat-mark"><svg><use href="#mk-facebook"/></svg></span>
-            <span class="gx-plat-txt">
-              <span class="gx-plat-name">Facebook</span>
-              <span class="gx-plat-qty">10,000 followers</span><span class="gx-unit-price" data-unit-price></span>
-            </span>
-            <span class="gx-plat-check" aria-hidden="true"><svg><use href="#mk-check"/></svg></span>
-          </label>
-        </fieldset>
-        <button class="gx-bundle m-press" type="button" id="bundleBtn" aria-pressed="false">
-          <span class="gx-bundle-copy"><span class="gx-bundle-badge">Best value per platform</span><strong>Make it all three.</strong><span>Instagram + TikTok + Facebook · 10K each</span></span>
-          <span class="gx-bundle-cost"><b id="bundlePrice">Choose country</b><span id="bundleSaving"></span><span class="gx-bundle-action" id="bundleAction">Select all three ↗</span></span>
-        </button>
+            <div class="fw-field" id="fwLinkField">
+                <label for="fwLink">Your link</label>
+                <input type="text" class="fw-input" id="fwLink" autocomplete="off"
+                       spellcheck="false" autocapitalize="none">
+                <p class="fw-err" id="fwLinkErr" hidden></p>
+            </div>
 
-        <!-- reassurance placed against the decision it belongs to -->
-        <p class="gx-included m-fade">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-            <circle cx="10" cy="10" r="7.5"/><path d="M10 9.2v4.4M10 6.6v.9" stroke-linecap="round"/>
-          </svg>
-          <span>
-            <b>10,000 followers per platform.</b> Likes and views are separate services.
-          </span>
-        </p>
-      </div>
+            <div class="fw-field">
+                <label for="fwTime">How long does it take?
+                    <i class="fas fa-circle-exclamation"
+                       title="We start most orders within this window, then deliver gradually rather than all at once."></i>
+                </label>
+                <div class="fw-readonly" id="fwTime">1–6 hours</div>
+            </div>
 
-      <!-- live order summary -->
-      <aside class="gx-config-aside" aria-labelledby="sumH">
-        <div class="gx-sum">
-          <div class="gx-sum-head">
-            <h2 id="sumH">Your selection</h2>
-            <span class="gx-sum-count" id="sumCount"></span>
-          </div>
-          <div class="gx-sum-body" id="sumBody"><!-- rendered --></div>
+            <div class="fw-field">
+                <label for="fwCharge">Total price</label>
+                <div class="fw-readonly is-charge" id="fwCharge"><span class="g-roll" id="fwChargeVal">—</span></div>
+            </div>
+
+            <button type="button" class="fw-submit" id="fwSubmit">Continue</button>
         </div>
-      </aside>
-
+        <p class="qo-note" style="margin-top:12px"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
     </section>
-  </div>
 
-  <div class="gx-shell gx-scene-wrap">
-    <section class="gx-brand-scene" aria-labelledby="brandSceneH">
-      <img src="/IMAGES/growth-campaign/brandscape-v1.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-      <div class="gx-brand-scene-copy m-up">
-        <img src="/IMAGES/logo.png" alt="97 World" width="42" height="42">
-        <p class="gx-eyebrow">The 97 way</p>
-        <h2 id="brandSceneH">Your account.<br>Always yours.</h2>
-        <p>No passwords. A clear agreement.<br>Half after the work is finished.</p>
-      </div>
+    <!-- =================================================== COMBOS === -->
+    <section class="g-wrap g-sec" id="combosSec">
+        <div class="g-sec-head">
+            <span class="combo-kicker"><i class="fas fa-layer-group"></i> 8 real bundles</span>
+            <h2>Combos</h2>
+            <p>Set packages across platforms, priced against buying the parts separately — never a made-up discount.</p>
+        </div>
+        <div class="combo-grid" id="comboGrid" data-stagger></div>
     </section>
-  </div>
 
-  <!-- ================================================ STEP 2 === -->
-  <div class="gx-shell">
-    <section class="gx-sec" id="results" aria-labelledby="resultsH">
-      <header class="gx-proof-intro">
-        <div>
-          <p class="gx-eyebrow gx-section-label">02 / Client stories</p>
-          <h2 id="resultsH" tabindex="-1">See the story.<br>Then decide.</h2>
-          <p id="proofIntro">Real screenshots, in order. Tap any image for a closer look.</p>
+    <!-- ==================================================== TRUST === -->
+    <section class="g-wrap g-sec">
+        <div class="trust-row r-up">
+            <div class="trust-item"><i class="fas fa-lock"></i> No password</div>
+            <div class="trust-item"><i class="fas fa-list-check"></i> Order tracking</div>
+            <div class="trust-item"><i class="fas fa-location-dot"></i> Local support</div>
+            <div class="trust-item"><i class="fas fa-rotate-left"></i> Refill options</div>
         </div>
-        <aside class="gx-proof-spotlight m-up" aria-label="Recorded Facebook client progress">
-          <span>From one supplied client record</span>
-          <strong>9.8K <i aria-hidden="true">→</i> 13K</strong>
-          <p>Follower counts shown across the captures. Delivery was still in progress.</p>
-        </aside>
-      </header>
-
-      <div id="proofFilters" hidden>
-        <h3 class="gx-sr" id="filtersH">Filter the evidence</h3>
-        <div class="gx-filters" role="group" aria-labelledby="filtersH" id="filterRow"></div>
-      </div>
-
-      <div id="proofStory" hidden></div>
-      <div class="gx-gallery" id="proofGrid" data-stagger hidden></div>
-      <div id="proofMoreWrap" hidden style="margin-block-start:22px">
-        <button type="button" class="gx-btn gx-btn--quiet" id="proofMore">Show more results</button>
-      </div>
-      <div id="proofEmpty"><!-- rendered --></div>
-      <div class="gx-proof-next m-up" id="proofNext" hidden>
-        <div>
-          <span>Next step</span>
-          <strong id="proofNextTitle">Ready to build your package?</strong>
-          <p id="proofNextCopy">Choose your platforms, then review the order with us in chat.</p>
-        </div>
-        <a class="gx-btn gx-btn--primary m-press" id="proofNextLink" href="#choose"><span class="gx-btn-label">Choose my platforms</span><span aria-hidden="true">↗</span></a>
-      </div>
     </section>
-  </div>
 
-  <!-- ========================================= BEFORE YOU SEND === -->
-  <div class="gx-shell">
-    <section class="gx-sec" id="before-you-send" aria-labelledby="beforeH">
-      <header>
-        <h2 id="beforeH">A few quick answers.</h2>
-        <p>A few things to know before we start.</p>
-      </header>
-
-      <div class="gx-faq">
-        <details open><summary>When do I pay?</summary><p>We check your accounts and confirm your order in chat. Pay 50% to begin and the remaining 50% after the agreed delivery is finished.</p></details>
-        <details><summary>Do you need my password?</summary><p>No. We only need your public profile links. Keep your accounts public while we deliver.</p></details>
-        <details><summary>How long does it take?</summary><p>We confirm your delivery schedule in chat before you pay. Followers arrive gradually.</p></details>
-        <details><summary>What if followers drop or I need to cancel?</summary><p>Contact us about the 30-day refill if delivered followers drop. Ask about cancellation before delivery starts. See our <a href="/terms-of-service/">terms</a> for coverage and exclusions.</p></details>
-        <details><summary>What does this package include?</summary><p>10,000 followers per selected platform. Likes and views are separate. This is paid promotional growth; engagement, sales, audience location, and monetisation are not guaranteed.</p></details>
-      </div>
-
-      <p class="gx-smallprint">
-        Instagram, TikTok and Facebook are independent companies; 97 World is not
-        affiliated with, endorsed by, or acting on behalf of any of them. Full
-        wording lives in the <a href="/terms-of-service/">terms of service</a>.
-      </p>
+    <!-- ==================================================== PROOF === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head">
+            <span class="combo-kicker"><i class="fas fa-camera-retro"></i> Real orders only</span>
+            <h2>Recent customer results</h2>
+            <p>We only ever post screenshots from real 97 World orders — never a stock testimonial.</p>
+        </div>
+        <div class="proof-empty r-up">
+            <div class="proof-empty-ic"><i class="fas fa-images"></i></div>
+            <p>We're between batches of screenshots right now. Want to see a recent delivery before you order?</p>
+            <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20can%20I%20see%20a%20screenshot%20from%20a%20recent%20order%3F"
+               target="_blank" rel="noopener" class="g-btn g-btn--ghost">
+                <i class="fab fa-whatsapp"></i> Ask us on WhatsApp
+            </a>
+        </div>
     </section>
-  </div>
 
-  <!-- ================================================ STEP 3 === -->
-  <div class="gx-shell">
-    <section class="gx-sec gx-send" id="send" aria-labelledby="sendH">
-      <div>
-        <header>
-          <p class="gx-eyebrow gx-section-label">03 / Send your order</p>
-          <h2 id="sendH" tabindex="-1">Your order is ready.</h2>
-          <p>Open WhatsApp with your package already written. Review it, send it, then share your public account links.</p>
-        </header>
-
-        <ol class="gx-next">
-          <li><b>1</b><span>WhatsApp opens with your package and exact price.</span></li>
-          <li><b>2</b><span>Send it, then share your public account links.</span></li>
-          <li><b>3</b><span>We confirm availability, timing and payment instructions.</span></li>
-        </ol>
-
-        <ul class="gx-send-promises" aria-label="Order safeguards">
-          <li><span aria-hidden="true">✓</span>No password</li>
-          <li><span aria-hidden="true">✓</span>Account check first</li>
-          <li><span aria-hidden="true">✓</span>Pay after confirmation</li>
-        </ul>
-
-        <div class="gx-send-actions">
-          <button type="button" class="gx-btn gx-btn--primary" id="sendBtn" disabled>
-            <span class="gx-btn-label">Order on WhatsApp</span>
-            <span class="gx-btn-amount" id="sendBtnTotal" hidden></span>
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 10h11M10.5 5.5 15.5 10l-5 4.5"/>
-            </svg>
-          </button>
-          <button type="button" class="gx-btn gx-btn--text" id="copyBtn" hidden>Copy order message</button>
-          <p class="gx-status" id="sendStatus" role="status">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
-              <circle cx="10" cy="10" r="7.5"/><path d="M10 9.2v4.4M10 6.6v.9"/>
-            </svg>
-            <span id="sendStatusTxt">Choose at least one platform above to build your order.</span>
-          </p>
+    <!-- =========================================== HOW IT WORKS === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head"><h2>How it works</h2></div>
+        <div class="steps r-up">
+            <div class="step">
+                <div class="step-n">Step 1</div>
+                <b>Order</b>
+                <p>Pick the service and amount. The exact charge is on screen before anything else happens.</p>
+            </div>
+            <div class="step">
+                <div class="step-n">Step 2</div>
+                <b>Pay 50%</b>
+                <p>Confirm on WhatsApp and pay half by MTN or Airtel Money, or cash at our Kampala office. The other 50% is only due once delivery is visibly running.</p>
+            </div>
+            <div class="step">
+                <div class="step-n">Step 3</div>
+                <b>Track</b>
+                <p>Delivery starts within 1–6 hours and arrives gradually. Check progress any time.</p>
+            </div>
         </div>
-
-        <div class="gx-fallback" id="fallback" hidden>
-          <h3 id="fallbackH">Your ready-to-send order</h3>
-          <textarea id="fallbackTxt" readonly aria-labelledby="fallbackH"></textarea>
-          <div>
-            <button type="button" class="gx-btn gx-btn--quiet" id="fallbackCopy">Copy message</button>
-          </div>
-        </div>
-      </div>
-
-      <aside aria-labelledby="sum2H">
-        <div class="gx-sum">
-          <div class="gx-sum-head">
-            <h2 id="sum2H">Order summary</h2>
-            <span class="gx-sum-count" id="sum2Count"></span>
-          </div>
-          <div class="gx-sum-body" id="sum2Body"><!-- rendered --></div>
-        </div>
-      </aside>
     </section>
-  </div>
 
-  <footer class="gx-shell gx-foot">
-    <nav class="gx-foot-links" aria-label="97 World">
-      <a href="/">97 World</a>
-      <a href="/growth/instagram/">Full growth catalogue</a>
-      <a href="/subs/">Subscriptions</a>
-      <a href="/business/">Business &amp; websites</a>
-      <a href="/trust/">Trust centre</a>
-      <a href="/track/">Track an order</a>
-      <a href="/terms-of-service/">Terms</a>
-      <a href="/privacy-policy/">Privacy</a>
-    </nav>
-    <p>
-      97 World · Kampala, Uganda. Paid promotional growth services. Individual
-      results vary and depend on the platform. Nothing is charged on this page.
-    </p>
-  </footer>
+    <!-- ====================================================== FAQ === -->
+    <section class="g-wrap g-sec">
+        <div class="g-sec-head"><h2>Questions</h2></div>
+        <div class="g-faq r-up">
+            <details>
+                <summary>Do you need my password?</summary>
+                <div class="faq-a">No. Everything is delivered to a public username or link. We will never ask for your login.</div>
+            </details>
+            <details>
+                <summary>Why are quantities fixed amounts?</summary>
+                <div class="faq-a">Our price list is set in tiers — 500, 1,000, 2,500 and so on — and each tier has its own agreed price. We list the amounts we actually sell rather than guessing a rate for numbers in between. Need something outside the list? Message us and we'll quote it.</div>
+            </details>
+            <details>
+                <summary>When does delivery start?</summary>
+                <div class="faq-a">Most orders begin moving within 1 to 6 hours of being confirmed, then continue gradually rather than landing all at once.</div>
+            </details>
+            <details>
+                <summary>What does refill cover?</summary>
+                <div class="faq-a">Where a service includes refill, anything that drops within 30 days is topped back up free. It applies to followers, subscribers and members — things that can actually drop. One-off metrics like views and plays cannot drop, so they are not covered. The form tells you which applies before you order.</div>
+            </details>
+            <details>
+                <summary>How do I pay?</summary>
+                <div class="faq-a">MTN Mobile Money, Airtel Money, or cash at our office in Kampala. You confirm the order on WhatsApp first and we take payment there — nothing is charged on this page.</div>
+            </details>
+            <details>
+                <summary>Can I order from outside Uganda?</summary>
+                <div class="faq-a">Yes — we also serve South Sudan and DR Congo, priced in USD. Switch currency from the menu.</div>
+            </details>
+        </div>
+    </section>
+
+    <!-- =================================================== FOOTER === -->
+    <footer class="g-wrap g-footer">
+        <div class="g-foot-links">
+            <a href="/">97 World</a>
+            <a href="/business/">Business &amp; websites</a>
+            <a href="/subs/">Tools</a>
+            <a href="/trust/">Trust centre</a>
+            <a href="/track/">Track order</a>
+            <a href="/terms-of-service/">Terms</a>
+            <a href="/privacy-policy/">Privacy</a>
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+        <p class="g-foot-note">97 World · Kampala, Uganda. Promotional engagement services — not a guarantee of organic customers, sales or platform ranking.</p>
+    </footer>
+
 </main>
 
-<!-- ================================================ BOTTOM BAR === -->
-<div class="gx-bar" id="bar" hidden>
-  <div class="gx-bar-in">
-    <p class="gx-bar-price">
-      <span id="barLabel">Total</span>
-      <b id="barTotal">—</b>
-    </p>
-    <button type="button" class="gx-btn gx-btn--primary" id="barBtn">
-      <span class="gx-btn-label">Continue</span>
-    </button>
-  </div>
+<!-- ================================================ SHEETS === -->
+
+<div class="sheet" id="regionSheet" role="dialog" aria-modal="true" aria-label="Currency">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>Where are you ordering from?</h2>
+            <button type="button" class="sheet-close" data-close="regionSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="goal-cards" id="regionGrid"></div>
+    </div>
 </div>
 
-<!-- ============================================ WELCOME DIALOG === -->
-<dialog class="gx-dlg" id="welcomeDlg" aria-labelledby="welcomeH" aria-describedby="welcomeP">
-  <div class="gx-dlg-card gx-dlg-split" id="welcomeForm" tabindex="-1">
-    <button type="button" class="gx-dlg-close" id="welcomeClose" hidden aria-label="Keep my current country">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
-        <path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/>
-      </svg>
-    </button>
-
-    <div class="gx-dlg-scroll">
-    <img class="gx-welcome-mark" src="/IMAGES/logo.png" width="40" height="40" alt="97 World">
-    <p class="gx-eyebrow">Your growth starts here</p>
-    <h2 id="welcomeH">Welcome to 97 World Growth.</h2>
-    <p id="welcomeP">Choose your country to see prices in your currency.</p>
-
-    <fieldset class="gx-countries" id="countryList">
-      <legend class="gx-sr">Your country</legend>
-
-      <label class="gx-ctry" data-country="UG">
-        <input type="radio" name="country" value="UG">
-        <span class="gx-ctry-flag" aria-hidden="true">🇺🇬</span>
-        <span class="gx-ctry-txt"><b>Uganda</b><span>Prices in Ugandan Shillings (UGX)</span></span>
-        <span class="gx-plat-check" aria-hidden="true"><svg><use href="#mk-check"/></svg></span>
-      </label>
-
-      <label class="gx-ctry" data-country="SS">
-        <input type="radio" name="country" value="SS">
-        <span class="gx-ctry-flag" aria-hidden="true">🇸🇸</span>
-        <span class="gx-ctry-txt"><b>South Sudan</b><span>Prices in US Dollars (USD)</span></span>
-        <span class="gx-plat-check" aria-hidden="true"><svg><use href="#mk-check"/></svg></span>
-      </label>
-
-      <label class="gx-ctry" data-country="CD">
-        <input type="radio" name="country" value="CD">
-        <span class="gx-ctry-flag" aria-hidden="true">🇨🇩</span>
-        <span class="gx-ctry-txt"><b>DR Congo</b><span>Prices in US Dollars (USD)</span></span>
-        <span class="gx-plat-check" aria-hidden="true"><svg><use href="#mk-check"/></svg></span>
-      </label>
-    </fieldset>
+<div class="sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>97 World</h2>
+            <button type="button" class="sheet-close" data-close="menuSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="goal-cards">
+            <button type="button" class="goal-card" id="regionBtn">
+                <span class="goal-card-copy"><b>Currency &amp; region</b><small>Currently <span id="regionLabel">UGX</span> — tap to change</small></span>
+            </button>
+            <a href="/track/" class="goal-card"><span class="goal-card-copy"><b>Track an order</b><small>Check where your delivery has reached</small></span></a>
+            <a href="/growth/bundle/" class="goal-card"><span class="goal-card-copy"><b>Combos</b><small>Set packages across platforms</small></span></a>
+            <a href="/business/" class="goal-card"><span class="goal-card-copy"><b>Business &amp; websites</b><small>Websites, business email and design</small></span></a>
+            <a href="/trust/" class="goal-card"><span class="goal-card-copy"><b>Trust centre</b><small>Who we are and how we work</small></span></a>
+            <a href="/" class="goal-card"><span class="goal-card-copy"><b>Home</b><small>Everything 97 World does</small></span></a>
+            <a href="https://wa.me/256762193386" target="_blank" rel="noopener" class="goal-card"><span class="goal-card-copy"><b>WhatsApp us</b><small>Questions before you order</small></span></a>
+        </div>
     </div>
-    <div class="gx-dlg-foot">
-    <button type="button" class="gx-btn gx-btn--primary gx-btn--block" id="welcomeGo" disabled>
-      <span class="gx-btn-label">Continue</span>
-    </button>
+</div>
+
+<div class="sheet" id="revSheet" role="dialog" aria-modal="true" aria-label="Review your order">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2>Your order</h2>
+            <button type="button" class="sheet-close" data-close="revSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+
+        <div class="rev-list" id="revList"></div>
+
+        <div class="price-card" style="margin-top:14px">
+            <div class="price-total"><span>Total</span><b id="revTotal">—</b></div>
+            <div class="price-sep"></div>
+            <div class="price-split">
+                <div class="price-split-row is-now">
+                    <span><i class="fas fa-hand-holding-dollar"></i> Pay now (50%)</span>
+                    <b id="revDeposit">—</b>
+                </div>
+                <div class="price-split-row">
+                    <span><i class="fas fa-clock"></i> Balance on delivery</span>
+                    <b id="revBalance">—</b>
+                </div>
+            </div>
+        </div>
+
+        <div class="acct-list" style="margin-top:16px">
+            <div class="acct-field">
+                <label for="revName">Your name</label>
+                <div class="acct-box"><i class="fas fa-user"></i>
+                    <input type="text" id="revName" placeholder="Full name" autocomplete="name">
+                </div>
+            </div>
+            <div class="acct-field">
+                <label for="revPhone">WhatsApp number</label>
+                <div class="acct-box"><i class="fab fa-whatsapp"></i>
+                    <input type="tel" id="revPhone" placeholder="+256 700 000 000" autocomplete="tel" inputmode="tel">
+                </div>
+            </div>
+        </div>
+        <p class="acct-err" id="revErr" hidden></p>
+
+        <p class="acct-note"><i class="fas fa-shield-halved"></i> Nothing is charged here. You confirm on WhatsApp and pay by MTN, Airtel Money or cash.</p>
+
+        <button type="button" class="g-btn g-btn--wide" id="revSend" style="margin-top:14px">
+            <i class="fab fa-whatsapp"></i> Confirm on WhatsApp
+        </button>
+        <button type="button" class="g-btn g-btn--ghost g-btn--wide" style="margin-top:8px" data-close="revSheet">Go back and edit</button>
     </div>
-  </div>
-</dialog>
+</div>
 
-<!-- ============================================== TRUST DIALOG === -->
-<dialog class="gx-dlg" id="trustDlg" aria-labelledby="trustH" aria-describedby="trustP">
-  <div class="gx-dlg-card gx-dlg-split">
-   <div class="gx-dlg-scroll">
-    <div class="gx-trust-seal" aria-hidden="true">97<span>WORLD</span></div>
-    <h2 id="trustH">At 97 World, trust comes first.</h2>
-    <p id="trustP">
-      Your account. Your login. Your decision.
-    </p>
-
-    <div class="gx-commits">
-      <div class="gx-commit">
-        <span class="gx-commit-ic" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="8.6" width="12" height="8" rx="2"/><path d="M7 8.6V6.4a3 3 0 0 1 6 0v2.2"/>
-          </svg>
-        </span>
-        <span class="gx-commit-txt">
-          <b>Your login stays yours</b>
-          <p>We never ask for your password, login codes, or access to your account.</p>
-        </span>
-      </div>
-
-      <div class="gx-commit">
-        <span class="gx-commit-ic" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="9" r="5.4"/><path d="M13 13l4 4"/>
-          </svg>
-        </span>
-        <span class="gx-commit-txt">
-          <b>Your order is checked first</b>
-          <p>We review your public account links and confirm the agreed service with you in chat.</p>
-        </span>
-      </div>
-
-      <div class="gx-commit">
-        <span class="gx-commit-ic" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2.8" y="5.4" width="14.4" height="9.2" rx="2"/><path d="M2.8 8.6h14.4"/>
-          </svg>
-        </span>
-        <span class="gx-commit-txt">
-          <b>Payment happens in two stages</b>
-          <p>Pay 50% after confirmation to begin, and the remaining 50% after the agreed delivery is finished.</p>
-        </span>
-      </div>
-
-      <div class="gx-commit">
-        <span class="gx-commit-ic" aria-hidden="true">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3.4" width="14" height="13.2" rx="2"/><path d="M3 12.4l3.6-3.4 3.2 3 2.6-2.4L17 13"/>
-            <circle cx="12.6" cy="7" r="1.3"/>
-          </svg>
-        </span>
-        <span class="gx-commit-txt">
-          <b>You can review the evidence</b>
-          <p>Explore client screenshots and progress records before sending your order.</p>
-        </span>
-      </div>
-    </div>
-
-   </div>
-   <div class="gx-dlg-foot">
-    <button type="button" class="gx-btn gx-btn--primary gx-btn--block" id="trustGo">
-      <span class="gx-btn-label">See clients boosted in your area</span>
-    </button>
-   </div>
-  </div>
-</dialog>
-
-<!-- ============================================ IMAGE VIEWER === -->
-<dialog class="gx-dlg gx-viewer" id="viewerDlg" aria-labelledby="viewerCapTitle">
-  <div class="gx-viewer-in">
-    <div class="gx-viewer-top">
-      <span class="gx-viewer-count" id="viewerCount"></span>
-      <button type="button" class="gx-vbtn" id="viewerClose" aria-label="Close the image viewer">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
-          <path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/>
-        </svg>
-      </button>
-    </div>
-    <div class="gx-viewer-stage"><img id="viewerImg" alt=""></div>
-    <div class="gx-viewer-foot">
-      <button type="button" class="gx-vbtn" id="viewerPrev" aria-label="Previous image">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 4.5 6.5 10l5.5 5.5"/>
-        </svg>
-      </button>
-      <p class="gx-viewer-cap"><b id="viewerCapTitle"></b><span id="viewerCapMeta"></span></p>
-      <button type="button" class="gx-vbtn" id="viewerNext" aria-label="Next image">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M8 4.5 13.5 10 8 15.5"/>
-        </svg>
-      </button>
-    </div>
-  </div>
-</dialog>
-
-<p class="gx-sr" id="liveRegion" role="status" aria-live="polite"></p>
-
-<script src="/assets/pricing.js"></script>
 <script src="/assets/motion.js" defer></script>
-<script src="/growth/offer.js?v=20260919-close10" defer></script>
+<script src="/assets/pricing.js"></script>
+<script src="/assets/order.js"></script>
+<script src="/growth/app.js?v=20260909-qc1" defer></script>
 </body>
 </html>
