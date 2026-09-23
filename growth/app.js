@@ -70,264 +70,25 @@
         return '<i class="' + m.icon + '"' + (m.color ? ' style="color:' + m.color + '"' : '') + '></i>';
     }
 
-    function haptic() { if (navigator.vibrate && !reduceMotion) navigator.vibrate(9); }
-
-    function roll(el, text) {
-        if (window.Motion) window.Motion.roll(el, text);
-        else if (el) el.textContent = text;
-    }
-
-    /** One-shot attention shake — the moment a field becomes invalid, not a
-     *  loop that keeps firing while it stays that way. */
-    function shake(el) {
-        if (!el || reduceMotion) return;
-        el.classList.remove('is-shake');
-        void el.offsetWidth;
-        el.classList.add('is-shake');
-        window.setTimeout(function () { el.classList.remove('is-shake'); }, 450);
-        haptic();
-    }
-
-    /* ------------------------------------------------------------ sheets --- */
-
-    function openSheet(id) {
-        var el = $(id);
-        if (!el) return;
-        el.classList.add('is-open');
-        document.body.classList.add('is-locked');
-
-        // the sheet's contents arrive as a short wave behind the slide-up,
-        // so the eye lands on the order before the form fields
-        var card = el.querySelector('.sheet-card');
-        if (card && !reduceMotion) {
-            Array.prototype.forEach.call(card.children, function (c, i) { c.style.setProperty('--i', i); });
-            card.classList.remove('is-entering');
-            void card.offsetWidth;
-            card.classList.add('is-entering');
-            window.clearTimeout(card._enterT);
-            card._enterT = window.setTimeout(function () { card.classList.remove('is-entering'); }, 800);
-        }
-        updateBar();
-    }
-    function closeSheet(id) {
-        var el = $(id);
-        if (!el) return;
-        el.classList.remove('is-open');
-        document.body.classList.remove('is-locked');
-        updateBar();
-    }
-
-    /* ------------------------------------------------------- order bar ---
-     * Phones only (CSS hides it on desktop, where the summary sits beside
-     * the form). It appears once there's a priced amount and the in-card
-     * button has scrolled out of view, and gets out of the way of any sheet. */
-    var barReady = false;
-    var submitInView = true;
-
-    function updateBar() {
-        var bar = $('fwBar');
-        if (!bar) return;
-        var show = barReady && !submitInView && !document.body.classList.contains('is-locked');
-        if (show === bar.classList.contains('is-on')) return;
-        bar.classList.toggle('is-on', show);
-        bar.setAttribute('aria-hidden', String(!show));
-        $('fwBarBtn').tabIndex = show ? 0 : -1;
-        document.body.classList.toggle('has-bar', show);
-    }
+    var K = window.K97Panel;
+    var haptic = K.haptic, roll = K.roll, shake = K.shake;
+    var openSheet = K.openSheet, closeSheet = K.closeSheet;
 
     document.addEventListener('click', function (e) {
-        var t = e.target;
-        if (!t || !t.closest) return;
-        if (t.closest('#menuBtn')) { openSheet('menuSheet'); return; }
-        var closer = t.closest('[data-close]');
-        if (closer) { closeSheet(closer.dataset.close); return; }
-        if (t.classList && t.classList.contains('sheet')) { closeSheet(t.id); return; }
+        if (e.target && e.target.closest && e.target.closest('#menuBtn')) openSheet('menuSheet');
     });
 
-    /* ---------------------------------------------------------- combobox ---
-     * A native <select> cannot show an icon or a price against an option, and
-     * cannot be typed into. On a list of twelve platforms and forty-odd
-     * services that is the difference between finding a thing and scrolling
-     * for it — so this is a real listbox: filterable, keyboard-driven, and
-     * announced properly.
-     *
-     * items: [{ value, label, icon, meta }]
-     * -------------------------------------------------------------------- */
+    /* the phone order bar, the payment picker and the WhatsApp button are
+     * the shared panel kit (assets/panel.js) — identical on /subs/ */
+    var bar = K.Bar({ bar: $('fwBar'), btn: $('fwBarBtn'), watch: $('fwSubmit'), onGo: submit });
+    var payment = K.Payment({
+        grid: $('payGrid'), code: $('payCode'), label: $('payLabel'),
+        codeLead: function (name) { return 'After confirming, pay the 50% to this ' + name + ' code'; }
+    });
+    var send = K.SendButton($('revSend'));
+    function setStep(n) { K.setStep($('revSteps'), n); }
 
-    function Combo(rootId, labelId, placeholder, onPick) {
-        var root = $(rootId);
-        if (!root) return null;
-
-        var items = [];
-        var shown = [];
-        var value = null;
-        var active = -1;
-        var open = false;
-
-        root.innerHTML =
-            '<button type="button" class="fw-combo-btn" id="' + rootId + '-btn"' +
-                ' aria-haspopup="listbox" aria-expanded="false" aria-labelledby="' + labelId + ' ' + rootId + '-val">' +
-                '<span class="fw-combo-val" id="' + rootId + '-val"></span>' +
-                '<span class="fw-combo-meta" id="' + rootId + '-meta"></span>' +
-                '<i class="fas fa-chevron-down fw-combo-caret" aria-hidden="true"></i>' +
-            '</button>' +
-            '<div class="fw-combo-pop" id="' + rootId + '-pop" tabindex="-1" hidden>' +
-                '<div class="fw-combo-search" id="' + rootId + '-sw">' +
-                    '<i class="fas fa-magnifying-glass" aria-hidden="true"></i>' +
-                    '<input type="text" id="' + rootId + '-q" role="combobox" autocomplete="off"' +
-                        ' spellcheck="false" placeholder="' + placeholder + '"' +
-                        ' aria-expanded="true" aria-controls="' + rootId + '-list" aria-autocomplete="list">' +
-                '</div>' +
-                '<ul class="fw-combo-list" id="' + rootId + '-list" role="listbox" tabindex="-1"' +
-                    ' aria-labelledby="' + labelId + '"></ul>' +
-            '</div>';
-
-        var btn = $(rootId + '-btn');
-        var val = $(rootId + '-val');
-        var metaEl = $(rootId + '-meta');
-        var pop = $(rootId + '-pop');
-        var q = $(rootId + '-q');
-        var sw = $(rootId + '-sw');
-        var list = $(rootId + '-list');
-
-        function current() {
-            for (var i = 0; i < items.length; i++) if (items[i].value === value) return items[i];
-            return null;
-        }
-
-        function paintButton() {
-            var it = current();
-            val.innerHTML = it ? (it.icon || '') + '<span>' + it.label + '</span>' : '<span>—</span>';
-            metaEl.textContent = it && it.meta ? it.meta : '';
-        }
-
-        function renderList() {
-            if (!shown.length) {
-                list.innerHTML = '<li class="fw-combo-empty" role="presentation">Nothing matches that.</li>';
-                q.removeAttribute('aria-activedescendant');
-                list.removeAttribute('aria-activedescendant');
-                return;
-            }
-            list.innerHTML = shown.map(function (it, i) {
-                var sel = it.value === value;
-                return '<li class="fw-opt' + (sel ? ' is-sel' : '') + (i === active ? ' is-active' : '') + '"' +
-                    ' id="' + rootId + '-o' + i + '" role="option" aria-selected="' + sel + '"' +
-                    ' data-val="' + it.value + '">' +
-                    (it.icon || '') +
-                    '<span class="fw-opt-label">' + it.label + '</span>' +
-                    (it.meta ? '<span class="fw-opt-meta">' + it.meta + '</span>' : '') +
-                    '<i class="fas fa-check fw-opt-tick" aria-hidden="true"></i>' +
-                    '</li>';
-            }).join('');
-            var desc = active >= 0 ? rootId + '-o' + active : '';
-            q.setAttribute('aria-activedescendant', desc);
-            list.setAttribute('aria-activedescendant', desc);
-        }
-
-        function filter() {
-            var t = q.value.trim().toLowerCase();
-            shown = !t ? items.slice() : items.filter(function (it) {
-                return it.label.toLowerCase().indexOf(t) !== -1;
-            });
-            active = shown.length ? 0 : -1;
-            renderList();
-        }
-
-        function setOpen(next) {
-            open = next;
-            pop.hidden = !next;
-            root.classList.toggle('is-open', next);
-            btn.setAttribute('aria-expanded', String(next));
-            if (!next) return;
-
-            // A four-item service list does not need a search box, and putting
-            // one there only throws up a phone keyboard over the options.
-            var searchable = items.length > 6;
-            sw.hidden = !searchable;
-
-            q.value = '';
-            filter();
-            // open with the highlight already on what is chosen
-            for (var i = 0; i < shown.length; i++) {
-                if (shown[i].value === value) { active = i; break; }
-            }
-            renderList();
-
-            // open upward when the field sits too low for the list to fit
-            pop.classList.remove('is-up');
-            var space = window.innerHeight - btn.getBoundingClientRect().bottom;
-            if (space < pop.offsetHeight + 16) pop.classList.add('is-up');
-
-            (searchable ? q : list).focus();
-            scrollActive();
-        }
-
-        function scrollActive() {
-            var el = $(rootId + '-o' + active);
-            if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
-        }
-
-        function choose(v) {
-            value = v;
-            paintButton();
-            setOpen(false);
-            btn.focus();
-            if (onPick) onPick(v);
-        }
-
-        btn.addEventListener('click', function () { setOpen(!open); });
-        q.addEventListener('input', filter);
-
-        pop.addEventListener('keydown', function (e) {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                if (!shown.length) return;
-                active = e.key === 'ArrowDown'
-                    ? (active + 1) % shown.length
-                    : (active - 1 + shown.length) % shown.length;
-                renderList();
-                scrollActive();
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                if (active >= 0 && shown[active]) choose(shown[active].value);
-            } else if (e.key === 'Escape') {
-                e.preventDefault();
-                setOpen(false);
-                btn.focus();
-            }
-        });
-
-        list.addEventListener('click', function (e) {
-            var li = e.target.closest('[data-val]');
-            if (li) { choose(li.dataset.val); haptic(); }
-        });
-        list.addEventListener('mousemove', function (e) {
-            var li = e.target.closest('[data-val]');
-            if (!li) return;
-            var i = shown.findIndex(function (it) { return it.value === li.dataset.val; });
-            if (i !== -1 && i !== active) { active = i; renderList(); }
-        });
-
-        document.addEventListener('click', function (e) {
-            if (open && !root.contains(e.target)) setOpen(false);
-        });
-
-        return {
-            setItems: function (next, keep) {
-                items = next || [];
-                var stillThere = keep && items.some(function (it) { return it.value === keep; });
-                value = stillThere ? keep : (items[0] ? items[0].value : null);
-                paintButton();
-                return value;
-            },
-            setValue: function (v) {
-                if (!items.some(function (it) { return it.value === v; })) return;
-                value = v;
-                paintButton();
-            },
-            value: function () { return value; }
-        };
-    }
+    var Combo = K.Combo;
 
     var catCombo = Combo('fwCat', 'fwCatLabel', 'Search platforms\u2026', function () {
         fillServices();
@@ -479,8 +240,7 @@
         if ($('fwBar')) {
             $('fwBarQty').textContent = r ? qtyTxt + ' · ' + meta(key).name : '';
             roll($('fwBarTotal'), totalTxt);
-            barReady = !!r;
-            updateBar();
+            bar.setReady(!!r);
         }
     }
 
@@ -711,46 +471,10 @@
         $('revSendAmt').textContent = P.money(pending.total, cur);
         $('revErr').hidden = true;
         setStep(1);
-        sendReady('Confirm on WhatsApp');
-        renderPayment();
+        send.ready('Confirm on WhatsApp');
+        payment.render(P.Region.data(region).payments);
         openSheet('revSheet');
     }
-
-    function setStep(n) {
-        var steps = $('revSteps');
-        if (!steps) return;
-        steps.querySelectorAll('li').forEach(function (li, i) {
-            li.classList.toggle('is-done', i < n - 1);
-            li.classList.toggle('is-on', i === n - 1);
-        });
-    }
-
-    /* wa.me hands off to the WhatsApp app on phones and the page stays where
-     * it was — so the button can't be left disabled on "Opening WhatsApp…",
-     * or anyone who comes back to fix a detail is stuck. */
-    var sendTimer = null;
-    function sendReady(label) {
-        window.clearTimeout(sendTimer);
-        var b = $('revSend');
-        b.disabled = false;
-        b.classList.remove('is-busy');
-        b.querySelector('.rev-send-label').textContent = label;
-    }
-    function sendBusy() {
-        var b = $('revSend');
-        b.disabled = true;
-        b.classList.add('is-busy');
-        b.querySelector('.rev-send-label').textContent = 'Opening WhatsApp…';
-        setStep(2);
-        window.clearTimeout(sendTimer);
-        sendTimer = window.setTimeout(function () { sendReady('Open WhatsApp again'); }, 4000);
-    }
-    document.addEventListener('visibilitychange', function () {
-        if (!document.hidden && $('revSend').disabled) sendReady('Open WhatsApp again');
-    });
-    window.addEventListener('pageshow', function (e) {
-        if (e.persisted && $('revSend').disabled) sendReady('Open WhatsApp again');
-    });
 
     /** The WhatsApp message, built from whichever kind of order is pending —
      *  the two flows share every line except how the package itself reads. */
@@ -775,7 +499,7 @@
         lines.push('*Charge:* ' + P.money(pending.total, pending.currency));
         lines.push('*Pay now (50%):* ' + P.money(pending.deposit, pending.currency));
         lines.push('*Balance on delivery:* ' + P.money(pending.balance, pending.currency));
-        if (paymentChoice) lines.push('*Payment method:* ' + paymentChoice);
+        if (payment.value()) lines.push('*Payment method:* ' + payment.value());
         lines.push('');
         lines.push('*Name:* ' + name);
         lines.push('*WhatsApp:* ' + phone);
@@ -821,7 +545,8 @@
 
         var message = buildMessage(name, phone.clean);
 
-        sendBusy();
+        send.busy();
+        setStep(2);
 
         if (window.OrderKit) {
             window.OrderKit.send({
@@ -850,7 +575,7 @@
                         phone: phone.clean,
                         region: region,
                         referrer: isBundle ? 'Combo panel' : 'Order panel',
-                        payment: paymentChoice,
+                        payment: payment.value(),
                         amount: pending.total,
                         currency: pending.currency,
                         deposit: pending.deposit,
@@ -862,85 +587,6 @@
             window.location.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(message);
         }
     });
-
-    /* -------------------------------------------------------- payment --- */
-
-    var paymentChoice = null;
-
-    function payMeta(label) {
-        if (/mtn/i.test(label)) return { icon: 'fas fa-mobile-screen-button', color: '#FFCC08' };
-        if (/airtel/i.test(label)) return { icon: 'fas fa-mobile-screen-button', color: '#ED1C24' };
-        if (/agent/i.test(label)) return { icon: 'fas fa-handshake', color: null };
-        if (/cash/i.test(label)) return { icon: 'fas fa-money-bill-wave', color: null };
-        return { icon: 'fas fa-wallet', color: null };
-    }
-
-    /** Real options for whichever region is selected — never Airtel/MTN
-     *  where mobile money isn't actually how that region pays. */
-    function renderPayment() {
-        var grid = $('payGrid');
-        if (!grid) return;
-        var opts = P.Region.data(region).payments || [];
-        if (opts.indexOf(paymentChoice) === -1) paymentChoice = opts[0] || null;
-
-        $('payLabel').textContent = opts.length > 1 ? 'How will you pay?' : 'How you’ll pay';
-        grid.innerHTML = opts.map(function (label) {
-            var m = payMeta(label);
-            var p = payParts(label);
-            var on = label === paymentChoice;
-            return '<button type="button" class="pay-opt m-press' + (on ? ' is-on' : '') + '"' +
-                ' data-pay="' + encodeURIComponent(label) + '" aria-pressed="' + on + '">' +
-                '<i class="' + m.icon + ' pay-ic"' + (m.color ? ' style="color:' + m.color + '"' : '') + '></i>' +
-                '<span class="pay-txt"><b>' + p.name + '</b>' +
-                    (p.code ? '<small>Code ' + p.code + '</small>' : '') + '</span>' +
-                '<span class="pay-tick"><i class="fas fa-check"></i></span>' +
-                '</button>';
-        }).join('');
-        paintPayCode(false);
-    }
-
-    /** "MTN Mobile Money — Code 196514" → { name, code }. Labels without a
-     *  code (the agent deposit) come back with code: null. */
-    function payParts(label) {
-        var m = /^(.*?)\s+—\s+Code\s+(\S+)$/.exec(label || '');
-        return m ? { name: m[1], code: m[2] } : { name: label, code: null };
-    }
-
-    /* The chosen network's code, big and copyable — it's the number they'll
-     * be typing into their phone a minute from now. */
-    function paintPayCode(animate) {
-        var box = $('payCode');
-        if (!box) return;
-        var p = paymentChoice ? payParts(paymentChoice) : null;
-        if (!p || !p.code) { box.hidden = true; box.innerHTML = ''; return; }
-        box.hidden = false;
-        box.innerHTML =
-            '<span class="pay-code-copy"><small>After confirming, pay the 50% to this ' + p.name + ' code</small>' +
-            '<b>' + p.code + '</b></span>' +
-            '<button type="button" class="pay-copy m-press" data-code="' + p.code + '">' +
-                '<i class="far fa-copy" aria-hidden="true"></i> <span>Copy</span></button>';
-        if (animate && !reduceMotion) {
-            box.classList.remove('is-swap');
-            void box.offsetWidth;
-            box.classList.add('is-swap');
-        }
-    }
-
-    function copyText(text, onDone) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(onDone, function () {});
-            return;
-        }
-        var t = document.createElement('textarea');
-        t.value = text;
-        t.setAttribute('readonly', '');
-        t.style.position = 'fixed';
-        t.style.opacity = '0';
-        document.body.appendChild(t);
-        t.select();
-        try { if (document.execCommand('copy')) onDone(); } catch (e) { /* nothing to copy with */ }
-        document.body.removeChild(t);
-    }
 
     /* -------------------------------------------------------- proof --- */
 
@@ -1104,41 +750,6 @@
         openCombo(card.dataset.plan);
     });
 
-    var payGrid = $('payGrid');
-    if (payGrid) {
-        payGrid.addEventListener('click', function (e) {
-            var b = e.target.closest('[data-pay]');
-            if (!b) return;
-            paymentChoice = decodeURIComponent(b.dataset.pay);
-            payGrid.querySelectorAll('[data-pay]').forEach(function (x) {
-                var on = x === b;
-                x.classList.toggle('is-on', on);
-                x.setAttribute('aria-pressed', String(on));
-            });
-            paintPayCode(true);
-            haptic();
-        });
-    }
-
-    var payCodeBox = $('payCode');
-    if (payCodeBox) {
-        payCodeBox.addEventListener('click', function (e) {
-            var b = e.target.closest('[data-code]');
-            if (!b) return;
-            copyText(b.dataset.code, function () {
-                b.classList.add('is-done');
-                b.querySelector('i').className = 'fas fa-check';
-                b.querySelector('span').textContent = 'Copied';
-                haptic();
-                window.setTimeout(function () {
-                    b.classList.remove('is-done');
-                    b.querySelector('i').className = 'far fa-copy';
-                    b.querySelector('span').textContent = 'Copy';
-                }, 1600);
-            });
-        });
-    }
-
     // quick-amount chips: tapping one is exactly typing that tier
     $('fwChips').addEventListener('click', function (e) {
         var b = e.target.closest('[data-qty]');
@@ -1150,14 +761,6 @@
 
     // the summary and the phone bar both lead to the same review
     $('sumSubmit').addEventListener('click', submit);
-    $('fwBarBtn').addEventListener('click', submit);
-
-    if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries) {
-            submitInView = entries[0].isIntersecting;
-            updateBar();
-        }).observe($('fwSubmit'));
-    }
 
     var comboMenuBtn = $('comboMenuBtn');
     if (comboMenuBtn) {

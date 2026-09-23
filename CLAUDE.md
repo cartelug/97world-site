@@ -49,28 +49,35 @@ and growth pages) are handled by the same engine — don't rename them.
 
 ## Layout
 
-- `/growth/` is light and self-contained. Everything else is dark
-  (`HOME/style.css` + `assets/hub.css`). Don't let the two leak into each
-  other. Two light surfaces live under `/growth/`:
-  - **`/growth/` itself** — the offer page from the sales conversation:
-    `growth/index.html` + `growth/offer.css` + `growth/offer.js`. Its design
-    system is scoped to `.gx` and every reset declaration sits inside
-    `:where()` so a component class always wins.
-  - **the 14 platform order pages** — `assets/order.css` + `assets/wizard.js`.
-- The 14 order pages are **generated** — edit
+- Two light order panels share one design: **`/growth/`** and **`/subs/`**.
+  Both use `assets/growth.css` for styling and `assets/panel.js` (`K97Panel`)
+  for the shared machinery — searchable dropdown, bottom sheets, the phone
+  order bar, the payment picker with MoMo codes, and a WhatsApp button that
+  resets itself. Each page keeps its own data and flow in `growth/app.js` /
+  `subs/app.js`. Change shared behaviour in `panel.js`, and re-check both.
+- The home page and `/business/` are dark (`HOME/style.css` +
+  `assets/hub.css`). Don't let dark and light leak into each other.
+- The per-product order pages (`/growth/<platform>/`, `/subs/<product>/`,
+  `/growth/bundle/`, `/business/website/`) use `assets/order.css` +
+  `assets/wizard.js`. They're still live as deep links, but the panels no
+  longer navigate to them. They're **generated** — edit
   `tools/build-order-pages.mjs` and re-run it, never the output files.
+- `/subs/` sells two kinds of thing and must keep them apart: subscriptions
+  (`SUBSCRIPTIONS`, priced for UG and SS only, paid in full) and digital
+  goods (`DIGITAL_PRODUCTS`, UG prices only, stock checked before payment).
+  No price for the region, or a tier with `orderable: false`, is a quote
+  request — never a converted or guessed number.
 
-## The /growth/ offer
+## Proof screenshots
 
-- Prices come from `K97Pricing.GROWTH_OFFER` / `offerQuote()` in
-  `assets/pricing.js` and nowhere else. One and two platforms are the plain
-  sum of the 10,000-follower tier already in `SERVICES` ($100 each);
-  `bundleUsd` is the single declared number, $250 for all three. UGX is the
-  same USD figure through `UGX_PER_USD` — never a hand-typed shilling price.
-- The page has one state model (country, platforms, step, proof filter) in
-  `growth/offer.js`. Totals, the payment split, the saving and the WhatsApp
-  message are all derived from it; nothing is read back off the DOM.
-- `PROOF` in `growth/offer.js` holds six records from two real conversations,
+- The panels' "Recently delivered" slots read `/IMAGES/proof/recent-1.webp`
+  … `recent-6.webp` (growth only — boost screenshots aren't proof for a
+  subscription). A missing file leaves a dashed placeholder; drop real,
+  redacted images in at those names and they appear with no code change.
+- The retired offer page (`growth/offer.js`, `K97Pricing.GROWTH_OFFER`) is
+  gone; `GROWTH_OFFER` in `pricing.js` is unused. The rules below were
+  written for its `PROOF` records and apply to every screenshot we publish.
+- The six `case-*`/`offer-*` files in `/IMAGES/proof/` came from two real conversations,
   served from `/IMAGES/proof/`. Every file was **re-encoded after solid
   rectangles were painted over the private parts** — redaction, never a blur
   over an intact original — and EXIF was dropped. Removed: the client's name,
