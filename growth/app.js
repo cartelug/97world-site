@@ -95,12 +95,44 @@
         if (!el) return;
         el.classList.add('is-open');
         document.body.classList.add('is-locked');
+
+        // the sheet's contents arrive as a short wave behind the slide-up,
+        // so the eye lands on the order before the form fields
+        var card = el.querySelector('.sheet-card');
+        if (card && !reduceMotion) {
+            Array.prototype.forEach.call(card.children, function (c, i) { c.style.setProperty('--i', i); });
+            card.classList.remove('is-entering');
+            void card.offsetWidth;
+            card.classList.add('is-entering');
+            window.clearTimeout(card._enterT);
+            card._enterT = window.setTimeout(function () { card.classList.remove('is-entering'); }, 800);
+        }
+        updateBar();
     }
     function closeSheet(id) {
         var el = $(id);
         if (!el) return;
         el.classList.remove('is-open');
         document.body.classList.remove('is-locked');
+        updateBar();
+    }
+
+    /* ------------------------------------------------------- order bar ---
+     * Phones only (CSS hides it on desktop, where the summary sits beside
+     * the form). It appears once there's a priced amount and the in-card
+     * button has scrolled out of view, and gets out of the way of any sheet. */
+    var barReady = false;
+    var submitInView = true;
+
+    function updateBar() {
+        var bar = $('fwBar');
+        if (!bar) return;
+        var show = barReady && !submitInView && !document.body.classList.contains('is-locked');
+        if (show === bar.classList.contains('is-on')) return;
+        bar.classList.toggle('is-on', show);
+        bar.setAttribute('aria-hidden', String(!show));
+        $('fwBarBtn').tabIndex = show ? 0 : -1;
+        document.body.classList.toggle('has-bar', show);
     }
 
     document.addEventListener('click', function (e) {
@@ -389,7 +421,67 @@
             $('fwQty').value = '';
             $('fwSnap').hidden = true;
         }
+        renderChips();
         paint();
+    }
+
+    /** "1K", "2.5K", "250" — the chip face; the full number is in its label. */
+    function qtyShort(n) {
+        if (n >= 1000000) return (n / 1000000).toString().replace(/\.0+$/, '') + 'M';
+        if (n >= 1000) return (n / 1000).toString().replace(/\.0+$/, '') + 'K';
+        return String(n);
+    }
+
+    /* One chip per tier this service actually sells, each with its exact
+     * price — tapping one is the same as typing that amount. */
+    function renderChips() {
+        var box = $('fwChips');
+        if (!box) return;
+        var id = svcCombo.value();
+        var cur = P.Region.data(region).currency;
+        box.innerHTML = P.qtysFor(id).map(function (n) {
+            var price = P.money(P.localPrice(P.tierUsd(id, n), cur), cur);
+            return '<button type="button" class="fw-chip m-press" data-qty="' + n + '" aria-pressed="false"' +
+                ' aria-label="' + n.toLocaleString() + ' for ' + price + '">' +
+                '<b>' + qtyShort(n) + '</b><small>' + price + '</small></button>';
+        }).join('');
+    }
+
+    function syncChips(r) {
+        var box = $('fwChips');
+        if (!box) return;
+        var want = r ? r.qty : null;
+        box.querySelectorAll('[data-qty]').forEach(function (b) {
+            var on = Number(b.dataset.qty) === want;
+            if (on === b.classList.contains('is-on')) return;
+            b.classList.toggle('is-on', on);
+            b.setAttribute('aria-pressed', String(on));
+        });
+    }
+
+    /** The desktop summary and the phone bar, both read off the same quote
+     *  the in-card total uses — they can never show a different number. */
+    var sumKey = null;
+    function syncSummary(r, q) {
+        var key = catCombo.value();
+        var s = P.SERVICES_BY_ID[svcCombo.value()];
+        var totalTxt = q ? P.money(q.total, q.currency) : '—';
+        var qtyTxt = r ? r.qty.toLocaleString() + ' ' + (s ? s.unit : '') : 'Choose an amount';
+
+        if ($('sumMark')) {
+            if (key !== sumKey) { $('sumMark').innerHTML = key ? mark(key) : ''; sumKey = key; }
+            $('sumSvc').textContent = (key ? meta(key).name + ' ' : '') + (s ? s.short : '');
+            $('sumQty').textContent = qtyTxt;
+            $('sumRefill').textContent = s && s.refillEligible ? '30 days' : 'Not included';
+            roll($('sumTotal'), totalTxt);
+            roll($('sumDeposit'), q ? P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) : '—');
+        }
+        if ($('fwBar')) {
+            $('fwBarQty').textContent = r ? qtyTxt + ' · ' + meta(key).name : '';
+            roll($('fwBarTotal'), totalTxt);
+            barReady = !!r;
+            updateBar();
+        }
     }
 
     /** The exact tier this order will be placed at, or null. */
@@ -417,10 +509,13 @@
         var snap = $('fwSnap');
         var qtyField = $('fwQtyField');
 
+        syncChips(r);
+
         if (!r) {
             roll($('fwChargeVal'), '—');
             snap.hidden = true;
             if (qtyField) qtyField.classList.remove('is-bad');
+            syncSummary(null, null);
             return;
         }
 
@@ -455,6 +550,7 @@
 
         var q = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: r.qty }], region, 1);
         roll($('fwChargeVal'), P.money(q.total, q.currency));
+        syncSummary(r, q);
     }
 
     /* ------------------------------------------------------------ search --- */
@@ -526,7 +622,14 @@
     function submit() {
         var r = resolved();
         if (!r) {
-            $('fwQty').focus();
+            // point at the chips rather than popping a keyboard over them
+            var field = $('fwQtyField');
+            field.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+            var snap = $('fwSnap');
+            snap.hidden = false;
+            snap.classList.remove('is-danger');
+            snap.textContent = 'Pick an amount to see your price.';
+            shake(field);
             return;
         }
         var problem = linkProblem(r, $('fwLink').value);
@@ -605,9 +708,49 @@
         $('revTotal').textContent = P.money(pending.total, cur);
         $('revDeposit').textContent = P.money(pending.deposit, cur);
         $('revBalance').textContent = P.money(pending.balance, cur);
+        $('revSendAmt').textContent = P.money(pending.total, cur);
+        $('revErr').hidden = true;
+        setStep(1);
+        sendReady('Confirm on WhatsApp');
         renderPayment();
         openSheet('revSheet');
     }
+
+    function setStep(n) {
+        var steps = $('revSteps');
+        if (!steps) return;
+        steps.querySelectorAll('li').forEach(function (li, i) {
+            li.classList.toggle('is-done', i < n - 1);
+            li.classList.toggle('is-on', i === n - 1);
+        });
+    }
+
+    /* wa.me hands off to the WhatsApp app on phones and the page stays where
+     * it was — so the button can't be left disabled on "Opening WhatsApp…",
+     * or anyone who comes back to fix a detail is stuck. */
+    var sendTimer = null;
+    function sendReady(label) {
+        window.clearTimeout(sendTimer);
+        var b = $('revSend');
+        b.disabled = false;
+        b.classList.remove('is-busy');
+        b.querySelector('.rev-send-label').textContent = label;
+    }
+    function sendBusy() {
+        var b = $('revSend');
+        b.disabled = true;
+        b.classList.add('is-busy');
+        b.querySelector('.rev-send-label').textContent = 'Opening WhatsApp…';
+        setStep(2);
+        window.clearTimeout(sendTimer);
+        sendTimer = window.setTimeout(function () { sendReady('Open WhatsApp again'); }, 4000);
+    }
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden && $('revSend').disabled) sendReady('Open WhatsApp again');
+    });
+    window.addEventListener('pageshow', function (e) {
+        if (e.persisted && $('revSend').disabled) sendReady('Open WhatsApp again');
+    });
 
     /** The WhatsApp message, built from whichever kind of order is pending —
      *  the two flows share every line except how the package itself reads. */
@@ -678,9 +821,7 @@
 
         var message = buildMessage(name, phone.clean);
 
-        var btn = this;
-        btn.disabled = true;
-        btn.textContent = 'Opening WhatsApp…';
+        sendBusy();
 
         if (window.OrderKit) {
             window.OrderKit.send({
@@ -745,14 +886,60 @@
         $('payLabel').textContent = opts.length > 1 ? 'How will you pay?' : 'How you’ll pay';
         grid.innerHTML = opts.map(function (label) {
             var m = payMeta(label);
+            var p = payParts(label);
             var on = label === paymentChoice;
             return '<button type="button" class="pay-opt m-press' + (on ? ' is-on' : '') + '"' +
                 ' data-pay="' + encodeURIComponent(label) + '" aria-pressed="' + on + '">' +
                 '<i class="' + m.icon + ' pay-ic"' + (m.color ? ' style="color:' + m.color + '"' : '') + '></i>' +
-                '<span>' + label + '</span>' +
+                '<span class="pay-txt"><b>' + p.name + '</b>' +
+                    (p.code ? '<small>Code ' + p.code + '</small>' : '') + '</span>' +
                 '<span class="pay-tick"><i class="fas fa-check"></i></span>' +
                 '</button>';
         }).join('');
+        paintPayCode(false);
+    }
+
+    /** "MTN Mobile Money — Code 196514" → { name, code }. Labels without a
+     *  code (the agent deposit) come back with code: null. */
+    function payParts(label) {
+        var m = /^(.*?)\s+—\s+Code\s+(\S+)$/.exec(label || '');
+        return m ? { name: m[1], code: m[2] } : { name: label, code: null };
+    }
+
+    /* The chosen network's code, big and copyable — it's the number they'll
+     * be typing into their phone a minute from now. */
+    function paintPayCode(animate) {
+        var box = $('payCode');
+        if (!box) return;
+        var p = paymentChoice ? payParts(paymentChoice) : null;
+        if (!p || !p.code) { box.hidden = true; box.innerHTML = ''; return; }
+        box.hidden = false;
+        box.innerHTML =
+            '<span class="pay-code-copy"><small>After confirming, pay the 50% to this ' + p.name + ' code</small>' +
+            '<b>' + p.code + '</b></span>' +
+            '<button type="button" class="pay-copy m-press" data-code="' + p.code + '">' +
+                '<i class="far fa-copy" aria-hidden="true"></i> <span>Copy</span></button>';
+        if (animate && !reduceMotion) {
+            box.classList.remove('is-swap');
+            void box.offsetWidth;
+            box.classList.add('is-swap');
+        }
+    }
+
+    function copyText(text, onDone) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(onDone, function () {});
+            return;
+        }
+        var t = document.createElement('textarea');
+        t.value = text;
+        t.setAttribute('readonly', '');
+        t.style.position = 'fixed';
+        t.style.opacity = '0';
+        document.body.appendChild(t);
+        t.select();
+        try { if (document.execCommand('copy')) onDone(); } catch (e) { /* nothing to copy with */ }
+        document.body.removeChild(t);
     }
 
     /* -------------------------------------------------------- proof --- */
@@ -928,8 +1115,48 @@
                 x.classList.toggle('is-on', on);
                 x.setAttribute('aria-pressed', String(on));
             });
+            paintPayCode(true);
             haptic();
         });
+    }
+
+    var payCodeBox = $('payCode');
+    if (payCodeBox) {
+        payCodeBox.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-code]');
+            if (!b) return;
+            copyText(b.dataset.code, function () {
+                b.classList.add('is-done');
+                b.querySelector('i').className = 'fas fa-check';
+                b.querySelector('span').textContent = 'Copied';
+                haptic();
+                window.setTimeout(function () {
+                    b.classList.remove('is-done');
+                    b.querySelector('i').className = 'far fa-copy';
+                    b.querySelector('span').textContent = 'Copy';
+                }, 1600);
+            });
+        });
+    }
+
+    // quick-amount chips: tapping one is exactly typing that tier
+    $('fwChips').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-qty]');
+        if (!b) return;
+        $('fwQty').value = Number(b.dataset.qty).toLocaleString();
+        paint();
+        haptic();
+    });
+
+    // the summary and the phone bar both lead to the same review
+    $('sumSubmit').addEventListener('click', submit);
+    $('fwBarBtn').addEventListener('click', submit);
+
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+            submitInView = entries[0].isIntersecting;
+            updateBar();
+        }).observe($('fwSubmit'));
     }
 
     var comboMenuBtn = $('comboMenuBtn');

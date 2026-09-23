@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" href="/assets/motion.css">
-    <link rel="stylesheet" href="/assets/growth.css?v=20260909-qc1">
+    <link rel="stylesheet" href="/assets/growth.css?v=20260923-cv1">
 </head>
 <body class="growth">
 
@@ -40,11 +40,18 @@
 
     <!-- ================================================ NEW ORDER === -->
     <section class="g-wrap g-open">
-        <h1>New order</h1>
-        <p>Pick a service, see the exact charge, and confirm on WhatsApp.</p>
+        <h1 class="m-up">Grow your page.<br><em>See the price before you pay.</em></h1>
+        <p class="m-up" style="--i:1">Pick a platform, choose an amount, confirm on WhatsApp. No password, ever.</p>
+        <ul class="g-props" data-stagger aria-label="How ordering works">
+            <li><i class="fas fa-lock" aria-hidden="true"></i> No password</li>
+            <li><i class="fas fa-bolt" aria-hidden="true"></i> Starts in 1–6 hours</li>
+            <li><i class="fas fa-hand-holding-dollar" aria-hidden="true"></i> 50% to start</li>
+            <li><i class="fas fa-rotate-left" aria-hidden="true"></i> 30-day refill on followers</li>
+        </ul>
     </section>
 
     <section class="g-wrap g-sec" id="orderSec">
+        <div class="fw-layout">
         <div class="fw-card">
 
             <!-- platform tiles: "All" plus the platforms we actually sell.
@@ -71,7 +78,9 @@
 
             <div class="fw-field" id="fwQtyField">
                 <label for="fwQty">How many do you want?</label>
-                <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off">
+                <div class="fw-chips" id="fwChips" role="group" aria-label="Amounts we sell"></div>
+                <input type="text" class="fw-input" id="fwQty" inputmode="numeric" autocomplete="off"
+                       placeholder="Or type an amount">
                 <p class="fw-minmax" id="fwMinMax"></p>
                 <p class="fw-snap" id="fwSnap" hidden></p>
             </div>
@@ -96,9 +105,37 @@
                 <div class="fw-readonly is-charge" id="fwCharge"><span class="g-roll" id="fwChargeVal">—</span></div>
             </div>
 
-            <button type="button" class="fw-submit" id="fwSubmit">Continue</button>
+            <button type="button" class="fw-submit m-press" id="fwSubmit">
+                <span>Review order</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </button>
+            <p class="qo-note"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
         </div>
-        <p class="qo-note" style="margin-top:12px"><i class="fas fa-lock"></i> No password needed. Nothing is charged on this page.</p>
+
+        <!-- desktop only: the order as it stands, always in view beside the form -->
+        <aside class="fw-aside" aria-label="Order summary">
+            <div class="sum-card">
+                <p class="sum-kicker">Your order</p>
+                <div class="sum-line">
+                    <span class="sum-mark" id="sumMark"></span>
+                    <span class="sum-copy"><b id="sumSvc">—</b><small id="sumQty">Choose an amount</small></span>
+                </div>
+                <div class="sum-rows">
+                    <div class="sum-row"><span>Starts</span><b>1–6 hours</b></div>
+                    <div class="sum-row"><span>Refill</span><b id="sumRefill">—</b></div>
+                </div>
+                <div class="sum-total"><span>Total</span><b class="g-roll" id="sumTotal">—</b></div>
+                <div class="sum-row sum-now"><span>Pay now (50%)</span><b class="g-roll" id="sumDeposit">—</b></div>
+                <button type="button" class="fw-submit m-press" id="sumSubmit">
+                    <span>Review order</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </button>
+                <ul class="sum-trust">
+                    <li><i class="fas fa-lock" aria-hidden="true"></i> No password needed</li>
+                    <li><i class="fas fa-shield-halved" aria-hidden="true"></i> Nothing is charged on this page</li>
+                    <li><i class="fas fa-clock" aria-hidden="true"></i> Balance due after completion</li>
+                </ul>
+            </div>
+        </aside>
+        </div>
     </section>
 
     <!-- =================================================== COMBOS === -->
@@ -147,7 +184,7 @@
             <div class="step">
                 <div class="step-n">Step 2</div>
                 <b>Pay 50%</b>
-                <p>Confirm on WhatsApp and pay half by MTN or Airtel Money, or cash at our Kampala office. The other 50% is only due once delivery is visibly running.</p>
+                <p>Confirm on WhatsApp, pay half by Mobile Money and send us a screenshot. The balance is due after completion.</p>
             </div>
             <div class="step">
                 <div class="step-n">Step 3</div>
@@ -205,6 +242,20 @@
 
 </main>
 
+<!-- phones and tablets: the total and the next step, once the in-card button
+     has scrolled out of view — never on top of it, never over a sheet -->
+<div class="fw-bar" id="fwBar" aria-hidden="true">
+    <div class="fw-bar-in">
+        <div class="fw-bar-copy">
+            <small id="fwBarQty">—</small>
+            <b class="g-roll" id="fwBarTotal">—</b>
+        </div>
+        <button type="button" class="fw-bar-btn m-press" id="fwBarBtn" tabindex="-1">
+            Review order <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+
 <!-- ================================================ SHEETS === -->
 
 <div class="sheet" id="regionSheet" role="dialog" aria-modal="true" aria-label="Currency">
@@ -247,6 +298,12 @@
             <button type="button" class="sheet-close" data-close="revSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
         </div>
 
+        <ol class="rev-steps" id="revSteps" aria-label="What happens next">
+            <li class="is-on"><span>1</span>Review</li>
+            <li><span>2</span>WhatsApp</li>
+            <li><span>3</span>Pay &amp; screenshot</li>
+        </ol>
+
         <div class="rev-list" id="revList"></div>
 
         <div class="price-card" style="margin-top:14px">
@@ -258,7 +315,7 @@
                     <b id="revDeposit">—</b>
                 </div>
                 <div class="price-split-row">
-                    <span><i class="fas fa-clock"></i> Balance on delivery</span>
+                    <span><i class="fas fa-clock"></i> Balance after completion</span>
                     <b id="revBalance">—</b>
                 </div>
             </div>
@@ -296,23 +353,27 @@
         <div class="pay-field" style="margin-top:16px">
             <label class="pay-label" id="payLabel">How will you pay?</label>
             <div class="pay-grid" id="payGrid"></div>
+            <div class="pay-code" id="payCode" hidden></div>
         </div>
-
-        <p class="acct-err" id="revErr" hidden></p>
 
         <p class="acct-note"><i class="fas fa-shield-halved"></i> Nothing is charged here — you confirm on WhatsApp first.</p>
         <p class="acct-note"><i class="fas fa-camera"></i> After paying, send us a screenshot of the payment on WhatsApp so we can start your order.</p>
 
-        <button type="button" class="g-btn g-btn--wide" id="revSend" style="margin-top:14px">
-            <i class="fab fa-whatsapp"></i> Confirm on WhatsApp
-        </button>
-        <button type="button" class="g-btn g-btn--ghost g-btn--wide" style="margin-top:8px" data-close="revSheet">Go back and edit</button>
+        <div class="sheet-foot">
+            <p class="acct-err" id="revErr" role="alert" hidden></p>
+            <button type="button" class="rev-send m-press" id="revSend">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                <span class="rev-send-label">Confirm on WhatsApp</span>
+                <b class="rev-send-amt" id="revSendAmt"></b>
+            </button>
+            <button type="button" class="rev-back" data-close="revSheet">Go back and edit</button>
+        </div>
     </div>
 </div>
 
 <script src="/assets/motion.js" defer></script>
 <script src="/assets/pricing.js"></script>
 <script src="/assets/order.js"></script>
-<script src="/growth/app.js?v=20260909-qc1" defer></script>
+<script src="/growth/app.js?v=20260923-cv1" defer></script>
 </body>
 </html>
