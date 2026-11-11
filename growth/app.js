@@ -154,9 +154,47 @@
         onServiceChange();
     }
 
+    var SERVICE_SCENES = {
+        sn_followers: { key: 'followers', title: 'Build your community.', caption: 'Followers for your public Snapchat profile.' },
+        sn_followers_refill: { key: 'refill', title: 'Growth with a little backup.', caption: 'A separate follower package with a 30-day refill window.' },
+        sn_likes: { key: 'likes', title: 'Put your content in the picture.', caption: 'Likes for one public Snapchat post or video.' },
+        sn_story_views: { key: 'story', title: 'Your next story, in focus.', caption: 'Audience, view count and price are confirmed in your quote.' },
+        sn_spotlight_views: { key: 'spotlight', title: 'Give your next moment a stage.', caption: 'Spotlight views: check availability and pricing first.' }
+    };
+    var sceneVersion = 0;
+    var currentScene = '';
+    function syncServiceScene(serviceId) {
+        var config = SERVICE_SCENES[serviceId];
+        var scene = $('serviceScene');
+        if (!config || !brandActive) {
+            sceneVersion++;
+            currentScene = '';
+            scene.hidden = true;
+            delete document.body.dataset.serviceScene;
+            return;
+        }
+        document.body.dataset.serviceScene = config.key;
+        var version = ++sceneVersion;
+        if (currentScene === config.key && !scene.hidden) return;
+        var loader = new Image();
+        loader.onload = function () {
+            if (version !== sceneVersion) return;
+            currentScene = config.key;
+            $('sceneImage').src = loader.src;
+            $('sceneTitle').textContent = config.title;
+            $('sceneCaption').textContent = config.caption;
+            $('sceneEyebrow').textContent = 'Snapchat · ' + (config.key === 'refill' ? '30-day refill' : config.key === 'story' ? 'Story views' : config.key === 'spotlight' ? 'Spotlight views' : config.key === 'likes' ? 'Likes' : 'Followers');
+            scene.hidden = false;
+            if (window.Motion) window.Motion.swap($('sceneImage'));
+        };
+        loader.onerror = function () { if (version === sceneVersion) scene.hidden = true; };
+        loader.src = '/IMAGES/growth-scenes/snapchat-' + config.key + '-v1.webp';
+    }
+
     function onServiceChange() {
         syncBrand();
         var id = svcCombo.value();
+        syncServiceScene(id);
         var qtys = P.qtysFor(id);
         $('fwMinMax').textContent = qtys.length
             ? 'You can order between ' + qtys[0].toLocaleString() + ' and ' + qtys[qtys.length - 1].toLocaleString() + '.'
