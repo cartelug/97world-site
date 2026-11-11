@@ -230,6 +230,7 @@
         var quoteOnly = !!(s && s.quoteOnly);
         var totalTxt = quoteOnly ? 'Custom quote' : q ? P.money(q.total, q.currency) : '—';
         $('inlineDeposit').textContent = q ? 'Start with ' + P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) + ' (50%). Balance after completion.' : 'Choose an amount to see your 50% deposit.';
+        $('sumPayLabel').textContent = quoteOnly ? 'Payment' : 'Pay now (50%)';
         if (quoteOnly) $('inlineDeposit').textContent = 'Availability, price and payment terms are confirmed on WhatsApp before you pay.';
         var qtyTxt = quoteOnly ? 'Availability and price to be confirmed' : r ? r.qty.toLocaleString() + ' ' + (s ? s.unit : '') : 'Choose an amount';
 
@@ -377,6 +378,24 @@
             return 'Add your ' + meta(r.platform).name +
                 ' username or link so we know where to deliver.';
         }
+        if (r.platform === 'snapchat') {
+            var contentService = r.serviceId === 'sn_likes' || r.serviceId === 'sn_spotlight_views';
+            var looksLikeLink = /[/:]/.test(v) || /\.com/i.test(v);
+            if (looksLikeLink) {
+                try {
+                    var url = new URL(/^https?:\/\//i.test(v) ? v : 'https://' + v);
+                    var hostname = url.hostname.toLowerCase();
+                    if (url.protocol !== 'https:' || (hostname !== 'snapchat.com' && !hostname.endsWith('.snapchat.com'))) {
+                        return 'Paste a public Snapchat link from snapchat.com.';
+                    }
+                    if (contentService && (!url.pathname || url.pathname === '/' || /^\/add(?:\/|$)/i.test(url.pathname))) {
+                        return 'This service needs a public Snapchat post or video link, not a profile link.';
+                    }
+                } catch (error) { return 'That Snapchat link does not look valid. Please paste it again.'; }
+            } else if (contentService) {
+                return 'Paste the public Snapchat post or video link, not a username.';
+            }
+        }
         if (r.platform === 'webtraffic' && v.indexOf('.') === -1) {
             return 'That does not look like a website address. Paste the full URL.';
         }
@@ -398,6 +417,11 @@
         var selectedService = P.SERVICES_BY_ID[svcCombo.value()];
         if (selectedService && selectedService.quoteOnly) {
             var account = $('fwLink').value.trim();
+            var problem = account ? linkProblem({ platform: selectedService.platform, serviceId: selectedService.id }, account) : null;
+            $('fwLinkErr').hidden = !problem;
+            $('fwLinkErr').textContent = problem || '';
+            $('fwLinkField').classList.toggle('is-bad', !!problem);
+            if (problem) { $('fwLink').focus(); return; }
             var message = 'Hi 97 World, I would like a quote for ' + selectedService.name + '.' +
                 (account ? '\nMy Snapchat link/username: ' + account : '') +
                 '\nPlease confirm availability, audience country, quantity, delivery timing and the total price before payment.';
@@ -492,7 +516,8 @@
         $('revTotal').textContent = P.money(pending.total, cur);
         $('revDeposit').textContent = P.money(pending.deposit, cur);
         $('revBalance').textContent = P.money(pending.balance, cur);
-        $('revSendAmt').textContent = P.money(pending.total, cur);
+        $('revSendAmt').textContent = P.money(pending.deposit, cur);
+        $('revSend').setAttribute('aria-label', 'Confirm on WhatsApp. Deposit: ' + P.money(pending.deposit, cur));
         $('revErr').hidden = true;
         setStep(1);
         send.ready('Confirm on WhatsApp');

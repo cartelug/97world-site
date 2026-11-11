@@ -128,11 +128,16 @@
     /** Change a figure in place. The element moves; its container doesn't. */
     function roll(el, text) {
         if (!el) return;
+        window.clearTimeout(el._rollT);
+        el.classList.remove('is-swap');
+        text = String(text);
         if (el.textContent === text) return;
-        if (reduce) { el.textContent = text; return; }
+        // Commit state immediately: a later tap must never be overwritten
+        // by an earlier animation, especially for prices and deposits.
+        el.textContent = text;
+        if (reduce) return;
         el.classList.add('is-swap');
-        window.setTimeout(function () {
-            el.textContent = text;
+        el._rollT = window.setTimeout(function () {
             el.classList.remove('is-swap');
         }, 150);
     }
