@@ -38,7 +38,7 @@
 
     /* Services delivered to one post/track rather than a profile. */
     var POST_LEVEL = {
-        ig_likes: 1, ig_reels: 1, ig_story: 1, ig_comments: 1, ig_saves: 1,
+        sn_likes: 1, ig_likes: 1, ig_reels: 1, ig_story: 1, ig_comments: 1, ig_saves: 1,
         tt_likes: 1, tt_views: 1, tt_shares: 1,
         fb_likes: 1, fb_reactions: 1, fb_views: 1,
         yt_views: 1, yt_likes: 1, yt_hours: 1, yt_comments: 1,
@@ -133,10 +133,10 @@
         if (!key) return;
         var cur = P.Region.data(region).currency;
 
-        // only services with a real ladder can be quoted on this form
+        // Fixed retail tiers and explicitly marked quote requests have separate flows.
         var ids = (P.PLATFORMS[key].services || []).filter(function (id) {
             var s = P.SERVICES_BY_ID[id];
-            return s && s.sizes && s.sizes.length;
+            return s && ((s.sizes && s.sizes.length) || s.quoteOnly);
         });
         svcCombo.setItems(ids.map(function (id) {
             var s = P.SERVICES_BY_ID[id];
@@ -145,7 +145,7 @@
                 value: id,
                 label: s.short,
                 icon: mark(key),
-                meta: 'from ' + P.money(P.localPrice(from, cur), cur)
+                meta: s.quoteOnly ? 'Quote on WhatsApp' : 'from ' + P.money(P.localPrice(from, cur), cur)
             };
         }), svcCombo.value());
 
@@ -163,7 +163,16 @@
             : '';
 
         var s = P.SERVICES_BY_ID[id];
-        roll($('fwSvcDesc'), (s && P.UNIT_DESC[s.unit]) || '');
+        roll($('fwSvcDesc'), (s && (s.description || P.UNIT_DESC[s.unit])) || '');
+        var quoteOnly = !!(s && s.quoteOnly);
+        $('fwQtyField').hidden = quoteOnly;
+        var hint = P.ACCOUNT_HINTS[catCombo.value()] || { placeholder: 'Profile link' };
+        $('fwLink').placeholder = (s && s.placeholder) || hint.placeholder;
+        $('fwLink').setAttribute('aria-label', s && s.placeholder ? s.placeholder : 'Your ' + meta(catCombo.value()).name + ' username or link');
+        ['fwSubmit', 'sumSubmit'].forEach(function (id) {
+            $(id).querySelector('span').textContent = quoteOnly ? 'Request a quote' : 'Review order';
+        });
+        $('fwBarBtn').innerHTML = (quoteOnly ? 'Request a quote' : 'Review order') + ' <i class="fas fa-arrow-right" aria-hidden="true"></i>';
         // the honest window, plus whether refill covers this specific service
         $('fwTime').textContent = (catCombo.value() === 'snapchat' ? 'Confirm on WhatsApp' : 'Most start in 1\u20136 hours') +
             (s && s.refillEligible ? ' \u00b7 30-day refill' : '');
@@ -218,9 +227,11 @@
     function syncSummary(r, q) {
         var key = catCombo.value();
         var s = P.SERVICES_BY_ID[svcCombo.value()];
-        var totalTxt = q ? P.money(q.total, q.currency) : '—';
+        var quoteOnly = !!(s && s.quoteOnly);
+        var totalTxt = quoteOnly ? 'Custom quote' : q ? P.money(q.total, q.currency) : '—';
         $('inlineDeposit').textContent = q ? 'Start with ' + P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) + ' (50%). Balance after completion.' : 'Choose an amount to see your 50% deposit.';
-        var qtyTxt = r ? r.qty.toLocaleString() + ' ' + (s ? s.unit : '') : 'Choose an amount';
+        if (quoteOnly) $('inlineDeposit').textContent = 'Availability, price and payment terms are confirmed on WhatsApp before you pay.';
+        var qtyTxt = quoteOnly ? 'Availability and price to be confirmed' : r ? r.qty.toLocaleString() + ' ' + (s ? s.unit : '') : 'Choose an amount';
 
         if ($('sumMark')) {
             if (key !== sumKey) { $('sumMark').innerHTML = key ? mark(key) : ''; sumKey = key; }
@@ -229,12 +240,12 @@
             $('sumTime').textContent = key === 'snapchat' ? 'Confirm on WhatsApp' : 'Most in 1–6 hours';
             $('sumRefill').textContent = s && s.refillEligible ? '30 days' : 'Not included';
             roll($('sumTotal'), totalTxt);
-            roll($('sumDeposit'), q ? P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) : '—');
+            roll($('sumDeposit'), quoteOnly ? 'Not yet payable' : q ? P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) : '—');
         }
         if ($('fwBar')) {
-            $('fwBarQty').textContent = r ? qtyTxt + ' · ' + meta(key).name : '';
+            $('fwBarQty').textContent = quoteOnly ? meta(key).name + ' · ' + s.short : r ? qtyTxt + ' · ' + meta(key).name : '';
             roll($('fwBarTotal'), totalTxt);
-            bar.setReady(!!r);
+            bar.setReady(!!r || quoteOnly);
         }
     }
 
@@ -259,6 +270,14 @@
     }
 
     function paint() {
+        var selectedService = P.SERVICES_BY_ID[svcCombo.value()];
+        if (selectedService && selectedService.quoteOnly) {
+            $('fwSnap').hidden = true;
+            $('fwQtyField').classList.remove('is-bad');
+            roll($('fwChargeVal'), 'Custom quote');
+            syncSummary(null, null);
+            return;
+        }
         var r = resolved();
         var snap = $('fwSnap');
         var qtyField = $('fwQtyField');
@@ -314,7 +333,7 @@
         var box = $('fwResults');
         if (!v) { box.hidden = true; box.innerHTML = ''; return; }
 
-        var hits = P.searchServices(v).filter(function (s) { return s.sizes && s.sizes.length; });
+        var hits = P.searchServices(v).filter(function (s) { return (s.sizes && s.sizes.length) || s.quoteOnly; });
         box.hidden = false;
         if (!hits.length) {
             box.innerHTML = '<p class="fw-minmax" style="padding:8px 2px">Nothing matches that. ' +
@@ -329,7 +348,7 @@
             return '<button type="button" class="fw-res" data-pick="' + s.id + '">' +
                 mark(s.platform) +
                 '<span>' + meta(s.platform).name + ' ' + s.short + '</span>' +
-                '<b>from ' + P.money(P.localPrice(from, cur), cur) + '</b>' +
+                '<b>' + (s.quoteOnly ? 'Request quote' : 'from ' + P.money(P.localPrice(from, cur), cur)) + '</b>' +
                 '</button>';
         }).join('');
     }
@@ -376,6 +395,15 @@
     var pending = null;
 
     function submit() {
+        var selectedService = P.SERVICES_BY_ID[svcCombo.value()];
+        if (selectedService && selectedService.quoteOnly) {
+            var account = $('fwLink').value.trim();
+            var message = 'Hi 97 World, I would like a quote for ' + selectedService.name + '.' +
+                (account ? '\nMy Snapchat link/username: ' + account : '') +
+                '\nPlease confirm availability, audience country, quantity, delivery timing and the total price before payment.';
+            window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(message), '_blank', 'noopener');
+            return;
+        }
         var r = resolved();
         if (!r) {
             // point at the chips rather than popping a keyboard over them

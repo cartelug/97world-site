@@ -118,9 +118,25 @@
         });
     }
 
+    function ugxTiers(pairs) {
+        return pairs.map(function (pair) {
+            return { qty: pair[0], ugx: pair[1], usd: pair[1] / UGX_PER_USD };
+        });
+    }
+
     var SERVICES = [
         svc('sn_followers', 'snapchat', 'Snapchat followers', 'Followers', 'followers',
             snapchatTiers(), 'snap snapchat follow audience', false, false),
+        svc('sn_followers_refill', 'snapchat', 'Snapchat followers with 30-day refill', 'Followers · 30-day refill', 'followers',
+            ugxTiers([[3000,450000],[5000,550000],[10000,850000],[15000,1100000]]),
+            'snap snapchat premium followers refill', false, true),
+        svc('sn_likes', 'snapchat', 'Snapchat likes', 'Likes', 'likes',
+            ugxTiers([[1000,250000],[2500,300000],[5000,375000],[10000,500000],[15000,650000]]),
+            'snap snapchat spotlight video likes engagement', false, false),
+        svc('sn_story_views', 'snapchat', 'Snapchat story views · request a quote', 'Story views · quote', 'views', null,
+            'snap snapchat story views audience', false, false),
+        svc('sn_spotlight_views', 'snapchat', 'Snapchat Spotlight views · check availability', 'Spotlight views · quote', 'views', null,
+            'snap snapchat spotlight video views plays', false, false),
         /* --------------------------------------------------------- Instagram --- */
         svc('ig_followers', 'instagram', 'Instagram followers', 'Followers', 'followers',
             T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
@@ -280,12 +296,26 @@
             'website traffic visitors geo targeted country', false, false)
     ];
 
+    // Different Snapchat services require different links and conditions.
+    // Views remain quote-only: no unverified quantity or price is chargeable.
+    var SNAPCHAT_DETAILS = {
+        sn_followers: { description: 'Followers for a public Snapchat profile. No refill included. Large packages are scheduled in batches; timing is agreed on WhatsApp before payment.' },
+        sn_followers_refill: { description: 'Followers for a public Snapchat profile, with a 30-day refill window for eligible drops. Delivery timing and refill conditions are confirmed before payment.' },
+        sn_likes: { description: 'Likes for one public Snapchat post or video. We confirm link eligibility and delivery timing on WhatsApp before payment. No refill included.', placeholder: 'Public Snapchat post or video link' },
+        sn_story_views: { quoteOnly: true, description: 'Request story-view pricing and availability. Currently listed audience options are Oman, Kuwait and Saudi Arabia. We confirm the view count, story coverage, audience and timing before quoting. East African targeting is not confirmed.', placeholder: '@username or public Snapchat profile link' },
+        sn_spotlight_views: { quoteOnly: true, description: 'Ask about views for one public Spotlight video. Availability, quantity and price must be confirmed before payment; no fixed package is currently listed here.', placeholder: 'Public Snapchat Spotlight video link (optional for quote)' }
+    };
+    SERVICES.forEach(function (service) {
+        var detail = SNAPCHAT_DETAILS[service.id];
+        if (detail) Object.keys(detail).forEach(function (key) { service[key] = detail[key]; });
+    });
+
     var SERVICES_BY_ID = {};
     for (var si = 0; si < SERVICES.length; si++) SERVICES_BY_ID[SERVICES[si].id] = SERVICES[si];
 
     /** Which services sell on each platform's order page, tab order. First = default. */
     var PLATFORMS = {
-        snapchat:   { key: 'snapchat', name: 'Snapchat', href: '/growth/?platform=snapchat', services: ['sn_followers'] },
+        snapchat:   { key: 'snapchat', name: 'Snapchat', href: '/growth/?platform=snapchat', services: ['sn_followers', 'sn_followers_refill', 'sn_likes', 'sn_story_views', 'sn_spotlight_views'] },
         instagram:  { key: 'instagram',  name: 'Instagram',       href: '/growth/instagram/',  services: ['ig_followers', 'ig_likes', 'ig_reels', 'ig_story'] },
         tiktok:     { key: 'tiktok',     name: 'TikTok',          href: '/growth/tiktok/',     services: ['tt_followers', 'tt_likes', 'tt_views'] },
         facebook:   { key: 'facebook',   name: 'Facebook',        href: '/growth/facebook/',   services: ['fb_followers', 'fb_likes', 'fb_reactions', 'fb_views'] },
