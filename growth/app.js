@@ -166,6 +166,7 @@
     function syncServiceScene(serviceId) {
         var config = SERVICE_SCENES[serviceId];
         var scene = $('serviceScene');
+        if (!scene) return; // Older cached HTML must retain a working order form.
         if (!config || !brandActive) {
             sceneVersion++;
             currentScene = '';
