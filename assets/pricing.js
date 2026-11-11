@@ -16,7 +16,8 @@
  * work) — it is quoted on WhatsApp. A made-up number here would be a number
  * someone gets charged, so we never invent one.
  *
- * Everything is declared in USD. UGX is derived at 3,750 UGX = $1.
+ * Legacy tariffs are declared in USD at 3,750 UGX = $1. Snapchat uses
+ * owner-approved UGX tariffs with USD derived at that same fixed site rate.
  */
 (function (window) {
     'use strict';
@@ -55,13 +56,7 @@
 
     /* ---------------------------------------------------------- platforms --- */
 
-    /* Real logos carry their own colour already. Everything else gets its
-     * icon tinted to the platform's actual brand colour — never a flat grey
-     * glyph — via the `color` field below. Snapchat's true brand yellow
-     * (#FFFC00) reads as almost invisible against this page's light fields,
-     * so its icon uses a deeper gold that still reads unmistakably as
-     * Snapchat rather than the literal hex — a legibility call, not a claim
-     * about anything factual. */
+    /* Official platform logos retain their original colours and proportions. */
     var PLAT_META = {
         instagram:  { name: 'Instagram',      logo: '/IMAGES/instagram.png', href: '/growth/instagram/' },
         tiktok:     { name: 'TikTok',         logo: '/IMAGES/tiktok.png',    href: '/growth/tiktok/' },
@@ -76,12 +71,7 @@
         soundcloud: { name: 'SoundCloud',     icon: 'fab fa-soundcloud',     href: '/growth/soundcloud/', color: '#FF5500' },
         webtraffic: { name: 'Website traffic',icon: 'fas fa-globe',          href: '/growth/traffic/',  color: '#2F80ED' },
 
-        /* Not a priced boost platform — kept out of PLATFORMS/GROWTH_* below
-         * so the panel never drives a Category → Service flow with nothing
-         * priced to show. It is a shortcut tile only: opens a WhatsApp quote
-         * request, same honest fallback used everywhere else on the site for
-         * something we don't have a fixed price for yet. */
-        snapchat:   { name: 'Snapchat',       icon: 'fab fa-snapchat',       color: '#D4B800' }
+        snapchat:   { name: 'Snapchat', logo: '/IMAGES/snapchat.svg', href: '/growth/?platform=snapchat' }
     };
 
     // The 4 platforms shown up front in the growth builder's step 1, and the
@@ -119,7 +109,18 @@
         };
     }
 
+    // Owner-approved Snapchat retail prices, 11 Nov 2026. Store the exact
+    // UGX tariff; USD follows the site's existing fixed conversion convention.
+    function snapchatTiers() {
+        return [[3000,350000], [5000,400000], [10000,600000],
+                [20000,1000000], [50000,2000000], [100000,3500000]].map(function (pair) {
+            return { qty: pair[0], ugx: pair[1], usd: pair[1] / UGX_PER_USD };
+        });
+    }
+
     var SERVICES = [
+        svc('sn_followers', 'snapchat', 'Snapchat followers', 'Followers', 'followers',
+            snapchatTiers(), 'snap snapchat follow audience', false, false),
         /* --------------------------------------------------------- Instagram --- */
         svc('ig_followers', 'instagram', 'Instagram followers', 'Followers', 'followers',
             T(1000,30, 2500,60, 5000,85, 10000,120, 25000,300),
@@ -284,6 +285,7 @@
 
     /** Which services sell on each platform's order page, tab order. First = default. */
     var PLATFORMS = {
+        snapchat:   { key: 'snapchat', name: 'Snapchat', href: '/growth/?platform=snapchat', services: ['sn_followers'] },
         instagram:  { key: 'instagram',  name: 'Instagram',       href: '/growth/instagram/',  services: ['ig_followers', 'ig_likes', 'ig_reels', 'ig_story'] },
         tiktok:     { key: 'tiktok',     name: 'TikTok',          href: '/growth/tiktok/',     services: ['tt_followers', 'tt_likes', 'tt_views'] },
         facebook:   { key: 'facebook',   name: 'Facebook',        href: '/growth/facebook/',   services: ['fb_followers', 'fb_likes', 'fb_reactions', 'fb_views'] },
@@ -326,7 +328,7 @@
     /* Order the growth builder shows platforms in: seven up front, the rest
      * behind "More". */
     var GROWTH_PRIMARY = ['instagram', 'tiktok', 'facebook', 'youtube', 'x', 'telegram', 'spotify'];
-    var GROWTH_MORE = ['whatsapp', 'linkedin', 'audiomack', 'soundcloud', 'webtraffic'];
+    var GROWTH_MORE = ['snapchat', 'whatsapp', 'linkedin', 'audiomack', 'soundcloud', 'webtraffic'];
 
     /** A platform can join a combo only if it has both roles priced. */
     function comboEligible(key) {
@@ -551,6 +553,7 @@
 
     /* What to ask for so we can deliver, per platform. Never a password. */
     var ACCOUNT_HINTS = {
+        snapchat: { label: 'Snapchat', placeholder: '@username or snapchat.com/add/username' },
         instagram:  { label: 'Instagram', placeholder: '@username or profile link' },
         tiktok:     { label: 'TikTok', placeholder: '@username or profile link' },
         facebook:   { label: 'Facebook', placeholder: 'Page name or profile link' },
@@ -908,7 +911,7 @@
     /* ---------------------------------------------------------- helpers --- */
 
     function localPrice(usd, currency) {
-        return currency === 'UGX' ? usd * UGX_PER_USD : usd;
+        return currency === 'UGX' ? Math.round(usd * UGX_PER_USD) : Math.round(usd * 100) / 100;
     }
 
     function money(amount, currency) {

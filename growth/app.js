@@ -47,13 +47,8 @@
         li_postlikes: 1, sp_plays: 1, am_plays: 1, am_likes: 1, sc_plays: 1, sc_likes: 1
     };
 
-    /* Tiles up front, the rest behind the + — never a platform we don't sell.
-     * 'snapchat' is a shortcut tile, not a priced platform: it never sets
-     * `filter` or drives the Category/Service combos — see renderTiles() and
-     * the click handler below. Website traffic is the real priced platform
-     * for "website" requests; there is no separate website-builder tile here. */
-    var TILES = ['instagram', 'tiktok', 'facebook', 'youtube', 'spotify', 'telegram', 'x', 'whatsapp', 'linkedin'];
-    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic', 'snapchat'];
+    var TILES = ['snapchat', 'instagram', 'tiktok', 'facebook', 'youtube', 'spotify', 'telegram', 'x', 'whatsapp', 'linkedin'];
+    var TILES_MORE = ['audiomack', 'soundcloud', 'webtraffic'];
 
     var $ = function (id) { return document.getElementById(id); };
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -61,6 +56,7 @@
     var region = P.Region.get() || 'UG';
     var filter = null;        // selected platform tile, null = All
     var tilesOpen = false;
+    var brandActive = false;
 
     function meta(key) { return P.PLAT_META[key] || { name: key }; }
 
@@ -91,6 +87,9 @@
     var Combo = K.Combo;
 
     var catCombo = Combo('fwCat', 'fwCatLabel', 'Search platforms\u2026', function () {
+        brandActive = true;
+        filter = catCombo.value();
+        renderTiles();
         fillServices();
         haptic();
     });
@@ -107,14 +106,6 @@
             '" data-tile="all" aria-label="All platforms"><i class="fas fa-bars"></i></button>';
 
         html += shown.map(function (key) {
-            // shortcut tile: opens a WhatsApp quote instead of driving the
-            // Category/Service combos, so it never shows as "selected".
-            if (key === 'snapchat') {
-                return '<button type="button" class="fw-tile" data-tile="snapchat" aria-label="Snapchat — ask on WhatsApp">' +
-                    mark(key) +
-                    '<span class="fw-tile-badge" aria-hidden="true"><i class="fab fa-whatsapp" style="color:#25D366"></i></span>' +
-                    '</button>';
-            }
             return '<button type="button" class="fw-tile' + (filter === key ? ' is-on' : '') +
                 '" data-tile="' + key + '" aria-label="' + meta(key).name + '" aria-pressed="' +
                 (filter === key) + '">' + mark(key) + '</button>';
@@ -164,6 +155,7 @@
     }
 
     function onServiceChange() {
+        syncBrand();
         var id = svcCombo.value();
         var qtys = P.qtysFor(id);
         $('fwMinMax').textContent = qtys.length
@@ -173,7 +165,7 @@
         var s = P.SERVICES_BY_ID[id];
         roll($('fwSvcDesc'), (s && P.UNIT_DESC[s.unit]) || '');
         // the honest window, plus whether refill covers this specific service
-        $('fwTime').textContent = '1\u20136 hours' +
+        $('fwTime').textContent = (catCombo.value() === 'snapchat' ? 'Confirm on WhatsApp' : 'Most start in 1\u20136 hours') +
             (s && s.refillEligible ? ' \u00b7 30-day refill' : '');
 
         // keep the typed amount if this service sells it, else start clean
@@ -227,12 +219,14 @@
         var key = catCombo.value();
         var s = P.SERVICES_BY_ID[svcCombo.value()];
         var totalTxt = q ? P.money(q.total, q.currency) : '—';
+        $('inlineDeposit').textContent = q ? 'Start with ' + P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) + ' (50%). Balance after completion.' : 'Choose an amount to see your 50% deposit.';
         var qtyTxt = r ? r.qty.toLocaleString() + ' ' + (s ? s.unit : '') : 'Choose an amount';
 
         if ($('sumMark')) {
             if (key !== sumKey) { $('sumMark').innerHTML = key ? mark(key) : ''; sumKey = key; }
             $('sumSvc').textContent = (key ? meta(key).name + ' ' : '') + (s ? s.short : '');
             $('sumQty').textContent = qtyTxt;
+            $('sumTime').textContent = key === 'snapchat' ? 'Confirm on WhatsApp' : 'Most in 1–6 hours';
             $('sumRefill').textContent = s && s.refillEligible ? '30 days' : 'Not included';
             roll($('sumTotal'), totalTxt);
             roll($('sumDeposit'), q ? P.money(P.roundMoney(q.total * 0.5, q.currency), q.currency) : '—');
@@ -343,7 +337,9 @@
     function pick(serviceId) {
         var s = P.SERVICES_BY_ID[serviceId];
         if (!s) return;
-        filter = null;
+        brandActive = true;
+        filter = s.platform;
+        if (TILES_MORE.indexOf(s.platform) !== -1) tilesOpen = true;
         renderTiles();
         fillCategories();
         catCombo.setValue(s.platform);
@@ -590,11 +586,8 @@
 
     /* -------------------------------------------------------- proof --- */
 
-    /* Placeholder slots for real, redacted screenshots — no name, number or
-     * date invented here. Each <img> quietly removes itself on a 404, so the
-     * dashed placeholder keeps showing until a real file lands at that path;
-     * dropping a real photo in at these exact paths is the whole update. */
-    var PROOF_SLOTS = ['recent-1', 'recent-2', 'recent-3', 'recent-4', 'recent-5', 'recent-6'];
+    /* Existing redacted evidence: this conversation shows progress, not completion. */
+    var PROOF_SLOTS = ['case-progress'];
 
     function proofImg(slug, cls) {
         return '<img class="' + cls + '" src="/IMAGES/proof/' + slug + '.webp" alt=""' +
@@ -605,8 +598,8 @@
         var grid = $('proofGrid');
         if (grid) {
             grid.innerHTML = PROOF_SLOTS.map(function (slug) {
-                return '<div class="proof-card"><span class="proof-ph"><i class="fas fa-image"></i></span>' +
-                    proofImg(slug, '') + '</div>';
+                return '<a class="growth-proof m-lift" href="/IMAGES/proof/' + slug + '.webp" target="_blank" rel="noopener">' +
+                    proofImg(slug, '') + '<span><b>From payment to progress</b><small>See how we communicate during an order. Private customer details have been removed.</small><strong>View screenshot ↗</strong></span></a>';
             }).join('');
         }
         var strip = $('revProofImgs');
@@ -660,7 +653,7 @@
 
             return '<button type="button" data-plan="' + b.id + '" class="combo-item' +
                 (b.hero ? ' is-hero' : '') + (b.tag ? ' has-tag' : '') + '">' +
-                (b.tag ? '<span class="combo-tag">' + b.tag + '</span>' : '') +
+                (was ? '<span class="combo-tag">Save ' + P.money(P.localPrice(b.wasUsd, cur) - P.localPrice(b.usd, cur), cur) + '</span>' : '') +
                 (marks ? '<span class="combo-marks">' + marks + '</span>' : '') +
                 '<span class="combo-item-name">' + b.name + '</span>' +
                 '<span class="combo-lines">' + feats + '</span>' +
@@ -686,6 +679,46 @@
                 '</a>'
             : '');
     }
+
+    function syncBrand() {
+        var key = brandActive ? catCombo.value() : '';
+        var label = $('platformLabel');
+        document.body.dataset.platform = key;
+        label.hidden = !key;
+        label.innerHTML = key ? mark(key) + '<span>' + meta(key).name + ' packages</span>' : '';
+        roll($('growthHeadline'), key ? 'Grow your ' + (key === 'webtraffic' ? 'website.' : meta(key).name + '.') : 'Grow your page.');
+        roll($('growthSubhead'), key === 'snapchat' ? 'Your next milestone starts here.' : 'See the price before you pay.');
+        $('startProp').textContent = key === 'snapchat' ? 'Timing confirmed on WhatsApp' : 'Most starts in 1–6 hours';
+        $('fwLink').setAttribute('aria-label', key ? 'Your ' + meta(key).name + ' username or link' : 'Your link');
+    }
+
+    // Shortcuts use the same catalogue and quote functions as the form.
+    var QUICK_PICKS = [
+        { id: 'ig_followers', qty: 1000 },
+        { id: 'fb_followers', qty: 1000 },
+        { id: 'sn_followers', qty: 3000 }
+    ];
+    function renderQuickPicks() {
+        var cur = P.Region.data(region).currency;
+        $('quickRegion').textContent = cur;
+        $('growthPicks').innerHTML = QUICK_PICKS.map(function (item) {
+            var service = P.SERVICES_BY_ID[item.id];
+            var price = P.money(P.localPrice(P.tierUsd(item.id, item.qty), cur), cur);
+            return '<button type="button" class="growth-pick m-press" data-quick="' + item.id + '" data-amount="' + item.qty + '">' + mark(service.platform) +
+                '<b>' + item.qty.toLocaleString() + ' ' + service.unit + '</b><small>' + meta(service.platform).name + '</small><strong>' + price + ' <span aria-hidden="true">↗</span></strong></button>';
+        }).join('');
+    }
+    $('quickRegion').addEventListener('click', function () { openSheet('regionSheet'); });
+    $('growthPicks').addEventListener('click', function (event) {
+        var button = event.target.closest('[data-quick]');
+        if (!button) return;
+        pick(button.dataset.quick);
+        $('fwQty').value = Number(button.dataset.amount).toLocaleString();
+        paint();
+        haptic();
+        $('fwLinkField').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        $('fwLink').focus({ preventScroll: true });
+    });
 
     /* ------------------------------------------------------------ region --- */
 
@@ -714,6 +747,7 @@
             closeSheet('regionSheet');
             fillServices();
             renderCombos();
+            renderQuickPicks();
         });
         $('regionLabel').textContent = P.Region.data(region).currency;
     }
@@ -725,13 +759,7 @@
         if (!t) return;
         var v = t.dataset.tile;
         if (v === 'more') { tilesOpen = true; renderTiles(); return; }
-        if (v === 'snapchat') {
-            haptic();
-            window.open('https://wa.me/' + WA + '?text=' +
-                encodeURIComponent('Hi 97 World, do you sell Snapchat services? Please send me pricing.'),
-                '_blank', 'noopener');
-            return;
-        }
+        brandActive = v !== 'all';
         filter = v === 'all' ? null : v;
         renderTiles();
         fillCategories();
@@ -810,6 +838,12 @@
     fillCategories();
     renderCombos();
     renderProof();
+    renderQuickPicks();
+    var requestedPlatform = new URLSearchParams(window.location.search).get('platform');
+    if (requestedPlatform && P.PLATFORMS[requestedPlatform]) {
+        var firstService = P.PLATFORMS[requestedPlatform].services[0];
+        pick(firstService);
+    }
 
     try {
         var savedProfile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
@@ -819,14 +853,7 @@
         }
     } catch (e) { /* private mode */ }
 
-    // Ask where they're ordering from on the first visit only, same as the
-    // order pages' own gate — popping this up on every single load (even
-    // with a region already saved) read as the page hanging then a sheet
-    // seizing the screen, not as a helpful prompt. Still reachable any time
-    // from the menu, and the page never waits on it either way — pricing
-    // already defaults to the saved region (or UGX) the moment it paints.
-    if (regionBtn && !P.Region.get()) {
-        window.setTimeout(function () { openSheet('regionSheet'); }, 260);
-    }
+    // Currency is now visible in the header: preserve the saved region or
+    // default UGX without interrupting a customer's first package selection.
 
 })(window, document);

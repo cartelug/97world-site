@@ -1,0 +1,41 @@
+/* Growth-only additions preserve the shared subscription panel. */
+.growth-currency { font: inherit; cursor: pointer; background: var(--g-surface); }
+.growth-picks-head { display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:.86rem; margin-bottom:12px; }
+.growth-picks-head a { color:var(--g-ink-2); font-size:.76rem; }
+.growth-picks { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.growth-pick { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:5px; padding:14px 10px; border:1px solid var(--g-acc-line); border-radius:12px; background:var(--g-surface-2); color:var(--g-ink); font:inherit; text-align:left; cursor:pointer; }
+.growth-pick > img { width:20px; height:20px; object-fit:contain; }
+.growth-pick > i { font-size:20px; }
+.growth-pick b { font-size:.8rem; line-height:1.35; margin-top:4px; }
+.growth-pick small { font-size:.72rem; color:var(--g-muted); }
+.growth-pick strong { font-size:.74rem; margin-top:6px; }
+.growth-custom { margin:18px 0 12px; color:var(--g-muted); font-size:.76rem; }
+.growth-deposit { font-size:.82rem; line-height:1.5; color:var(--g-ink-2); margin:10px 0 14px; }
+.growth-proof { display:flex; gap:24px; align-items:center; width:100%; padding:20px; background:var(--g-surface); border:1px solid var(--g-line); border-radius:var(--g-r); color:var(--g-ink); text-decoration:none; }
+.growth-proof > img { width:112px; height:180px; object-fit:cover; object-position:bottom; border-radius:10px; }
+.growth-proof span { display:grid; gap:10px; max-width:400px; }
+.growth-proof small { color:var(--g-muted); line-height:1.6; }
+.growth-proof strong { font-size:.82rem; color:var(--g-acc-hi); }
+@media(max-width:380px) { .growth-pick { padding:12px 7px; } .growth-pick b,.growth-pick strong { font-size:.7rem; } .growth-picks-head { align-items:flex-start; } .growth-proof { gap:14px; padding:14px; } .growth-proof > img { width:86px; } }
+
+/* Selecting a platform changes colour and copy, preserving panel geometry. */
+.growth-platform-label { display:flex; gap:10px; align-items:center; font-size:.76rem; font-weight:800; margin-bottom:12px; }
+.growth-platform-label img { width:24px; height:24px; object-fit:contain; }
+.growth-platform-label > i { font-size:24px; }
+body[data-platform="snapchat"] { --g-bg:#FFFEEA; --g-surface-2:#FFFFF2; --g-acc:#161616; --g-acc-hi:#161616; --g-acc-soft:#FFFD9C; --g-acc-line:#D7D37B; --g-line:#ECEBCF; --g-line-2:#C7C383; --fw-field:#FFFEDE; --fw-tile:#FFFDE0; --fw-cta-a:#202020; --fw-cta-b:#050505; }
+body[data-platform="snapchat"] .g-open { border-top:5px solid #FFFC00; }
+body[data-platform="snapchat"] .growth-platform-label { background:#FFFC00; width:fit-content; padding:8px 14px; border-radius:100px; }
+body[data-platform="snapchat"] .fw-submit, body[data-platform="snapchat"] .fw-bar-btn { color:#FFFC00; background:#111; }
+body[data-platform="snapchat"] .fw-tile.is-on { background:#FFFC00; border-color:#111; color:#111; box-shadow:0 0 0 3px #FFFC0066; }
+body[data-platform="snapchat"] .fw-tile.is-on img { filter:none; }
+body[data-platform="snapchat"] .fw-tile.is-on::after { border-color:#111; }
+body[data-platform="instagram"] { --g-acc:#B32C80; --g-acc-hi:#90236A; --g-acc-soft:#FAEAF4; --fw-cta-a:#BA307E; --fw-cta-b:#8B2569; }
+body[data-platform="tiktok"],body[data-platform="x"] { --g-acc:#171717; --g-acc-hi:#171717; --g-acc-soft:#EBF7F7; --fw-cta-a:#262626; --fw-cta-b:#111; }
+body[data-platform="facebook"],body[data-platform="linkedin"] { --g-acc:#1765C1; --g-acc-hi:#1455A1; --g-acc-soft:#EAF2FC; --fw-cta-a:#2475D5; --fw-cta-b:#1455A1; }
+body[data-platform="youtube"] { --g-acc:#C82222; --g-acc-hi:#A51B1B; --g-acc-soft:#FFF0F0; --fw-cta-a:#D32929; --fw-cta-b:#A51B1B; }
+body[data-platform="whatsapp"],body[data-platform="spotify"] { --g-acc:#137A3D; --g-acc-hi:#106632; --g-acc-soft:#EBF8EF; --fw-cta-a:#158544; --fw-cta-b:#106632; }
+body[data-platform="telegram"],body[data-platform="webtraffic"] { --g-acc:#126FA0; --g-acc-hi:#105F88; --fw-cta-a:#1A7EB2; --fw-cta-b:#105F88; }
+body[data-platform="soundcloud"],body[data-platform="audiomack"] { --g-acc:#A74300; --g-acc-hi:#903A00; --fw-cta-a:#BA4C00; --fw-cta-b:#903A00; }
+[data-tile="snapchat"] { background:#FFFC00; }
+.growth-pick[data-quick="sn_followers"] { background:#FFFEBC; border-color:#D7D37B; }
+@media(prefers-reduced-motion:reduce) { .growth-proof,.growth-pick { animation:none!important; transition:none!important; transform:none!important; } }

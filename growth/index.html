@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <meta name="theme-color" content="#F6F7F5">
 
-    <title>New Order | 97 Growth</title>
+    <title>Social Media Growth Packages | 97 Growth</title>
     <meta name="description" content="Followers, likes, views and plays across Instagram, TikTok, YouTube, Facebook, X, Telegram, Spotify and more. Pick a service, see the exact charge, order in under a minute.">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
@@ -17,6 +17,7 @@
 
     <link rel="stylesheet" href="/assets/motion.css">
     <link rel="stylesheet" href="/assets/growth.css?v=20260923-cv1">
+    <link rel="stylesheet" href="/growth/conversion.css?v=20261111">
 </head>
 <body class="growth">
 
@@ -28,6 +29,7 @@
             <span>97 Growth</span>
         </a>
         <div class="g-head-right">
+            <button type="button" class="g-track-btn growth-currency m-press" id="quickRegion" aria-label="Change currency">UGX</button>
             <a href="/track/" class="g-track-btn">Orders</a>
             <button type="button" class="g-menu-btn" id="menuBtn" aria-label="Menu">
                 <i class="fas fa-bars"></i>
@@ -40,19 +42,23 @@
 
     <!-- ================================================ NEW ORDER === -->
     <section class="g-wrap g-open">
-        <h1 class="m-up">Grow your page.<br><em>See the price before you pay.</em></h1>
-        <p class="m-up" style="--i:1">Pick a platform, choose an amount, confirm on WhatsApp. No password, ever.</p>
+        <div class="growth-platform-label" id="platformLabel" hidden></div>
+        <h1 class="m-up"><span id="growthHeadline">Grow your page.</span><br><em id="growthSubhead">See the price before you pay.</em></h1>
+        <p class="m-up" style="--i:1">Followers, views and engagement for your next move. Choose a package, see your deposit, and confirm with us on WhatsApp.</p>
         <ul class="g-props" data-stagger aria-label="How ordering works">
             <li><i class="fas fa-lock" aria-hidden="true"></i> No password</li>
-            <li><i class="fas fa-bolt" aria-hidden="true"></i> Starts in 1–6 hours</li>
+            <li><i class="fas fa-bolt" aria-hidden="true"></i> <span id="startProp">Most starts in 1–6 hours</span></li>
             <li><i class="fas fa-hand-holding-dollar" aria-hidden="true"></i> 50% to start</li>
-            <li><i class="fas fa-rotate-left" aria-hidden="true"></i> 30-day refill on followers</li>
+            <li><i class="fas fa-rotate-left" aria-hidden="true"></i> Refill on eligible services</li>
         </ul>
     </section>
 
     <section class="g-wrap g-sec" id="orderSec">
         <div class="fw-layout">
         <div class="fw-card">
+            <div class="growth-picks-head"><b>Start with a quick pick</b><a href="#combosSec">Compare bundles <span aria-hidden="true">↗</span></a></div>
+            <div class="growth-picks" id="growthPicks" aria-label="Quick picks" data-stagger></div>
+            <p class="growth-custom">Or build your own order below</p>
 
             <!-- platform tiles: "All" plus the platforms we actually sell.
                  The + reveals the rest rather than listing anything we don't. -->
@@ -105,6 +111,7 @@
                 <div class="fw-readonly is-charge" id="fwCharge"><span class="g-roll" id="fwChargeVal">—</span></div>
             </div>
 
+            <p class="growth-deposit" id="inlineDeposit" aria-live="polite">Choose an amount to see your 50% deposit.</p>
             <button type="button" class="fw-submit m-press" id="fwSubmit">
                 <span>Review order</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
             </button>
@@ -120,7 +127,7 @@
                     <span class="sum-copy"><b id="sumSvc">—</b><small id="sumQty">Choose an amount</small></span>
                 </div>
                 <div class="sum-rows">
-                    <div class="sum-row"><span>Starts</span><b>1–6 hours</b></div>
+                    <div class="sum-row"><span>Starts</span><b id="sumTime">Most in 1–6 hours</b></div>
                     <div class="sum-row"><span>Refill</span><b id="sumRefill">—</b></div>
                 </div>
                 <div class="sum-total"><span>Total</span><b class="g-roll" id="sumTotal">—</b></div>
@@ -162,8 +169,8 @@
     <section class="g-wrap g-sec" id="proofSec">
         <div class="g-sec-head">
             <span class="combo-kicker"><i class="fas fa-camera-retro"></i> Real orders only</span>
-            <h2>Recent customer results</h2>
-            <p>We only ever post screenshots from real 97 World orders — never a stock testimonial.</p>
+            <h2>Inside a real order</h2>
+            <p>A redacted customer conversation showing delivery in progress. This is a progress update, not a completed-order claim.</p>
         </div>
         <div class="proof-scroll" id="proofGrid" data-stagger></div>
         <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20can%20I%20see%20a%20screenshot%20from%20a%20recent%20order%3F"
@@ -189,7 +196,7 @@
             <div class="step">
                 <div class="step-n">Step 3</div>
                 <b>Track</b>
-                <p>Delivery starts within 1–6 hours and arrives gradually. Check progress any time.</p>
+                <p>We confirm the delivery window on WhatsApp. Most services start within 1–6 hours; Snapchat timing is confirmed separately.</p>
             </div>
         </div>
     </section>
@@ -208,7 +215,11 @@
             </details>
             <details>
                 <summary>When does delivery start?</summary>
-                <div class="faq-a">Most orders begin moving within 1 to 6 hours of being confirmed, then continue gradually rather than landing all at once.</div>
+                <div class="faq-a">Most orders begin moving within 1 to 6 hours of being confirmed, then continue gradually. We confirm Snapchat delivery timing on WhatsApp before payment.</div>
+            </details>
+            <details>
+                <summary>What should I know before buying Snapchat followers?</summary>
+                <div class="faq-a">Use a public Snapchat username or profile link. We confirm availability and delivery timing on WhatsApp before you pay. No refill is included in these packages. Promotional followers do not guarantee engagement, customers or sales. 97 World is an independent service, not affiliated with Snapchat.</div>
             </details>
             <details>
                 <summary>What does refill cover?</summary>
@@ -323,7 +334,7 @@
 
         <button type="button" class="proof-strip m-press" id="revProofStrip">
             <span class="proof-strip-imgs" id="revProofImgs"></span>
-            <span class="proof-strip-copy"><b>Recently delivered</b><small>See real screenshots from other orders</small></span>
+            <span class="proof-strip-copy"><b>See a real order in progress</b><small>Redacted customer conversation</small></span>
             <i class="fas fa-chevron-right"></i>
         </button>
 
@@ -372,9 +383,9 @@
 </div>
 
 <script src="/assets/motion.js" defer></script>
-<script src="/assets/pricing.js"></script>
+<script src="/assets/pricing.js?v=20261111"></script>
 <script src="/assets/order.js"></script>
 <script src="/assets/panel.js?v=20260923-p1" defer></script>
-<script src="/growth/app.js?v=20260923-p1" defer></script>
+<script src="/growth/app.js?v=20261111" defer></script>
 </body>
 </html>
