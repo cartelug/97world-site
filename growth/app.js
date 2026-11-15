@@ -35,6 +35,7 @@
     // used on every order-wizard page. Never affects the WhatsApp hand-off.
     var WORKER_API = 'https://the97-orders.carteluganda.workers.dev';
     var PROFILE_KEY = 'k97_checkout_profile';
+    var NEXT_KEY = 'k97_growth_next';
 
     /* Services delivered to one post/track rather than a profile. */
     var POST_LEVEL = {
@@ -262,8 +263,52 @@
 
     /** The desktop summary and the phone bar, both read off the same quote
      *  the in-card total uses — they can never show a different number. */
+    /* ---------------------------------------------------- value nudge ---
+     * When the next tier up costs less per 1,000, say so with the real
+     * numbers: the extra charge and both per-1,000 rates come from the same
+     * quote() the total uses, so the nudge can never disagree with the price.
+     * No next tier, or no saving per 1,000, means no nudge.
+     */
+    function pop(el) {
+        if (!el || reduceMotion) return;
+        el.classList.remove('m-pop-in');
+        void el.offsetWidth;
+        el.classList.add('m-pop-in');
+    }
+
+    function syncNudge(r, q) {
+        var box = $('cvNudge');
+        if (!box) return;
+        var hide = function () { box.hidden = true; box.dataset.key = ''; };
+        if (!r || !q) return hide();
+        var s = P.SERVICES_BY_ID[r.serviceId];
+        var qtys = P.qtysFor(r.serviceId);
+        var i = qtys.indexOf(r.qty);
+        if (!s || i < 0 || i >= qtys.length - 1) return hide();
+
+        var next = qtys[i + 1];
+        var qn = P.quote([{ platform: r.platform, serviceId: r.serviceId, qty: next }], region, 1);
+        var cur = q.currency;
+        var extra = qn.total - q.total;
+        var perNow = P.roundMoney(q.total / r.qty * 1000, cur);
+        var perNext = P.roundMoney(qn.total / next * 1000, cur);
+        if (!(extra > 0) || perNext >= perNow) return hide();
+
+        var key = r.serviceId + ':' + r.qty + ':' + cur;
+        if (box.dataset.key === key && !box.hidden) return;
+        box.dataset.key = key;
+        box.innerHTML = '<i class="fas fa-arrow-trend-up" aria-hidden="true"></i>' +
+            '<span class="cv-nudge-copy"><b>' + next.toLocaleString() + ' ' + s.unit + ' for ' +
+            P.money(extra, cur) + ' more</b><small>' + P.money(perNext, cur) + ' per 1,000 instead of ' +
+            P.money(perNow, cur) + '</small></span>' +
+            '<button type="button" class="cv-nudge-btn m-press" data-qty="' + next + '">Switch</button>';
+        box.hidden = false;
+        pop(box);
+    }
+
     var sumKey = null;
     function syncSummary(r, q) {
+        syncNudge(r, q);
         var key = catCombo.value();
         var s = P.SERVICES_BY_ID[svcCombo.value()];
         var quoteOnly = !!(s && s.quoteOnly);
@@ -633,6 +678,16 @@
 
         var message = buildMessage(name, phone.clean);
 
+        // remembered for the "2 steps left" sheet shown when they come back
+        try {
+            sessionStorage.setItem(NEXT_KEY, JSON.stringify({
+                deposit: P.money(pending.deposit, pending.currency),
+                balance: P.money(pending.balance, pending.currency),
+                snapchat: !isBundle && pending.r.platform === 'snapchat',
+                t: Date.now()
+            }));
+        } catch (e) { /* private mode */ }
+
         send.busy();
         setStep(2);
 
@@ -926,6 +981,98 @@
         });
     }, { passive: true });
 
+    // the nudge's Switch is exactly tapping the next chip
+    var nudgeBox = $('cvNudge');
+    if (nudgeBox) {
+        nudgeBox.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-qty]');
+            if (!b) return;
+            $('fwQty').value = Number(b.dataset.qty).toLocaleString();
+            paint();
+            haptic();
+            if (window.Motion && window.Motion.flash) window.Motion.flash($('fwCharge'));
+        });
+    }
+
+    /* ------------------------------------------------ "Is this safe?" ---
+     * Six questions, each answer a claim the site already makes. Opening an
+     * answer ticks it; the bar fills as they go. Nothing is gated on it.
+     */
+    var safeQs = $('safeQs');
+    if (safeQs) {
+        var safeItems = safeQs.querySelectorAll('[data-q]');
+        var safeSeen = 0;
+        var syncSafe = function () {
+            var all = safeSeen === safeItems.length;
+            $('safeBar').style.transform = 'scaleX(' + (safeSeen / safeItems.length) + ')';
+            var count = $('safeCount');
+            count.textContent = all
+                ? 'All ' + safeItems.length + ' checked. You know exactly how it works.'
+                : 'Tap each question · ' + safeSeen + ' of ' + safeItems.length + ' checked';
+            count.classList.toggle('is-all', all);
+            $('safeGoLabel').textContent = all ? 'All clear. Choose my package' : 'Choose my package';
+            if (all && window.Motion && window.Motion.flash) window.Motion.flash(count);
+        };
+        $('safeOpen').addEventListener('click', function () { openSheet('safeSheet'); haptic(); });
+        safeQs.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cv-q-btn');
+            if (!btn) return;
+            var item = btn.parentNode;
+            var ans = item.querySelector('.cv-a');
+            var open = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', String(!open));
+            ans.hidden = open;
+            if (!open && !reduceMotion) {
+                ans.classList.remove('is-in');
+                void ans.offsetWidth;
+                ans.classList.add('is-in');
+            }
+            if (!item.classList.contains('is-checked')) {
+                item.classList.add('is-checked');
+                safeSeen++;
+                syncSafe();
+                haptic();
+            }
+        });
+        var goTo = function (id) {
+            closeSheet('safeSheet');
+            window.setTimeout(function () {
+                var el = $(id);
+                if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+            }, reduceMotion ? 0 : 300);
+        };
+        $('safeGo').addEventListener('click', function () { goTo('orderSec'); });
+        $('safeProof').addEventListener('click', function (e) { e.preventDefault(); goTo('proofSec'); });
+    }
+
+    /* ------------------------------------------------ "2 steps left" ---
+     * After the WhatsApp hand-off the customer still has to pay the deposit
+     * and send the screenshot. When they come back to this tab, show those
+     * two steps once, with their own amounts. Expires after three hours.
+     */
+    function showNextSteps() {
+        if (!$('nextSheet')) return;
+        var saved = null;
+        try { saved = JSON.parse(sessionStorage.getItem(NEXT_KEY) || 'null'); } catch (e) { return; }
+        if (!saved) return;
+        var age = Date.now() - saved.t;
+        if (age < 1500) return;                       // still mid hand-off
+        try { sessionStorage.removeItem(NEXT_KEY); } catch (e) { /* ignore */ }
+        if (age > 3 * 60 * 60 * 1000) return;
+        $('nextDeposit').textContent = saved.deposit;
+        $('nextBalance').textContent = 'Balance of ' + saved.balance + ' after completion.';
+        if (saved.snapchat) {
+            $('nextPayNote').textContent = 'After we confirm Snapchat timing with you. We never ask for your PIN.';
+            $('nextStart').textContent = 'We confirm Snapchat delivery timing on WhatsApp before you pay.';
+        }
+        closeSheet('revSheet');
+        openSheet('nextSheet');
+    }
+    document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) showNextSteps();
+    });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) showNextSteps(); });
+
     renderTiles();
     fillCategories();
     renderCombos();
@@ -944,6 +1091,9 @@
             if (savedProfile.phone) $('revPhone').value = savedProfile.phone;
         }
     } catch (e) { /* private mode */ }
+
+    // back from WhatsApp on a fresh load (no back-forward cache)
+    showNextSteps();
 
     // Currency is now visible in the header: preserve the saved region or
     // default UGX without interrupting a customer's first package selection.

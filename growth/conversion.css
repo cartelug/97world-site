@@ -56,3 +56,68 @@ body[data-service-scene="story"] { --g-bg:#F9F1DD; background-image:linear-gradi
 body[data-service-scene="spotlight"] { --g-bg:#EDECE5; background-image:linear-gradient(180deg,rgba(237,236,229,.92),#EDECE5 850px),url('/IMAGES/growth-scenes/snapchat-spotlight-v1.webp'); }
 @media(max-width:480px) { .service-scene { height:200px; } .service-scene figcaption { padding:14px; width:48%; min-width:0; } .service-scene small { font-size:.64rem; } .service-scene > img { object-position:62% center; } }
 @media(prefers-reduced-motion:reduce) { .service-scene > img { animation:none!important; transition:none!important; transform:none!important; } }
+
+/* ---------------------------------------------------------------------------
+ * Conversion layer: "Is this safe?" sheet, the better-value nudge and the
+ * "2 steps left" sheet. Motion is opacity/transform only; reduced motion
+ * leaves everything visible and static.
+ * ------------------------------------------------------------------------- */
+.cv-safe-open { display:flex; align-items:center; gap:12px; width:100%; max-width:420px; margin-top:16px; padding:12px 14px; border:1px solid var(--g-acc-line); border-radius:14px; background:var(--g-surface); color:var(--g-ink); font:inherit; text-align:left; cursor:pointer; box-shadow:var(--g-shadow); }
+.cv-safe-ic { flex:none; display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:var(--g-acc-soft); color:var(--g-acc); }
+.cv-safe-copy { flex:1; min-width:0; display:grid; gap:2px; }
+.cv-safe-copy b { font-size:.92rem; font-weight:800; }
+.cv-safe-copy small { font-size:.76rem; color:var(--g-muted); }
+.cv-safe-chev { flex:none; color:var(--g-muted); font-size:.8rem; transition:transform var(--m-base) var(--m-out); }
+@media (hover:hover) { .cv-safe-open:hover .cv-safe-chev { transform:translateX(4px); } }
+
+.cv-progress { height:6px; border-radius:100px; background:var(--g-line); overflow:hidden; }
+.cv-progress span { display:block; height:100%; width:100%; border-radius:inherit; background:var(--g-acc); transform:scaleX(0); transform-origin:left center; transition:transform 320ms var(--m-out); }
+.cv-count { margin:8px 0 12px; font-size:.8rem; font-weight:700; color:var(--g-ink-2); }
+.cv-count.is-all { color:#137A3D; }
+
+.cv-qs { display:grid; gap:8px; }
+.cv-q { border:1px solid var(--g-line); border-radius:12px; background:var(--g-surface); transition:border-color var(--g-fast) var(--g-ease); }
+.cv-q.is-checked { border-color:var(--g-acc-line); }
+.cv-q-btn { display:flex; align-items:center; gap:10px; width:100%; padding:13px 12px; font:inherit; text-align:left; color:var(--g-ink); background:none; cursor:pointer; }
+.cv-q-btn b { flex:1; min-width:0; font-size:.9rem; font-weight:750; }
+.cv-tick { flex:none; display:grid; place-items:center; width:22px; height:22px; border-radius:50%; border:1.5px solid var(--g-line-2); color:transparent; font-size:.62rem; transition:background-color var(--g-fast) var(--g-ease), border-color var(--g-fast) var(--g-ease), color var(--g-fast) var(--g-ease); }
+.cv-tick i { transform:scale(.4); transition:transform 260ms var(--m-pop); }
+.cv-q.is-checked .cv-tick { background:#137A3D; border-color:#137A3D; color:#fff; }
+.cv-q.is-checked .cv-tick i { transform:scale(1); }
+.cv-chev { flex:none; color:var(--g-muted); font-size:.75rem; transition:transform 240ms var(--m-out); }
+.cv-q-btn[aria-expanded="true"] .cv-chev { transform:rotate(180deg); }
+.cv-a { padding:0 12px 13px 44px; font-size:.84rem; line-height:1.55; color:var(--g-ink-2); }
+.cv-a.is-in { animation:cvIn 260ms var(--m-out); }
+.cv-a strong { color:var(--g-ink); }
+@keyframes cvIn { from { opacity:0; transform:translate3d(0,-6px,0); } }
+
+.cv-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.cv-links a { display:inline-flex; align-items:center; gap:7px; padding:8px 12px; border:1px solid var(--g-line-2); border-radius:100px; font-size:.78rem; font-weight:700; color:var(--g-ink-2); text-decoration:none; }
+.cv-links a i { color:var(--g-acc); }
+#safeSheet .sheet-foot .fw-submit { margin-top:0; }
+
+.cv-nudge { display:flex; align-items:center; gap:10px; margin-top:10px; padding:11px 12px; border:1px dashed var(--g-acc-line); border-radius:12px; background:var(--g-acc-soft); }
+.cv-nudge > i { flex:none; color:var(--g-acc); }
+.cv-nudge-copy { flex:1; min-width:0; display:grid; gap:2px; }
+.cv-nudge-copy b { font-size:.82rem; font-weight:800; color:var(--g-ink); }
+.cv-nudge-copy small { font-size:.74rem; color:var(--g-ink-2); }
+.cv-nudge-btn { flex:none; padding:8px 14px; border-radius:100px; background:var(--g-acc); color:#fff; font:inherit; font-size:.78rem; font-weight:800; cursor:pointer; }
+
+.cv-next { list-style:none; display:grid; gap:10px; margin:2px 0 12px; padding:0; }
+.cv-next li { display:flex; gap:12px; align-items:flex-start; padding:12px; border:1px solid var(--g-line); border-radius:12px; background:var(--g-surface); }
+.cv-next li.is-on { border-color:var(--g-acc-line); background:var(--g-acc-soft); }
+.cv-next-n { flex:none; display:grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--g-surface-2); border:1px solid var(--g-line-2); font-size:.78rem; font-weight:800; color:var(--g-ink-2); }
+.cv-next li.is-done .cv-next-n { background:#137A3D; border-color:#137A3D; color:#fff; font-size:.66rem; }
+.cv-next li.is-on .cv-next-n { background:var(--g-acc); border-color:var(--g-acc); color:#fff; }
+.cv-next li div { display:grid; gap:3px; min-width:0; }
+.cv-next b { font-size:.9rem; font-weight:800; }
+.cv-next em { font-style:normal; color:var(--g-acc-hi); }
+.cv-next small { font-size:.78rem; color:var(--g-muted); line-height:1.5; }
+a.rev-send { text-decoration:none; }
+a.rev-back { display:flex; align-items:center; justify-content:center; text-decoration:none; }
+
+@media (prefers-reduced-motion:reduce) {
+    .cv-a.is-in { animation:none!important; }
+    .cv-progress span, .cv-tick, .cv-tick i, .cv-chev, .cv-safe-chev { transition:none!important; }
+    .cv-tick i { transform:none; }
+}

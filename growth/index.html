@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="/assets/motion.css">
     <link rel="stylesheet" href="/assets/growth.css?v=20260923-cv1">
-    <link rel="stylesheet" href="/growth/conversion.css?v=20261111-art">
+    <link rel="stylesheet" href="/growth/conversion.css?v=20261115-cv2">
 </head>
 <body class="growth">
 
@@ -51,6 +51,11 @@
             <li><i class="fas fa-hand-holding-dollar" aria-hidden="true"></i> 50% to start</li>
             <li><i class="fas fa-rotate-left" aria-hidden="true"></i> Refill on eligible services</li>
         </ul>
+        <button type="button" class="cv-safe-open m-press m-up" style="--i:2" id="safeOpen" aria-haspopup="dialog">
+            <span class="cv-safe-ic" aria-hidden="true"><i class="fas fa-shield-halved"></i></span>
+            <span class="cv-safe-copy"><b>Is this safe?</b><small>6 quick answers before you pay</small></span>
+            <i class="fas fa-chevron-right cv-safe-chev" aria-hidden="true"></i>
+        </button>
     </section>
 
     <section class="g-wrap g-sec" id="orderSec">
@@ -93,6 +98,7 @@
                        placeholder="Or type an amount">
                 <p class="fw-minmax" id="fwMinMax"></p>
                 <p class="fw-snap" id="fwSnap" hidden></p>
+                <div class="cv-nudge" id="cvNudge" aria-live="polite" hidden></div>
             </div>
 
             <div class="fw-field" id="fwLinkField">
@@ -372,6 +378,7 @@
         </div>
 
         <p class="acct-note"><i class="fas fa-shield-halved"></i> Nothing is charged here — you confirm on WhatsApp first.</p>
+        <p class="acct-note"><i class="fas fa-key"></i> We never ask for your Mobile Money PIN.</p>
         <p class="acct-note"><i class="fas fa-camera"></i> After paying, send us a screenshot of the payment on WhatsApp so we can start your order.</p>
 
         <div class="sheet-foot">
@@ -386,10 +393,121 @@
     </div>
 </div>
 
+<!-- "Is this safe?" — every answer below restates a claim the site already
+     makes (FAQ, privacy policy, footer). Nothing new is promised here. -->
+<div class="sheet" id="safeSheet" role="dialog" aria-modal="true" aria-labelledby="safeTitle">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2 id="safeTitle">Before you pay, check these</h2>
+            <button type="button" class="sheet-close" data-close="safeSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <div class="cv-progress" aria-hidden="true"><span id="safeBar"></span></div>
+        <p class="cv-count" id="safeCount" aria-live="polite">Tap each question · 0 of 6 checked</p>
+
+        <div class="cv-qs" id="safeQs">
+            <div class="cv-q" data-q>
+                <button type="button" class="cv-q-btn m-press" aria-expanded="false" aria-controls="safeA1">
+                    <span class="cv-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    <b>Do you need my password?</b>
+                    <i class="fas fa-chevron-down cv-chev" aria-hidden="true"></i>
+                </button>
+                <div class="cv-a" id="safeA1" hidden><p><strong>No.</strong> We deliver to a public username or link. We will never ask for your login.</p></div>
+            </div>
+            <div class="cv-q" data-q>
+                <button type="button" class="cv-q-btn m-press" aria-expanded="false" aria-controls="safeA2">
+                    <span class="cv-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    <b>Do I pay everything upfront?</b>
+                    <i class="fas fa-chevron-down cv-chev" aria-hidden="true"></i>
+                </button>
+                <div class="cv-a" id="safeA2" hidden><p><strong>No.</strong> You pay 50% to start. The balance is due after completion. Nothing is charged on this page.</p></div>
+            </div>
+            <div class="cv-q" data-q>
+                <button type="button" class="cv-q-btn m-press" aria-expanded="false" aria-controls="safeA3">
+                    <span class="cv-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    <b>Will you ask for my Mobile Money PIN?</b>
+                    <i class="fas fa-chevron-down cv-chev" aria-hidden="true"></i>
+                </button>
+                <div class="cv-a" id="safeA3" hidden><p><strong>Never.</strong> A genuine payment is confirmed on your own phone, by you. Nobody at 97 World needs that number.</p></div>
+            </div>
+            <div class="cv-q" data-q>
+                <button type="button" class="cv-q-btn m-press" aria-expanded="false" aria-controls="safeA4">
+                    <span class="cv-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    <b>How fast does it start?</b>
+                    <i class="fas fa-chevron-down cv-chev" aria-hidden="true"></i>
+                </button>
+                <div class="cv-a" id="safeA4" hidden><p>Most orders start within 1–6 hours of confirmation, then deliver gradually. Snapchat timing is confirmed on WhatsApp before you pay.</p></div>
+            </div>
+            <div class="cv-q" data-q>
+                <button type="button" class="cv-q-btn m-press" aria-expanded="false" aria-controls="safeA5">
+                    <span class="cv-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    <b>What if followers drop?</b>
+                    <i class="fas fa-chevron-down cv-chev" aria-hidden="true"></i>
+                </button>
+                <div class="cv-a" id="safeA5" hidden><p>Where a service includes refill, anything that drops within 30 days is topped back up free. It covers followers, subscribers and members. The order form shows whether yours includes it.</p></div>
+            </div>
+            <div class="cv-q" data-q>
+                <button type="button" class="cv-q-btn m-press" aria-expanded="false" aria-controls="safeA6">
+                    <span class="cv-tick" aria-hidden="true"><i class="fas fa-check"></i></span>
+                    <b>Will followers bring me customers?</b>
+                    <i class="fas fa-chevron-down cv-chev" aria-hidden="true"></i>
+                </button>
+                <div class="cv-a" id="safeA6" hidden><p><strong>Honest answer: not guaranteed.</strong> Followers make your page look bigger and more established. They don't guarantee engagement, customers or sales.</p></div>
+            </div>
+        </div>
+
+        <div class="cv-links">
+            <a href="#proofSec" id="safeProof"><i class="fas fa-camera-retro" aria-hidden="true"></i> See a real order</a>
+            <a href="/trust/"><i class="fas fa-building-shield" aria-hidden="true"></i> Trust centre</a>
+            <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%20have%20a%20question%20before%20I%20order." target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> Ask us</a>
+        </div>
+
+        <div class="sheet-foot">
+            <button type="button" class="fw-submit m-press" id="safeGo">
+                <span id="safeGoLabel">Choose my package</span> <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Shown once, when the customer comes back from the WhatsApp hand-off:
+     the two things still standing between them and a started order. -->
+<div class="sheet" id="nextSheet" role="dialog" aria-modal="true" aria-labelledby="nextTitle">
+    <div class="sheet-card">
+        <div class="sheet-grab"></div>
+        <div class="sheet-head">
+            <h2 id="nextTitle">Almost done: 2 steps left</h2>
+            <button type="button" class="sheet-close" data-close="nextSheet" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        </div>
+        <ol class="cv-next" aria-label="What happens next">
+            <li class="is-done">
+                <span class="cv-next-n" aria-hidden="true"><i class="fas fa-check"></i></span>
+                <div><b>Order sent on WhatsApp</b><small>We have your details.</small></div>
+            </li>
+            <li class="is-on">
+                <span class="cv-next-n" aria-hidden="true">2</span>
+                <div><b>Pay <em id="nextDeposit">your 50%</em> by Mobile Money</b><small id="nextPayNote">To the code we confirm with you. We never ask for your PIN.</small></div>
+            </li>
+            <li>
+                <span class="cv-next-n" aria-hidden="true">3</span>
+                <div><b>Send us the payment screenshot</b><small>On WhatsApp, so we can start. <span id="nextBalance"></span></small></div>
+            </li>
+        </ol>
+        <p class="acct-note"><i class="fas fa-bolt"></i> <span id="nextStart">Most orders start within 1–6 hours of confirmation.</span></p>
+        <div class="sheet-foot">
+            <a class="rev-send m-press" id="nextWa" href="https://wa.me/256762193386" target="_blank" rel="noopener">
+                <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                <span class="rev-send-label">Back to WhatsApp</span>
+            </a>
+            <a class="rev-back" href="/track/">Track my order</a>
+        </div>
+    </div>
+</div>
+
 <script src="/assets/motion.js?v=20261111-final" defer></script>
 <script src="/assets/pricing.js?v=20261111-snap-services"></script>
 <script src="/assets/order.js"></script>
 <script src="/assets/panel.js?v=20260923-p1" defer></script>
-<script src="/growth/app.js?v=20261111-art" defer></script>
+<script src="/growth/app.js?v=20261115-cv2" defer></script>
 </body>
 </html>
