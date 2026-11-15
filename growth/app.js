@@ -848,6 +848,9 @@
     function renderQuickPicks() {
         var cur = P.Region.data(region).currency;
         $('quickRegion').textContent = cur;
+        // the quick-pick block was removed from the page; the currency label
+        // above still updates, the picks themselves only render if present
+        if (!$('growthPicks')) return;
         $('growthPicks').innerHTML = QUICK_PICKS.map(function (item) {
             var service = P.SERVICES_BY_ID[item.id];
             var price = P.money(P.localPrice(P.tierUsd(item.id, item.qty), cur), cur);
@@ -856,7 +859,7 @@
         }).join('');
     }
     $('quickRegion').addEventListener('click', function () { openSheet('regionSheet'); });
-    $('growthPicks').addEventListener('click', function (event) {
+    if ($('growthPicks')) $('growthPicks').addEventListener('click', function (event) {
         var button = event.target.closest('[data-quick]');
         if (!button) return;
         pick(button.dataset.quick);
