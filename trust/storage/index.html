@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>Storage clients | 97 World</title>
+<meta name="description" content="Real 97 World storage clients on 1TB, 2TB and 5TB plans. See who is already connected before you pay.">
+<link rel="canonical" href="https://the97.world/trust/storage/">
+<meta property="og:title" content="Storage clients | 97 World">
+<meta property="og:description" content="Real clients already connected to 97 World storage. 1TB, 2TB and 5TB plans.">
+<link rel="icon" href="/IMAGES/logo.png" type="image/png">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.className+=' js'</script>
+<style>
+/* Self-contained like /proof/: this is a link sent from ads to someone who
+   is deciding, usually on mobile data. No web fonts, no icon font. */
+:root{
+  --bg:#050505;--surface:#0d0d10;--line:rgba(255,255,255,.09);--text:#fff;--muted:#9a9aa3;
+  --accent:#00FFB2;--accent-ink:#03140e;--wa:#25D366;
+  --r:18px;--gut:16px;--max:1080px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --bar-h:76px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.55 var(--sans);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+.ic{width:1.1em;height:1.1em;flex:none;fill:currentColor}
+.skip{position:absolute;left:-999px;top:8px;background:var(--accent);color:var(--accent-ink);padding:8px 12px;border-radius:8px;z-index:99}
+.skip:focus{left:8px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ------------------------------------------------------------ top --- */
+.top{position:sticky;top:0;z-index:20;background:rgba(5,5,5,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .26s}
+.top.is-stuck{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;letter-spacing:.08em;font-size:14px}
+.brand img{width:28px;height:28px}
+.top-link{font-size:14px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 0}
+.top-link:hover{color:var(--text)}
+
+/* ----------------------------------------------------------- hero --- */
+.hero{padding:40px 0 18px}
+.hero .m-swap{animation-fill-mode:both}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(0,255,178,.14)}
+h1{font-size:clamp(32px,8.4vw,60px);line-height:1.04;letter-spacing:-.025em;margin:14px 0 14px;font-weight:800;max-width:15ch}
+h1 em,h2 em{font-style:normal;color:var(--accent)}
+.lede{color:#c9c9d0;font-size:clamp(16px,2.2vw,19px);max-width:56ch;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:0 20px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
+.btn--wa{background:var(--wa);color:#04210f}
+.btn--ghost{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.btn--ghost:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+.hero-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px;max-width:620px}
+.stats div{padding:14px 16px;border-radius:var(--r);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.stats b{display:block;font-size:clamp(24px,7vw,34px);line-height:1.05;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stats span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
+.stats[hidden]{display:none}
+@media (max-width:379px){.stats{grid-template-columns:1fr}}
+
+/* -------------------------------------------------------- sections --- */
+.sec{padding:40px 0 8px;border-top:1px solid var(--line);margin-top:32px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h2{font-size:clamp(24px,5.4vw,36px);line-height:1.1;letter-spacing:-.02em;margin:6px 0 0;font-weight:800}
+.sub{color:#c4c4cb;margin:10px 0 0;max-width:60ch}
+
+/* ---------------------------------------------------------- filter --- */
+.filters{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:20px calc(var(--gut) * -1) 0;padding:2px var(--gut)}
+.filters::-webkit-scrollbar{display:none}
+.filters button{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 15px;border-radius:999px;font:700 14px var(--sans);color:#d4d4da;background:none;border:0;box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;transition:transform .16s var(--m-out,ease),background .26s,color .26s}
+.filters button:active{transform:scale(.975)}
+.filters button b{font-size:12px;color:var(--muted)}
+.filters button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.filters button[aria-pressed="true"] b{color:var(--accent-ink)}
+.filters[hidden]{display:none}
+
+/* --------------------------------------------------------- clients --- */
+.clients{display:grid;gap:12px;margin-top:18px;list-style:none;padding:0}
+@media (min-width:640px){.clients{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:960px){.clients{grid-template-columns:repeat(3,1fr)}}
+.client{display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:var(--r);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.client-head{display:flex;align-items:center;gap:12px;min-width:0}
+.avatar{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--accent);background:rgba(0,255,178,.08);box-shadow:inset 0 0 0 1px rgba(0,255,178,.25)}
+.who{min-width:0}
+.who b{display:block;font-size:15.5px;line-height:1.3;overflow-wrap:anywhere}
+.who span{display:block;color:var(--muted);font-size:13px}
+.plan-tag{margin-left:auto;flex:none;font-size:12.5px;font-weight:800;color:var(--accent);padding:5px 10px;border-radius:999px;background:rgba(0,255,178,.1);box-shadow:inset 0 0 0 1px rgba(0,255,178,.3)}
+.quote{margin:0;color:#d2d2d8;font-size:15px}
+.shot{border-radius:12px;overflow:hidden;background:#141418;box-shadow:0 0 0 1px var(--line)}
+.shot img{width:100%;height:auto}
+.active{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.active .ic{color:var(--accent)}
+
+.empty{margin-top:18px;padding:26px 20px;border-radius:var(--r);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);display:grid;gap:14px;justify-items:start;max-width:640px}
+.empty p{margin:0;color:#c4c4cb}
+.empty b{color:#fff}
+
+/* ----------------------------------------------------------- plans --- */
+.plans{display:grid;gap:12px;margin-top:20px}
+@media (min-width:640px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{padding:20px;border-radius:var(--r);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;gap:6px}
+.plan h3{margin:0;font-size:clamp(34px,9vw,44px);line-height:1;font-weight:800;letter-spacing:-.03em}
+.plan h3 small{font-size:.45em;color:var(--muted);font-weight:700;letter-spacing:0;margin-left:4px}
+.plan p{margin:0;color:var(--muted);font-size:14px}
+.plan .count{color:var(--accent);font-weight:700;font-size:13.5px;margin-top:6px}
+.plan .btn{margin-top:12px;min-height:44px;font-size:14px}
+
+/* ------------------------------------------------------------ more --- */
+.ticks{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;max-width:640px}
+.ticks li{display:flex;gap:10px;align-items:flex-start;color:#d2d2d8;font-size:15px}
+.ticks .ic{color:var(--accent);margin-top:4px}
+.more{display:grid;gap:10px;margin-top:16px}
+@media (min-width:640px){.more{grid-template-columns:repeat(2,1fr)}}
+.more a{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);text-decoration:none}
+.more a:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.more b{display:block;font-size:15px}
+.more span{display:block;font-size:13px;color:var(--muted)}
+.more .ic{width:22px;height:22px;color:var(--accent)}
+.more .go{margin-left:auto;width:16px;height:16px;color:var(--muted)}
+.foot{padding:36px 0 28px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px 18px}
+.foot a{color:var(--muted)}
+
+/* -------------------------------------------------- WhatsApp bar --- */
+.wa-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px var(--gut) calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(5,5,5,.97) 62%,rgba(5,5,5,0));transform:translate3d(0,110%,0);transition:transform .38s var(--m-out,ease)}
+.wa-bar.is-in{transform:none}
+.wa-bar .wrap{display:flex;align-items:center;gap:12px;padding:0}
+.wa-bar p{margin:0;font-size:13px;line-height:1.3;color:#cfcfd6;flex:1;min-width:0}
+.wa-bar p b{display:block;color:#fff;font-size:14px}
+.wa-bar .btn{flex:none;min-height:52px;box-shadow:0 10px 30px -10px rgba(37,211,102,.6)}
+@media (max-width:379px){.wa-bar p{display:none}.wa-bar .btn{flex:1}}
+
+@media (prefers-reduced-motion:reduce){
+  .wa-bar,.filters button{transition:none!important}
+  .wa-bar{transform:none!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#clients-title">Skip to the client list</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91A9.92 9.92 0 0 0 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.24-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15.4 18.6 8.8 12l6.6-6.6 1.4 1.4L11.6 12l5.2 5.2z"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M8.6 18.6 7.2 17.2 12.4 12 7.2 6.8l1.4-1.4L15.2 12z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m9.55 17.65-5.3-5.3 1.4-1.4 3.9 3.9 8.8-8.8 1.4 1.4z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13Zm8 0c-.29 0-.62.02-.97.05A4.22 4.22 0 0 1 17 16.5V19h6v-2.5c0-2.33-4.67-3.5-7-3.5Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3Z"/></symbol>
+</svg>
+
+<header class="top" data-motion-header>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/IMAGES/logo.png" alt="" width="28" height="28">97 WORLD</a>
+    <a class="top-link" href="/trust/"><svg class="ic"><use href="#i-left"/></svg> Trust Centre</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow m-swap">Trust · Storage</span>
+      <h1 class="m-swap" style="animation-delay:60ms">People already <em>store with us.</em></h1>
+      <p class="lede m-swap" style="animation-delay:120ms">Before you pay, see the clients already connected to 97 World storage on 1TB, 2TB and 5TB plans. Everyone listed is a real client who agreed to be shown here.</p>
+      <div class="stats m-swap" id="stats" style="animation-delay:180ms" hidden>
+        <div><b class="m-roll" id="statClients">0</b><span>Clients listed</span></div>
+        <div><b class="m-roll" id="statTB">0 TB</b><span>On their plans</span></div>
+        <div><b class="m-roll" id="statSince">–</b><span>First connected</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="clients-title">
+    <div class="wrap">
+      <div class="m-up">
+        <span class="kicker">Connected clients</span>
+        <h2 id="clients-title">Who's <em>already in</em></h2>
+        <p class="sub">Newest first. Names are shortened or set by each client, and screenshots have private details painted over.</p>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter by plan" hidden></div>
+      <ul class="clients" id="clients" data-stagger></ul>
+      <div class="empty m-up" id="empty" hidden>
+        <p><b>We're adding storage clients to this page.</b> We only list people who agreed to be shown, so it's short for now rather than padded out.</p>
+        <p>Message us and we'll show you a connected account on WhatsApp before you pay.</p>
+        <a class="btn btn--wa m-press" data-wa="Hi 97 World, I'm looking at storage. Can you show me a connected account before I pay?" target="_blank" rel="noopener"><svg class="ic"><use href="#i-wa"/></svg> Ask to see one</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="plans-title">
+    <div class="wrap">
+      <div class="m-up">
+        <span class="kicker">Storage plans</span>
+        <h2 id="plans-title">Pick your <em>size</em></h2>
+        <p class="sub">The same plans the clients above are on. Ask on WhatsApp for today's price.</p>
+      </div>
+      <div class="plans" id="plans" data-stagger></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="check-title">
+    <div class="wrap">
+      <div class="m-up"><span class="kicker">Still not sure?</span><h2 id="check-title">Check us <em>yourself</em></h2></div>
+      <ul class="ticks" data-stagger>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Ask us to show you a live, connected storage account on a video call or screenshot before you pay.</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Ask past clients directly in our VIP group, where we can't edit what they say.</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Call the number below. It's the same one on every 97 World page.</span></li>
+      </ul>
+      <div class="more" data-stagger>
+        <a class="m-lift" href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener"><svg class="ic"><use href="#i-users"/></svg><span><b>Our VIP group</b><span>Ask past customers directly</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+        <a class="m-lift" href="tel:+256762193386"><svg class="ic"><use href="#i-phone"/></svg><span><b>Call us</b><span>+256 762 193 386</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+        <a class="m-lift" href="/proof/"><svg class="ic"><use href="#i-shield"/></svg><span><b>Order proof</b><span>Screenshots from real orders</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+        <a class="m-lift" href="/trust/"><svg class="ic"><use href="#i-shield"/></svg><span><b>Trust Centre</b><span>How to check any seller</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <span>© 2026 97 World · Kampala</span>
+  <a href="/terms-of-service/">Terms</a>
+  <a href="/privacy-policy/">Privacy</a>
+</footer>
+
+<div class="wa-bar" id="waBar">
+  <div class="wrap">
+    <p><b>Ready to connect?</b>Pick your plan on WhatsApp.</p>
+    <a class="btn btn--wa m-press" data-wa="Hi 97 World, I've seen the storage clients page. I'd like a storage plan." target="_blank" rel="noopener">
+      <svg class="ic"><use href="#i-wa"/></svg> Get storage
+    </a>
+  </div>
+</div>
+
+<script>
+/* =====================================================================
+   STORAGE CLIENTS — the only part to edit.
+
+   Add ONLY real clients who agreed to be shown. Never a stand-in, never a
+   guess (see "Honesty rules" in CLAUDE.md).
+     name     how they want to appear: initials ("J. K."), first name, or
+              business name
+     plan     "1TB", "2TB" or "5TB"
+     since    date they connected, "YYYY-MM-DD"
+     quote    their own words, optional
+     shot     optional screenshot, already redacted (names, numbers and
+              emails painted over, EXIF dropped), e.g.
+              "/IMAGES/proof/storage/jk.webp"
+   No country field on purpose: a name is not a country.
+   ===================================================================== */
+var STORAGE_CLIENTS = [
+  // { name: "J. K.", plan: "2TB", since: "2026-03-14", quote: "Moved all my phone photos over.", shot: "" },
+];
+var STORAGE_PLANS = ["1TB", "2TB", "5TB"];
+/* ===================================================================== */
+
+(function () {
+  var WA = '256762193386';
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var tb = function (p) { return parseFloat(String(p).replace(/[^\d.]/g, '')) || 0; };
+  var initials = function (n) { return String(n).replace(/\./g, ' ').split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('') || '?'; };
+  var date = function (d, o) { var x = new Date(d + 'T00:00:00'); return isNaN(x) ? '' : x.toLocaleDateString('en-GB', o); };
+  var waLink = function (text) { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(text); };
+
+  document.querySelectorAll('[data-wa]').forEach(function (a) { a.href = waLink(a.getAttribute('data-wa')); });
+
+  var clients = STORAGE_CLIENTS.filter(function (c) { return c && c.name && c.plan; })
+    .sort(function (a, b) { return String(b.since || '').localeCompare(String(a.since || '')); });
+
+  // Stats only appear once there is something true to count.
+  if (clients.length) {
+    $('stats').hidden = false;
+    $('statClients').textContent = clients.length;
+    $('statTB').textContent = clients.reduce(function (n, c) { return n + tb(c.plan); }, 0) + ' TB';
+    var first = clients.map(function (c) { return c.since; }).filter(Boolean).sort()[0];
+    $('statSince').textContent = first ? date(first, { month: 'short', year: 'numeric' }) : '–';
+  }
+
+  var check = '<svg class="ic"><use href="#i-check"/></svg>';
+  var active = 'All';
+
+  function renderFilters() {
+    var counts = {};
+    clients.forEach(function (c) { counts[c.plan] = (counts[c.plan] || 0) + 1; });
+    var opts = ['All'].concat(STORAGE_PLANS.filter(function (p) { return counts[p]; }));
+    $('filters').hidden = opts.length < 3;
+    $('filters').innerHTML = opts.map(function (p) {
+      var n = p === 'All' ? clients.length : counts[p];
+      return '<button type="button" aria-pressed="' + (p === active) + '" data-p="' + esc(p) + '">' + esc(p) + ' <b>' + n + '</b></button>';
+    }).join('');
+  }
+
+  function renderClients() {
+    if (!clients.length) { $('empty').hidden = false; $('clients').hidden = true; return; }
+    var list = active === 'All' ? clients : clients.filter(function (c) { return c.plan === active; });
+    $('clients').innerHTML = list.map(function (c) {
+      var meta = c.since ? 'Connected ' + date(c.since, { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+      return '<li class="client m-up">' +
+        '<div class="client-head"><span class="avatar" aria-hidden="true">' + esc(initials(c.name)) + '</span>' +
+        '<span class="who"><b>' + esc(c.name) + '</b>' + (meta ? '<span>' + esc(meta) + '</span>' : '') + '</span>' +
+        '<span class="plan-tag">' + esc(c.plan) + '</span></div>' +
+        (c.quote ? '<p class="quote">“' + esc(c.quote) + '”</p>' : '') +
+        (c.shot ? '<div class="shot"><img src="' + esc(c.shot) + '" alt="Storage screenshot shared by ' + esc(c.name) + '. Private details painted over." loading="lazy" decoding="async"></div>' : '') +
+        '<span class="active">' + check + ' Connected client</span></li>';
+    }).join('');
+  }
+
+  $('filters').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    active = b.getAttribute('data-p');
+    renderFilters(); renderClients();
+  });
+
+  $('plans').innerHTML = STORAGE_PLANS.map(function (p) {
+    var n = clients.filter(function (c) { return c.plan === p; }).length;
+    return '<div class="plan m-up"><h3>' + esc(tb(p)) + '<small>TB</small></h3>' +
+      '<p>' + esc(p) + ' storage plan</p>' +
+      (n ? '<span class="count">' + n + ' client' + (n === 1 ? '' : 's') + ' listed on this plan</span>' : '') +
+      '<a class="btn btn--ghost m-press" href="' + waLink('Hi 97 World, I want the ' + p + ' storage plan. What is the price today?') + '" target="_blank" rel="noopener">Ask about ' + esc(p) + '</a></div>';
+  }).join('');
+
+  renderFilters();
+  renderClients();
+
+  // WhatsApp bar slides in once the hero is passed; stays put after that.
+  var bar = $('waBar');
+  var onScroll = function () { if (window.scrollY > 240) { bar.classList.add('is-in'); window.removeEventListener('scroll', onScroll); } };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+<script src="/assets/motion.js" defer></script>
+</body>
+</html>
