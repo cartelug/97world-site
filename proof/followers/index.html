@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>Follower proof | 97 World</title>
+<meta name="description" content="Every follower order we have screenshots for, sorted by platform and labelled for what it actually shows. Private details painted over.">
+<link rel="canonical" href="https://the97.world/proof/followers/">
+<meta property="og:title" content="Follower proof | 97 World">
+<meta property="og:description" content="Real follower-order screenshots, sorted by platform. Private details painted over.">
+<meta property="og:image" content="https://the97.world/IMAGES/proof/fast/case-fb-after-720.webp">
+<link rel="icon" href="/IMAGES/logo.png" type="image/png">
+<link rel="preload" as="image" href="/IMAGES/proof/fast/case-fb-before-320.avif" type="image/avif" fetchpriority="high">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.className+=' js'</script>
+<style>
+/* Self-contained on purpose: this page is a link we send to someone who is
+   hesitating, often on mobile data. No web fonts, no icon font, no
+   preloader. Everything above the fold arrives with the HTML itself. */
+:root{
+  --bg:#050505;--surface:#0d0d10;--line:rgba(255,255,255,.09);--text:#fff;--muted:#9a9aa3;
+  --accent:#00FFB2;--accent-ink:#03140e;--wa:#25D366;--warn:#ffcf5c;
+  --r:18px;--gut:16px;--max:1080px;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --bar-h:76px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 16px/1.55 var(--sans);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
+html.pv-lock,html.pv-lock body{overflow:hidden}
+img{display:block;max-width:100%}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+.ic{width:1.1em;height:1.1em;flex:none;fill:currentColor}
+.skip{position:absolute;left:-999px;top:8px;background:var(--accent);color:var(--accent-ink);padding:8px 12px;border-radius:8px;z-index:99}
+.skip:focus{left:8px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+/* ------------------------------------------------------------ top --- */
+.top{position:sticky;top:0;z-index:20;background:rgba(5,5,5,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .26s}
+.top.is-stuck{border-bottom-color:var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;font-weight:800;letter-spacing:.08em;font-size:14px}
+.brand img{width:28px;height:28px}
+.top-link{font-size:14px;color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 0}
+.top-link:hover{color:var(--text)}
+
+/* ----------------------------------------------------------- hero --- */
+.hero{padding:40px 0 28px}
+.hero .m-swap{animation-fill-mode:both}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(0,255,178,.14)}
+h1{font-size:clamp(32px,8.4vw,60px);line-height:1.04;letter-spacing:-.025em;margin:14px 0 14px;font-weight:800;max-width:15ch}
+h1 em,h2 em{font-style:normal;color:var(--accent)}
+.lede{color:#c9c9d0;font-size:clamp(16px,2.2vw,19px);max-width:56ch;margin:0}
+.hero-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:0 20px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
+.btn--accent{background:var(--accent);color:var(--accent-ink)}
+.btn--wa{background:var(--wa);color:#04210f}
+.btn--ghost{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.btn--ghost:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+
+.fact{margin-top:28px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px 14px;max-width:440px;padding:16px 18px;border-radius:var(--r);background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.fact small{grid-column:1/-1;color:var(--muted);font-size:12.5px;letter-spacing:.02em}
+.fact b{font-size:clamp(28px,8vw,40px);line-height:1;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fact .to{color:var(--accent)}
+.fact span{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+.fact .arrow{color:var(--accent);font-size:22px}
+
+/* --------------------------------------------------------- orders --- */
+.order{padding:36px 0 8px;border-top:1px solid var(--line);margin-top:28px}
+.order-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px;margin-bottom:18px}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h2{font-size:clamp(24px,5.4vw,36px);line-height:1.1;letter-spacing:-.02em;margin:6px 0 0;font-weight:800}
+.stage{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:999px;background:rgba(255,207,92,.1);color:var(--warn);box-shadow:inset 0 0 0 1px rgba(255,207,92,.28);white-space:nowrap}
+.stage::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.stage--process{background:rgba(255,255,255,.06);color:#d4d4da;box-shadow:inset 0 0 0 1px var(--line)}
+
+/* The strip scrolls sideways on phones; the page itself never does. */
+.strip{list-style:none;margin:0 calc(var(--gut) * -1);padding:4px var(--gut) 14px;display:grid;grid-auto-flow:column;grid-auto-columns:min(62vw,236px);gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding:0 var(--gut);scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip > li{scroll-snap-align:start;min-width:0}
+@media (min-width:900px){
+  .strip{grid-auto-flow:row;grid-template-columns:repeat(4,1fr);grid-auto-columns:auto;overflow:visible;margin:0;padding:4px 0 14px}
+  .strip--2{grid-template-columns:repeat(4,1fr)}
+}
+.shot{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:zoom-in;font:inherit}
+.frame{position:relative;aspect-ratio:320/693;border-radius:16px;overflow:hidden;background:#141418 center/cover no-repeat;box-shadow:0 0 0 1px var(--line),0 18px 40px -22px rgba(0,0,0,.9)}
+.frame img{width:100%;height:100%;object-fit:cover;transition:opacity .32s var(--m-out,ease)}
+.js .frame img{opacity:0}
+.js .frame img.is-ok{opacity:1}
+.frame .step{position:absolute;left:10px;top:10px;min-width:26px;height:26px;padding:0 8px;border-radius:999px;display:grid;place-items:center;font-size:12.5px;font-weight:800;background:rgba(5,5,5,.78);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(0,255,178,.35)}
+.frame .zoom{position:absolute;right:10px;bottom:10px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(5,5,5,.72);color:#fff;transition:transform .26s var(--m-out,ease)}
+@media (hover:hover){.shot:hover .zoom{transform:scale(1.1)}}
+.cap{margin-top:12px}
+.cap b{display:block;font-size:15.5px;line-height:1.3}
+.cap span{display:block;color:var(--muted);font-size:13.5px;margin-top:3px}
+.note{display:flex;gap:10px;margin:8px 0 0;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.035);color:#bdbdc5;font-size:13.5px;max-width:720px}
+.note .ic{margin-top:3px;color:var(--muted)}
+
+/* ------------------------------------------------------- redacted --- */
+.sec{padding:40px 0 8px;border-top:1px solid var(--line);margin-top:32px}
+.cols{display:grid;gap:22px}
+@media (min-width:820px){.cols{grid-template-columns:1fr 1fr;gap:40px}}
+.ticks{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px}
+.ticks li{display:flex;gap:10px;align-items:flex-start;color:#d2d2d8;font-size:15px}
+.ticks .ic{color:var(--accent);margin-top:4px}
+.sec p{color:#c4c4cb;margin:12px 0 0}
+
+.more{display:grid;gap:10px;margin-top:16px}
+@media (min-width:640px){.more{grid-template-columns:repeat(2,1fr)}}
+.more a{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);text-decoration:none}
+.more a:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.more b{display:block;font-size:15px}
+.more span{display:block;font-size:13px;color:var(--muted)}
+.more .ic{width:22px;height:22px;color:var(--accent)}
+.more .go{margin-left:auto;width:16px;height:16px;color:var(--muted)}
+
+.foot{padding:36px 0 28px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px 18px}
+.foot a{color:var(--muted)}
+
+/* -------------------------------------------------- WhatsApp bar --- */
+.wa-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px var(--gut) calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(5,5,5,.97) 62%,rgba(5,5,5,0));transform:translate3d(0,110%,0);transition:transform .38s var(--m-out,ease)}
+.wa-bar.is-in{transform:none}
+html.pv-lock .wa-bar{transform:translate3d(0,110%,0)}
+.wa-bar .wrap{display:flex;align-items:center;gap:12px;padding:0}
+.wa-bar p{margin:0;font-size:13px;line-height:1.3;color:#cfcfd6;flex:1;min-width:0}
+.wa-bar p b{display:block;color:#fff;font-size:14px}
+.wa-bar .btn{flex:none;min-height:52px;box-shadow:0 10px 30px -10px rgba(37,211,102,.6)}
+@media (max-width:379px){.wa-bar p{display:none}.wa-bar .btn{flex:1}}
+
+/* --------------------------------------------------------- viewer --- */
+.pv{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;background:#040405;opacity:0;visibility:hidden;transition:opacity .24s var(--m-out,ease),visibility 0s linear .24s}
+.pv.is-open{opacity:1;visibility:visible;transition:opacity .24s var(--m-out,ease),visibility 0s}
+.pv-top,.pv-foot{flex:none;display:flex;align-items:center;gap:10px;padding:10px var(--gut)}
+.pv-top{padding-top:calc(10px + env(safe-area-inset-top));justify-content:space-between}
+.pv-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.pv-count .m-roll{color:#fff;font-weight:700}
+.pv-x,.pv-nav{width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.pv-x:hover,.pv-nav:hover{background:rgba(255,255,255,.16)}
+.pv-nav[disabled]{opacity:.3;cursor:default}
+.pv-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;gap:14px;padding:0 var(--gut);touch-action:pan-y}
+.pv-fig{margin:0;height:100%;max-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;transform:scale(.965);transition:transform .32s var(--m-out,ease)}
+.pv.is-open .pv-fig{transform:none}
+.pv-img{position:relative;height:100%;max-height:calc(100vh - 220px);max-height:calc(100dvh - 220px);aspect-ratio:720/1560;max-width:100%;border-radius:14px;overflow:hidden;background:#141418 center/cover no-repeat}
+.pv-img img{width:100%;height:100%;object-fit:contain;transition:opacity .2s}
+.pv-img.is-loading img{opacity:0}
+.pv-fig.go-next{animation:pvNext .28s var(--m-out,ease)}
+.pv-fig.go-prev{animation:pvPrev .28s var(--m-out,ease)}
+@keyframes pvNext{from{opacity:0;transform:translate3d(22px,0,0)}}
+@keyframes pvPrev{from{opacity:0;transform:translate3d(-22px,0,0)}}
+.pv-cap{flex:none;text-align:center;max-width:520px;margin:0 auto;padding:12px var(--gut) 0}
+.pv-cap b{display:block;font-size:15px}
+.pv-cap span{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.pv-foot{justify-content:center;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.pv-foot .btn{min-height:48px}
+@media (max-width:599px){.pv-stage .pv-nav{display:none}}
+@media (min-width:600px){.pv-foot .pv-nav{display:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .wa-bar,.pv,.pv-fig,.frame img,.pv-img img,.frame .zoom{transition:none!important}
+  .pv-fig.go-next,.pv-fig.go-prev{animation:none!important}
+  .pv-fig{transform:none!important}
+  .wa-bar{transform:none!important}
+  html.pv-lock .wa-bar{visibility:hidden}
+}
+
+.stage--done{background:rgba(0,255,178,.1);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(0,255,178,.3)}
+.hero{padding-bottom:18px}
+.legend{display:grid;gap:8px;margin:22px 0 0;padding:0;list-style:none;max-width:560px}
+.legend li{display:flex;gap:10px;align-items:baseline;font-size:14px;color:#c4c4cb}
+.legend .stage{flex:none}
+.subnav{position:sticky;top:56px;z-index:15;background:rgba(5,5,5,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.subnav .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
+.subnav .wrap::-webkit-scrollbar{display:none}
+.subnav a{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 15px;border-radius:999px;font-size:14px;font-weight:700;text-decoration:none;color:#d4d4da;box-shadow:inset 0 0 0 1px var(--line);transition:transform .16s var(--m-out,ease),background .26s,color .26s}
+.subnav a:active{transform:scale(.975)}
+.subnav a b{font-size:12px;color:var(--muted);font-weight:700}
+.subnav a.is-on{background:var(--accent);color:var(--accent-ink);box-shadow:none}
+.subnav a.is-on b{color:var(--accent-ink)}
+.grp{scroll-margin-top:112px}
+.grp-blurb{color:#c4c4cb;margin:10px 0 0;max-width:60ch}
+.order .order-head{margin-bottom:14px}
+.inc{display:grid;gap:10px;margin-top:16px}
+@media (min-width:700px){.inc{grid-template-columns:repeat(3,1fr)}}
+.inc div{padding:16px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.inc b{display:block;font-size:15px}
+.inc span{display:block;color:var(--muted);font-size:13.5px;margin-top:3px}
+.ns{margin-top:18px;color:var(--muted);font-size:14px;max-width:62ch}
+@media (prefers-reduced-motion:reduce){.subnav a{transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#facebook">Skip to the screenshots</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91A9.92 9.92 0 0 0 12.04 2Zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.24 8.24 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.17.24-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 16.6 5.4 10l1.4-1.4 5.2 5.2 5.2-5.2 1.4 1.4z"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M15.4 18.6 8.8 12l6.6-6.6 1.4 1.4L11.6 12l5.2 5.2z"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M8.6 18.6 7.2 17.2 12.4 12 7.2 6.8l1.4-1.4L15.2 12z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.4 19 5 17.6 10.6 12 5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6z"/></symbol>
+  <symbol id="i-zoom" viewBox="0 0 24 24"><path d="M5 5h6v2H7v4H5V5Zm8 0h6v6h-2V7h-4V5ZM5 13h2v4h4v2H5v-6Zm12 0h2v6h-6v-2h4v-4Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m9.55 17.65-5.3-5.3 1.4-1.4 3.9 3.9 8.8-8.8 1.4 1.4z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><path d="M11 17h2v-6h-2v6Zm1-8a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm0 13a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13Zm8 0c-.29 0-.62.02-.97.05A4.22 4.22 0 0 1 17 16.5V19h6v-2.5c0-2.33-4.67-3.5-7-3.5Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3Z"/></symbol>
+</svg>
+
+<header class="top" data-motion-header>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/IMAGES/logo.png" alt="" width="28" height="28">97 WORLD</a>
+    <a class="top-link" href="/proof/"><svg class="ic"><use href="#i-left"/></svg> All proof</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow m-swap">Proof · Followers</span>
+      <h1 class="m-swap" style="animation-delay:60ms">Every follower order, <em>as it happened.</em></h1>
+      <p class="lede m-swap" style="animation-delay:120ms">6 screenshots from real orders, sorted by platform. Each order carries a label saying what it shows, so a sales chat is never passed off as a result.</p>
+      <ul class="legend m-swap" style="animation-delay:180ms">
+        <li><span class="stage stage--process">Order process</span>How an order is agreed. No result shown.</li>
+        <li><span class="stage">Delivery in progress</span>Followers arriving. Not finished yet.</li>
+      </ul>
+    </div>
+  </section>
+
+  <nav class="subnav" aria-label="Platforms" data-motion-header>
+    <div class="wrap"><a href="#facebook" data-g="facebook">Facebook <b>4</b></a><a href="#multi" data-g="multi">Instagram + TikTok + Facebook <b>2</b></a></div>
+  </nav>
+
+  <section class="order grp" id="facebook" data-grp>
+    <div class="wrap">
+      <div class="m-up"><span class="kicker">Followers</span><h2>Facebook</h2><p class="grp-blurb">One client&#x27;s Facebook followers, from the first profile to the latest one we have.</p></div>
+      <div class="order-head m-up" style="margin-top:26px">
+        <div><span class="kicker">Facebook followers</span><h2>From the first profile to <em>13K</em></h2></div>
+        <span class="stage">Delivery in progress</span>
+      </div>
+      <ol class="strip" data-stagger data-group="facebook-o1">
+        <li>
+          <button type="button" class="shot m-press" data-slug="case-fb-before" data-title="Before: 9.8K followers" data-body="The client&#x27;s profile before we started.">
+            <span class="frame" style="background-image:url(data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAACQAwCdASoKABYAPxFysVAsJqSisAgBgCIJZwDA3CHHPya0BSMUAP7i1Tik3d91cAW+klJN0F8GOsCvfBBfTWVLl3trcAg/H9/yvyy+mxggG4QaBAfVf1ud8Q4AAA==)">
+              <picture>
+                <source type="image/avif" srcset="/IMAGES/proof/fast/case-fb-before-320.avif">
+                <img src="/IMAGES/proof/fast/case-fb-before-320.webp" width="320" height="693" alt="Facebook profile screenshot showing 9.8K followers. Name and photos painted over." fetchpriority="high" decoding="async">
+              </picture>
+              <span class="step">1</span>
+              <span class="zoom" aria-hidden="true"><svg class="ic"><use href="#i-zoom"/></svg></span>
+            </span>
+            <span class="cap"><b>Before: 9.8K followers</b><span>The client&#x27;s profile before we started.</span></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="shot m-press" data-slug="case-payment-receipt" data-title="Payment and receipt" data-body="Mobile money in, a numbered receipt back.">
+            <span class="frame" style="background-image:url(data:image/webp;base64,UklGRoYAAABXRUJQVlA4IHoAAADQAwCdASoKABYAPxFysVAsJqSisAgBgCIJYwAAXK2k4GEp/1KqJIAA+RDFjgLMxsF6P/MRpbuvIFdayXLgzcWrMDfO/dc76vLzYTLdVCH4ipf1ZDnm9BYRkuAsqq8KlWpN055CY/l8gLOzdhLBTA4Y+Cr4AFrgABJAAA==)">
+              <picture>
+                <source type="image/avif" srcset="/IMAGES/proof/fast/case-payment-receipt-320.avif">
+                <img src="/IMAGES/proof/fast/case-payment-receipt-320.webp" width="320" height="693" alt="WhatsApp chat: a mobile-money payment, then a 97 World receipt sent as a PDF. Amounts, names and numbers painted over." loading="lazy" decoding="async">
+              </picture>
+              <span class="step">2</span>
+              <span class="zoom" aria-hidden="true"><svg class="ic"><use href="#i-zoom"/></svg></span>
+            </span>
+            <span class="cap"><b>Payment and receipt</b><span>Mobile money in, a numbered receipt back.</span></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="shot m-press" data-slug="case-progress" data-title="Progress shared in chat" data-body="“Boost nearly done.”">
+            <span class="frame" style="background-image:url(data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAACwAwCdASoKABYAPxFysVAsJqSisAgBgCIJZwDKAB6XC+hJ5LNI4AD+X28GRKYcE2Rc93GdH4kuixz4TDgRvMzIm7cwuJsv/RnhBW3O3M+WxAF6wxezEDYiQiLfSpTum0yPnuR/R+AiXEpFLr7M4BzcexyUAA==)">
+              <picture>
+                <source type="image/avif" srcset="/IMAGES/proof/fast/case-progress-320.avif">
+                <img src="/IMAGES/proof/fast/case-progress-320.webp" width="320" height="693" alt="WhatsApp chat: 97 World sends the client&#x27;s profile at 13K followers with the message Boost nearly done." loading="lazy" decoding="async">
+              </picture>
+              <span class="step">3</span>
+              <span class="zoom" aria-hidden="true"><svg class="ic"><use href="#i-zoom"/></svg></span>
+            </span>
+            <span class="cap"><b>Progress shared in chat</b><span>“Boost nearly done.”</span></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="shot m-press" data-slug="case-fb-after" data-title="Latest: 13K followers" data-body="Same profile, same following and post count.">
+            <span class="frame" style="background-image:url(data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAACQAwCdASoKABYAPxFwsFAsJiSisAgBgCIJZQDImCHHPyazbqrwAP7i1Tik3d91cAW+klJN0F8GOsCvfBBfTWVLl3trZcUn+//AUwYyWp/GsS0BsfQrI5K3VauphkAAAAA=)">
+              <picture>
+                <source type="image/avif" srcset="/IMAGES/proof/fast/case-fb-after-320.avif">
+                <img src="/IMAGES/proof/fast/case-fb-after-320.webp" width="320" height="693" alt="The same Facebook profile now showing 13K followers. Name and photos painted over." loading="lazy" decoding="async">
+              </picture>
+              <span class="step">4</span>
+              <span class="zoom" aria-hidden="true"><svg class="ic"><use href="#i-zoom"/></svg></span>
+            </span>
+            <span class="cap"><b>Latest: 13K followers</b><span>Same profile, same following and post count.</span></span>
+          </button>
+        </li>
+      </ol>
+      <p class="note m-fade"><svg class="ic"><use href="#i-info"/></svg><span>Delivery was still running when these were taken, so this shows progress, not a finished order. The screenshots don't show how long delivery took.</span></p>
+    </div>
+  </section>
+
+  <section class="order grp" id="multi" data-grp>
+    <div class="wrap">
+      <div class="m-up"><span class="kicker">Followers</span><h2>Instagram + TikTok + Facebook</h2><p class="grp-blurb">A different client choosing all three platforms. This is the order being agreed, not a result.</p></div>
+      <div class="order-head m-up" style="margin-top:26px">
+        <div><span class="kicker">All three platforms</span><h2>How an order gets <em>agreed</em></h2></div>
+        <span class="stage stage--process">Order process</span>
+      </div>
+      <ol class="strip strip--2" data-stagger data-group="multi-o2">
+        <li>
+          <button type="button" class="shot m-press" data-slug="offer-quote" data-title="The offer, in writing" data-body="Package and price set out before anything is paid.">
+            <span class="frame" style="background-image:url(data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACwAwCdASoKABYAPxF0tFAsJyUisAgBgCIJZQDA3CHhSehpc2osAADfje7s4SAFRQTPP0UsFvqCvfIamTR+afWcG3KP9OeebBZMa0PZV3cZx0Qcnu5Hn/YAAAA=)">
+              <picture>
+                <source type="image/avif" srcset="/IMAGES/proof/fast/offer-quote-320.avif">
+                <img src="/IMAGES/proof/fast/offer-quote-320.webp" width="320" height="693" alt="WhatsApp chat: 97 World sets out a followers offer and asks which platform the client wants." loading="lazy" decoding="async">
+              </picture>
+              <span class="step">1</span>
+              <span class="zoom" aria-hidden="true"><svg class="ic"><use href="#i-zoom"/></svg></span>
+            </span>
+            <span class="cap"><b>The offer, in writing</b><span>Package and price set out before anything is paid.</span></span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="shot m-press" data-slug="offer-terms" data-title="Accounts checked, half now" data-body="Half to start, the balance after completion.">
+            <span class="frame" style="background-image:url(data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAACwAwCdASoKABYAPxFysVAsJqSisAgBgCIJZwAAW+g9vUIGa7b5AAD7yUJDdbj8OBfZqm/xMnAD6+0s5qwGVxIe+dwyreE9n1AhdjXgCEQAAA==)">
+              <picture>
+                <source type="image/avif" srcset="/IMAGES/proof/fast/offer-terms-320.avif">
+                <img src="/IMAGES/proof/fast/offer-terms-320.webp" width="320" height="693" alt="WhatsApp chat: 97 World checks the client&#x27;s three accounts, then agrees half to start and half after completion." loading="lazy" decoding="async">
+              </picture>
+              <span class="step">2</span>
+              <span class="zoom" aria-hidden="true"><svg class="ic"><use href="#i-zoom"/></svg></span>
+            </span>
+            <span class="cap"><b>Accounts checked, half now</b><span>Half to start, the balance after completion.</span></span>
+          </button>
+        </li>
+      </ol>
+      <p class="note m-fade"><svg class="ic"><use href="#i-info"/></svg><span>This shows how an order is agreed, not a delivery result. The prices in it were an earlier offer. <a href="/growth/">Today's prices are here</a>.</span></p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="inc-title">
+    <div class="wrap">
+      <div class="m-up">
+        <span class="kicker">Every follower order</span>
+        <h2 id="inc-title">The terms <em>don't change</em></h2>
+      </div>
+      <div class="inc" data-stagger>
+        <div><b>No password</b><span>We deliver to your public link. We never ask for a login.</span></div>
+        <div><b>Half to start</b><span>The balance is due after the agreed delivery is finished.</span></div>
+        <div><b>30-day refill</b><span>Anything that drops off inside 30 days is topped back up.</span></div>
+      </div>
+      <p class="ns m-fade">No screenshots yet for Instagram, TikTok, YouTube, X, Telegram, Snapchat. We only show what we actually have, so those platforms aren't padded out with stand-ins. Ask us on WhatsApp if you'd like to see one.</p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="more-title">
+    <div class="wrap">
+      <div class="m-up"><span class="kicker">Still not sure?</span><h2 id="more-title">Ask someone who <em>isn't us</em></h2></div>
+      <div class="more" data-stagger>
+        <a class="m-lift" href="/proof/"><svg class="ic"><use href="#i-shield"/></svg><span><b>Back to all proof</b><span>The short version</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+        <a class="m-lift" href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener"><svg class="ic"><use href="#i-users"/></svg><span><b>Our VIP group</b><span>Ask past customers directly</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+        <a class="m-lift" href="tel:+256762193386"><svg class="ic"><use href="#i-phone"/></svg><span><b>Call us</b><span>+256 762 193 386</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+        <a class="m-lift" href="/trust/"><svg class="ic"><use href="#i-shield"/></svg><span><b>Trust Centre</b><span>How to check any seller</span></span><svg class="ic go"><use href="#i-right"/></svg></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <span>© 2026 97 World · Kampala</span>
+  <a href="/terms-of-service/">Terms</a>
+  <a href="/privacy-policy/">Privacy</a>
+</footer>
+
+<div class="wa-bar" id="waBar">
+  <div class="wrap">
+    <p><b>Seen enough?</b>Pick up where we left off.</p>
+    <a class="btn btn--wa m-press" href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%27ve%20seen%20the%20proof%20page.%20I%27d%20like%20to%20continue%20my%20order." target="_blank" rel="noopener">
+      <svg class="ic"><use href="#i-wa"/></svg> Back to WhatsApp
+    </a>
+  </div>
+</div>
+
+<div class="pv" id="pv" role="dialog" aria-modal="true" aria-label="Screenshot viewer" aria-hidden="true">
+  <div class="pv-top">
+    <span class="pv-count" aria-live="polite"><span class="m-roll" id="pvN">1</span> of <span id="pvT">4</span></span>
+    <button type="button" class="pv-x m-press" id="pvX" aria-label="Close viewer"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="pv-stage" id="pvStage">
+    <button type="button" class="pv-nav m-press" data-dir="-1" aria-label="Previous screenshot"><svg class="ic"><use href="#i-left"/></svg></button>
+    <figure class="pv-fig" id="pvFig">
+      <div class="pv-img is-loading" id="pvBox">
+        <picture>
+          <source type="image/avif" id="pvSrc">
+          <img id="pvImg" alt="" width="720" height="1560" decoding="async">
+        </picture>
+      </div>
+    </figure>
+    <button type="button" class="pv-nav m-press" data-dir="1" aria-label="Next screenshot"><svg class="ic"><use href="#i-right"/></svg></button>
+  </div>
+  <div class="pv-cap" id="pvCap"><b></b><span></span></div>
+  <div class="pv-foot">
+    <button type="button" class="pv-nav m-press" data-dir="-1" aria-label="Previous screenshot"><svg class="ic"><use href="#i-left"/></svg></button>
+    <a class="btn btn--wa m-press" href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%27ve%20seen%20the%20proof%20page.%20I%27d%20like%20to%20continue%20my%20order." target="_blank" rel="noopener"><svg class="ic"><use href="#i-wa"/></svg> Back to WhatsApp</a>
+    <button type="button" class="pv-nav m-press" data-dir="1" aria-label="Next screenshot"><svg class="ic"><use href="#i-right"/></svg></button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var BASE = '/IMAGES/proof/fast/';
+
+  /* Thumbnails fade in over their blurred placeholder once decoded. */
+  document.querySelectorAll('.frame img').forEach(function (img) {
+    function ok() { img.classList.add('is-ok'); }
+    if (img.complete && img.naturalWidth) ok();
+    else img.addEventListener('load', ok, { once: true });
+  });
+
+
+  /* Highlight the platform you're reading. Colour only; nothing reflows. */
+  var links = document.querySelectorAll('.subnav a');
+  var secs = document.querySelectorAll('[data-grp]');
+  if (links[0]) links[0].classList.add('is-on');
+  if ('IntersectionObserver' in window && secs.length > 1) {
+    var spy = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { a.classList.toggle('is-on', a.getAttribute('data-g') === e.target.id); });
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    secs.forEach(function (s) { spy.observe(s); });
+  }
+
+  /* The bar slides up once the page has painted; it never blocks a tap. */
+  var bar = document.getElementById('waBar');
+  window.requestAnimationFrame(function () {
+    window.requestAnimationFrame(function () { bar.classList.add('is-in'); });
+  });
+
+  /* ------------------------------------------------------- viewer --- */
+  var pv = document.getElementById('pv');
+  var fig = document.getElementById('pvFig');
+  var box = document.getElementById('pvBox');
+  var src = document.getElementById('pvSrc');
+  var img = document.getElementById('pvImg');
+  var nEl = document.getElementById('pvN');
+  var tEl = document.getElementById('pvT');
+  var cap = document.getElementById('pvCap');
+  var items = [], at = 0, opener = null;
+
+  function useAvif() {
+    var t = document.querySelector('.frame img');
+    return !!(t && /\.avif$/.test(t.currentSrc || ''));
+  }
+  function url(slug) { return BASE + slug + '-720.' + (useAvif() ? 'avif' : 'webp'); }
+
+  function show(i, dir) {
+    at = (i + items.length) % items.length;
+    var b = items[at];
+    var slug = b.getAttribute('data-slug');
+    var lq = b.querySelector('.frame').style.backgroundImage;
+    box.style.backgroundImage = lq;
+    box.classList.add('is-loading');
+    var next = BASE + slug + '-720.webp';
+    var same = img.getAttribute('src') === next;
+    src.srcset = BASE + slug + '-720.avif';
+    img.src = next;
+    if (same && img.complete && img.naturalWidth) box.classList.remove('is-loading');
+    img.alt = b.querySelector('img').alt;
+    cap.querySelector('b').textContent = b.getAttribute('data-title');
+    cap.querySelector('span').textContent = b.getAttribute('data-body');
+    if (window.Motion) window.Motion.roll(nEl, at + 1); else nEl.textContent = at + 1;
+    if (dir && !reduce) {
+      fig.classList.remove('go-next', 'go-prev');
+      void fig.offsetWidth;
+      fig.classList.add(dir > 0 ? 'go-next' : 'go-prev');
+    }
+    pv.querySelectorAll('.pv-nav[data-dir="-1"]').forEach(function (n) { n.disabled = at === 0; });
+    pv.querySelectorAll('.pv-nav[data-dir="1"]').forEach(function (n) { n.disabled = at === items.length - 1; });
+    // Warm the neighbours so the next swipe is instant.
+    [at - 1, at + 1].forEach(function (j) {
+      if (items[j]) { var p = new Image(); p.src = url(items[j].getAttribute('data-slug')); }
+    });
+  }
+  img.addEventListener('load', function () { box.classList.remove('is-loading'); });
+  img.addEventListener('error', function () { box.classList.remove('is-loading'); });
+
+  function open(btn) {
+    var group = btn.closest('[data-group]');
+    items = Array.prototype.slice.call(group.querySelectorAll('.shot'));
+    tEl.textContent = items.length;
+    opener = btn;
+    show(items.indexOf(btn));
+    pv.classList.add('is-open');
+    pv.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('pv-lock');
+    document.getElementById('pvX').focus({ preventScroll: true });
+  }
+  function close() {
+    pv.classList.remove('is-open');
+    pv.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('pv-lock');
+    if (opener) opener.focus({ preventScroll: true });
+  }
+  function step(d) {
+    var j = at + d;
+    if (j < 0 || j >= items.length) return;
+    show(j, d);
+  }
+
+  document.querySelectorAll('.shot').forEach(function (b) {
+    b.addEventListener('click', function () { open(b); });
+  });
+  document.getElementById('pvX').addEventListener('click', close);
+  pv.querySelectorAll('.pv-nav').forEach(function (n) {
+    n.addEventListener('click', function () { step(+n.getAttribute('data-dir')); });
+  });
+  document.getElementById('pvStage').addEventListener('click', function (e) {
+    if (e.target === this) close();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!pv.classList.contains('is-open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') step(1);
+    else if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'Tab') {
+      // Keep focus inside the viewer while it is open.
+      var f = Array.prototype.filter.call(pv.querySelectorAll('button,a'), function (x) {
+        return !x.disabled && x.offsetParent !== null;
+      });
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* Swipe between screenshots. */
+  var x0 = null, y0 = null;
+  var stage = document.getElementById('pvStage');
+  stage.addEventListener('touchstart', function (e) {
+    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+</script>
+<script src="/assets/motion.js" defer></script>
+</body>
+</html>

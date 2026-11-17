@@ -1,0 +1,44 @@
+{
+  "_readme": "Every screenshot shown on /proof/followers/ is listed here. Add a screenshot with tools/proof/add-shot.py, list it below, then run tools/proof/build-followers.py. A platform with no orders here is not shown, never padded. stage must be one of: process (a sales chat), progress (delivery running), complete (only if the screenshot itself shows it finished).",
+  "groups": [
+    {
+      "id": "facebook",
+      "label": "Facebook",
+      "blurb": "One client's Facebook followers, from the first profile to the latest one we have.",
+      "orders": [
+        {
+          "id": "o1",
+          "kicker": "Facebook followers",
+          "title": "From the first profile to <em>13K</em>",
+          "stage": "progress",
+          "note": "Delivery was still running when these were taken, so this shows progress, not a finished order. The screenshots don't show how long delivery took.",
+          "shots": [
+            {"slug": "case-fb-before", "title": "Before: 9.8K followers", "body": "The client's profile before we started.", "alt": "Facebook profile screenshot showing 9.8K followers. Name and photos painted over."},
+            {"slug": "case-payment-receipt", "title": "Payment and receipt", "body": "Mobile money in, a numbered receipt back.", "alt": "WhatsApp chat: a mobile-money payment, then a 97 World receipt sent as a PDF. Amounts, names and numbers painted over."},
+            {"slug": "case-progress", "title": "Progress shared in chat", "body": "“Boost nearly done.”", "alt": "WhatsApp chat: 97 World sends the client's profile at 13K followers with the message Boost nearly done."},
+            {"slug": "case-fb-after", "title": "Latest: 13K followers", "body": "Same profile, same following and post count.", "alt": "The same Facebook profile now showing 13K followers. Name and photos painted over."}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multi",
+      "label": "Instagram + TikTok + Facebook",
+      "blurb": "A different client choosing all three platforms. This is the order being agreed, not a result.",
+      "orders": [
+        {
+          "id": "o2",
+          "kicker": "All three platforms",
+          "title": "How an order gets <em>agreed</em>",
+          "stage": "process",
+          "note": "This shows how an order is agreed, not a delivery result. The prices in it were an earlier offer. <a href=\"/growth/\">Today's prices are here</a>.",
+          "shots": [
+            {"slug": "offer-quote", "title": "The offer, in writing", "body": "Package and price set out before anything is paid.", "alt": "WhatsApp chat: 97 World sets out a followers offer and asks which platform the client wants."},
+            {"slug": "offer-terms", "title": "Accounts checked, half now", "body": "Half to start, the balance after completion.", "alt": "WhatsApp chat: 97 World checks the client's three accounts, then agrees half to start and half after completion."}
+          ]
+        }
+      ]
+    }
+  ],
+  "not_shown": ["Instagram", "TikTok", "YouTube", "X", "Telegram", "Snapchat"]
+}

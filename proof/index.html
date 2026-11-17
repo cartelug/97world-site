@@ -110,7 +110,7 @@ h2{font-size:clamp(24px,5.4vw,36px);line-height:1.1;letter-spacing:-.02em;margin
 .sec p{color:#c4c4cb;margin:12px 0 0}
 
 .more{display:grid;gap:10px;margin-top:16px}
-@media (min-width:640px){.more{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:640px){.more{grid-template-columns:repeat(2,1fr)}}
 .more a{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);text-decoration:none}
 .more a:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
 .more b{display:block;font-size:15px}
@@ -331,7 +331,7 @@ html.pv-lock .wa-bar{transform:translate3d(0,110%,0)}
       <div class="m-up">
         <span class="kicker">Why parts are blacked out</span>
         <h2 id="red-title">We hide their details. <em>We'd hide yours too.</em></h2>
-        <p>These clients didn't agree to be on a website, so we covered everything that could identify them with solid blocks. Covered, not blurred, so it can't be undone.</p>
+        <p>So that nobody can be identified, we covered everything personal with solid blocks. Covered, not blurred, so it can't be undone.</p>
       </div>
       <ul class="ticks" data-stagger>
         <li><svg class="ic"><use href="#i-check"/></svg>Names, profile photos and bios</li>
@@ -350,6 +350,11 @@ html.pv-lock .wa-bar{transform:translate3d(0,110%,0)}
         <h2 id="more-title">Ask someone who <em>isn't us</em></h2>
       </div>
       <div class="more" data-stagger>
+        <a class="m-lift" href="/proof/followers/">
+          <svg class="ic"><use href="#i-users"/></svg>
+          <span><b>All follower orders</b><span>Every screenshot, sorted by platform</span></span>
+          <svg class="ic go"><use href="#i-right"/></svg>
+        </a>
         <a class="m-lift" href="https://www.facebook.com/share/1C9cjQCknW/?mibextid=wwXIfr" target="_blank" rel="noopener">
           <svg class="ic"><use href="#i-users"/></svg>
           <span><b>Our VIP group</b><span>Ask past customers directly</span></span>
