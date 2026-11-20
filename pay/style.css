@@ -1,0 +1,19 @@
+.pay-shell { padding-block: 34px 52px; }
+.pay-intro { margin-bottom: 23px; }
+.pay-intro h1 { font: 800 clamp(2rem, 6vw, 3.5rem)/1.05 'Cabinet Grotesk', sans-serif; letter-spacing: -.04em; }
+.pay-intro p, .pay-instructions, .pay-aside p { color: var(--g-ink-2); line-height: 1.5; }
+.pay-intro p { margin-top: 10px; }
+.pay-layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.pay-state, .pay-panel, .pay-aside { padding: clamp(15px, 4vw, 24px); }
+.pay-state > :is(button, a) { margin-top: 12px; }
+.pay-order, .pay-demo { margin-bottom: 12px; }
+.pay-order strong { overflow-wrap: anywhere; }
+.pay-demo { border-radius: 8px; background: var(--g-acc-soft); padding: 9px 11px; font-weight: 700; }
+.pay-panel h2 { margin-bottom: 12px; }
+.pay-instructions { margin-top: 12px; }
+.pay-report { margin-top: 18px; }
+.pay-report button { margin-top: 12px; }
+.pay-aside img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; margin-bottom: 16px; }
+.pay-aside p { margin-top: 12px; }
+.pay-panel .pay-code b { letter-spacing: .04em; }
+@media (max-width: 700px) { .pay-layout { grid-template-columns: 1fr; } }

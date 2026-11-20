@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex">
+    <meta name="referrer" content="same-origin">
+    <meta name="theme-color" content="#EFE9E8">
+    <title>Pay with Mobile Money | 97 World</title>
+    <link rel="icon" href="/IMAGES/logo.png" type="image/png">
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="/assets/growth.css">
+    <link rel="stylesheet" href="/pay/style.css">
+</head>
+<body class="growth">
+<header class="g-header">
+    <div class="g-wrap g-header-in">
+        <a href="/growth/" class="g-brand"><img src="/IMAGES/logo.png" alt=""><span>97 Growth</span></a>
+        <a href="/track/" class="g-track-btn m-press" id="navTrack">Track order</a>
+    </div>
+</header>
+<main class="g-wrap pay-shell">
+    <header class="pay-intro m-up">
+        <h1>Pay with Mobile Money</h1>
+        <p>Use your phone to pay the deposit, then report the transfer here.</p>
+    </header>
+
+    <div id="payState" class="price-card pay-state m-pop-in" role="status">
+        <p id="payStateText">Checking your order…</p>
+        <button type="button" class="g-btn g-btn--ghost m-press" id="retryLookup" hidden>Check again</button>
+        <a class="g-btn g-btn--ghost m-press" href="/growth/" id="startOrder" hidden>Start a growth order</a>
+    </div>
+
+    <div class="pay-layout" id="payLayout" hidden>
+        <section class="price-card pay-panel m-pop-in" aria-labelledby="payHeading">
+            <p class="pay-order" id="payOrderLine">Order <strong id="payRef"></strong></p>
+            <p class="pay-demo" id="payDemo" hidden>Checkout preview · No money will be sent.</p>
+            <h2 id="payHeading">Choose your network</h2>
+            <div class="pay-grid" id="payMethods" role="group" aria-label="Mobile Money network"></div>
+            <div class="pay-code" id="merchantCode" hidden></div>
+            <p class="pay-instructions" id="payInstructions" role="status">Choose MTN or Airtel to see how to pay.</p>
+
+            <form id="reportForm" class="pay-report" hidden>
+                <div class="acct-field">
+                    <label for="transferRef">Mobile Money transaction reference</label>
+                    <div class="acct-box"><input id="transferRef" type="text" maxlength="200"
+                        autocomplete="off" placeholder="From your Mobile Money message" required></div>
+                </div>
+                <p class="acct-err" id="reportError" role="alert" hidden></p>
+                <button type="submit" class="g-btn g-btn--wide m-press" id="sendTransfer">Report transfer</button>
+            </form>
+        </section>
+        <aside class="price-card pay-aside m-up" aria-label="Deposit summary">
+            <img src="/IMAGES/growth-campaign/momo-checkout.webp" width="960" height="640" alt="">
+            <div id="payTotals">
+                <div class="price-total"><span>Deposit due</span><b id="payDeposit"></b></div>
+                <div class="price-sep"></div>
+                <div class="price-row"><span>Balance after completion</span><b id="payBalance"></b></div>
+                <div class="price-row"><span>Order total</span><b id="payTotal"></b></div>
+            </div>
+            <p>Enter your Mobile Money PIN only on your phone. After you report the transfer, we’ll check it before marking the payment confirmed.</p>
+        </aside>
+    </div>
+</main>
+<script src="/assets/pricing.js?v=20261111-snap-services" defer></script>
+<script src="/assets/motion.js?v=20261111-final" defer></script>
+<script src="/pay/app.js" defer></script>
+</body>
+</html>

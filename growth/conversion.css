@@ -71,3 +71,20 @@ body[data-service-scene="spotlight"] { --g-bg:#EDECE5; background-image:linear-g
 .checkout-created { margin-top: 16px; }
 .checkout-created h3 { font-size: 1.1rem; }
 .rev-account { overflow-wrap: anywhere; }
+
+.checkout-guide, #revOrderForm { margin-top: 16px; }
+.checkout-message {
+    display: flex; gap: 11px; align-items: flex-start; padding: 14px;
+    background: var(--g-acc-soft); border: 1px solid var(--g-line); border-radius: var(--g-r);
+}
+.checkout-message > i { color: var(--g-acc-hi); margin-top: 4px; }
+.checkout-message h3 { font-size: 1rem; }
+.checkout-message p, .checkout-evidence p { margin: 5px 0 0; line-height: 1.5; font-size: .9rem; }
+.checkout-evidence { margin: 12px 0; padding: 10px 0; }
+.checkout-evidence summary { cursor: pointer; font-weight: 700; }
+.checkout-evidence a { display: inline-block; margin-top: 8px; }
+#revSend .rev-send-label { white-space: normal; }
+.checkout-review-image {
+    display: block; width: 100%; height: clamp(70px, 16vw, 112px); object-fit: cover;
+    object-position: center 52%; border-radius: var(--g-r); margin-bottom: 10px;
+}

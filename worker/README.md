@@ -9,10 +9,10 @@ money — so it lives here as an encrypted secret and the site calls this instea
 | Route | Method | Auth | Does |
 |---|---|---|---|
 | `/catalogue` | GET | — | Our services with retail prices, built from Fastway's live rates. Never returns wholesale cost. Cached 1 hour. |
-| `/order/health` | GET | — | Checks order storage. The website offers web checkout only when this responds with `{"checkout":true}`. |
+| `/order/health` | GET | — | Checks order storage. The website offers web checkout only when this responds with both `checkout: true` and `paymentPage: true`. |
 | `/order` | POST | — | Records a **pending** order, with the price/deposit/balance the site already showed the customer. Does not contact Fastway. Does not spend anything. |
-| `/order/confirm` | POST | — | Customer says "I've sent the money" (WhatsApp agent, mobile money, cash — this site never collects payment itself). Moves the order to `awaiting_confirmation`. Still spends nothing. |
-| `/order/status` | GET | — | `?ref=K97-XXXX`. What a customer's own tracking page sees: status and amount only — never their name, phone or link. |
+| `/order/confirm` | POST | — | Customer says "I've sent the money" (WhatsApp agent, mobile money, cash — this site never collects payment itself). For orders on the payment page, also records the Mobile Money network and transaction reference. Moves the order to `awaiting_confirmation`. Still spends nothing. |
+| `/order/status` | GET | — | `?ref=K97-XXXX`. What a customer's own tracking page sees: Status and amounts, including the deposit and balance for web orders. Never returns the customer’s name, phone or link. |
 | `/admin/orders` | GET | token | Your queue |
 | `/admin/confirm` | POST | token | You've checked the money actually landed. Moves the order to `paid` — the only status `/admin/place` will accept. |
 | `/admin/place` | POST | token | **The only route that spends money.** Sends a `paid` order to Fastway. Refuses anything not yet marked paid. |

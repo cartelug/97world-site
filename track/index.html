@@ -8,6 +8,7 @@
     <title>Track your order | 97 Growth</title>
     <meta name="description" content="Check where your 97 World order has reached — payment, acceptance and delivery status.">
     <meta name="robots" content="noindex">
+    <meta name="referrer" content="same-origin">
 
     <link rel="icon" href="/IMAGES/logo.png" type="image/png">
 
@@ -71,6 +72,7 @@
             </div>
         </div>
 
+        <a href="/pay/" class="g-btn g-btn--wide m-press" id="openPayment" style="margin-top:14px" hidden>Open payment page</a>
         <div class="acct-list" id="confirmBlock" style="margin-top:14px" hidden>
             <p class="acct-note" id="trackPaymentInstructions" hidden></p>
             <div class="acct-field">
@@ -165,6 +167,7 @@
         var pending = o.status === 'pending';
         var confirmed = o.status === 'paid' || o.status === 'placed' || o.status === 'partial' || o.status === 'failed';
         var payment = checkoutPayment(o.ref);
+        var hasPaymentPage = o.checkoutFlow === 'payment-page';
         var note = 'Check back here for the latest status.';
         var payLabel = document.getElementById('stPayLabel');
         var payNote = document.getElementById('stPayNote');
@@ -185,7 +188,9 @@
         if (pending) {
             pay.classList.add('is-current');
             payLabel.textContent = 'Waiting for payment';
-            payNote.textContent = 'After sending your payment, report the transfer below.';
+            payNote.textContent = hasPaymentPage
+                ? 'Open the payment page to choose your network or report a transfer.'
+                : 'After sending your payment, report the transfer below.';
         } else if (o.status === 'awaiting_confirmation') {
             pay.classList.add('is-current');
             payLabel.textContent = 'Transfer reported';
@@ -209,7 +214,10 @@
             note = 'The current status is unavailable. Check again shortly.';
         }
 
-        document.getElementById('confirmBlock').hidden = !pending;
+        var openPayment = document.getElementById('openPayment');
+        openPayment.href = '/pay/?ref=' + encodeURIComponent(o.ref);
+        openPayment.hidden = !pending || !hasPaymentPage;
+        document.getElementById('confirmBlock').hidden = !pending || hasPaymentPage;
         document.getElementById('resNote').textContent = note;
         var current = out.querySelector('.step.is-current');
         if (current && window.Motion) window.Motion.flash(current);

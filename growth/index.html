@@ -17,7 +17,7 @@
 
     <link rel="stylesheet" href="/assets/motion.css">
     <link rel="stylesheet" href="/assets/growth.css?v=20260923-cv1">
-    <link rel="stylesheet" href="/growth/conversion.css?v=20261120-checkout">
+    <link rel="stylesheet" href="/growth/conversion.css?v=20261120-guided">
 </head>
 <body class="growth">
 
@@ -327,8 +327,8 @@
 
         <ol class="rev-steps" id="revSteps" aria-label="What happens next">
             <li class="is-on"><span>1</span>Review</li>
-            <li><span>2</span><em id="revStepTwo">MoMo</em></li>
-            <li><span>3</span><em id="revStepThree">Track</em></li>
+            <li><span>2</span>Details</li>
+            <li><span>3</span><em id="revStepThree">Payment</em></li>
         </ol>
 
         <div class="rev-list" id="revList"></div>
@@ -338,7 +338,7 @@
             <div class="price-sep"></div>
             <div class="price-split">
                 <div class="price-split-row is-now">
-                    <span><i class="fas fa-hand-holding-dollar"></i> Pay now (50%)</span>
+                    <span><i class="fas fa-hand-holding-dollar"></i> Deposit (50%)</span>
                     <b id="revDeposit">—</b>
                 </div>
                 <div class="price-split-row">
@@ -348,13 +348,28 @@
             </div>
         </div>
 
-        <button type="button" class="proof-strip m-press" id="revProofStrip">
-            <span class="proof-strip-imgs" id="revProofImgs"></span>
-            <span class="proof-strip-copy"><b>See a real order in progress</b><small>Redacted customer conversation</small></span>
-            <i class="fas fa-chevron-right"></i>
-        </button>
+        <div class="checkout-guide" id="revGuide">
+            <img class="checkout-review-image m-up" src="/IMAGES/growth-campaign/review-checkout.webp"
+                 width="960" height="640" alt="" loading="lazy">
+            <div class="checkout-message m-pop-in">
+                <i class="fas fa-list-check" aria-hidden="true"></i>
+                <div><h3>Check where your boost will go</h3>
+                    <p>Review your selection above. The deposit is due first and the balance is due after completion.</p></div>
+            </div>
+            <details class="checkout-evidence">
+                <summary class="m-press">What happens after I pay?</summary>
+                <p id="revNextHint"></p>
+                <a href="/proof/" target="_blank" rel="noopener">See a real order in progress (opens in a new tab)</a>
+            </details>
+            <button type="button" class="g-btn g-btn--wide m-press" id="revContinue">Continue to order details</button>
+        </div>
 
-        <div id="revOrderForm">
+        <div id="revOrderForm" hidden>
+            <div class="checkout-message m-pop-in">
+                <i class="fas fa-phone" aria-hidden="true"></i>
+                <div><h3 id="revDetailsTitle" tabindex="-1">Add your contact details</h3>
+                    <p id="revDetailsHint" role="status"></p></div>
+            </div>
             <div class="acct-list" style="margin-top:16px">
                 <div class="acct-field" id="revAccountField" hidden>
                     <label for="revAccount">Your @handle</label>
@@ -388,29 +403,23 @@
             <div class="pay-code" id="payCode" hidden></div>
         </div>
 
-        <div class="sheet-foot" id="revActions">
+        <div class="sheet-foot" id="revActions" hidden>
             <p class="acct-err" id="revErr" role="alert" hidden></p>
             <button type="button" class="rev-send m-press" id="revSend">
                 <i class="fas fa-mobile-screen-button" id="revSendIcon" aria-hidden="true"></i>
                 <span class="rev-send-label">Create order</span>
                 <b class="rev-send-amt" id="revSendAmt"></b>
             </button>
-            <button type="button" class="rev-back m-press" data-close="revSheet">Go back and edit</button>
+            <button type="button" class="rev-back m-press" id="revBack">Back to review</button>
         </div>
 
-        <div id="revCreated" class="checkout-created m-pop-in" hidden>
-            <h3 id="revCreatedTitle" tabindex="-1">Your order is ready for payment</h3>
-            <p class="acct-note">Order number <strong id="revOrderRef"></strong>. Save it to track your order.</p>
-            <p class="acct-note" id="revPhonePayNote">On your phone, choose merchant payment and enter the merchant code and deposit shown here. After paying, use the transaction reference to report the transfer.</p>
-            <a class="g-btn g-btn--wide m-press" id="revTrack" style="margin-top:12px" href="/track/">Report payment or track order</a>
-        </div>
     </div>
 </div>
 
 <script src="/assets/motion.js?v=20261111-final" defer></script>
 <script src="/assets/pricing.js?v=20261111-snap-services"></script>
 <script src="/assets/order.js"></script>
-<script src="/assets/panel.js?v=20261120-checkout" defer></script>
-<script src="/growth/app.js?v=20261120-checkout" defer></script>
+<script src="/assets/panel.js?v=20261120-guided" defer></script>
+<script src="/growth/app.js?v=20261120-guided" defer></script>
 </body>
 </html>

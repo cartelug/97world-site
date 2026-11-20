@@ -311,7 +311,7 @@ async function handleOrder(request, env, origin) {
 
   const {
     serviceId, bundleId, quantity, link, name, phone, region, referrer, payment,
-    amount, currency, deposit, balance
+    amount, currency, deposit, balance, checkoutFlow
   } = body;
 
   if (!link || !name || !phone) {
@@ -319,6 +319,14 @@ async function handleOrder(request, env, origin) {
   }
   if (!serviceId && !bundleId) {
     return json({ error: 'No service chosen' }, { status: 400 }, origin);
+  }
+
+  if (checkoutFlow === 'payment-page' && !(
+    region === 'UG' && currency === 'UGX' &&
+    [amount, deposit, balance].every(Number.isSafeInteger) &&
+    deposit > 0 && balance >= 0 && deposit + balance === amount
+  )) {
+    return json({ error: 'Invalid deposit or order total' }, { status: 400 }, origin);
   }
 
   const id = ref();
@@ -340,6 +348,7 @@ async function handleOrder(request, env, origin) {
     phone: String(phone).slice(0, 40),
     region: region || 'UG',
     referrer: referrer || 'Direct',
+    checkoutFlow: checkoutFlow === 'payment-page' ? checkoutFlow : null,
     payment: payment || null,
     // what the customer owes, as already computed and shown to them on the
     // site — the Worker never prices anything itself, it just remembers it
@@ -374,6 +383,12 @@ async function handleOrderConfirm(request, env, origin) {
   if (!order) return json({ error: 'Order not found' }, { status: 404 }, origin);
 
   if (order.status === 'pending') {
+    if (order.checkoutFlow === 'payment-page') {
+      if (!['mtn', 'airtel'].includes(body.method) || typeof body.note !== 'string' || !body.note.trim()) {
+        return json({ error: 'Choose the network and enter the transaction reference' }, { status: 400 }, origin);
+      }
+      order.payment = body.method === 'mtn' ? 'MTN Mobile Money' : 'Airtel Money';
+    }
     order.status = 'awaiting_confirmation';
     order.claimedPaidAt = new Date().toISOString();
     if (body.note) order.paymentNote = String(body.note).slice(0, 200);
@@ -403,8 +418,13 @@ async function handleOrderStatus(url, env, origin) {
     paidAt: order.paidAt,
     placedAt: order.placedAt || null,
     amount: order.amount,
-    currency: order.currency
-  }, {}, origin);
+    currency: order.currency,
+    ...(order.checkoutFlow === 'payment-page' ? {
+      checkoutFlow: order.checkoutFlow,
+      deposit: order.deposit,
+      balance: order.balance
+    } : {})
+  }, { headers: { 'Cache-Control': 'no-store' } }, origin);
 }
 
 /** You confirm the money actually landed. The only route between a customer
@@ -541,7 +561,7 @@ export default {
         const headers = { 'Cache-Control': 'no-store' };
         try {
           await env.ORDERS.get('checkout:health');
-          return json({ checkout: true }, { headers }, origin);
+          return json({ checkout: true, paymentPage: true }, { headers }, origin);
         } catch {
           return json({ checkout: false }, { status: 503, headers }, origin);
         }

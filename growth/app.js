@@ -37,7 +37,7 @@
 
     fetch(WORKER_API + '/order/health', { cache: 'no-store' })
         .then(function (response) { return response.ok ? response.json() : null; })
-        .then(function (data) { checkoutReady = !!(data && data.checkout === true); })
+        .then(function (data) { checkoutReady = !!(data && data.checkout === true && data.paymentPage === true); })
         .catch(function () { /* The coordinated checkout remains available. */ });
 
     /* Services delivered to one post/track rather than a profile. */
@@ -83,10 +83,7 @@
     var bar = K.Bar({ bar: $('fwBar'), btn: $('fwBarBtn'), watch: $('fwSubmit'), onGo: submit });
     var payment = K.Payment({
         grid: $('payGrid'), code: $('payCode'), label: $('payLabel'),
-        codeLead: function (name) {
-            return (reviewOnline ? 'Pay the deposit to this ' : 'After confirming, pay the deposit to this ') +
-                name + ' merchant code';
-        }
+        codeLead: function (name) { return 'After confirming, pay the deposit to this ' + name + ' merchant code'; }
     });
     var send = K.SendButton($('revSend'));
     function setStep(n) { K.setStep($('revSteps'), n); }
@@ -576,19 +573,53 @@
         $('revPhone').placeholder = P.Region.data(pending.region).phone;
         $('revPhoneIcon').className = online ? 'fas fa-phone' : 'fab fa-whatsapp';
         $('revSendIcon').className = online ? 'fas fa-mobile-screen-button' : 'fab fa-whatsapp';
-        $('revStepTwo').textContent = online ? 'MoMo' : 'WhatsApp';
-        $('revStepThree').textContent = online ? 'Track' : 'Pay & send receipt';
+        $('revStepThree').textContent = online ? 'Payment' : 'Confirm';
+        $('revNextHint').textContent = online
+            ? 'After you create your order, choose MTN or Airtel on the payment page. Once you report the transfer, you can follow the verification here on the site.'
+            : 'Confirm your order and payment instructions with us before sending your deposit.';
         $('revWebNote').hidden = !online;
         $('revChatNote').hidden = online;
-        $('revOrderForm').hidden = false;
-        $('revActions').hidden = false;
-        $('revCreated').hidden = true;
+        $('revGuide').querySelector('details').open = false;
         $('revErr').hidden = true;
-        setStep(1);
-        send.ready(online ? 'Create order' : 'Confirm on WhatsApp');
-        payment.render(P.Region.data(pending.region).payments, online);
+        send.ready(online ? 'Create order and continue to payment' : 'Confirm on WhatsApp');
+        payment.render(online ? [] : P.Region.data(pending.region).payments, true);
+        showReviewDetails(false);
         openSheet('revSheet');
     }
+
+    function updateDetailsHint() {
+        var ready = $('revName').value.trim().length >= 2 &&
+            /^(?:\D*\d){8,15}\D*$/.test($('revPhone').value) &&
+            (pending.kind !== 'bundle' || $('revAccount').value.trim());
+        $('revDetailsHint').textContent = ready
+            ? (reviewOnline ? 'Your details are ready. Continue to get your order number and payment options.'
+                : 'Your details are ready. Continue to confirm the order with us.')
+            : 'We use this number if we need to reach you about your order.';
+    }
+
+    function showReviewDetails(show) {
+        $('revGuide').hidden = show;
+        $('revOrderForm').hidden = !show;
+        $('revActions').hidden = !show;
+        $('revPayment').hidden = !show || reviewOnline;
+        setStep(show ? 2 : 1);
+        updateDetailsHint();
+    }
+
+    $('revContinue').addEventListener('click', function () {
+        showReviewDetails(true);
+        $('revDetailsTitle').focus();
+    });
+
+    $('revBack').addEventListener('click', function () {
+        if (creatingOrder) return;
+        showReviewDetails(false);
+        $('revContinue').focus();
+    });
+
+    ['revName', 'revPhone', 'revAccount'].forEach(function (id) {
+        $(id).addEventListener('input', updateDetailsHint);
+    });
 
     /** The WhatsApp message, built from whichever kind of order is pending —
      *  the two flows share every line except how the package itself reads. */
@@ -678,6 +709,7 @@
 
         if (reviewOnline) {
             order.referrer = 'Growth web checkout';
+            order.checkoutFlow = 'payment-page';
             createWebOrder(order);
             return;
         }
@@ -716,8 +748,6 @@
     function createWebOrder(order) {
         var button = $('revSend');
         var error = $('revErr');
-        var paymentOptions = $('payGrid').querySelectorAll('button');
-        paymentOptions.forEach(function (option) { option.disabled = true; });
         creatingOrder = true;
         button.disabled = true;
         button.querySelector('.rev-send-label').textContent = 'Creating order…';
@@ -731,27 +761,15 @@
             return response.json();
         }).then(function (result) {
             if (!result.ok || !/^K97-[A-Z0-9-]+$/.test(result.ref)) throw new Error('Missing reference');
-            payment.render([order.payment]);
-            $('revOrderForm').hidden = true;
-            $('revActions').hidden = true;
-            try {
-                sessionStorage.setItem('k97_payment:' + result.ref, JSON.stringify({
-                    method: order.payment, deposit: order.deposit
-                }));
-            } catch (error) { /* Payment instructions are also visible here. */ }
-            $('revCreated').hidden = false;
-            $('revOrderRef').textContent = result.ref;
-            $('revTrack').href = '/track/?ref=' + encodeURIComponent(result.ref);
-            setStep(2);
-            if ($('revSheet').classList.contains('is-open')) $('revCreatedTitle').focus();
+            setStep(3);
+            window.location.replace('/pay/?ref=' + encodeURIComponent(result.ref));
         }).catch(function () {
             checkoutReady = false;
             error.textContent = 'Couldn’t get an order number. Please try again before sending money.';
             error.hidden = false;
         }).finally(function () {
             creatingOrder = false;
-            paymentOptions.forEach(function (option) { option.disabled = false; });
-            send.ready('Create order');
+            send.ready('Create order and continue to payment');
         });
     }
 
@@ -773,13 +791,7 @@
                     proofImg(slug, '') + '<span><b>From payment to progress</b><small>See how we communicate during an order. Private customer details have been removed.</small><strong>View screenshot ↗</strong></span></a>';
             }).join('');
         }
-        var strip = $('revProofImgs');
-        if (strip) {
-            strip.innerHTML = PROOF_SLOTS.slice(0, 3).map(function (slug) {
-                return '<span class="proof-strip-av"><i class="fas fa-image"></i>' +
-                    proofImg(slug, '') + '</span>';
-            }).join('');
-        }
+
     }
 
     /* ------------------------------------------------------------ combos ---
@@ -967,17 +979,6 @@
             closeSheet('menuSheet');
             window.setTimeout(function () {
                 var el = $('combosSec');
-                if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-            }, reduceMotion ? 0 : 300);
-        });
-    }
-
-    var revProofStrip = $('revProofStrip');
-    if (revProofStrip) {
-        revProofStrip.addEventListener('click', function () {
-            closeSheet('revSheet');
-            window.setTimeout(function () {
-                var el = $('proofSec');
                 if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
             }, reduceMotion ? 0 : 300);
         });
