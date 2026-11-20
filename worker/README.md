@@ -9,6 +9,7 @@ money — so it lives here as an encrypted secret and the site calls this instea
 | Route | Method | Auth | Does |
 |---|---|---|---|
 | `/catalogue` | GET | — | Our services with retail prices, built from Fastway's live rates. Never returns wholesale cost. Cached 1 hour. |
+| `/order/health` | GET | — | Checks order storage. The website offers web checkout only when this responds with `{"checkout":true}`. |
 | `/order` | POST | — | Records a **pending** order, with the price/deposit/balance the site already showed the customer. Does not contact Fastway. Does not spend anything. |
 | `/order/confirm` | POST | — | Customer says "I've sent the money" (WhatsApp agent, mobile money, cash — this site never collects payment itself). Moves the order to `awaiting_confirmation`. Still spends nothing. |
 | `/order/status` | GET | — | `?ref=K97-XXXX`. What a customer's own tracking page sees: status and amount only — never their name, phone or link. |

@@ -20,8 +20,8 @@
  *      list actually sells and says so. The list is tiered; there is no
  *      per-1000 rate to multiply an arbitrary amount by.
  *
- * Everything priced comes from assets/pricing.js. Submitting hands off to
- * the same WhatsApp message, Sheets row and Worker queue as the order pages.
+ * Everything priced comes from assets/pricing.js. Eligible Uganda orders use
+ * the Worker checkout. Orders requiring coordination use the chat hand-off.
  */
 (function (window, document) {
     'use strict';
@@ -31,10 +31,14 @@
 
     var WA = '256762193386';
     var SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsER7toUR8OwPWPic7Oqbbjz-ew2pR_HJ4Um3V9o6eVmlf730ibwF7ELv6GCekmgl2aA/exec';
-    // The order Worker (worker/) — same additive, fire-and-forget recording
-    // used on every order-wizard page. Never affects the WhatsApp hand-off.
     var WORKER_API = 'https://the97-orders.carteluganda.workers.dev';
     var PROFILE_KEY = 'k97_checkout_profile';
+    var checkoutReady = false;
+
+    fetch(WORKER_API + '/order/health', { cache: 'no-store' })
+        .then(function (response) { return response.ok ? response.json() : null; })
+        .then(function (data) { checkoutReady = !!(data && data.checkout === true); })
+        .catch(function () { /* The coordinated checkout remains available. */ });
 
     /* Services delivered to one post/track rather than a profile. */
     var POST_LEVEL = {
@@ -79,7 +83,10 @@
     var bar = K.Bar({ bar: $('fwBar'), btn: $('fwBarBtn'), watch: $('fwSubmit'), onGo: submit });
     var payment = K.Payment({
         grid: $('payGrid'), code: $('payCode'), label: $('payLabel'),
-        codeLead: function (name) { return 'After confirming, pay the 50% to this ' + name + ' code'; }
+        codeLead: function (name) {
+            return (reviewOnline ? 'Pay the deposit to this ' : 'After confirming, pay the deposit to this ') +
+                name + ' merchant code';
+        }
     });
     var send = K.SendButton($('revSend'));
     function setStep(n) { K.setStep($('revSteps'), n); }
@@ -451,8 +458,15 @@
     /* ------------------------------------------------------------ review --- */
 
     var pending = null;
+    var creatingOrder = false;
+    var reviewOnline = false;
+
+    function webCheckout() {
+        return checkoutReady && pending.region === 'UG' && (pending.kind === 'bundle' || pending.r.platform !== 'snapchat');
+    }
 
     function submit() {
+        if (creatingOrder) return;
         var selectedService = P.SERVICES_BY_ID[svcCombo.value()];
         if (selectedService && selectedService.quoteOnly) {
             var account = $('fwLink').value.trim();
@@ -499,6 +513,7 @@
             kind: 'single', r: r, account: $('fwLink').value.trim(), quote: q,
             total: q.total, currency: q.currency, deposit: deposit, balance: balance
         };
+        pending.region = region;
         paintReview();
     }
 
@@ -506,6 +521,7 @@
      *  quantity — the two platforms and 10,000-follower quantities are fixed
      *  by the bundle itself. Only the handle is still asked. */
     function openCombo(id) {
+        if (creatingOrder) return;
         var b = null;
         for (var i = 0; i < P.BUNDLES.length; i++) {
             if (P.BUNDLES[i].id === id) { b = P.BUNDLES[i]; break; }
@@ -516,15 +532,13 @@
         var deposit = P.roundMoney(total * 0.5, cur);
         var balance = total - deposit;
         pending = {
-            kind: 'bundle', bundle: b, account: pending && pending.account || '',
+            kind: 'bundle', bundle: b, region: region, account: pending && pending.account || '',
             total: total, currency: cur, deposit: deposit, balance: balance
         };
         paintReview();
     }
 
-    /** Paints revList/revTotal/revDeposit/revBalance for whichever kind of
-     *  order is pending, then opens the sheet — the one place either flow
-     *  lands before it becomes a WhatsApp message. */
+    /** Show the current quote and choose the checkout route for this order. */
     function paintReview() {
         var cur = pending.currency;
 
@@ -546,9 +560,10 @@
                 '<span class="rev-copy"><b>' + meta(r.platform).name + ' ' +
                     (row.service ? row.service.short : '') + '</b>' +
                 '<small>' + r.qty.toLocaleString() + ' ' + (row.service ? row.service.unit : '') +
-                    ' — ' + pending.account + '</small></span>' +
+                    ' — <span class="rev-account"></span></small></span>' +
                 '<span class="rev-amt">' + P.money(row.price, cur) + '</span>' +
                 '</div>';
+            $('revList').querySelector('.rev-account').textContent = pending.account;
             $('revAccountField').hidden = true;
         }
 
@@ -556,18 +571,29 @@
         $('revDeposit').textContent = P.money(pending.deposit, cur);
         $('revBalance').textContent = P.money(pending.balance, cur);
         $('revSendAmt').textContent = P.money(pending.deposit, cur);
-        $('revSend').setAttribute('aria-label', 'Confirm on WhatsApp. Deposit: ' + P.money(pending.deposit, cur));
+        var online = reviewOnline = webCheckout();
+        $('revPhoneLabel').textContent = online ? 'Contact number' : 'WhatsApp number';
+        $('revPhone').placeholder = P.Region.data(pending.region).phone;
+        $('revPhoneIcon').className = online ? 'fas fa-phone' : 'fab fa-whatsapp';
+        $('revSendIcon').className = online ? 'fas fa-mobile-screen-button' : 'fab fa-whatsapp';
+        $('revStepTwo').textContent = online ? 'MoMo' : 'WhatsApp';
+        $('revStepThree').textContent = online ? 'Track' : 'Pay & send receipt';
+        $('revWebNote').hidden = !online;
+        $('revChatNote').hidden = online;
+        $('revOrderForm').hidden = false;
+        $('revActions').hidden = false;
+        $('revCreated').hidden = true;
         $('revErr').hidden = true;
         setStep(1);
-        send.ready('Confirm on WhatsApp');
-        payment.render(P.Region.data(region).payments);
+        send.ready(online ? 'Create order' : 'Confirm on WhatsApp');
+        payment.render(P.Region.data(pending.region).payments, online);
         openSheet('revSheet');
     }
 
     /** The WhatsApp message, built from whichever kind of order is pending —
      *  the two flows share every line except how the package itself reads. */
     function buildMessage(name, phone) {
-        var reg = P.Region.data(region);
+        var reg = P.Region.data(pending.region);
         var lines = ['*NEW 97 GROWTH ORDER [' + reg.name.toUpperCase() + ']*', ''];
 
         if (pending.kind === 'bundle') {
@@ -595,7 +621,7 @@
     }
 
     $('revSend').addEventListener('click', function () {
-        if (!pending) return;
+        if (!pending || creatingOrder) return;
         var errEl = $('revErr');
 
         if (pending.kind === 'bundle') {
@@ -615,8 +641,11 @@
         var phoneRaw = $('revPhone').value.trim();
 
         if (name.length < 2) { errEl.hidden = false; errEl.textContent = 'Please add your name.'; return; }
-        if (phoneRaw.replace(/\D/g, '').length < 8) {
-            errEl.hidden = false; errEl.textContent = 'Add a WhatsApp number we can reach you on.'; return;
+        var digits = phoneRaw.replace(/\D/g, '');
+        if (digits.length < 8 || digits.length > 15) {
+            errEl.hidden = false;
+            errEl.textContent = reviewOnline ? 'Add a valid contact number.' : 'Add a WhatsApp number we can reach you on.';
+            return;
         }
         errEl.hidden = true;
 
@@ -630,6 +659,28 @@
         try {
             localStorage.setItem(PROFILE_KEY, JSON.stringify({ name: name, phone: phoneRaw }));
         } catch (e) { /* private mode */ }
+
+        var order = {
+            serviceId: isBundle ? null : pending.r.serviceId,
+            bundleId: isBundle ? b.id : null,
+            quantity: isBundle ? null : pending.r.qty,
+            link: pending.account,
+            name: name,
+            phone: phone.clean,
+            region: pending.region,
+            referrer: isBundle ? 'Combo panel' : 'Order panel',
+            payment: payment.value(),
+            amount: pending.total,
+            currency: pending.currency,
+            deposit: pending.deposit,
+            balance: pending.balance
+        };
+
+        if (reviewOnline) {
+            order.referrer = 'Growth web checkout';
+            createWebOrder(order);
+            return;
+        }
 
         var message = buildMessage(name, phone.clean);
 
@@ -654,27 +705,55 @@
                 },
                 worker: {
                     apiBase: WORKER_API,
-                    body: {
-                        serviceId: isBundle ? null : (pending.r.serviceId || null),
-                        bundleId: isBundle ? b.id : null,
-                        quantity: isBundle ? null : (pending.r.qty || null),
-                        link: pending.account,
-                        name: name,
-                        phone: phone.clean,
-                        region: region,
-                        referrer: isBundle ? 'Combo panel' : 'Order panel',
-                        payment: payment.value(),
-                        amount: pending.total,
-                        currency: pending.currency,
-                        deposit: pending.deposit,
-                        balance: pending.balance
-                    }
+                    body: order
                 }
             });
         } else {
             window.location.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(message);
         }
     });
+
+    function createWebOrder(order) {
+        var button = $('revSend');
+        var error = $('revErr');
+        var paymentOptions = $('payGrid').querySelectorAll('button');
+        paymentOptions.forEach(function (option) { option.disabled = true; });
+        creatingOrder = true;
+        button.disabled = true;
+        button.querySelector('.rev-send-label').textContent = 'Creating order…';
+
+        fetch(WORKER_API + '/order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(order)
+        }).then(function (response) {
+            if (!response.ok) throw new Error('Order could not be created');
+            return response.json();
+        }).then(function (result) {
+            if (!result.ok || !/^K97-[A-Z0-9-]+$/.test(result.ref)) throw new Error('Missing reference');
+            payment.render([order.payment]);
+            $('revOrderForm').hidden = true;
+            $('revActions').hidden = true;
+            try {
+                sessionStorage.setItem('k97_payment:' + result.ref, JSON.stringify({
+                    method: order.payment, deposit: order.deposit
+                }));
+            } catch (error) { /* Payment instructions are also visible here. */ }
+            $('revCreated').hidden = false;
+            $('revOrderRef').textContent = result.ref;
+            $('revTrack').href = '/track/?ref=' + encodeURIComponent(result.ref);
+            setStep(2);
+            if ($('revSheet').classList.contains('is-open')) $('revCreatedTitle').focus();
+        }).catch(function () {
+            checkoutReady = false;
+            error.textContent = 'Couldn’t get an order number. Please try again before sending money.';
+            error.hidden = false;
+        }).finally(function () {
+            creatingOrder = false;
+            paymentOptions.forEach(function (option) { option.disabled = false; });
+            send.ready('Create order');
+        });
+    }
 
     /* -------------------------------------------------------- proof --- */
 

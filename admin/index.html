@@ -265,31 +265,37 @@
             return '<button class="mini" data-act="status" data-ref="' + o.ref + '">Check status</button>' + wa;
         }
 
+        function escapeHTML(value) {
+            return String(value).replace(/[&<>"']/g, function (character) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+            });
+        }
+
         function orderHTML(o) {
             var placed = (o.fastway || []).filter(function (p) { return p.orderId; });
             var hasAmount = typeof o.amount === 'number';
-            return '<article class="ord" data-s="' + o.status + '">' +
+            return '<article class="ord" data-s="' + escapeHTML(o.status) + '">' +
                 '<div class="ord-top"><span class="ord-ref">' + o.ref + '</span>' +
                 '<span class="ord-when">' + when(o.createdAt) + '</span></div>' +
-                '<b class="who">' + o.name + '</b>' +
-                '<p class="what">' + describe(o) + '<br>' + o.link + '</p>' +
+                '<b class="who">' + escapeHTML(o.name) + '</b>' +
+                '<p class="what">' + escapeHTML(describe(o)) + '<br>' + escapeHTML(o.link) + '</p>' +
                 '<div class="meta">' +
-                    '<span>' + o.phone + '</span>' +
-                    '<span>' + o.region + '</span>' +
-                    (o.payment ? '<span>' + o.payment + '</span>' : '') +
-                    (o.referrer && o.referrer !== 'Direct' ? '<span>ref: ' + o.referrer + '</span>' : '') +
-                    '<span>' + (STATUS_LABEL[o.status] || o.status) + '</span>' +
+                    '<span>' + escapeHTML(o.phone) + '</span>' +
+                    '<span>' + escapeHTML(o.region) + '</span>' +
+                    (o.payment ? '<span>' + escapeHTML(o.payment) + '</span>' : '') +
+                    (o.referrer && o.referrer !== 'Direct' ? '<span>ref: ' + escapeHTML(o.referrer) + '</span>' : '') +
+                    '<span>' + escapeHTML(STATUS_LABEL[o.status] || o.status) + '</span>' +
                 '</div>' +
                 (hasAmount
                     ? '<div class="meta">' +
                         '<span>' + OrderKit.money(o.amount, o.currency) + ' total</span>' +
                         (typeof o.deposit === 'number' ? '<span>' + OrderKit.money(o.deposit, o.currency) + ' deposit</span>' : '') +
-                        (o.paymentNote ? '<span>note: ' + o.paymentNote + '</span>' : '') +
+                        (o.paymentNote ? '<span>Transfer reference: ' + escapeHTML(o.paymentNote) + '</span>' : '') +
                       '</div>'
                     : '') +
                 (placed.length
                     ? '<div class="meta">' + placed.map(function (p) {
-                        return '<span>#' + p.orderId + ' · ' + p.label + '</span>';
+                        return '<span>#' + escapeHTML(p.orderId) + ' · ' + escapeHTML(p.label) + '</span>';
                       }).join('') + '</div>'
                     : '') +
                 '<div class="acts">' + actionsHTML(o) + '</div>' +

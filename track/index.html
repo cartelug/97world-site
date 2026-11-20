@@ -36,7 +36,7 @@
 <main>
     <section class="g-wrap g-open">
         <h1>Track your order.</h1>
-        <p>Enter the order number we sent you on WhatsApp.</p>
+        <p>Enter the order number from your checkout or order confirmation.</p>
     </section>
 
     <section class="g-wrap g-sec">
@@ -48,19 +48,15 @@
                     <input type="text" id="refInput" placeholder="e.g. K97-ABC123" autocomplete="off"
                            spellcheck="false" autocapitalize="characters">
                 </div>
-                <p class="acct-err" id="refErr" hidden></p>
+                <p class="acct-err" id="refErr" role="alert" hidden></p>
             </div>
         </div>
-        <button type="button" class="g-btn g-btn--wide" id="refGo" style="margin-top:14px">
+        <button type="button" class="g-btn g-btn--wide m-press" id="refGo" style="margin-top:14px">
             Check status <i class="fas fa-arrow-right"></i>
         </button>
     </section>
 
-    <!-- Real status when the order Worker can be reached; when it can't
-         (not yet deployed, or this ref predates it), everything below
-         quietly falls back to the same honest static copy this page always
-         showed — never a blank or broken result. -->
-    <section class="g-wrap g-sec" id="resultSec" hidden>
+    <section class="g-wrap g-sec" id="resultSec" aria-live="polite" hidden>
         <div class="price-card">
             <div class="price-row"><span>Order</span><b id="resRef">—</b></div>
             <div class="price-row" id="resAmtRow" hidden><span>Amount</span><b id="resAmt">—</b></div>
@@ -71,28 +67,27 @@
                 <div class="step" id="stAccept"><div class="step-n">Order accepted</div><b id="stAcceptLabel">Queued</b>
                     <p>Accepted orders are sent to delivery in the order they arrive.</p></div>
                 <div class="step" id="stDeliver"><div class="step-n">Delivery</div><b id="stDeliverLabel">Not started</b>
-                    <p>Delivery begins 1–6 hours after acceptance and arrives gradually.</p></div>
+                    <p>Check this page for your latest delivery status.</p></div>
             </div>
         </div>
 
-        <!-- Only shown once we can see a real "pending" order — someone who
-             hasn't sent anything yet has nothing to confirm. -->
         <div class="acct-list" id="confirmBlock" style="margin-top:14px" hidden>
+            <p class="acct-note" id="trackPaymentInstructions" hidden></p>
             <div class="acct-field">
-                <label for="payNote">Reference or note (optional)</label>
+                <label for="payNote" id="payNoteLabel">Transaction reference or note</label>
                 <div class="acct-box">
                     <i class="fas fa-note-sticky"></i>
-                    <input type="text" id="payNote" placeholder="e.g. agent name or transaction code" autocomplete="off">
+                    <input type="text" id="payNote" placeholder="Code from your payment message" autocomplete="off" maxlength="200">
                 </div>
             </div>
-            <button type="button" class="g-btn g-btn--wide" id="confirmPaid" style="margin-top:10px">
-                <i class="fas fa-circle-check"></i> I've sent the payment
+            <button type="button" class="g-btn g-btn--wide m-press" id="confirmPaid" style="margin-top:10px">
+                <i class="fas fa-circle-check"></i> Report transfer
             </button>
         </div>
 
         <p class="acct-note" style="margin-top:14px">
             <i class="fas fa-circle-info"></i>
-            <span id="resNote">For the live position of this order, message us — we reply with the exact status.</span>
+            <span id="resNote">Loading your order status.</span>
         </p>
 
         <a class="g-btn g-btn--wide" id="resWa" style="margin-top:12px" target="_blank" rel="noopener">
@@ -103,7 +98,7 @@
     <section class="g-wrap g-sec">
         <div class="g-sec-head">
             <h2>Can't find your number?</h2>
-            <p>It's in the WhatsApp thread where you confirmed the order. If you can't find it, message us with the account you ordered for and we'll look it up.</p>
+            <p>Check your checkout or order confirmation. If you still need help, contact support.</p>
         </div>
         <a href="https://wa.me/256762193386?text=Hi%2097%20World%2C%20I%27d%20like%20to%20check%20on%20my%20order."
            target="_blank" rel="noopener" class="g-btn g-btn--ghost g-btn--wide">
@@ -125,6 +120,7 @@
     </footer>
 </main>
 
+<script src="/assets/pricing.js?v=20261111-snap-services"></script>
 <script>
 (function () {
     'use strict';
@@ -135,136 +131,194 @@
     var field = document.getElementById('refField');
     var out = document.getElementById('resultSec');
     var currentRef = null;
+    var statusVersion = 0;
+    var timer;
 
     function money(n, currency) {
         if (typeof n !== 'number') return null;
-        return currency === 'USD' ? '$' + n.toLocaleString() : n.toLocaleString() + ' UGX';
+        return window.K97Pricing.money(n, currency || 'UGX');
     }
 
-    // The honest default this page always showed, before any Worker call —
-    // what a visitor sees the instant they search, and what stays up if the
-    // Worker is unreachable, not yet deployed, or the ref simply isn't one
-    // of its records (e.g. it predates this being wired up).
-    function showUnknown() {
-        document.getElementById('resAmtRow').hidden = true;
-        document.getElementById('stPayLabel').textContent = 'Waiting on confirmation';
-        document.getElementById('stPayNote').textContent = 'We mark this confirmed once your deposit lands.';
-        document.getElementById('stAcceptLabel').textContent = 'Queued';
-        document.getElementById('stDeliverLabel').textContent = 'Not started';
-        ['stPay', 'stAccept', 'stDeliver'].forEach(function (id) {
-            document.getElementById(id).classList.remove('is-done', 'is-current');
-        });
-        document.getElementById('confirmBlock').hidden = true;
-        document.getElementById('resNote').textContent =
-            'For the live position of this order, message us — we reply with the exact status.';
+    function checkoutPayment(ref) {
+        try {
+            var data = JSON.parse(sessionStorage.getItem('k97_payment:' + ref));
+            var methods = window.K97Pricing.REGIONS.UG.payments;
+            if (data && methods.includes(data.method) && Number.isFinite(data.deposit) && data.deposit > 0) {
+                return data;
+            }
+        } catch (error) { /* Previously created orders can still be tracked. */ }
+        return null;
     }
 
     function renderStatus(o) {
-        var pay = document.getElementById('stPay'), payLabel = document.getElementById('stPayLabel'), payNote = document.getElementById('stPayNote');
-        var accept = document.getElementById('stAccept'), acceptLabel = document.getElementById('stAcceptLabel');
-        var deliver = document.getElementById('stDeliver'), deliverLabel = document.getElementById('stDeliverLabel');
+        var pay = document.getElementById('stPay');
+        var accept = document.getElementById('stAccept');
+        var deliver = document.getElementById('stDeliver');
         [pay, accept, deliver].forEach(function (el) { el.classList.remove('is-done', 'is-current'); });
 
         var amt = money(o.amount, o.currency);
-        var amtRow = document.getElementById('resAmtRow');
-        if (amt) { amtRow.hidden = false; document.getElementById('resAmt').textContent = amt; }
-        else { amtRow.hidden = true; }
+        document.getElementById('resAmtRow').hidden = !amt;
+        document.getElementById('resAmt').textContent = amt || '';
+        document.getElementById('stAcceptLabel').textContent = 'Queued';
+        document.getElementById('stDeliverLabel').textContent = 'Not started';
 
-        var showConfirm = false;
-        var note = 'For the live position of this order, message us — we reply with the exact status.';
+        var pending = o.status === 'pending';
+        var confirmed = o.status === 'paid' || o.status === 'placed' || o.status === 'partial' || o.status === 'failed';
+        var payment = checkoutPayment(o.ref);
+        var note = 'Check back here for the latest status.';
+        var payLabel = document.getElementById('stPayLabel');
+        var payNote = document.getElementById('stPayNote');
+        var instructions = document.getElementById('trackPaymentInstructions');
 
-        if (o.status === 'pending') {
+        payLabel.textContent = 'Waiting on confirmation';
+        payNote.textContent = 'We show a confirmation here once we verify the transfer.';
+        instructions.hidden = !(pending && payment);
+        if (payment) {
+            var method = payment.method.split(' — Code ');
+            instructions.textContent = 'Deposit: ' + money(payment.deposit, 'UGX') + ' via ' +
+                method[0] + ', merchant code ' + method[1] + '. Approve it on your phone.';
+        }
+        document.getElementById('payNoteLabel').textContent = payment
+            ? 'Mobile Money transaction reference' : 'Transaction reference or note (optional)';
+        document.getElementById('payNote').required = !!payment;
+
+        if (pending) {
             pay.classList.add('is-current');
-            payLabel.textContent = 'Waiting on your payment';
-            payNote.textContent = 'Send your payment, then tap "I\'ve sent the payment" below.';
-            showConfirm = true;
-            note = 'Once you confirm, we check it against our balance and take it from there.';
+            payLabel.textContent = 'Waiting for payment';
+            payNote.textContent = 'After sending your payment, report the transfer below.';
         } else if (o.status === 'awaiting_confirmation') {
             pay.classList.add('is-current');
-            payLabel.textContent = 'Checking your payment';
-            payNote.textContent = 'You told us you\'ve sent it — we\'re confirming it landed.';
-            note = 'This is usually quick. We\'ll message you on WhatsApp once it\'s confirmed.';
-        } else if (o.status === 'paid') {
-            pay.classList.add('is-done'); payLabel.textContent = 'Confirmed';
-            accept.classList.add('is-current'); acceptLabel.textContent = 'Queued for delivery';
-        } else if (o.status === 'placed') {
-            pay.classList.add('is-done'); payLabel.textContent = 'Confirmed';
-            accept.classList.add('is-done'); acceptLabel.textContent = 'Accepted';
-            deliver.classList.add('is-current'); deliverLabel.textContent = 'Delivering';
-            note = 'Delivery arrives gradually, not all at once — that\'s normal.';
-        } else if (o.status === 'partial' || o.status === 'failed') {
-            pay.classList.add('is-done'); payLabel.textContent = 'Confirmed';
-            accept.classList.add('is-done'); acceptLabel.textContent = 'Accepted';
-            deliver.classList.add('is-current'); deliverLabel.textContent = 'Needs a look';
-            note = 'Something needs our attention on this one — message us and we\'ll sort it.';
+            payLabel.textContent = 'Transfer reported';
+            payNote.textContent = 'We’re checking that your payment reached us.';
+            note = 'This page refreshes while we check your payment.';
+        } else if (confirmed) {
+            pay.classList.add('is-done');
+            payLabel.textContent = 'Payment confirmed';
+            payNote.textContent = 'We verified your payment.';
+            if (o.status === 'paid') {
+                accept.classList.add('is-current');
+                document.getElementById('stAcceptLabel').textContent = 'Queued for delivery';
+            } else {
+                accept.classList.add('is-done');
+                deliver.classList.add('is-current');
+                document.getElementById('stAcceptLabel').textContent = 'Accepted';
+                document.getElementById('stDeliverLabel').textContent = o.status === 'placed'
+                    ? 'Sent to delivery' : 'Needs attention';
+            }
+        } else {
+            note = 'The current status is unavailable. Check again shortly.';
         }
 
-        document.getElementById('confirmBlock').hidden = !showConfirm;
+        document.getElementById('confirmBlock').hidden = !pending;
         document.getElementById('resNote').textContent = note;
-
-        var current = document.querySelector('.step.is-current');
+        var current = out.querySelector('.step.is-current');
         if (current && window.Motion) window.Motion.flash(current);
     }
 
-    function loadStatus(ref) {
-        fetch(API + '/order/status?ref=' + encodeURIComponent(ref))
-            .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, data: data }; }); })
-            .then(function (res) {
-                if (!res.ok || !res.data || !res.data.ok) { showUnknown(); return; }
-                renderStatus(res.data);
-            })
-            .catch(showUnknown);
+    function loadStatus(ref, automatic) {
+        window.clearTimeout(timer);
+        var version = ++statusVersion;
+        if (!automatic) {
+            err.hidden = true;
+            document.getElementById('refGo').textContent = 'Checking status…';
+        }
+        fetch(API + '/order/status?ref=' + encodeURIComponent(ref), { cache: 'no-store' })
+            .then(function (response) {
+                if (response.status === 404) return null;
+                if (!response.ok) throw new Error('Status unavailable');
+                return response.json();
+            }).then(function (result) {
+                if (version !== statusVersion) return;
+                if (!result) {
+                    if (checkoutPayment(ref)) {
+                        err.textContent = 'Your new order is syncing. Check again in a moment.';
+                        err.hidden = false;
+                        timer = window.setTimeout(function () { loadStatus(ref, true); }, 12000);
+                    } else {
+                        out.hidden = true;
+                        err.textContent = 'Order not found. Check the order number and try again.';
+                        err.hidden = false;
+                    }
+                    return;
+                }
+                if (!result.ok || result.ref !== ref) throw new Error('Invalid status');
+                var firstResult = out.hidden;
+                err.hidden = true;
+                document.getElementById('resRef').textContent = ref;
+                out.hidden = false;
+                renderStatus(result);
+                if (firstResult && !automatic) out.scrollIntoView({ block: 'start' });
+                if (result.status === 'awaiting_confirmation') {
+                    timer = window.setTimeout(function () { loadStatus(ref, true); }, 15000);
+                }
+            }).catch(function () {
+                if (version !== statusVersion) return;
+                err.textContent = 'Couldn’t load the latest status. Please try again.';
+                err.hidden = false;
+            }).finally(function () {
+                if (version === statusVersion) document.getElementById('refGo').textContent = 'Check status';
+            });
     }
 
     function check() {
         var ref = input.value.trim().toUpperCase();
-        if (ref.length < 4) {
+        if (!/^K97-[A-Z0-9-]{1,40}$/.test(ref)) {
             field.classList.add('is-bad');
             err.hidden = false;
-            err.textContent = 'Enter the order number from your WhatsApp confirmation.';
+            err.textContent = 'Enter your order number, including K97-.';
+            input.focus();
             return;
         }
         field.classList.remove('is-bad');
-        err.hidden = true;
+        if (currentRef !== ref) {
+            document.getElementById('payNote').value = '';
+            out.hidden = true;
+        }
         currentRef = ref;
-
-        document.getElementById('resRef').textContent = ref;
         document.getElementById('resWa').href = 'https://wa.me/' + WA + '?text=' +
             encodeURIComponent('Hi 97 World, please give me the status of order ' + ref + '.');
-        showUnknown();
-        out.hidden = false;
-        out.scrollIntoView({ behavior: 'smooth', block: 'start' });
         loadStatus(ref);
     }
 
     document.getElementById('refGo').addEventListener('click', check);
-    input.addEventListener('keypress', function (e) { if (e.key === 'Enter') check(); });
+    input.addEventListener('keydown', function (event) { if (event.key === 'Enter') check(); });
 
     document.getElementById('confirmPaid').addEventListener('click', function () {
         if (!currentRef) return;
+        var ref = currentRef;
         var btn = this;
+        var noteField = document.getElementById('payNote');
+        var note = noteField.value.trim();
+        if (noteField.required && !note) {
+            document.getElementById('resNote').textContent = 'Enter the transaction reference from your payment message.';
+            noteField.focus();
+            return;
+        }
         btn.disabled = true;
         btn.querySelector('i').className = 'fas fa-spinner fa-spin';
-        var note = document.getElementById('payNote').value.trim();
 
         fetch(API + '/order/confirm', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ref: currentRef, note: note || undefined })
-        })
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
-                if (!data || !data.ok) throw new Error('not ok');
-                loadStatus(currentRef);
-            })
-            .catch(function () {
+            body: JSON.stringify({ ref: ref, note: note || undefined })
+        }).then(function (response) {
+            if (!response.ok) throw new Error('Could not report transfer');
+            return response.json();
+        }).then(function (data) {
+            if (!data.ok) throw new Error('Could not report transfer');
+            if (currentRef !== ref) return;
+            document.getElementById('confirmBlock').hidden = true;
+            document.getElementById('resNote').textContent = 'Transfer reported. Refreshing your status…';
+            loadStatus(ref, true);
+        }).catch(function () {
+            if (currentRef === ref) {
                 document.getElementById('resNote').textContent =
-                    'Couldn\'t reach us right now — message us on WhatsApp instead and we\'ll confirm it manually.';
-            })
-            .then(function () {
-                btn.disabled = false;
-                btn.querySelector('i').className = 'fas fa-circle-check';
-            });
+                    'Couldn’t report the transfer. Try reporting it again using the same reference.';
+            }
+        }).finally(function () {
+            btn.disabled = false;
+            btn.querySelector('i').className = 'fas fa-circle-check';
+        });
     });
 
     var pre = new URLSearchParams(window.location.search).get('ref');

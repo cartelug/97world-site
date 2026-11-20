@@ -333,12 +333,13 @@
      *  above the code, since when to pay differs by what's being sold. */
     function Payment(opts) {
         var choice = null;
+        var showCodes = true;
 
         function paintCode(animate) {
             var box = opts.code;
             if (!box) return;
             var p = choice ? payParts(choice) : null;
-            if (!p || !p.code) { box.hidden = true; box.innerHTML = ''; return; }
+            if (!showCodes || !p || !p.code) { box.hidden = true; box.innerHTML = ''; return; }
             box.hidden = false;
             box.innerHTML =
                 '<span class="pay-code-copy"><small>' + opts.codeLead(p.name) + '</small>' +
@@ -352,7 +353,8 @@
             }
         }
 
-        function render(options) {
+        function render(options, hideCodes) {
+            showCodes = !hideCodes;
             options = options || [];
             if (options.indexOf(choice) === -1) choice = options[0] || null;
             if (opts.label) opts.label.textContent = options.length > 1 ? 'How will you pay?' : 'How you’ll pay';
@@ -364,7 +366,7 @@
                     ' data-pay="' + encodeURIComponent(label) + '" aria-pressed="' + on + '">' +
                     '<i class="' + m.icon + ' pay-ic"' + (m.color ? ' style="color:' + m.color + '"' : '') + '></i>' +
                     '<span class="pay-txt"><b>' + p.name + '</b>' +
-                        (p.code ? '<small>Code ' + p.code + '</small>' : '') + '</span>' +
+                        (showCodes && p.code ? '<small>Code ' + p.code + '</small>' : '') + '</span>' +
                     '<span class="pay-tick"><i class="fas fa-check"></i></span>' +
                     '</button>';
             }).join('');

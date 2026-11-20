@@ -56,3 +56,18 @@ body[data-service-scene="story"] { --g-bg:#F9F1DD; background-image:linear-gradi
 body[data-service-scene="spotlight"] { --g-bg:#EDECE5; background-image:linear-gradient(180deg,rgba(237,236,229,.92),#EDECE5 850px),url('/IMAGES/growth-scenes/snapchat-spotlight-v1.webp'); }
 @media(max-width:480px) { .service-scene { height:200px; } .service-scene figcaption { padding:14px; width:48%; min-width:0; } .service-scene small { font-size:.64rem; } .service-scene > img { object-position:62% center; } }
 @media(prefers-reduced-motion:reduce) { .service-scene > img { animation:none!important; transition:none!important; transform:none!important; } }
+
+.creator-snapshots { margin-top: 22px; }
+.creator-snapshots h3 { margin-bottom: 4px; }
+.creator-snapshots p { margin-bottom: 12px; color: var(--g-muted); }
+.creator-snapshot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.creator-snapshot {
+    margin: 0; padding: 14px; display: grid; gap: 10px;
+    align-content: start; justify-items: start;
+    border: 1px solid var(--g-line); border-radius: var(--g-r); background: var(--g-surface);
+}
+.creator-snapshot figcaption { font-weight: 700; }
+.creator-snapshot img { max-width: 100%; height: auto; border-radius: 6px; }
+.checkout-created { margin-top: 16px; }
+.checkout-created h3 { font-size: 1.1rem; }
+.rev-account { overflow-wrap: anywhere; }

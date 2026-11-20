@@ -537,6 +537,15 @@ export default {
         const data = await buildCatalogue(env, ctx);
         return json(data, { headers: { 'Cache-Control': 'public, max-age=600' } }, origin);
       }
+      if (path === '/order/health' && request.method === 'GET') {
+        const headers = { 'Cache-Control': 'no-store' };
+        try {
+          await env.ORDERS.get('checkout:health');
+          return json({ checkout: true }, { headers }, origin);
+        } catch {
+          return json({ checkout: false }, { status: 503, headers }, origin);
+        }
+      }
       if (path === '/order' && request.method === 'POST') {
         return await handleOrder(request, env, origin);
       }
